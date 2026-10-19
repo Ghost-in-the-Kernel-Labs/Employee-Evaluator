@@ -73,3 +73,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   not yet executed `build.gradle` (the workspace that wrote it had no Gradle and no Docker daemon)
   and to run the fast loop first.
 - **Touched:** E-024; `.github/workflows/ci.yml`; `scripts/Metrics.java`; README.md; docs/HANDOFF.md.
+
+### J-005 Gradle's first run: the scaffold builds, one deprecation fixed
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** The handoff's first step: run `build.gradle` under Gradle itself before 1.2, since the
+  workspace that wrote it had none.
+- **Found:** On JDK 21.0.12 and Gradle 8.14.3 the build and the fast loop pass (9 tests: 7 doc tests,
+  2 of the command line); `gradle metrics` runs. Gradle warned once: `exceptionFormat 'full'` sets a
+  property with the space syntax, removed in Gradle 10. No Docker daemon in this workspace, so the
+  image is still unbuilt.
+- **Options:** leave the warning until a Gradle upgrade; fix it now.
+- **Resolved:** `exceptionFormat = 'full'`; the build runs with no deprecation. The image's first
+  build stays with Ghost (docs/HANDOFF.md).
+- **Caught by:** `gradle test --warning-mode all`.
+- **Touched:** build.gradle.

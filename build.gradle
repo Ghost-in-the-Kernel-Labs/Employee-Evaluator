@@ -40,7 +40,7 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'evaluator.root', rootDir.absolutePath
-    testLogging { events 'failed'; exceptionFormat 'full' }
+    testLogging { events 'failed'; exceptionFormat = 'full' }
 }
 
 tasks.register('metrics', JavaExec) {

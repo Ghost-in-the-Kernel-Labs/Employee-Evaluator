@@ -26,16 +26,20 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.5, in slices (Ghost's answers in E-037)
+## Now: 1.5, in slices (Ghost's answers in E-037, E-038)
 
 The work runs in one continuous session (Ghost, 2026-10-19); this file is its record, kept current at
-each step. 1.5 in slices: (S1) the readers: JUnit XML, Cobertura and JaCoCo reports read as hostile
-files, network attempts found, the `QUALITY.tests.*` facts; (S2) the runner: the stripped copy, the two
-phases' `docker run`, the timeout, each language's test command, behind an interface a fake stands in
-for; (S3) the sandbox image with the pinned runners and an egress proxy so phase 1 reaches the
-registries only; (S4) fixtures with their own tests, one passing, one failing, one reaching for the
-network. No Docker daemon here: S3 and S4's real runs are Ghost's, and 1.5 closes on them.
+each step. S1 (the readers) and S2 (the runner) are built and proven against a fake sandbox (J-019).
+S3 (the image) is built (J-021): `sandbox/Dockerfile`, its pins, `sandbox/fetch.py`, the registries proxy
+and `sandbox/setup.sh`. Proven here: fetch.py unpacks Maven and refuses a wrong hash; the Python pins
+install with every hash checked; c8's lockfile installs with scripts off and reports coverage; the proxy
+tunnels a registry and refuses all else on loopback. Not provable here (no Docker daemon), for Ghost's
+machine: `sandbox/setup.sh` (both images build, the network and the proxy come up), then a real run.
+S4 next: fixtures with their own tests, one passing, one failing, one reaching for the network.
 
+- **For Ghost:** the kernel's `Dockerfile` installs git with `apt-get` unpinned, the one install in the
+  repository not held by a hash; the supply-chain test does not check apt. Pin it (a version, or a
+  snapshot date of the archive) or record why apt's signatures are enough.
 - **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
   is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes.
 - **Still open:** docs/DESIGN.md says "three efficiency ratios" once and two everywhere else.

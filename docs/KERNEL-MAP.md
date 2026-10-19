@@ -274,3 +274,11 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..visitFile#2` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..postVisitDirectory` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TestPlans.java:TestPlans.exactVersions` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.RegistriesProxy` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.main` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.serve` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.handle` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.verdict` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.header` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.reply` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.pipe` |  | 2026-10-19 |  |

@@ -45,6 +45,18 @@ final class SupplyChainTest {
                 .repository(vendored(Check.read("third_party/MANIFEST.md"), jars()))
                 .repository(build(Check.read("build.gradle")))
                 .repository(directive(Check.read("CLAUDE.md"), Check.read("theGhost.md")))
+                .repository(images(files))
+                .repository(sandboxLocks(Check.read("sandbox/requirements.txt"), Check.read("sandbox/node/package-lock.json")))
+                .rejects("a base image by tag", () -> images(Map.of("sandbox/Dockerfile", "FROM python:3.12-slim\n")))
+                .rejects("a download with no hash", () -> images(Map.of("sandbox/Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN python3 /tmp/fetch.py https://x/y.tgz /opt/y\n")))
+                .rejects("a pip install without hashes", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN pip install pytest\n")))
+                .rejects("an npm install", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN npm install c8\n")))
+                .rejects("a script piped to a shell", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN curl -fsSL https://x/install.sh | sh\n")))
+                .accepts("a comment naming fetch.py", () -> images(Map.of("Dockerfile", "# checked by sandbox/fetch.py before use\nFROM a@sha256:" + "0".repeat(64) + "\n")))
+                .accepts("the sandbox's own way", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + " AS b\nRUN python3 /tmp/fetch.py https://x/y.tgz sha256 " + "a".repeat(64) + " /opt/y\nRUN pip install --require-hashes -r r.txt\nRUN npm ci --ignore-scripts\n")))
+                .rejects("an unhashed requirement", () -> sandboxLocks("pytest==9.1.1\n", "{\"packages\": {}}"))
+                .rejects("a package with an install script", () -> sandboxLocks("a==1 --hash=sha256:" + "0".repeat(64) + "\n", "{\"packages\": {\"node_modules/x\": {\"integrity\": \"sha512-x\", \"hasInstallScript\": true}}}"))
+                .rejects("a package with no sha512", () -> sandboxLocks("a==1 --hash=sha256:" + "0".repeat(64) + "\n", "{\"packages\": {\"node_modules/x\": {\"integrity\": \"sha1-x\"}}}"))
                 .rejects("an action pinned to a tag", () -> workflows(Map.of(".github/workflows/a.yml", "permissions:\n  contents: read\njobs:\n  - uses: actions/checkout@v4\n")))
                 .rejects("a workflow with no permissions", () -> workflows(Map.of(".github/workflows/a.yml", "jobs:\n  - uses: actions/checkout@" + "a".repeat(40) + " # v4\n")))
                 .rejects("pull_request_target", () -> workflows(Map.of(".github/workflows/a.yml", "on: pull_request_target\npermissions:\n  contents: read\n")))
@@ -130,6 +142,51 @@ final class SupplyChainTest {
         String code = gradle.replaceAll("(?m)//.*$", "");
         Matcher declared = Pattern.compile("\\b(repositories\\s*\\{|mavenCentral\\s*\\(|google\\s*\\(|jcenter\\s*\\(|gradlePluginPortal\\s*\\(|maven\\s*\\{)").matcher(code);
         while (declared.find()) failures.add("build.gradle declares " + declared.group(1).replaceAll("\\s", "") + ": the build reaches no repository (E-021, E-033)");
+        return failures;
+    }
+
+    /**
+     * Every image file builds from digests and checked downloads: each `FROM` pinned by `@sha256`, each
+     * fetch carrying its hash, pip only with `--require-hashes`, npm only as `npm ci --ignore-scripts`, and
+     * no script piped into a shell.
+     */
+    static List<String> images(Map<String, String> files) {
+        List<String> failures = new ArrayList<>();
+        files.forEach((path, text) -> {
+            String name = path.substring(path.lastIndexOf('/') + 1);
+            if (!name.equals("Dockerfile") && !name.endsWith(".Dockerfile")) return;
+            String joined = String.join("\n", text.lines().filter(l -> !l.strip().startsWith("#")).toList()).replace("\\\n", " ");
+            for (String line : joined.lines().toList()) {
+                String bare = line.strip();
+                if (bare.startsWith("FROM ") && !bare.matches("FROM \\S+@sha256:[0-9a-f]{64}( AS \\S+)?")) failures.add(path + ": `" + bare + "` is not pinned by digest");
+            }
+            Matcher fetch = Pattern.compile("fetch\\.py (\\S+) (\\S+)").matcher(joined);
+            while (fetch.find()) if (!fetch.group(2).matches("sha256|sha512")) failures.add(path + ": " + fetch.group(1) + " is fetched with no hash");
+            for (String command : joined.split("&&|;|\\n")) {
+                String c = command.strip();
+                if (c.contains("pip install") && !c.contains("--require-hashes")) failures.add(path + ": `" + c + "` installs without hashes");
+                if (c.matches(".*\\bnpm (install|i|add)\\b.*") || (c.contains("npm ci") && !c.contains("--ignore-scripts"))) failures.add(path + ": `" + c + "` is not npm ci with scripts off");
+                if (c.matches(".*\\|\\s*(sh|bash)\\b.*")) failures.add(path + ": `" + c + "` pipes a download into a shell");
+            }
+        });
+        return failures;
+    }
+
+    /** The sandbox's own locks: every Python requirement hashed; every npm package with a SHA-512 and no install script. */
+    @SuppressWarnings("unchecked")
+    static List<String> sandboxLocks(String requirements, String packageLock) {
+        List<String> failures = new ArrayList<>();
+        for (String line : requirements.replace("\\\n", " ").lines().toList()) {
+            String bare = line.strip();
+            if (!bare.isEmpty() && !bare.startsWith("#") && !bare.startsWith("-") && !bare.contains("--hash=sha256:")) failures.add("sandbox/requirements.txt: `" + bare + "` has no hash");
+        }
+        Map<String, Object> packages = (Map<String, Object>) ((Map<String, Object>) evaluator.analyze.Json.parse(packageLock)).get("packages");
+        packages.forEach((name, value) -> {
+            if (name.isEmpty()) return;
+            Map<String, Object> pkg = (Map<String, Object>) value;
+            if (!String.valueOf(pkg.get("integrity")).startsWith("sha512-")) failures.add("sandbox/node/package-lock.json: " + name + " has no SHA-512 integrity");
+            if (Boolean.TRUE.equals(pkg.get("hasInstallScript"))) failures.add("sandbox/node/package-lock.json: " + name + " has an install script");
+        });
         return failures;
     }
 

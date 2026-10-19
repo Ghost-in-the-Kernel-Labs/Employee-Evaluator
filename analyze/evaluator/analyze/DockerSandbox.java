@@ -40,7 +40,7 @@ public final class DockerSandbox implements Sandbox {
         if (phase == Phase.TEST) {
             argv.addAll(List.of("--network", "none"));
         } else {
-            argv.addAll(List.of("--network", REGISTRIES, "--env", "npm_config_ignore_scripts=true"));
+            argv.addAll(List.of("--network", REGISTRIES, "--env", "npm_config_ignore_scripts=true", "--env", "npm_config_https_proxy=" + PROXY));
             for (String variable : List.of("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy")) argv.addAll(List.of("--env", variable + "=" + PROXY));
             argv.addAll(List.of("--env", "MAVEN_OPTS=-Dhttp.proxyHost=registries-proxy -Dhttp.proxyPort=3128 -Dhttps.proxyHost=registries-proxy -Dhttps.proxyPort=3128"));
         }

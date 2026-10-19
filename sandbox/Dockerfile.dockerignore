@@ -1,0 +1,8 @@
+# The sandbox image's build reads these files and nothing else of the repository.
+*
+!sandbox/fetch.py
+!sandbox/requirements.txt
+!sandbox/node/package.json
+!sandbox/node/package-lock.json
+!third_party/jacoco/org.jacoco.agent-0.8.15-runtime.jar
+!third_party/jacoco/org.jacoco.cli-0.8.15-nodeps.jar

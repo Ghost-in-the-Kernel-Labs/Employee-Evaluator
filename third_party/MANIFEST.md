@@ -16,9 +16,25 @@ says whether the jar reaches an applicant or an employer: nothing here does.
 | `tree-sitter/tree-sitter-0.26.6.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-ng`; the bundled tree-sitter library: `tree-sitter/LICENSE-tree-sitter`) | `analyze/` (E-028) | no | `81b113176c47c6adef9f6e3f7b8ca9f8141c4a8627f69d4423fc2e130a8ba74e` |
 | `tree-sitter/tree-sitter-python-0.25.0.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-python`) | `analyze/` (E-028) | no | `2cf56d951790ca5fbbd3fa64d11cca74e7d7bffc17d445050f9965c80875d640` |
 | `tree-sitter/tree-sitter-typescript-0.23.2.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-typescript`) | `analyze/` (E-028) | no | `5c3d1716441fbda55293b8632f9e691733bd3035a582da3936599d2309183bf0` |
+| `jacoco/org.jacoco.agent-0.8.15-runtime.jar` | EPL-2.0 (`jacoco/LICENSE-jacoco.md`) | the sandbox image (E-037) | no | `fb5b0036a0899ea97edfa0fc2c7985b55f3f7c5695028163e5e60d4f3cf6075d` |
+| `jacoco/org.jacoco.cli-0.8.15-nodeps.jar` | EPL-2.0 (`jacoco/LICENSE-jacoco.md`) | the sandbox image (E-037) | no | `d2b74b20b415163c1f53261e7c5ef4445b788327094208ff821e0c2baf9bc8f1` |
 | `tree-sitter/tree-sitter-tsx-0.23.2.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-typescript`: the same repository) | `analyze/` (E-028) | no | `a5eb98db7157e2693385f9e5af8b668a91112122d8c5a879b616206a841824d4` |
 
 The tree-sitter jars are `io.github.bonede` on Maven Central (github.com/bonede/tree-sitter-ng): a JNI
 binding built for Java 11, so it runs on the kernel's Java 21, with its native libraries inside each
 jar for Linux, macOS and Windows (x86_64, and aarch64 for Linux and macOS). The official binding,
 `io.github.tree-sitter:jtreesitter`, is built for Java 23 and ships no native library (J-010).
+
+## The sandbox image's other pins (sandbox/, E-037)
+
+Not vendored here, but pinned where the sandbox image is built, each public a week before it was pinned
+(E-033's cooldown), each checked by `test/SupplyChainTest.java`: the base images by digest
+(`sandbox/Dockerfile`: the kernel's own `gradle:8.14.3-jdk21-noble` for Temurin 21, and
+`python:3.12-slim-bookworm`, built 2026-10-06); Node v22.23.3 and Maven 3.9.16 by the SHA-256 and
+SHA-512 their projects publish (`sandbox/fetch.py` refuses any other); pytest 9.1.1, coverage 7.16.2 and
+pytest's four dependencies by their wheels' SHA-256 (`sandbox/requirements.txt`); c8 12.0.0 and its 54
+dependencies by npm's SHA-512 integrity, resolved as of 2026-10-12, none with an install script
+(`sandbox/node/package-lock.json`). JaCoCo 0.8.15 (June 2026) is above. Licenses: pytest, coverage,
+iniconfig, pluggy, pygments MIT, BSD or Apache-2.0; packaging Apache-2.0 or BSD; c8 ISC; Node MIT;
+Maven Apache-2.0; Temurin GPLv2 with the Classpath Exception. Nothing in the image ships to an applicant
+or an employer.

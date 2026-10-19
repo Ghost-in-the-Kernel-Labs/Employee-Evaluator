@@ -313,3 +313,26 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** Ghost: checksums enforced (E-038). The off-switch is gone; a pom with a range,
   SNAPSHOT, LATEST or RELEASE is not measured, and the install runs `mvn -C`.
 - **Touched:** E-038; `analyze/evaluator/analyze/TestPlans.java` and its test.
+
+### J-021 TODO 1.5, S3: the sandbox image, its pins, and a proxy of our own
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The image a submission's tests run in, every piece pinned past the 7-day cooldown, and the
+  install phase's way out limited to the registries.
+- **Found:** Docker Hub rate-limited the digest lookups after the first, and this environment's network
+  refuses Adoptium. So the image has one outside base (`python:3.12-slim-bookworm`, built 2026-10-06), takes
+  Temurin from the kernel's own pinned image, and fetches Node and Maven as release tarballs checked by
+  hash (`sandbox/fetch.py`). Maven Central rate-limited one download, and the 96-byte error page came back
+  as the JaCoCo CLI jar: the SHA-1 check refused it, but I then recorded the error page's SHA-256 in the
+  manifest; `SupplyChainTest` caught that on its next run. The test also first read a Dockerfile comment
+  as a command; comments are skipped now. For the proxy, a small Java one of our own (CONNECT only, the
+  registries by exact name, port 443) instead of a vendored squid or tinyproxy: no new dependency, and
+  it is tested here.
+- **Options:** for the proxy, a vendored one or our own; for the tools, three base images or one plus
+  hashed tarballs.
+- **Resolved:** Built and pushed; what can be proven here is (the handoff lists it), the rest is
+  Ghost's run of `sandbox/setup.sh`. `SupplyChainTest` now holds every Dockerfile to digests, checked
+  fetches, hashed pip and `npm ci --ignore-scripts`, and the sandbox's own locks. The kernel image's
+  unpinned `apt-get install git` put to Ghost.
+- **Caught by:** `SupplyChainTest` (the wrong hash, mine; the comment, my test's).
+- **Touched:** `sandbox/`; `third_party/jacoco/`, `third_party/MANIFEST.md`; `analyze/` (`RegistriesProxy`,
+  `DockerSandbox`); `test/SupplyChainTest.java`; docs/MODULES.md, docs/HANDOFF.md.

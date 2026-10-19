@@ -37,9 +37,9 @@ Measured by `gradle metrics` in the image at every tithe pass.
 | Functions over 20 paths | 0 | 0 | a function nobody can hold in mind |
 | Duplicate helpers (same body, two names) | 0 | 0 | two names for one thing |
 | Decisions without `See also` | reported, not held | 15 | a decision that floats |
-| Docs lines per source line | reported, not held | 0.73 | the ratio of intent to code |
+| Docs lines per source line | reported, not held | 0.76 | the ratio of intent to code |
 | Stale generated artifacts | 0 | 0 | a map that lies |
-| Commits since the last tithe | ≤ 8 | 0 | E-015 |
+| Commits since the last tithe | ≤ 8 | 2 | E-015 |
 
 Pass 0's numbers are the scaffold's: almost no product code, so most are trivially met. The first
 pass that means anything is 1.10.

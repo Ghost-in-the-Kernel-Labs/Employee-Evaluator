@@ -14,9 +14,19 @@ scaffold) is done; 1.2 (ingestion) is next.
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
+## For Opus: before the next session
+
+The scaffold was compiled with `javac` and its suite run through the JUnit launcher on a fresh clone
+(9 tests, no lint warnings), but Gradle itself has not yet executed `build.gradle`, and the image has
+not yet been built: the workspace that wrote them had neither. So the first thing a session on
+Ghost's machine does is `docker build -t evaluator .` and the fast loop from `CLAUDE.md` (or `gradle
+test --offline` on JDK 21 with Gradle 8.14.3 exactly; `build.gradle` refuses another version). If
+Gradle objects to anything, fix `build.gradle`, run `gradle kernelMap`, write it up as J-004 with
+class `failure-caught`, and only then start 1.2.
+
 ## For Opus: the next session (1.2)
 
 Read `CLAUDE.md`, then TODO.md 1.2. Build `rubric/` (the Fact and ScoreCard types of
 docs/SCORE-CARD.md, with a doc test holding the document to the types) and `ingest/` (the inventory
 and the Size facts), with the first fixture repository under `test/fixtures/` and its golden. Run
-`gradle kernelMap` before the commit. Write J-004.
+`gradle kernelMap` before the commit. Write the journal entry.

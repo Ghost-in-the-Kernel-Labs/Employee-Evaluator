@@ -58,3 +58,18 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   intent map (docs/SCORE-CARD.md, E-017). Mutation testing and the tithe gate are proposed, not yet
   vendored (E-019, TODO.md 1.10).
 - **Touched:** everything under docs/, scripts/, test/; theGhost.md; build.gradle; Dockerfile.
+
+## 2026-10-19
+
+### J-004 CI made manual: the minutes are a scarce resource
+- **Who:** Ghost, with Fable. **Class:** decision.
+- **Intent:** The spotless pass over the scaffold before Opus starts 1.2.
+- **Found:** The organization's GitHub Actions minutes are severely constrained, and GitHub is the
+  only place apart from Ghost's PC where Windows builds work; a workflow on every push to `main`
+  would spend them on what `scripts/prepush.sh` already proves locally.
+- **Options:** keep the push trigger; run on a schedule; run by hand only.
+- **Resolved:** By hand only (E-024). Also in this pass: `gradle metrics` aligned with the rows
+  `docs/AGENT.md` tracks; the README got a Setup section; HANDOFF tells Opus that Gradle itself has
+  not yet executed `build.gradle` (the workspace that wrote it had no Gradle and no Docker daemon)
+  and to run the fast loop first.
+- **Touched:** E-024; `.github/workflows/ci.yml`; `scripts/Metrics.java`; README.md; docs/HANDOFF.md.

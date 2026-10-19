@@ -11,11 +11,19 @@ answer.
 - `TODO.md` — what is next, in order.
 
 Built kernel first: a Java 21 scorer (phase 1, in progress), then agent judges (phase 2), then the
-web app (phase 3). A clean clone builds and tests with the network off, in the pinned image:
+web app (phase 3).
+
+## Setup
+
+Nothing to install beyond Docker: a clean clone builds and tests with the network off, in the
+pinned image (JDK 21, Gradle 8.14.3, git).
 
 ```sh
 docker build -t evaluator .
 docker run --rm --network none -u "$(id -u)" -v "$PWD":/evaluator evaluator gradle test --offline
 ```
+
+Without Docker, JDK 21 and Gradle 8.14.3 exactly (`build.gradle` refuses another version), then
+`gradle test --offline`. Every dependency is already under `third_party/`.
 
 Ghost in the Kernel Labs. Maintainer: Ghost.

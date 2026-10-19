@@ -37,7 +37,7 @@ Everything runs in the pinned image (`Dockerfile`, built once): `docker run --rm
 "$(id -u)" -v "$PWD":/evaluator evaluator gradle test --offline` is the fast loop (doc and unit
 tests). `gradle metrics` prints `docs/AGENT.md`'s numbers and warnings; `gradle kernelMap` adds new
 functions to the kernel map. `scripts/prepush.sh` is the check before a push: it fetches `main`,
-runs the fast loop in the image, and refuses a stale kernel map. Without Docker, `gradle test
+runs the fast loop in the image, and refuses a stale kernel map. GitHub's workflow runs only by hand (E-024): never count on it. Without Docker, `gradle test
 --offline` on JDK 21 with Gradle 8.14.3 is the same loop.
 
 ## Before calling work done

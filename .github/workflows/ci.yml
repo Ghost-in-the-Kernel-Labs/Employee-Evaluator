@@ -1,10 +1,9 @@
 # The fast loop in the pinned image with the network off (E-021): what passes here is what a clean
-# clone builds offline. One run per change: on a push to main, where every step lands (E-020), and
-# by hand; a branch push or a pull request runs nothing, since its commits are the ones main gets.
+# clone builds offline. Run by hand only (E-024): GitHub's minutes are scarce and reserved for what
+# a local machine cannot do, so no push or pull request starts a run. The gate before a push is
+# scripts/prepush.sh, which runs the same loop locally.
 name: ci
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 jobs:
   fast-loop:

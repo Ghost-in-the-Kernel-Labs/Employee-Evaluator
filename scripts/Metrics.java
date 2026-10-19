@@ -18,13 +18,11 @@ import java.util.stream.Stream;
  * printed as the Markdown table docs/AGENT.md records, then the warnings: long or
  * branching functions with no comment saying what they are for, and the `// Unsure:` lines.
  *   gradle metrics                 the table and the warnings
- *   gradle metrics --args=--time   also times the fast loop (`gradle test --offline --rerun-tasks`) twice:
- *                                  cold (the first run starts its daemon), then warm, the one held (E-054)
+ *   gradle metrics --args=--time   also times the fast loop (`gradle test --offline --rerun-tasks`)
  * Ported from Katana's scripts/Metrics.java, itself from Suite Builder's scripts/kernel-metrics.mjs.
  */
 final class Metrics {
     private static final Pattern CODE = Pattern.compile("`([^`]+)`");
-    private static final Pattern SKIPPED = Pattern.compile("<testsuite [^>]*skipped=\"(\\d+)\"");
 
     public static void main(String[] args) throws Exception {
         boolean time = List.of(args).contains("--time");
@@ -39,10 +37,7 @@ final class Metrics {
         List<Scan.Function> functions = Repo.functions(java);
         Map<String, String> metrics = new LinkedHashMap<>();
         metrics.put("Mandatory context (words)", String.valueOf(words(Repo.read("CLAUDE.md"))) + " (CLAUDE.md)");
-        String cold = time ? fastLoop() : "not timed (--time)";
-        metrics.put("Fast loop (s)", time ? fastLoop() : cold);
-        metrics.put("Fast loop, cold (s)", cold);
-        metrics.put("Pre-push check, every suite (min)", "timed by scripts/prepush.sh --all");
+        metrics.put("Fast loop (s)", time ? fastLoop() : "not timed (--time)");
         metrics.put("Largest source file (lines)", largest(java));
         metrics.put("Files a routing row opens", routing(Repo.read("CLAUDE.md")));
         metrics.put("Functions over 20 paths", String.valueOf(functions.stream().filter(f -> f.paths() > 20).count()));
@@ -50,7 +45,7 @@ final class Metrics {
         metrics.put("Decisions without `See also`", withoutSeeAlso(Repo.read("theGhost.md")));
         metrics.put("Docs lines per source line", docsRatio(java));
         metrics.put("Stale generated artifacts", stale());
-        metrics.put("Skipped tests reported on the fast loop", skipped());
+        metrics.put("Commits since the last tithe", cadence());
         return metrics;
     }
 
@@ -119,19 +114,6 @@ final class Metrics {
         return kernelMap ? "1 (" + KernelMap.PATH + ")" : "0";
     }
 
-    private static String skipped() throws IOException {
-        Path results = Repo.ROOT.resolve("build/test-results/test");
-        if (!Files.isDirectory(results)) return "no test run yet";
-        int skipped = 0;
-        try (Stream<Path> files = Files.list(results)) {
-            for (Path p : files.filter(p -> p.toString().endsWith(".xml")).toList()) {
-                Matcher m = SKIPPED.matcher(Files.readString(p));
-                if (m.find()) skipped += Integer.parseInt(m.group(1));
-            }
-        }
-        return String.valueOf(skipped);
-    }
-
     /** One `gradle test` from scratch, in seconds; the first of a session pays for starting the daemon. */
     private static String fastLoop() throws Exception {
         long started = System.nanoTime();
@@ -164,8 +146,6 @@ final class Metrics {
         lines.add("\nOver 15 lines or 6 paths, with no comment saying what it is for:");
         functions.stream().filter(f -> !f.documented() && (f.lines() > 15 || f.paths() > 6))
                 .forEach(f -> lines.add("  " + f.key() + " (line " + f.line() + "): " + f.lines() + " lines, " + f.paths() + " paths"));
-        lines.add("\nTithe cadence (E-015: every eighth commit):");
-        lines.add("  " + cadence());
         lines.add("\n`// Unsure:` lines (doubts written down; never failed):");
         Repo.files(".java").forEach((path, text) -> {
             String[] source = text.split("\n");

@@ -308,3 +308,17 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Source:** Ghost, with Fable, 2026-10-18.
 - **Status:** in force
 - **subject:** pitch
+
+### E-024: GitHub's minutes are spent by hand, never by a push
+- **Decision:** The workflow in `.github/workflows/ci.yml` runs only on `workflow_dispatch`. No push,
+  branch or pull request starts a run. The check before a push is `scripts/prepush.sh`, the same
+  loop on a fresh clone in the pinned image, locally. A run on GitHub is for what a local machine
+  cannot do (a Windows build, a run Ghost wants on record), and Ghost starts it.
+- **Why:** Ghost's finding across the projects (2026-10-19): the organization's Actions minutes are
+  severely constrained and, apart from his own PC, GitHub is the only place Windows builds work.
+  Katana ran under the same constraint with its pre-push script as the gate.
+- **Held by:** `.github/workflows/ci.yml` (`on: workflow_dispatch` alone); `scripts/prepush.sh`.
+- **Source:** Ghost, 2026-10-19.
+- **Status:** in force
+- **subject:** environment
+- **See also:** E-021

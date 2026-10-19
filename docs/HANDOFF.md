@@ -23,9 +23,13 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 ## For the next session (1.3)
 
-Read `CLAUDE.md`, then TODO.md 1.3. The TypeScript and Python adapters use ANTLR (E-027): vendor its
-runtime jar and the grammars-v4 Python and TypeScript grammars under `third_party/` first, each with
-its license and a MANIFEST.md row, then generate the parsers. The Java adapter needs nothing new (the JDK's parser, as `scripts/Scan.java` uses). `analyze/`
+Read `CLAUDE.md`, then TODO.md 1.3. The TypeScript and Python adapters use tree-sitter (E-028). Before vendoring
+anything, prove two things and write each down in the journal: which Java binding works on the
+kernel's Java (the official one is believed to need Java 22+; a JNI binding on Java 21, or Java 25, is
+Ghost's call), and that its native library loads in the image with the network off. If either fails,
+stop and ask Ghost (ANTLR, E-027, is the fallback). Then vendor the jars, the native libraries and the
+Python and TypeScript grammars under `third_party/`, each with its license and a MANIFEST.md row.
+The Java adapter needs nothing new (the JDK's parser, as `scripts/Scan.java` uses). `analyze/`
 reads `ingest/`'s Inventory (`Ingest.read()`); its Complexity facts are built with `Fact.measured()`.
 Add a fixture beside `test/fixtures/small-app/` when a case needs one, its golden under
 `test/goldens/`. Run `gradle kernelMap` before the commit, and write the journal entry.

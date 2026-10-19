@@ -119,3 +119,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** tree-sitter with its native libraries; ANTLR with grammars-v4; a separate parsing process.
 - **Resolved:** ANTLR (E-027); TODO.md 1.3's check and the handoff updated.
 - **Touched:** E-027; TODO.md; docs/HANDOFF.md.
+
+### J-008 tree-sitter after all: E-027 superseded the same evening
+- **Who:** Ghost, with Claude. **Class:** direction.
+- **Intent:** Ghost asked which parser is better for the project, not for the build.
+- **Found:** Claude's recommendation (E-027) had weighed a pure-Java build above what the parser must
+  do: read broken and newly written code in many languages, at scale. On those, tree-sitter is ahead;
+  its native library is one per platform, and production is one Linux image.
+- **Options:** keep ANTLR; tree-sitter with its Java binding proven first; a separate parsing process.
+- **Resolved:** tree-sitter (E-028, superseding E-027), with two checks before anything is vendored
+  and ANTLR as the fallback. TODO.md 1.3 and the handoff say so.
+- **Caught by:** Ghost's question.
+- **Touched:** E-027, E-028; TODO.md; docs/HANDOFF.md.

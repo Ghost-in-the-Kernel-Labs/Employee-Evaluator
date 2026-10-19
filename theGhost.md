@@ -371,6 +371,26 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   ANTLR's parse trees into complexity counts.
 - **Held by:** TODO.md 1.3 (its check); `third_party/MANIFEST.md` once vendored.
 - **Source:** Ghost, 2026-10-19, on Claude's recommendation.
+- **Status:** superseded by E-028
+- **subject:** environment
+- **See also:** E-021
+
+### E-028: tree-sitter parses TypeScript and Python, after all
+- **Decision:** The TypeScript and Python adapters of `analyze/` (TODO.md 1.3) parse with tree-sitter
+  and its languages' own grammars, vendored under `third_party/` with their licenses (MIT) and the
+  native library for each platform the kernel builds on (Linux for the image, Windows for Ghost's
+  machine). Before anything is vendored, 1.3 confirms which Java binding works on the kernel's Java
+  (the official bindings are believed to need Java 22 or later: a JNI binding on Java 21, or a move to
+  Java 25, is Ghost's call) and that its native library loads in the image with the network off. If
+  either fails, 1.3 stops and asks Ghost; ANTLR (E-027) is the fallback.
+- **Why:** The scorer reads strangers' repositories at scale: code that does not compile, syntax newer
+  than any volunteer grammar, more languages later. tree-sitter was built for broken code, its grammars
+  are kept by each language's community, every language gives the same tree shape and query style, and
+  it is fast. E-027 weighed a simpler build above all of that; the native library is one per platform,
+  and production is one Linux image.
+- **Held by:** TODO.md 1.3 (its check); `third_party/MANIFEST.md` once vendored.
+- **Source:** Ghost, 2026-10-19, on Claude's second look.
 - **Status:** in force
 - **subject:** environment
 - **See also:** E-021
+- **Supersedes:** E-027

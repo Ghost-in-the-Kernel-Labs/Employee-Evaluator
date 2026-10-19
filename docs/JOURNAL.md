@@ -260,3 +260,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `DuplicationTest` (the hand count); `gradle metrics` (the paths).
 - **Touched:** `analyze/` (`TestFiles`, `Coupling`, `Duplication`, `Tokens`; `Measure` carries its end
   line and text); E-034, E-035, E-036; docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.
+
+### J-017 TODO 1.4 closed; its two ratios moved to 1.9
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Close 1.4, whose check also named "the two ratios" (J-016).
+- **Found:** Both ratios divide one score by another; Quality is not measured before 1.5, and scores
+  are `score/`'s (MOD-03), at 1.9.
+- **Options:** close 1.4 and move the ratios to 1.9; start `score/` early with Quality's ratio not measured.
+- **Resolved:** Ghost: moved to 1.9 (its check and docs/DESIGN.md step 9 now name them); 1.4 to
+  docs/DONE.md. Still open for Ghost: docs/DESIGN.md says "three efficiency ratios" once and two
+  everywhere else.
+- **Touched:** TODO.md, docs/DONE.md, docs/DESIGN.md, docs/HANDOFF.md.

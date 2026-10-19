@@ -131,12 +131,12 @@ Phase 1 delivers a command-line scorer that takes a repository path and emits a 
 1. Scaffold the repo with `CLAUDE.md`, `theGhost.md`, the module map, the kernel map, the doc tests, the pinned image, and an empty `score` command. Done 2026-10-18.
 2. Repo ingestion: clone or read a local path, detect languages, exclude vendored and generated code, produce a file inventory. Output the Size metric.
 3. Static analysis adapters: one adapter interface, first implementations for TypeScript and Python (tree-sitter), producing cyclomatic and cognitive complexity per function and the dependency graph. Output the Complexity metric.
-4. Maintainability: coupling, duplication (token-shingling), test-to-code ratio. Output the Maintainability metric and the two efficiency ratios.
+4. Maintainability: coupling, duplication (token-shingling), test-to-code ratio. Output the Maintainability facts. (The two efficiency ratios are ratios of scores and move to step 9, where `score/` makes the scores; Ghost, 2026-10-19.)
 5. Test runner adapter: detect and run the repo's own tests in a sandbox, capture pass rate and coverage. Feed the tool half of Quality.
 6. Git history analysis: spread, diff variance, revert and fixup detection, test co-location, agent fingerprints. Output provenance layer 3.
 7. GitHub adapter: commit verification status and push attribution via the API. Output provenance layer 2.
 8. Navigability checklist: `CLAUDE.md` / `AGENTS.md` presence and freshness (does it name modules that still exist?), module boundary consistency. Output the proxy navigability score.
-9. Score card JSON schema plus a Markdown renderer. Run the scorer on Suite Builder, Katana and Flight Recorder and commit the cards as the first corpus entries.
+9. Score card JSON schema plus a Markdown renderer, with the two efficiency ratios. Run the scorer on Suite Builder, Katana and Flight Recorder and commit the cards as the first corpus entries.
 10. Navigability pass: refactor for the agent, tighten `CLAUDE.md`, delete dead paths.
 
 **Done when:** `evaluator score <path>` runs on three of our repos and the numbers survive a sanity read.

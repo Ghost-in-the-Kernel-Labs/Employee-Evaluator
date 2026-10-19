@@ -33,3 +33,12 @@ by one set of rules (E-030, E-031); the dependency graph, its longest chain and 
 (E-032); every fixture's values worked by hand, then golden. No two adapters read one language, so no
 disagreement could arise; the one pair that measured the same thing (the kernel and `scripts/Scan.java`)
 now shares its code.
+
+### 1.4 Maintainability
+
+Check: coupling, duplication by token shingling and the test-to-code ratio on the fixtures; the
+Maintainability facts and the two ratios are goldens; a fixture with a copied function is caught.
+Done 2026-10-19 (J-016, J-017): test files and the test-to-code ratio (E-034), coupling (E-035),
+duplication by token shingling (E-036), each a fact proven on a fixture; the duplication fixture's
+renamed copy caught, and its Maintainability facts a golden. The two ratios are ratios of scores, which
+are `score/`'s (MOD-03): moved to 1.9 by Ghost's call.

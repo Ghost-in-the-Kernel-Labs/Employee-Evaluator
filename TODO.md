@@ -8,11 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.4 Maintainability
-
-Check: coupling, duplication by token shingling and the test-to-code ratio on the fixtures; the
-Maintainability facts and the two ratios are goldens; a fixture with a copied function is caught.
-
 ### 1.5 Test runner adapter
 
 Check: a fixture's own tests are found and run inside the sandbox (no network, no credentials, a
@@ -40,7 +35,8 @@ boundary consistency and naming consistency on the fixtures; this repository sco
 ### 1.9 Score card and the seed corpus
 
 Check: `evaluator score <path>` prints the card as JSON and as Markdown for every fixture, each a
-golden; the cards for Suite Builder, Katana and Flight Recorder are committed under `corpus/` and
+golden, its two efficiency ratios (SC-04: Quality per thousand lines, Maintainability per unit of
+Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and Flight Recorder are committed under `corpus/` and
 survive Ghost's sanity read.
 
 ### 1.10 Tithe pass: the phase-1 boundary

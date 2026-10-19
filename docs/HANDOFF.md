@@ -26,18 +26,28 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## For the next session (1.4, waiting on Ghost)
+## For the next session (1.5, waiting on Ghost)
 
-1.4's measurements are built (J-016): test files and the test-to-code ratio (E-034), coupling (E-035),
-duplication (E-036), each fact proven on a fixture and the duplication fixture's Maintainability facts
-a golden. What its check also names, "the two ratios", waits on Ghost: Quality per thousand lines and
-Maintainability per unit of Complexity are ratios of scores, Quality is not measured before 1.5, and
-turning facts into 0–100 scores is `score/`'s (MOD-03), at 1.9. docs/DESIGN.md says "three efficiency
-ratios" in one place and two in another. Ghost's answer decides whether 1.4 closes now with the ratios
-moved to 1.9, or `score/` starts early.
+1.4 is done (J-016, J-017; its two ratios moved to 1.9). 1.5 runs a submission's own tests, the first
+step that runs hostile code (E-013), and it needs Ghost's approval before it starts, because each
+answer below adds a dependency (E-033: none without a decision and approval):
+
+- **The sandbox.** A container per run (`docker run --network none --memory ... --pids-limit ...
+  --read-only`, no credentials mounted), or a stronger runtime under it (gVisor's `runsc`), or
+  bubblewrap on the host. This workspace has no Docker daemon, so whichever is chosen is proven on
+  Ghost's machine first.
+- **The runtimes and coverage tools,** vendored or pinned in the image: Python with pytest and
+  coverage.py; Node with the submission's own runner and c8 for coverage; Java with JUnit's console
+  launcher and JaCoCo. Each is a new dependency.
+- **A submission's own dependencies.** Its tests need its packages, and "no network" forbids fetching
+  them. Proposal: two phases. First, install from the submission's lockfile only (`npm ci
+  --ignore-scripts`, `pip install --require-hashes`), with the network limited to the registries;
+  no lockfile, no install, and the tests are "not measured" (SC-07). Then the tests run with the
+  network off entirely.
 
 - **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
   is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes.
+- **Still open:** docs/DESIGN.md says "three efficiency ratios" once and two everywhere else.
 - Add a fixture beside the others when a case needs one, its golden under `test/goldens/`; work each
   value by hand before the golden is written. Run `gradle kernelMap` before the commit, and write
   the journal entry.

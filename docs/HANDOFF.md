@@ -26,18 +26,16 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## For the next session (1.4)
+## For the next session (1.4, waiting on Ghost)
 
-Read `CLAUDE.md`, then TODO.md 1.4: coupling, duplication by token shingling, the test-to-code ratio,
-and the Maintainability facts and two ratios as goldens; a fixture with a copied function is caught.
+1.4's measurements are built (J-016): test files and the test-to-code ratio (E-034), coupling (E-035),
+duplication (E-036), each fact proven on a fixture and the duplication fixture's Maintainability facts
+a golden. What its check also names, "the two ratios", waits on Ghost: Quality per thousand lines and
+Maintainability per unit of Complexity are ratios of scores, Quality is not measured before 1.5, and
+turning facts into 0–100 scores is `score/`'s (MOD-03), at 1.9. docs/DESIGN.md says "three efficiency
+ratios" in one place and two in another. Ghost's answer decides whether 1.4 closes now with the ratios
+moved to 1.9, or `score/` starts early.
 
-- **Coupling** has its graph already: `Dependencies.graph()` gives each file's edges into the
-  repository (E-032). Fan-in and fan-out per file, or per folder, come from it without a new parse.
-- **Duplication** needs tokens, not lines: tree-sitter's leaves for TypeScript and Python, javac's
-  scanner for Java. A renamed copy is the padding an agent writes most (E-025's weak spot: a library
-  renamed out of `vendor/` is caught here or nowhere).
-- **Test-to-code ratio** needs to know a test file: by path and name (`test/`, `tests/`, `*_test.py`,
-  `test_*.py`, `*.test.ts`, `*Test.java`); record the rule as a decision.
 - **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
   is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes.
 - Add a fixture beside the others when a case needs one, its golden under `test/goldens/`; work each

@@ -68,7 +68,7 @@ public final class JavaAdapter implements Adapter {
             List<Import> imports = new ArrayList<>();
             SourcePositions positions = Trees.instance(task).getSourcePositions();
             for (CompilationUnitTree unit : task.parse()) {
-                new Methods(unit, positions, found).scan(unit, null);
+                new Methods(unit, positions, found, text).scan(unit, null);
                 imports.addAll(JavaImports.of(unit, positions));
             }
             for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
@@ -87,8 +87,10 @@ public final class JavaAdapter implements Adapter {
         private final List<Measure> found;
         private final Deque<String> classes = new ArrayDeque<>();
         private final Map<String, Integer> seen = new HashMap<>();
+        private final String text;
 
-        Methods(CompilationUnitTree unit, SourcePositions positions, List<Measure> found) {
+        Methods(CompilationUnitTree unit, SourcePositions positions, List<Measure> found, String text) {
+            this.text = text;
             this.unit = unit;
             this.positions = positions;
             this.found = found;
@@ -115,8 +117,10 @@ public final class JavaAdapter implements Adapter {
             String qualified = String.join(".", classes) + "." + name;
             int count = seen.merge(qualified, 1, Integer::sum);
             LineMap lines = unit.getLineMap();
-            int line = (int) lines.getLineNumber(positions.getStartPosition(unit, tree));
-            return new Measure(qualified + (count > 1 ? "#" + count : ""), line, JavaComplexity.cyclomatic(tree), JavaComplexity.cognitive(tree));
+            long start = positions.getStartPosition(unit, tree), end = positions.getEndPosition(unit, tree);
+            int line = (int) lines.getLineNumber(start);
+            return new Measure(qualified + (count > 1 ? "#" + count : ""), line, JavaComplexity.cyclomatic(tree), JavaComplexity.cognitive(tree),
+                    (int) lines.getLineNumber(end), text.substring((int) start, (int) end));
         }
     }
 }

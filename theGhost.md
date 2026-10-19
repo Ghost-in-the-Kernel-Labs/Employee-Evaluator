@@ -541,3 +541,23 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-032
+
+### E-036: Duplication is shared 60-token runs inside functions, names and literals normalized
+- **Decision:** `MAINTAINABILITY.duplication` is the share of tokens, inside the outermost functions of
+  files that are not tests, that lie in a run of 60 tokens found at another place too (another
+  function, or the same one at least a run's length away), to three places, citing each duplicated
+  stretch by file and lines. Tokens are normalized: comments dropped, every name that is not a
+  keyword one token, every string one token, every number one token; keywords and punctuation stay.
+  Runs are grouped by fingerprint and checked token for token, and a group is marked whole.
+- **Why:** The padding an agent writes most is a function copied and renamed; normalized tokens catch
+  it where comparing lines cannot, and kept keywords keep code of a different shape apart. Reading only
+  inside functions keeps import blocks and constant tables, which look alike everywhere, out of it.
+  Tests copy setup by design and are left out, as Sonar and PMD's CPD leave them out by default. 60
+  normalized tokens is eight to ten lines, between Sonar's ten lines and CPD's 100 raw tokens.
+  Grouping makes a hostile file of one line repeated cost its length, not its square (E-013).
+- **Held by:** `analyze/evaluator/analyze/Duplication.java`, `Tokens.java`;
+  `test/evaluator/analyze/DuplicationTest.java` and the duplication fixture's golden.
+- **Source:** Claude, building TODO.md 1.4, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-025, E-034

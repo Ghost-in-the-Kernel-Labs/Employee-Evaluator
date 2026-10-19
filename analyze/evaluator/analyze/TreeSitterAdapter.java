@@ -66,7 +66,7 @@ abstract class TreeSitterAdapter implements Adapter {
             String qualified = String.join(".", scopes) + (scopes.isEmpty() ? "" : ".") + function;
             int count = seen.merge(qualified, 1, Integer::sum);
             found.add(new Measure(qualified + (count > 1 ? "#" + count : ""), node.getStartPoint().getRow() + 1,
-                    1 + decisionsIn(node, source), cognitive(node, function, source)));
+                    1 + decisionsIn(node, source), cognitive(node, function, source), node.getEndPoint().getRow() + 1, source.text(node)));
         }
         if (scope != null) scopes.addLast(scope);
         for (int i = 0; i < node.getChildCount(); i++) functions(node.getChild(i), source, scopes, seen, found);

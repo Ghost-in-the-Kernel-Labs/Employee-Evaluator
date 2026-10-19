@@ -241,3 +241,22 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `SupplyChainTest`, on its first run.
 - **Touched:** E-033; CLAUDE.md, theGhost.md, TODO.md, docs/HANDOFF.md; `.github/workflows/ci.yml`;
   `ingest/evaluator/ingest/Quarantine.java`; `test/SupplyChainTest.java`.
+
+### J-016 TODO 1.4's measurements: test files, coupling, duplication
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.4: coupling, duplication by token shingling and the test-to-code ratio, each
+  a fact, with a fixture whose copied function is caught.
+- **Found:** The renamed copy in the duplication fixture was caught whole and the near miss was not, on
+  the first run. One hand count was wrong (`price_order` is 78 tokens, not 77: line 8 has 14); the
+  tokens were printed and the test corrected, the code unchanged. The tokenizer's one function had 27
+  paths, over `gradle metrics`' 20; split into a lexer of one method per kind of token, every golden
+  unchanged. The check's "two ratios" cannot be built at 1.4 as written: they are ratios of scores,
+  Quality is not measured before 1.5, and scores are `score/`'s, at 1.9. docs/DESIGN.md says "three
+  efficiency ratios" in one place and two in another.
+- **Options:** for the ratios, close 1.4 and move them to 1.9; or start `score/` now for
+  Maintainability and Complexity, with Quality's ratio not measured.
+- **Resolved:** The measurements built and pushed (E-034 to E-036, for Ghost's review); 1.4 stays open,
+  the ratios put to Ghost (the chain stops on an item that cannot be done as written, TODO.md).
+- **Caught by:** `DuplicationTest` (the hand count); `gradle metrics` (the paths).
+- **Touched:** `analyze/` (`TestFiles`, `Coupling`, `Duplication`, `Tokens`; `Measure` carries its end
+  line and text); E-034, E-035, E-036; docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.

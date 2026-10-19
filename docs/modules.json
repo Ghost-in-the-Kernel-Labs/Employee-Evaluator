@@ -50,7 +50,7 @@
       "mayImport": ["rubric", "ingest"],
       "mustNotImport": ["history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["analyze/evaluator/analyze/Complexity.java → Complexity.measure(), Complexity.facts()", "analyze/evaluator/analyze/Dependencies.java → Dependencies.graph(), Dependencies.facts()", "analyze/evaluator/analyze/Adapter.java (one per language)"]
+      "entryPoints": ["analyze/evaluator/analyze/Complexity.java → Complexity.measure(), Complexity.facts()", "analyze/evaluator/analyze/Dependencies.java → Dependencies.graph(), Dependencies.facts()", "analyze/evaluator/analyze/TestFiles.java → TestFiles.ratio()", "analyze/evaluator/analyze/Coupling.java → Coupling.facts()", "analyze/evaluator/analyze/Duplication.java → Duplication.fact()", "analyze/evaluator/analyze/Adapter.java (one per language)"]
     },
     "history": {
       "purpose": "The git history's shape: spread over time, diff variance, reverts and fixups, tests landing beside code, agent fingerprints. Provenance layer 3.",

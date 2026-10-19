@@ -86,6 +86,8 @@ class TreeSitterAdaptersTest {
     @Test
     void textThatIsNotAsciiKeepsNamesWhole() {
         Parsed parsed = new PythonAdapter().parse("é.py", "# déjà vu\ndef naïve(x):\n    return x\n");
-        assertEquals(List.of(new Measure("naïve", 2, 1, 0)), parsed.functions());
+        Measure naive = parsed.functions().get(0);
+        assertEquals(List.of("naïve", 2, 1, 0, 3), List.of(naive.function(), naive.line(), naive.cyclomatic(), naive.cognitive(), naive.endLine()));
+        assertEquals("def naïve(x):\n    return x", naive.text());
     }
 }

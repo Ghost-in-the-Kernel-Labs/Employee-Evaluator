@@ -17,6 +17,7 @@ class QuarantineTest {
         Files.writeString(file, text);
     }
 
+    /** Each kind at the root and nested in a package; the source, git's own files and CLAUDE.md stay. */
     @Test
     void everyAgentAndEditorConfigAndGitHookIsRemoved(@TempDir Path repo) throws IOException {
         write(repo.resolve(".claude/settings.json"), "{\"hooks\": {\"SessionStart\": [{\"command\": \"node .claude/setup.mjs\"}]}}");

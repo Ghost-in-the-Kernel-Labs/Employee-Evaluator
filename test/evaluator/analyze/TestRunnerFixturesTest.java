@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * The run fixtures' facts, worked by hand from what each fixture's tests do: in the fast loop from the
- * reports a real run wrote (test/goldens/runs/), and with `-Pdocker` from a run in the real sandbox,
+ * reports a real run wrote (test/goldens/test-runs/), and with `-Pdocker` from a run in the real sandbox,
  * which must give the same facts.
  */
 class TestRunnerFixturesTest {
@@ -62,7 +62,7 @@ class TestRunnerFixturesTest {
     }
 
     private static Map<String, Object> facts(String fixture, Sandbox sandbox) {
-        Path repo = ROOT.resolve("test/fixtures/runs/" + fixture);
+        Path repo = ROOT.resolve("test/fixtures/test-runs/" + fixture);
         TestRunner.Result result = TestRunner.run(repo, Ingest.read(repo), sandbox);
         assertEquals(List.of(), result.notMeasured(), fixture);
         Map<String, Object> facts = new LinkedHashMap<>();
@@ -72,13 +72,13 @@ class TestRunnerFixturesTest {
 
     @Test
     void theRecordedRunsGiveTheFactsWorkedByHand() {
-        EXPECTED.forEach((fixture, expected) -> assertEquals(expected, facts(fixture, new Recorded(ROOT.resolve("test/goldens/runs/" + fixture))), fixture));
+        EXPECTED.forEach((fixture, expected) -> assertEquals(expected, facts(fixture, new Recorded(ROOT.resolve("test/goldens/test-runs/" + fixture))), fixture));
     }
 
     @Test
     void theNetworkAttemptIsNamed() {
-        Path repo = ROOT.resolve("test/fixtures/runs/py-network");
-        Fact fact = TestRunner.run(repo, Ingest.read(repo), new Recorded(ROOT.resolve("test/goldens/runs/py-network"))).facts().get(0);
+        Path repo = ROOT.resolve("test/fixtures/test-runs/py-network");
+        Fact fact = TestRunner.run(repo, Ingest.read(repo), new Recorded(ROOT.resolve("test/goldens/test-runs/py-network"))).facts().get(0);
         assertEquals(List.of("tests.test_rates.test_fetches_rates"), fact.evidence().sources());
     }
 

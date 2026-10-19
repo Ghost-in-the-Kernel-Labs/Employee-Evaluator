@@ -100,6 +100,7 @@ class TestRunnerTest {
         assertEquals(List.of("Python: the tests wrote no report"), TestRunner.run(repo, Ingest.read(repo), new Fake()).notMeasured());
     }
 
+    /** An XXE report is refused; a report that is a link out of the run is never read, and removing it leaves its target. */
     @Test
     void aHostileReportIsRefusedAndALinkIsNotFollowed(@TempDir Path repo, @TempDir Path outside) throws IOException {
         Fake fake = new Fake();

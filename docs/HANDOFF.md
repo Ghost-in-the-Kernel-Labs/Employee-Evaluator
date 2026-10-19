@@ -35,8 +35,8 @@ and `sandbox/setup.sh`. Proven here: fetch.py unpacks Maven and refuses a wrong 
 install with every hash checked; c8's lockfile installs with scripts off and reports coverage; the proxy
 tunnels a registry and refuses all else on loopback. Not provable here (no Docker daemon), for Ghost's
 machine: `sandbox/setup.sh` (both images build, the network and the proxy come up), then a real run.
-S4 is built (J-022): `test/fixtures/runs/` (py-pass, py-fail, py-network, node-pass), their reports
-from a real run recorded in `test/goldens/runs/`, and `TestRunnerFixturesTest` holding the runner to the
+S4 is built (J-022): `test/fixtures/test-runs/` (py-pass, py-fail, py-network, node-pass), their reports
+from a real run recorded in `test/goldens/test-runs/`, and `TestRunnerFixturesTest` holding the runner to the
 facts worked by hand. **1.5 waits on one run, Ghost's:** on a machine with Docker, `sandbox/setup.sh`,
 then `gradle test -Pdocker`; `theRealSandboxGivesTheSameFacts` must pass (it is skipped without
 `-Pdocker`). Then 1.5 moves to docs/DONE.md, and 1.6 (git history) starts.

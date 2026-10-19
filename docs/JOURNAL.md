@@ -352,3 +352,21 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** reading the recorded coverage report's files, before writing the expected values.
 - **Touched:** `analyze/evaluator/analyze/TestPlans.java`, `TestRunner.java`; `test/fixtures/runs/`,
   `test/goldens/runs/`; build.gradle (`-Pdocker`); docs/HANDOFF.md.
+
+### J-023 A commit that fails in a clean clone reached main: the fixtures were ignored, and my check passed it
+- **Who:** Claude. **Class:** failure-missed.
+- **Intent:** Push 1.5's S4 (J-022).
+- **Found:** `.gitignore`'s `runs/` (E-014: no run output in the repository) is unanchored, so it also
+  ignored `test/fixtures/runs/` and `test/goldens/runs/`: the fixtures were never committed, and every
+  clean clone failed two tests. The check I ran before each push, a stand-in for `scripts/prepush.sh`
+  without Docker, piped Gradle's output through `grep`, so Gradle's exit status was lost and the check
+  printed "ok" over a failed build. The pushed commit (d0e8d34) failed in a clean clone; every earlier
+  push's output shows no failed test, so it is the only one.
+- **Options:** narrow `.gitignore`; rename the folders.
+- **Resolved:** The folders renamed `test-runs/` (E-014's rule left as it is). The stand-in rewritten with
+  `set -euo pipefail` and every exit status checked; run first against the broken commit, it failed, as it
+  must; then against the fix. Missed by me twice: the ignore rule when adding the folders (`git status`
+  showed nothing to add, which I did not read), and the check's masked status.
+- **Caught by:** the fresh clone's test run, whose failure lines were printed above the false "ok".
+- **Cost:** one broken commit on main, fixed by the next.
+- **Touched:** `test/fixtures/test-runs/`, `test/goldens/test-runs/`; `TestRunnerFixturesTest`; docs/HANDOFF.md.

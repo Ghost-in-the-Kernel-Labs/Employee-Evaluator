@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="0.130" timestamp="2026-10-19T14:44:47.086662+00:00" hostname="vm"><testcase classname="tests.test_rates" name="test_offline" time="0.002" /><testcase classname="tests.test_rates" name="test_fetches_rates" time="0.006"><failure message="socket.gaierror: [Errno -2] Name or service not known">def test_fetches_rates():
+&gt;       socket.getaddrinfo("registry.evaluator.invalid", 443)
+
+tests/test_rates.py:9: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+host = 'registry.evaluator.invalid', port = 443, family = 0, type = 0, proto = 0
+flags = 0
+
+    def getaddrinfo(host, port, family=0, type=0, proto=0, flags=0):
+        """Resolve host and port into list of address info entries.
+    
+        Translate the host/port argument into a sequence of 5-tuples that contain
+        all the necessary arguments for creating a socket connected to that service.
+        host is a domain name, a string representation of an IPv4/v6 address or
+        None. port is a string service name such as 'http', a numeric port number or
+        None. By passing None as the value of host and port, you can pass NULL to
+        the underlying C API.
+    
+        The family, type and proto arguments can be optionally specified in order to
+        narrow the list of addresses returned. Passing zero as a value for each of
+        these arguments selects the full range of results.
+        """
+        # We override this function since we want to translate the numeric family
+        # and socket type values to enum constants.
+        addrlist = []
+&gt;       for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       socket.gaierror: [Errno -2] Name or service not known
+
+/usr/lib/python3.13/socket.py:983: gaierror</failure></testcase></testsuite></testsuites>

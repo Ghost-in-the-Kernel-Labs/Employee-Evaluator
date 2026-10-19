@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.062" timestamp="2026-10-19T14:44:45.389285+00:00" hostname="vm"><testcase classname="tests.test_calc" name="test_add" time="0.001" /><testcase classname="tests.test_calc" name="test_mean" time="0.001" /><testcase classname="tests.test_calc" name="test_mean_rounds" time="0.001"><failure message="assert 1.5 == 2&#10; +  where 1.5 = mean([1, 2])">def test_mean_rounds():
+&gt;       assert mean([1, 2]) == 2
+E       assert 1.5 == 2
+E        +  where 1.5 = mean([1, 2])
+
+tests/test_calc.py:13: AssertionError</failure></testcase></testsuite></testsuites>

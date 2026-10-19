@@ -27,5 +27,9 @@ stop and ask Ghost (ANTLR, E-027, is the fallback). Then vendor the jars, the na
 Python and TypeScript grammars under `third_party/`, each with its license and a MANIFEST.md row.
 The Java adapter needs nothing new (the JDK's parser, as `scripts/Scan.java` uses). `analyze/`
 reads `ingest/`'s Inventory (`Ingest.read()`); its Complexity facts are built with `Fact.measured()`.
+Padding the applicant writes themselves is not set aside (E-025 sets aside only what they did
+not write): Ghost, 2026-10-19, "someone just spamming imports is not a good candidate". With the
+dependency graph, make imports nothing uses a fact per file (`MAINTAINABILITY.unused_imports`, say),
+so padding counts against the applicant; 1.4's duplication catches the copy-paste kind.
 Add a fixture beside `test/fixtures/small-app/` when a case needs one, its golden under
 `test/goldens/`. Run `gradle kernelMap` before the commit, and write the journal entry.

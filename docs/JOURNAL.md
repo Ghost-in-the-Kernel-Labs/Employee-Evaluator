@@ -131,3 +131,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   and ANTLR as the fallback. TODO.md 1.3 and the handoff say so.
 - **Caught by:** Ghost's question.
 - **Touched:** E-027, E-028; TODO.md; docs/HANDOFF.md.
+
+### J-009 E-025 and E-026 approved as built
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Ghost's review of the two judgment calls made under TODO.md 1.2.
+- **Found:** Their weak spots, as presented: a real source folder named `build` or `out` is set aside;
+  a library renamed out of `vendor/` counts as the applicant's until copied code is detected (1.4);
+  comments count toward Size; folders stand in for modules until 1.3's dependency graph.
+- **Options:** approve; change the folder list; strip comments once 1.3 can parse.
+- **Resolved:** Both approved as built.
+- **Touched:** E-025, E-026 (their Source); docs/HANDOFF.md.

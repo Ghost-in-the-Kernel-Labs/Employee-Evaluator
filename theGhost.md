@@ -339,7 +339,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   hostile-input rule (E-013).
 - **Held by:** `ingest/evaluator/ingest/SetAside.java`; `test/evaluator/ingest/SetAsideTest.java`;
   the small-app fixture's golden (`test/goldens/small-app/inventory.json`), one file per rule.
-- **Source:** Claude, building TODO.md 1.2, 2026-10-19; for Ghost's review.
+- **Source:** Claude, building TODO.md 1.2, 2026-10-19; approved by Ghost, 2026-10-19 (J-009).
 - **Status:** in force
 - **subject:** ingestion
 - **See also:** E-013, E-026
@@ -355,7 +355,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   folder count stands in for modules until something reads imports. The set-aside count is kept so an
   employer sees how much of the tree the applicant did not write.
 - **Held by:** `ingest/evaluator/ingest/Size.java`; `test/evaluator/ingest/IngestTest.java`.
-- **Source:** Claude, building TODO.md 1.2, 2026-10-19; for Ghost's review.
+- **Source:** Claude, building TODO.md 1.2, 2026-10-19; approved by Ghost, 2026-10-19 (J-009).
 - **Status:** in force
 - **subject:** ingestion
 - **See also:** E-011, E-025

@@ -7,10 +7,6 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 ## For Ghost
 
-- **Review E-025 and E-026.** Built under 1.2 and recorded as in force, but they are judgment calls
-  on how Size is counted: which folders, names and headers set code aside, and that Size counts
-  non-blank lines and folders (modules wait for 1.3's dependency graph). Change either by a new
-  decision; the small-app golden shows what each rule does.
 - **The image.** `docker build -t evaluator .` has still never run: neither workspace so far had a
   Docker daemon. Gradle itself has now run the build (J-005), so `scripts/prepush.sh` is the one
   untried piece. The first run on your machine proves it.

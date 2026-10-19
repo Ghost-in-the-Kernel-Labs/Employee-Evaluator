@@ -18,7 +18,7 @@ files yet points at the plan.
 | What to work on; a decision; a plan | `TODO.md` (its first item), `theGhost.md`, `docs/HANDOFF.md` | `theGhost.md` | `test/TodoTest.java`, `test/GhostTest.java` |
 | The design: pitch, architecture, provenance, the phases | `docs/DESIGN.md` | | |
 | A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` | E-004 | `test/ModulesTest.java` |
-| The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`; `rubric/` (phase 1, step 1.2) | `docs/SCORE-CARD.md` (SC-01 onward) | a doc test holding the document to `rubric/` (phase 1) |
+| The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`, `rubric/evaluator/rubric/Fact.java`, `rubric/evaluator/rubric/ScoreCard.java` | `docs/SCORE-CARD.md` (SC-01 onward) | `test/ScoreCardDocTest.java`, `test/evaluator/rubric/` |
 | Reading a repository: inventory, languages, what is vendored | `ingest/` (phase 1) | SC-07 | its fixture's golden (phase 1) |
 | Complexity, duplication, coupling, the repo's own tests | `analyze/` (phase 1) | docs/SCORE-CARD.md; E-013 (the sandbox) | the fixtures' goldens (phase 1) |
 | The git history's shape; provenance layer 3 | `history/` (phase 1) | docs/DESIGN.md (Provenance) | the fixtures' goldens (phase 1) |

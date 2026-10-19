@@ -15,6 +15,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 ### `rubric/`
 - **Purpose:** the vocabulary: the seven metrics as data, a Fact (what was measured, its evidence, its confidence, its state), the score card's types and invariants (docs/SCORE-CARD.md).
 - **May import:** nothing of ours (MOD-02).
+- **Start at:** `rubric/evaluator/rubric/Fact.java` (`Fact.measured()`, `Fact.judged()`), `rubric/evaluator/rubric/ScoreCard.java`.
 
 ### `ingest/`
 - **Purpose:** a repository on disk as an inventory: every source file by path and language, vendored and generated code set aside, nothing interpreted.

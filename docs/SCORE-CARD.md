@@ -3,8 +3,9 @@
 The score card is what the platform produces for one submission and what an employer reads. It is
 built entirely from **facts**, each with its evidence, its confidence and its state, the way Katana's
 Intent IR holds what a program means (E-017). A score nobody can trace to a fact is refused. This
-document is the contract `rubric/` implements; once `rubric/` exists, a test holds this document to
-its types (every type and invariant here is in the code, and the reverse).
+document is the contract `rubric/` implements; `test/ScoreCardDocTest.java` holds this document to
+its types: the metrics, a fact's fields, its states, the card's fields and the tiers are the code's,
+and every invariant is cited in `rubric/` (`// Invariant: SC-02`) or names the open step that will hold it.
 
 Invariants are numbered SC-01 onward, in this document only, and a number is never reused.
 
@@ -45,7 +46,7 @@ A `Fact` is one thing measured or judged about the submission:
   on the labeled set (30 repositories to start) is recorded with the prompt's hash; a fact from that
   prompt carries at most that number. A prompt with no recorded precision produces no fact.
 - **SC-06 A fact is known by its kind and its subject.** A rule's next version that infers it again is
-  the same fact, so a person's word on it stays with it.
+  the same fact, so a person's word on it stays with it. Its key is its kind and its subject (`SIZE.source_lines repository:.`).
 
 ## The card
 
@@ -53,23 +54,23 @@ One card per submission:
 
 | Field | Holds |
 | --- | --- |
-| seven scores | each 0–100, with the facts behind it listed by id |
-| ratios | Quality per thousand lines; Maintainability per unit of Complexity |
-| provenance tier | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
-| tooling bucket | which agent tooling built the repository, read from its fingerprints |
-| corpus rank | per metric, the percentile within the tooling bucket, once the bucket holds enough cards (200 to start); absent before that |
-| not measured | metrics no fact fed (the judgment metrics, when no agent ran, E-003) |
-| refuted | the facts a person refuted and by whom |
-| review | the agent's prose, one paragraph per judgment metric, each citing the facts it rests on |
-| produced | the kernel's version, the date, the rubric's hash |
+| `scores` | the seven, each 0–100, with the facts behind it listed by key |
+| `ratios` | Quality per thousand lines; Maintainability per unit of Complexity |
+| `provenanceTier` | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
+| `toolingBucket` | which agent tooling built the repository, read from its fingerprints |
+| `corpusRank` | per metric, the percentile within the tooling bucket, once the bucket holds enough cards (200 to start); absent before that |
+| `notMeasured` | metrics no fact fed (the judgment metrics, when no agent ran, E-003) |
+| `refuted` | the facts a person refuted and by whom |
+| `review` | the agent's prose, one paragraph per judgment metric, each citing the facts it rests on |
+| `produced` | the kernel's version, the date, the rubric's hash |
 
 - **SC-07 A metric with no fact is "not measured", never 0.** A zero is a measurement; an absence is
   an absence, and the employer sees which.
 - **SC-08 The anonymized card is the card minus identity.** The public board shows the scores, the
   ratios, the tier, the bucket, the language and a coarse category; never the review, the README, a
-  path or any fact's evidence, since evidence identifies.
+  path or any fact's evidence, since evidence identifies. Held from TODO.md 3.5, the board.
 - **SC-09 A card for a fixture repository is a golden** (E-018). Its JSON rendering is compared byte
-  for byte; a refactor changes none.
+  for byte; a refactor changes none. Held from TODO.md 1.9, the first cards.
 
 ## Where the facts come from
 

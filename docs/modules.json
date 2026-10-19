@@ -32,7 +32,7 @@
       "mayImport": [],
       "mustNotImport": ["ingest", "analyze", "history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": []
+      "entryPoints": ["rubric/evaluator/rubric/Fact.java → Fact.measured(), Fact.judged()", "rubric/evaluator/rubric/ScoreCard.java → new ScoreCard()"]
     },
     "ingest": {
       "purpose": "A repository on disk as an inventory: every source file by path and language, vendored and generated code set aside, nothing interpreted.",

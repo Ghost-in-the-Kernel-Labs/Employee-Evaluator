@@ -36,6 +36,11 @@ class DocTests {
     }
 
     @Test
+    void scoreCard() {
+        assertEquals(List.of(), ScoreCardDocTest.run().problems());
+    }
+
+    @Test
     void kernelMap() {
         assertEquals(List.of(), KernelMapTest.run().problems());
     }

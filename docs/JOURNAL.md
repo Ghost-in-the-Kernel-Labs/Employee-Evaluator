@@ -161,3 +161,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   (no Docker daemon here) and Windows; both are Ghost's run. The risk kept: one maintainer behind the
   binding; it is MIT and vendored, so a fork or our own build of the natives stays open.
 - **Touched:** `third_party/tree-sitter/`, `third_party/MANIFEST.md`; build.gradle; docs/HANDOFF.md.
+
+### J-011 The one-step-per-session rule struck
+- **Who:** Ghost, with Claude. **Class:** direction.
+- **Intent:** Keep 1.3 moving after its first slice.
+- **Found:** The rule in `CLAUDE.md` ("one step of TODO.md per session ... stop") fits work where
+  context cannot be cleared; in coding sessions compaction clears it well, and stopping forced a
+  restart after every step.
+- **Options:** keep it; strike it; keep it but count slices instead of steps.
+- **Resolved:** Struck (E-029): each step is closed and pushed as before, then the next one starts.
+- **Touched:** E-029; CLAUDE.md.

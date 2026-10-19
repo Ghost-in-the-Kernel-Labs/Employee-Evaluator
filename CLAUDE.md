@@ -44,8 +44,9 @@ runs the fast loop in the image, and refuses a stale kernel map. GitHub's workfl
 
 The fast loop always; `scripts/prepush.sh` before a push. A refactor changes no golden (E-018). A
 function that holds a decision cites it, `// Decision: E-011`. `gradle kernelMap` before the commit;
-a function removed or renamed gets a closing row by hand. One step of `TODO.md` per session: do it,
-move it to `docs/DONE.md`, write the journal entry, update `docs/HANDOFF.md`, stop. Every eighth
+a function removed or renamed gets a closing row by hand. A finished step of `TODO.md` is moved to
+`docs/DONE.md`, its journal entry written, `docs/HANDOFF.md` updated and pushed; then the next step
+starts, in order (E-029). Every eighth
 commit is a tithe (E-015). A doubt left in the code goes on a line of its own above it,
 `// Unsure: <why>`; `gradle metrics` lists them and nothing fails on one.
 

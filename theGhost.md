@@ -394,3 +394,20 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** environment
 - **See also:** E-021
 - **Supersedes:** E-027
+
+## How a session runs
+
+### E-029: A session works through the steps in order; it does not stop at one
+- **Decision:** A session is not limited to one step of `TODO.md`. Each finished step is closed the
+  same way (moved to `docs/DONE.md`, its journal entry, `docs/HANDOFF.md` updated, pushed to `main`),
+  and then the next step starts, in order. A step too large for one push is built in slices, each
+  tested and pushed on its own. The order of the chain (E-016) is unchanged.
+- **Why:** The one-step rule came from work where a long context cannot be cleared. In a coding
+  session, compaction clears it well, and the record each step leaves (the handoff, the journal, the
+  commits) is what a compacted or fresh session resumes from; stopping after every step only cost
+  Ghost a restart.
+- **Held by:** `CLAUDE.md` ("Before calling work done"); review.
+- **Source:** Ghost, 2026-10-19.
+- **Status:** in force
+- **subject:** process
+- **See also:** E-016, E-018

@@ -10,6 +10,8 @@ file and `docs/research/`. An alias without backticks is a review guide.
 | **applicant** | the person who submitted; on the employer side, after an unlock, the candidate | submitter |
 | **employer** | an account that browses the board and pays to unlock | recruiter, client, customer |
 | **score card** | the card of seven scores, ratios, tier and review for one submission (docs/SCORE-CARD.md) | scorecard (the Java type is ScoreCard), report, result |
+| **inventory** | a repository read as files: its source by path, language and lines, and what was set aside and why (`ingest/`) | file list, manifest |
+| **set aside** | a source file not counted as the applicant's: vendored or generated, with the rule that said so (E-025) | excluded, ignored, filtered |
 | **fact** | one thing measured or judged, with evidence, confidence and state | finding, signal, feature |
 | **metric** | one of the seven: Quality, Complexity, Size, Ambition, AI navigability, Maintainability, Provenance | score (that is the metric's number), dimension, category |
 | **ratio** | Quality per thousand lines, or Maintainability per unit of Complexity | normalized score |

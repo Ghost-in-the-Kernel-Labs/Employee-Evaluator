@@ -12,6 +12,8 @@ import java.util.stream.Stream;
 final class Repo {
     static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
     private static final Set<String> NOT_OURS = Set.of("build", "third_party", "web", "agent-runner");
+    /** The fixture repositories: someone else's code, as far as our metrics are concerned. */
+    private static final String FIXTURES = "test/fixtures/";
 
     static String read(String relative) {
         try {
@@ -27,7 +29,7 @@ final class Repo {
         try (Stream<Path> walk = Files.walk(ROOT)) {
             for (Path p : walk.filter(Files::isRegularFile).toList()) {
                 String rel = ROOT.relativize(p).toString().replace('\\', '/');
-                if (rel.startsWith(".") || NOT_OURS.contains(rel.split("/")[0]) || rel.contains("/prototypes/")) continue;
+                if (rel.startsWith(".") || NOT_OURS.contains(rel.split("/")[0]) || rel.contains("/prototypes/") || rel.startsWith(FIXTURES)) continue;
                 for (String ending : endings) if (rel.endsWith(ending)) files.put(rel, Files.readString(p));
             }
         } catch (IOException e) {

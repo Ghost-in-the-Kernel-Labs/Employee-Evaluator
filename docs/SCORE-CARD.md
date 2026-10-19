@@ -76,7 +76,7 @@ One card per submission:
 
 | Module | Facts |
 | --- | --- |
-| `ingest/` | `SIZE.*` |
+| `ingest/` | `SIZE.source_lines`, `SIZE.source_files`, `SIZE.source_folders`, `SIZE.set_aside_files` (E-026) |
 | `analyze/` | `COMPLEXITY.*`, `MAINTAINABILITY.*`, `QUALITY.tests`, `QUALITY.lint`, `NAVIGABILITY.checklist` |
 | `history/` | `PROVENANCE.history.*`, `MAINTAINABILITY.refactors` |
 | `github/` | `PROVENANCE.authorship.*` |

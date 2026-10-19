@@ -34,6 +34,7 @@ final class ScoreCardDocTest {
         run().exit();
     }
 
+    /** The document against the code, and against copies of it broken one way each, which must be caught. */
     static Check run() {
         String doc = Check.read("docs/SCORE-CARD.md");
         Set<String> open = DocsTest.openSteps(Check.read("TODO.md"));

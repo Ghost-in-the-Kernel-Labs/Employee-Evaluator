@@ -1,0 +1,2 @@
+# The fixture's own attributes: what GitHub's linguist would also set aside.
+assets/legacy.js linguist-vendored

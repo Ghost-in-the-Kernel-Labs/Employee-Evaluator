@@ -41,7 +41,7 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["analyze", "history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": []
+      "entryPoints": ["ingest/evaluator/ingest/Ingest.java → Ingest.read()", "ingest/evaluator/ingest/Size.java → Size.facts()"]
     },
     "analyze": {
       "purpose": "Static analysis over the inventory, one adapter per language: complexity per function, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox.",

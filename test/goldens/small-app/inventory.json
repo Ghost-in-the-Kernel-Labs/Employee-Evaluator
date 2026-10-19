@@ -1,0 +1,18 @@
+{
+  "source": [
+    {"path": "lib/Report.java", "language": "Java", "lines": 7},
+    {"path": "src/app/main.py", "language": "Python", "lines": 6},
+    {"path": "src/app/util.py", "language": "Python", "lines": 2},
+    {"path": "src/web/index.ts", "language": "TypeScript", "lines": 5},
+    {"path": "tests/test_util.py", "language": "Python", "lines": 3}
+  ],
+  "setAside": [
+    {"path": "assets/legacy.js", "language": "JavaScript", "reason": "vendored: .gitattributes assets/legacy.js"},
+    {"path": "dist/bundle.js", "language": "JavaScript", "reason": "generated: folder dist/"},
+    {"path": "node_modules/tiny/index.js", "language": "JavaScript", "reason": "vendored: folder node_modules/"},
+    {"path": "src/app/schema_pb2.py", "language": "Python", "reason": "generated: name *_pb2.py"},
+    {"path": "src/web/api.generated.ts", "language": "TypeScript", "reason": "generated: name *.generated.ts"},
+    {"path": "src/web/client.ts", "language": "TypeScript", "reason": "generated: header \"@generated\""},
+    {"path": "vendor/left_pad.js", "language": "JavaScript", "reason": "vendored: folder vendor/"}
+  ]
+}

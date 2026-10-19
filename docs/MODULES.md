@@ -21,6 +21,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 - **Purpose:** a repository on disk as an inventory: every source file by path and language, vendored and generated code set aside, nothing interpreted.
 - **Input:** a path to a checked-out repository. **Output:** an Inventory; the Size facts.
 - **May import:** `rubric`.
+- **Start at:** `ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025).
 
 ### `analyze/`
 - **Purpose:** static analysis over the inventory, one adapter per language: complexity, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox (E-013).

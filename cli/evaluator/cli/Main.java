@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * The command line: turns what was typed into a command and prints what it did. The work is in the
  * other modules; this one only names it. `evaluator score <path>` is the one command (phase 1); until
- * ingest/ exists (1.2) it says so and exits 2.
+ * the score card exists (1.9) it says so and exits 2.
  */
 // Decision: E-010
 public final class Main {
@@ -25,7 +25,7 @@ public final class Main {
             err.print(USAGE);
             return 1;
         }
-        err.println("evaluator score: not built yet (TODO.md 1.2, repo ingestion); " + args.get(1) + " was not read");
+        err.println("evaluator score: not built yet (TODO.md 1.9, the score card); " + args.get(1) + " was not read");
         return 2;
     }
 }

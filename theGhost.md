@@ -322,3 +322,40 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** environment
 - **See also:** E-021
+
+## Reading a repository
+
+### E-025: Vendored and generated code is set aside by what the repository shows, and says why
+- **Decision:** A source file is set aside, not counted, when a folder on its path is a vendoring or
+  build folder (`node_modules`, `vendor`, `third_party`, `dist`, `build`, `target`, ...), when the
+  repository's own `.gitattributes` marks it `linguist-vendored` or `linguist-generated`, when its name
+  is a generator's (`*.min.js`, `*_pb2.py`, `*.pb.go`, `*.generated.ts`, ...), or when one of its first
+  five lines carries a generator's mark (`@generated`, `Code generated`, `DO NOT EDIT`). The first
+  rule that matches is written beside the file in the inventory. Nothing is run to decide.
+- **Why:** Size and every ratio built on it reward padding if copied or generated code counts; an
+  applicant who vendors a library did not write it. The rules are the ones GitHub's linguist and the
+  generators themselves use, so an honest repository is read as its own tooling already reads it,
+  and a reason beside each file lets a person check (E-017). Reading, never running, keeps the
+  hostile-input rule (E-013).
+- **Held by:** `ingest/evaluator/ingest/SetAside.java`; `test/evaluator/ingest/SetAsideTest.java`;
+  the small-app fixture's golden (`test/goldens/small-app/inventory.json`), one file per rule.
+- **Source:** Claude, building TODO.md 1.2, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** ingestion
+- **See also:** E-013, E-026
+
+### E-026: What Size counts: non-blank lines, files and folders of the applicant's own source
+- **Decision:** The Size facts are `SIZE.source_lines` (lines that are not blank, comments included,
+  in counted source files), `SIZE.source_files`, `SIZE.source_folders` (folders that directly hold
+  counted source) and `SIZE.set_aside_files`. A file is source when its ending names a programming
+  language; documents, data and binaries are not. Each fact cites the paths it counted. "Modules" in
+  the score card's Size row waits for the dependency graph (TODO.md 1.3), which knows what a module is.
+- **Why:** Non-blank lines is the count every tool agrees on without parsing; stripping comments
+  needs a parser per language, which is 1.3's work, and comments are part of working software. A
+  folder count stands in for modules until something reads imports. The set-aside count is kept so an
+  employer sees how much of the tree the applicant did not write.
+- **Held by:** `ingest/evaluator/ingest/Size.java`; `test/evaluator/ingest/IngestTest.java`.
+- **Source:** Claude, building TODO.md 1.2, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** ingestion
+- **See also:** E-011, E-025

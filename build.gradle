@@ -25,9 +25,11 @@ sourceSets {
     scripts {
         java.srcDirs = ['scripts']
     }
-    // The doc tests (default package) and each module's tests (its package).
+    // The doc tests (default package) and each module's tests (its package). The fixtures are
+    // repositories to read, not our code: their Java is never compiled.
     test {
         java.srcDirs = ['test']
+        java.exclude 'fixtures/**'
         compileClasspath += scripts.output
         runtimeClasspath += scripts.output
     }
@@ -40,6 +42,8 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty 'evaluator.root', rootDir.absolutePath
+    // `gradle test -PwriteGoldens` rewrites the goldens under test/goldens/ instead of comparing (E-018); review the diff.
+    systemProperty 'evaluator.writeGoldens', project.hasProperty('writeGoldens')
     testLogging { events 'failed'; exceptionFormat = 'full' }
 }
 

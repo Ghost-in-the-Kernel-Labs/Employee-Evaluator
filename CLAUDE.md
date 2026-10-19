@@ -19,7 +19,7 @@ files yet points at the plan.
 | The design: pitch, architecture, provenance, the phases | `docs/DESIGN.md` | | |
 | A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` | E-004 | `test/ModulesTest.java` |
 | The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`, `rubric/evaluator/rubric/Fact.java`, `rubric/evaluator/rubric/ScoreCard.java` | `docs/SCORE-CARD.md` (SC-01 onward) | `test/ScoreCardDocTest.java`, `test/evaluator/rubric/` |
-| Reading a repository: inventory, languages, what is vendored | `ingest/` (phase 1) | SC-07 | its fixture's golden (phase 1) |
+| Reading a repository: inventory, languages, what is vendored | `ingest/evaluator/ingest/Ingest.java`, `ingest/evaluator/ingest/SetAside.java`, `ingest/evaluator/ingest/Size.java` | E-025, E-026 | `test/evaluator/ingest/`, the golden `test/goldens/small-app/inventory.json` (`gradle test -PwriteGoldens` rewrites it; review the diff) |
 | Complexity, duplication, coupling, the repo's own tests | `analyze/` (phase 1) | docs/SCORE-CARD.md; E-013 (the sandbox) | the fixtures' goldens (phase 1) |
 | The git history's shape; provenance layer 3 | `history/` (phase 1) | docs/DESIGN.md (Provenance) | the fixtures' goldens (phase 1) |
 | Commit verification and push attribution; layer 2 | `github/` (phase 1) | docs/DESIGN.md (Provenance) | an integration test on Ghost's own repository (phase 1) |

@@ -24,6 +24,9 @@ sourceSets {
     // The project's own tooling: the kernel map and the metrics. Never shipped.
     scripts {
         java.srcDirs = ['scripts']
+        // Counted by the kernel's own rules where the two measure the same thing (Scan.paths, E-030).
+        compileClasspath += main.output
+        runtimeClasspath += main.output
     }
     // The doc tests (default package) and each module's tests (its package). The fixtures are
     // repositories to read, not our code: their Java is never compiled.

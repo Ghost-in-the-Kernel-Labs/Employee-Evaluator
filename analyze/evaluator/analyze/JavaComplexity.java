@@ -27,12 +27,16 @@ import com.sun.source.util.TreeScanner;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A Java method's two complexities, from its parse tree. A class declared inside the method is not counted: its methods are functions of their own. */
-final class JavaComplexity {
+/**
+ * A Java method's two complexities, from its parse tree. A class declared inside the method is not
+ * counted: its methods are functions of their own. Public so the project's own tooling counts paths
+ * the same way (`scripts/Scan.java`).
+ */
+public final class JavaComplexity {
     private JavaComplexity() {}
 
     /** Decision points plus one: if, loops, a case that is not default, catch, ?:, && and ||. */
-    static int cyclomatic(MethodTree method) {
+    public static int cyclomatic(MethodTree method) {
         int[] count = {1};
         new TreeScanner<Void, Void>() {
             @Override
@@ -110,17 +114,19 @@ final class JavaComplexity {
 
         @Override
         public Void visitSwitch(SwitchTree tree, Integer nesting) {
-            total += 1 + nesting;
-            scan(tree.getExpression(), nesting);
-            scan(tree.getCases(), nesting + 1);
-            return null;
+            return aSwitch(tree.getExpression(), tree.getCases(), nesting);
         }
 
         @Override
         public Void visitSwitchExpression(SwitchExpressionTree tree, Integer nesting) {
+            return aSwitch(tree.getExpression(), tree.getCases(), nesting);
+        }
+
+        /** A switch, statement or expression: +1 and its nesting once, however many cases; the cases one level deeper. */
+        private Void aSwitch(ExpressionTree selector, List<? extends CaseTree> cases, int nesting) {
             total += 1 + nesting;
-            scan(tree.getExpression(), nesting);
-            scan(tree.getCases(), nesting + 1);
+            scan(selector, nesting);
+            scan(cases, nesting + 1);
             return null;
         }
 

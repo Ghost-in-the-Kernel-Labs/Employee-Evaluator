@@ -1,7 +1,5 @@
-import com.sun.source.tree.CaseTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.tree.DefaultCaseLabelTree;
 import com.sun.source.tree.LineMap;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
@@ -10,6 +8,7 @@ import com.sun.source.util.JavacTask;
 import com.sun.source.util.SourcePositions;
 import com.sun.source.util.TreeScanner;
 import com.sun.source.util.Trees;
+import evaluator.analyze.JavaComplexity;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -137,30 +136,9 @@ final class Scan {
         }
     }
 
-    /** Decision points plus one: if, loops, non-default cases, catch, ?:, && and ||. */
+    /** Decision points plus one, counted by the kernel's own rule (E-030), so the two never disagree. */
     static int paths(MethodTree method) {
-        int[] count = {1};
-        new TreeScanner<Void, Void>() {
-            @Override
-            public Void scan(Tree tree, Void unused) {
-                if (tree == null) return null;
-                switch (tree.getKind()) {
-                    case IF, FOR_LOOP, ENHANCED_FOR_LOOP, WHILE_LOOP, DO_WHILE_LOOP, CATCH, CONDITIONAL_EXPRESSION,
-                            CONDITIONAL_AND, CONDITIONAL_OR -> count[0]++;
-                    case CASE -> {
-                        if (((CaseTree) tree).getLabels().stream().noneMatch(l -> l instanceof DefaultCaseLabelTree)) count[0]++;
-                    }
-                    default -> {}
-                }
-                return super.scan(tree, null);
-            }
-
-            @Override
-            public Void visitClass(ClassTree tree, Void unused) {
-                return null; // a class inside a method has its own methods
-            }
-        }.scan(method.getBody(), null);
-        return count[0];
+        return JavaComplexity.cyclomatic(method);
     }
 
     /** The simple names of the methods a method invokes. */

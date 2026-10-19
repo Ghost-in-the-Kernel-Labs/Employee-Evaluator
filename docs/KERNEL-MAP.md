@@ -97,3 +97,4 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/JavaComplexity.java:JavaComplexity.Cognitive.flatten` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/Parsed.java:Parsed.Parsed` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/Parsed.java:Parsed.unread` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/JavaComplexity.java:JavaComplexity.Cognitive.aSwitch` |  | 2026-10-19 |  |

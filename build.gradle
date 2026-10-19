@@ -1,0 +1,62 @@
+// Employee Evaluator's build: Java 21, offline, every dependency a file under third_party/ (E-021).
+// No repository is declared, so nothing can reach the network; a new dependency is vendored first.
+plugins {
+    id 'java'
+}
+
+// The image pins Gradle (Dockerfile); a different Gradle outside it is refused, not tolerated.
+if (gradle.gradleVersion != '8.14.3') {
+    throw new GradleException("Employee Evaluator builds with Gradle 8.14.3 (the Dockerfile's image); this is ${gradle.gradleVersion}")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.encoding = 'UTF-8'
+}
+
+// The kernel's modules are the folders docs/modules.json names (the list lives only there).
+def modules = new groovy.json.JsonSlurper().parse(file('docs/modules.json')).modules.keySet()
+
+sourceSets {
+    main {
+        java.srcDirs = modules.collect { it }
+    }
+    // The project's own tooling: the kernel map and the metrics. Never shipped.
+    scripts {
+        java.srcDirs = ['scripts']
+    }
+    // The doc tests (default package) and each module's tests (its package).
+    test {
+        java.srcDirs = ['test']
+        compileClasspath += scripts.output
+        runtimeClasspath += scripts.output
+    }
+}
+
+dependencies {
+    testImplementation fileTree(dir: 'third_party/junit', include: '*.jar')
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'evaluator.root', rootDir.absolutePath
+    testLogging { events 'failed'; exceptionFormat 'full' }
+}
+
+tasks.register('metrics', JavaExec) {
+    description = 'Prints the metrics of docs/AGENT.md and the warnings: long or branching functions, Unsure lines, the tithe cadence.'
+    classpath = sourceSets.scripts.runtimeClasspath
+    mainClass = 'Metrics'
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
+tasks.register('kernelMap', JavaExec) {
+    description = 'Appends to docs/KERNEL-MAP.md a row for every function in a module it does not hold.'
+    classpath = sourceSets.scripts.runtimeClasspath
+    mainClass = 'KernelMap'
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
+jar {
+    manifest { attributes 'Main-Class': 'evaluator.cli.Main' }
+}

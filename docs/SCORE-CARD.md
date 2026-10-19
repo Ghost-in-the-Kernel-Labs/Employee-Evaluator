@@ -1,0 +1,83 @@
+# The score card: the project's intent map
+
+The score card is what the platform produces for one submission and what an employer reads. It is
+built entirely from **facts**, each with its evidence, its confidence and its state, the way Katana's
+Intent IR holds what a program means (E-017). A score nobody can trace to a fact is refused. This
+document is the contract `rubric/` implements; once `rubric/` exists, a test holds this document to
+its types (every type and invariant here is in the code, and the reverse).
+
+Invariants are numbered SC-01 onward, in this document only, and a number is never reused.
+
+## The seven metrics (E-011)
+
+| Metric | Measures | Facts it is built from | Judge |
+| --- | --- | --- | --- |
+| Quality | correctness, tests, error handling, idiom | test pass rate and coverage, lint findings, agent review of sampled modules | tools + agent |
+| Complexity | difficulty of the problem actually solved | cyclomatic and cognitive complexity per function, dependency-graph depth, agent assessment | tools + agent |
+| Size | amount of working software | source lines, files, modules, with vendored and generated code set aside | tools |
+| Ambition | how hard the stated goal was | agent judgment against a calibrated rubric: toy, utility, product, research | agent, calibrated |
+| AI navigability | how easily an agent with little context works in the repo | phase 1: a checklist (`CLAUDE.md`/`AGENTS.md` present and fresh, module boundaries, naming); phase 2: a cold-start task measured in tool calls and tokens | checklist, then agent task |
+| Maintainability | how safely the code can be changed | coupling, duplication, test-to-code ratio, refactor history | tools + agent |
+| Provenance | confidence the applicant built it | identity (sign-in), authorship (signed or pushed commits), history shape | tools |
+
+- **SC-01 Seven scores, each 0–100, each ranked on its own; there is no composite.** The card never
+  carries a single overall number, and no renderer computes one.
+- **SC-04 Size and Complexity rank through ratios.** The card shows them raw and ranks on Quality per
+  thousand lines and Maintainability per unit of Complexity.
+
+## A fact
+
+A `Fact` is one thing measured or judged about the submission:
+
+| Field | Holds |
+| --- | --- |
+| `kind` | which metric it feeds and what it says (`SIZE.source_lines`, `HISTORY.spread_days`, `QUALITY.agent_review`) |
+| `subject` | what it is about: the whole repository, a file, a function, a commit, a module |
+| `value` | the measurement or the judgment, typed by the kind |
+| `evidence` | where it was read: paths and lines, commit hashes, the tool and its version, the prompt hash and the sampled files for an agent judgment |
+| `confidence` | 0–1; a tool measurement is 1.0; an agent judgment carries the precision its prompt scored on the calibration set, never more |
+| `state` | `inferred`, `confirmed` or `refuted` |
+
+- **SC-02 Every fact carries its evidence.** A fact with no evidence is refused when built.
+- **SC-03 A refuted fact never scores.** A person refutes a fact (Ghost during calibration, an employer
+  in review); the card is recomputed without it and says which facts a person refuted.
+- **SC-05 An agent judgment's confidence is bounded by calibration.** The judging prompt's precision
+  on the labeled set (30 repositories to start) is recorded with the prompt's hash; a fact from that
+  prompt carries at most that number. A prompt with no recorded precision produces no fact.
+- **SC-06 A fact is known by its kind and its subject.** A rule's next version that infers it again is
+  the same fact, so a person's word on it stays with it.
+
+## The card
+
+One card per submission:
+
+| Field | Holds |
+| --- | --- |
+| seven scores | each 0–100, with the facts behind it listed by id |
+| ratios | Quality per thousand lines; Maintainability per unit of Complexity |
+| provenance tier | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
+| tooling bucket | which agent tooling built the repository, read from its fingerprints |
+| corpus rank | per metric, the percentile within the tooling bucket, once the bucket holds enough cards (200 to start); absent before that |
+| not measured | metrics no fact fed (the judgment metrics, when no agent ran, E-003) |
+| refuted | the facts a person refuted and by whom |
+| review | the agent's prose, one paragraph per judgment metric, each citing the facts it rests on |
+| produced | the kernel's version, the date, the rubric's hash |
+
+- **SC-07 A metric with no fact is "not measured", never 0.** A zero is a measurement; an absence is
+  an absence, and the employer sees which.
+- **SC-08 The anonymized card is the card minus identity.** The public board shows the scores, the
+  ratios, the tier, the bucket, the language and a coarse category; never the review, the README, a
+  path or any fact's evidence, since evidence identifies.
+- **SC-09 A card for a fixture repository is a golden** (E-018). Its JSON rendering is compared byte
+  for byte; a refactor changes none.
+
+## Where the facts come from
+
+| Module | Facts |
+| --- | --- |
+| `ingest/` | `SIZE.*` |
+| `analyze/` | `COMPLEXITY.*`, `MAINTAINABILITY.*`, `QUALITY.tests`, `QUALITY.lint`, `NAVIGABILITY.checklist` |
+| `history/` | `PROVENANCE.history.*`, `MAINTAINABILITY.refactors` |
+| `github/` | `PROVENANCE.authorship.*` |
+| `agent-runner/` (phase 2) | `AMBITION.*`, `QUALITY.agent_review`, `COMPLEXITY.agent_assessment`, `NAVIGABILITY.task` |
+| `score/` | none: it combines facts into the card and makes no fact of its own |

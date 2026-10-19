@@ -1,0 +1,3 @@
+// One Gradle project. The kernel's modules are not Gradle subprojects: each is an entry in
+// docs/modules.json (how to add one: its `adding` line) and a folder once it has code (E-004).
+rootProject.name = 'employee-evaluator'

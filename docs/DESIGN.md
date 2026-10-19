@@ -124,11 +124,11 @@ Employers never see code or identity until they pay, and candidates never see wh
 
 Phase 1 delivers a command-line scorer that takes a repository path and emits a score card for the four tool-computable metrics plus provenance layers 2 and 3. No agents, no web app. It is testable on our own repos from the first week.
 
-**Repo:** this one, with the scorer in `packages/scorer`. Language: Java 21, Gradle, JUnit 5.
+**Repo:** this one. The scorer is the kernel's modules at the root (`docs/modules.json`: rubric, ingest, analyze, history, github, score, cli). Language: Java 21, Gradle, JUnit 5, built offline in a pinned image. The working rules are `CLAUDE.md`, `theGhost.md` and `docs/GHOST-IN-THE-KERNEL.md`.
 
 **Steps, each one Opus session:**
 
-1. Scaffold the repo with `CLAUDE.md`, architecture notes, lint, test runner, and an empty `score` command. Record the refactor cadence in `CLAUDE.md` (every fifth session is a navigability pass).
+1. Scaffold the repo with `CLAUDE.md`, `theGhost.md`, the module map, the kernel map, the doc tests, the pinned image, and an empty `score` command. Done 2026-10-18.
 2. Repo ingestion: clone or read a local path, detect languages, exclude vendored and generated code, produce a file inventory. Output the Size metric.
 3. Static analysis adapters: one adapter interface, first implementations for TypeScript and Python (tree-sitter), producing cyclomatic and cognitive complexity per function and the dependency graph. Output the Complexity metric.
 4. Maintainability: coupling, duplication (token-shingling), test-to-code ratio. Output the Maintainability metric and the two efficiency ratios.
@@ -143,7 +143,7 @@ Phase 1 delivers a command-line scorer that takes a repository path and emits a 
 
 ## Phase 2 — Evaluation engine with Anthropic agents (Opus plan)
 
-Phase 2 adds the judgment metrics (Ambition, the agent half of Quality, Complexity assessment) and the real navigability task, run by Claude agents through the Claude Agent SDK, and wraps the scorer in a job queue. The Agent SDK ships in TypeScript and Python, so the agent runner is a small Python worker (`packages/agent-runner`) that the Java engine calls over the queue: it receives a job, runs one agent, and returns structured JSON. Everything else stays in Java.
+Phase 2 adds the judgment metrics (Ambition, the agent half of Quality, Complexity assessment) and the real navigability task, run by Claude agents through the Claude Agent SDK, and wraps the scorer in a job queue. The Agent SDK ships in TypeScript and Python, so the agent runner is a small Python worker (`agent-runner/`) that the Java engine calls over the queue: it receives a job, runs one agent, and returns structured JSON. Everything else stays in Java.
 
 **Design rule:** every agent judgment is a structured output against a written rubric, checked against the calibration set before it touches a live submission. The agent explains its score in prose; the prose becomes the employer-facing review.
 
@@ -171,7 +171,7 @@ Phase 3 is one web application: GitHub OAuth for applicants, an employer board, 
 
 **Steps, each one Opus session:**
 
-1. Scaffold `packages/web` beside the scorer and engine; shared score-card types from phase 1.
+1. Scaffold `web/` beside the kernel; shared score-card types from `rubric/`.
 2. GitHub App registration and OAuth sign-in; applicant and employer roles; employer accounts verified by company email domain.
 3. Submission flow: pick a repository the account owns, confirm it is public or grant the App read access, enqueue the job, show status.
 4. Score card page for the applicant: all seven metrics, the review, the provenance tier, and what the public board shows.

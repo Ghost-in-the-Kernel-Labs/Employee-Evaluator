@@ -1,0 +1,18 @@
+# The fast loop in the pinned image with the network off (E-021): what passes here is what a clean
+# clone builds offline. One run per change: on a push to main, where every step lands (E-020), and
+# by hand; a branch push or a pull request runs nothing, since its commits are the ones main gets.
+name: ci
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  fast-loop:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t evaluator .
+      - name: Build and test, network off
+        run: docker run --rm --network none -u "$(id -u)" -v "$PWD":/evaluator evaluator gradle build --offline --warning-mode fail

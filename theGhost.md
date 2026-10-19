@@ -1,0 +1,310 @@
+# theGhost: the decisions Employee Evaluator stands on
+
+This is the baseline of intention. [docs/GHOST-IN-THE-KERNEL.md](docs/GHOST-IN-THE-KERNEL.md) says why
+the codebase must remember why it exists; this file is that memory, for the decisions that shape it.
+Comments say what one piece of code is for; the decisions here are the layer beneath them, the
+reasons the pieces are shaped as they are. Everything else should be extensible from it: a plan
+builds on these decisions, a rule enforces one, a test proves one holds.
+
+**Every major decision is recorded, including those the design already implies.** The code shows
+*what* was chosen, never *why*, nor what was weighed against it. The decisions against are recorded
+too, so they are not proposed again without new evidence.
+
+## How an entry is written
+
+```text
+### X-000: the decision, in one line (X is E)
+- **Decision:** what was decided, plainly.
+- **Why:** the reason, and the evidence it came from.
+- **Held by:** the code, rule, test or document that keeps it true.
+- **Source:** who decided and when.
+- **Status:** in force | proposed | refused | withdrawn | superseded by E-000
+- **subject:** one or two words, so entries can be grouped
+- **See also:** E-000 (optional)
+- **Supersedes:** E-000 (only on a decision that replaces one; the old one's status names this one)
+```
+
+Append, never rewrite history. A decision that changes gets a new entry; the old one says "superseded
+by" the new one, so the reasoning that was replaced stays readable. Ids are consecutive; a gap is
+refused unless a paragraph opening "Reserved" names it. `test/GhostTest.java` holds all of this.
+
+## Lineage
+
+Katana (R-001 onward) and Suite Builder (G-001 onward) are this project's parents. A decision taken
+from one of them says so in its Why; the reasoning there is not copied here, only pointed at.
+
+## Purpose and shape
+
+### E-001: Java 21 for the kernel, TypeScript for the web, Python for the agent runner
+- **Decision:** The scorer, the engine and the API are Java 21 on Gradle with JUnit 5. The web
+  frontend (phase 3) is TypeScript. The agent runner (phase 2) is a small Python worker around the
+  Claude Agent SDK. Each lives in its own folder; the kernel is the Java.
+- **Why:** At the scale planned (tens of thousands of submitters) the cost is model API spend and the
+  sandbox fleet, not orchestration; the JVM's concurrency and static-analysis ecosystem fit the
+  engine, and Ghost is faster in Java. The Agent SDK ships in TypeScript and Python, not Java.
+- **Held by:** `build.gradle`; `docs/modules.json` (MOD-01: the kernel never imports a model client).
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** languages
+- **See also:** E-003, E-021
+
+### E-002: The website and the GitHub app are one web app
+- **Decision:** There is one web application: GitHub sign-in, the submission flow, the employer board
+  and billing. There is no separate "GitHub app" product; the GitHub App registration is how the web
+  app reads repositories with scoped, revocable permissions.
+- **Why:** Ghost listed a website and a GitHub-integrated app as two components and asked whether
+  they could merge; they are one front door with one identity (E-012's layer 1).
+- **Held by:** `docs/DESIGN.md` (Architecture).
+- **Source:** Ghost, 2026-10-18.
+- **Status:** in force
+- **subject:** architecture
+
+### E-003: No model runs in the kernel; judgment arrives as facts
+- **Decision:** No module of the Java kernel imports a model client. Agent judgments (Ambition, the
+  agent half of Quality, the navigability task) run in `agent-runner/`, behind a queue, and reach the
+  kernel as Facts with evidence and confidence (E-017). The kernel can score a repository with no
+  model at all; it then reports the judgment metrics as not measured.
+- **Why:** Katana's R-004 (no model at conversion time) made the compiler testable and its output
+  reproducible; here the same split keeps the deterministic metrics deterministic, lets the kernel's
+  tests run offline, and puts every model call behind one cost-capped door.
+- **Held by:** `docs/modules.json` MOD-01; `test/ModulesTest.java`.
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** architecture
+- **See also:** E-001, E-017
+
+### E-004: Modules with declared imports, held by a test
+- **Decision:** The kernel is modules, one folder each at the root, package `evaluator.<module>`.
+  Each is an entry in `docs/modules.json` with what it may and must not import. Every import in the
+  source is checked against it. A new module or a new import is an architecture decision for Ghost.
+- **Why:** Suite Builder's finding: the module map (and the kernel map, E-005) was the biggest
+  context reducer in the codebase, and the guardrail that tripped when an agent nearly overwrote
+  another area's function. Katana carried it over as `modules.json` with a test; so does this.
+- **Held by:** `docs/modules.json`; `test/ModulesTest.java` (cycles, rules MOD-01 to MOD-04, every import).
+- **Source:** Ghost, 2026-10-18, from Suite Builder and Katana.
+- **Status:** in force
+- **subject:** architecture
+- **See also:** E-005, E-016
+
+### E-005: This file is the decision record; every decision-holding function cites one
+- **Decision:** Every decision is an entry here, numbered, append-only. A function that holds a
+  decision cites it on the line above, `// Decision: E-nnn`. The kernel map (`docs/KERNEL-MAP.md`)
+  records every function and the decision it cites, append-only, generated by `gradle kernelMap`.
+- **Why:** Suite Builder's ghost document stopped an agent from overwriting another area's code
+  before any logging existed; its append-only kernel map was the guardrail that tripped. Katana kept
+  both. The decisions are the layer beneath the comments; the map is how a function is found.
+- **Held by:** `test/GhostTest.java`; `test/KernelMapTest.java`; `scripts/KernelMap.java`.
+- **Source:** Ghost, 2026-10-18, from Suite Builder (G-011, G-105) and Katana (R-008, R-042).
+- **Status:** in force
+- **subject:** intent
+- **See also:** E-004, E-006
+
+### E-006: Every document that can drift is held to the code by a test
+- **Decision:** A document a test cannot hold is a hope. `CLAUDE.md`'s paths exist or belong to an
+  open step; `TODO.md` is in order with a check per item and the first open item's check written;
+  `docs/DONE.md` and `TODO.md` share no number; the kernel map matches the source.
+- **Why:** Suite Builder's G-080: a principle with no failing test is a wish; Katana's doc tests made
+  the plan and the tree agree every push.
+- **Held by:** `test/DocsTest.java`, `test/TodoTest.java`, `test/KernelMapTest.java`, `test/DocTests.java`.
+- **Source:** Ghost, 2026-10-18, from Suite Builder (G-080).
+- **Status:** in force
+- **subject:** intent
+
+### E-007: One word for one thing: the glossary and its enforced aliases
+- **Decision:** `docs/GLOSSARY.md` names the project's words. An alias written in backticks in its
+  "Not" column is refused wherever it appears in a document outside the glossary and `docs/research/`.
+- **Why:** Katana's R-039: two words for one thing cost every reader a lookup, and an agent a wrong
+  search. Enforcing the few that matter keeps the rest a review guide.
+- **Held by:** `test/GlossaryTest.java`.
+- **Source:** Ghost, 2026-10-18, from Katana (R-039).
+- **Status:** in force
+- **subject:** intent
+
+### E-008: The journal: every event, in fixed fields, by whoever was there
+- **Decision:** `docs/JOURNAL.md` records what happened while the work was done (a contradiction
+  found, a decision, a failure caught or missed, a measurement, a change of direction), one entry per
+  event with fixed fields, newest last, written by the agent or Ghost in the same commit when possible.
+- **Why:** Katana's R-046 and Suite Builder's G-162: `git log` says what changed, never what was on
+  the table; a journal with fixed fields can be counted across projects, which the NSF study needs.
+- **Held by:** `test/JournalTest.java`.
+- **Source:** Ghost, 2026-10-18, from Katana (R-046).
+- **Status:** in force
+- **subject:** intent
+
+### E-009: Doc tests are plain Java with no dependency, run under JUnit
+- **Decision:** The tests that hold the documents and the kernel are plain Java 21 with no library,
+  each runnable alone through its `main` and all run under JUnit by `test/DocTests.java`. Each holds
+  the repository and also rejects a deliberately broken input, so a check that stops catching anything
+  is caught itself.
+- **Why:** Katana's R-038: a check that only ever sees sound input can rot silently; one that must
+  also fail on a broken fixture proves it still reads.
+- **Held by:** `test/Check.java` (`repository`, `rejects`, `accepts`).
+- **Source:** Ghost, 2026-10-18, from Katana (R-038).
+- **Status:** in force
+- **subject:** tests
+
+### E-010: The command line decides nothing
+- **Decision:** `cli/` turns what was typed into a call on another module and prints what came back.
+  No module imports it; no decision lives in it.
+- **Why:** Suite Builder's CLI rows: the work is in the project modules; the command line only says
+  it. A decision in the CLI is one the tests of the modules never see.
+- **Held by:** `docs/modules.json` MOD-04; `cli/evaluator/cli/Main.java`.
+- **Source:** Ghost, 2026-10-18.
+- **Status:** in force
+- **subject:** architecture
+
+## Scoring
+
+### E-011: Seven metrics, ranked separately; no composite score
+- **Decision:** Quality, Complexity, Size, Ambition, AI navigability, Maintainability and
+  Provenance, each 0–100, each ranked on its own. Size and Complexity are shown raw and ranked
+  through efficiency ratios (Quality per thousand lines, Maintainability per unit of Complexity). No
+  single overall number is ever shown.
+- **Why:** Employers hire for different things; a composite hides the trade-off. Raw Size and
+  Complexity reward padding; the ratios make a 6,000-line clean solution beat a 40,000-line mess.
+- **Held by:** `docs/SCORE-CARD.md` (SC-01, SC-04); `rubric/` once built.
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** scoring
+
+### E-012: Provenance is a score, not a gate
+- **Decision:** A submission with weak evidence of authorship is shown as Unverified, never rejected.
+  Three computed layers (identity by GitHub sign-in, authorship by signed or pushed commits, the
+  history's shape) make a 0–100 score; a fourth, a recorded follow-up session, is deferred.
+- **Why:** Rejecting loses every honest applicant who never set up commit signing; the employer can
+  price the uncertainty. Commit count is forgeable in an evening; the shape of a history is not.
+- **Held by:** `docs/DESIGN.md` (Provenance); `history/` and `github/` once built.
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** scoring
+
+### E-013: A submitted repository is hostile input
+- **Decision:** README text, comments, commit messages and file names are data, never instructions.
+  A submitted repository's code runs only inside a sandbox with no network except GitHub, under a
+  timeout and a cost cap. No agent judging a repository is given a tool the repository could turn.
+- **Why:** Rankings with money attached will be attacked; Suite Builder's review of 2026-10-11 found
+  the same hole (hostile crawled-site input) and closed it. The engine must assume the worst submitter.
+- **Held by:** `docs/DESIGN.md` (phase 2, Security note); the sandbox once built (TODO.md 1.6).
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** security
+
+### E-014: Nothing from an applicant enters this repository
+- **Decision:** No submitted repository, no snapshot, no identity ever enters this repository. The
+  seed corpus is the score cards of our own repositories (Suite Builder, Katana, Flight Recorder),
+  committed under `corpus/`.
+- **Why:** Katana's R-037 and Suite Builder's G-085: what a customer gave us is theirs; the
+  platform's IP promise (snapshots live only as long as scoring) starts with its own tree.
+- **Held by:** `.gitignore`; review.
+- **Source:** Ghost, 2026-10-18.
+- **Status:** in force
+- **subject:** security
+
+## How work is done
+
+### E-015: The navigation tithe
+- **Decision:** One commit in eight changes no behaviour and improves the agent's environment or the
+  code's navigability; every phase ends with a tithe pass; the metrics in `docs/AGENT.md` ratchet and
+  may not regress without a decision here. `gradle metrics` says when one is due.
+- **Why:** Ghost's finding in Suite Builder: delivery speed rose once the agent's ability to find,
+  read and change code with little context was treated as work, about a tenth of effort; Katana
+  made it a rule (R-008) and its tithe gate. This project has three languages in the tree, so the
+  share rises.
+- **Held by:** `docs/AGENT.md`; `scripts/Metrics.java` (the cadence warning); the tithe gate once built (TODO.md 1.10).
+- **Source:** Ghost, 2026-10-18, from Suite Builder and Katana (R-008).
+- **Status:** in force
+- **subject:** process
+- **See also:** E-005
+
+### E-016: The kernel first, then width
+- **Decision:** Build in this order: the rubric and the deterministic scorer (phase 1), the judging
+  engine (phase 2), the web app (phase 3). No phase starts until the one before it is proven on real
+  repositories. Within a phase, the foundation before the next layer.
+- **Why:** Ghost's design philosophy from Suite Builder: do the kernel architecture before expanding
+  wide, to save context, lower token burn, and avoid structural problems that make refactoring painful.
+- **Held by:** `TODO.md` (one chain, in order); `test/TodoTest.java`.
+- **Source:** Ghost, 2026-10-18, from Suite Builder.
+- **Status:** in force
+- **subject:** process
+- **See also:** E-004
+
+### E-017: The score card is the intent map: facts with evidence, confidence and state
+- **Decision:** Every score is built from Facts. A Fact names what it is about (a file, a function, a
+  commit, the whole repository), the evidence it was read from, a confidence, and a state: inferred,
+  confirmed or refuted. A person (Ghost in calibration, an employer in review) confirms or refutes; a
+  refuted fact never scores. No judgment metric scores a live submission until its judging prompt has
+  been run against the labeled calibration set and the agreement recorded.
+- **Why:** Katana's Intent IR (R-029): a fact a person can check beats a number nobody can question;
+  Ghost wants every inferred fact laid out in a checkable file with a correctness probability. Here
+  the file is the employer-facing review, and the probability is the confidence.
+- **Held by:** `docs/SCORE-CARD.md` (SC-02, SC-03, SC-05); `rubric/` once built.
+- **Source:** Ghost, with Fable, 2026-10-18, from Katana (R-029, R-064).
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-003, E-011
+
+### E-018: Goldens, and one change per commit
+- **Decision:** A score card for a fixture repository is a golden, byte for byte. A refactor changes
+  no golden and is committed on its own, first. One change per commit; a changed golden is reviewed
+  as a diff and explained in the commit.
+- **Why:** Suite Builder's G-083 and G-084, Katana's P-02: a golden is the cheapest proof that a
+  refactor changed nothing, and the only honest record of what a scoring change did.
+- **Held by:** the goldens under `test/` once the first fixture exists (TODO.md 1.2); review.
+- **Source:** Ghost, 2026-10-18, from Suite Builder (G-083, G-084).
+- **Status:** in force
+- **subject:** tests
+
+### E-019: Every new or changed unit test is tried by mutation
+- **Decision:** A mutation tool runs over every new or changed unit test; each surviving mutant gets a
+  test or is written up as harmless in `docs/MUTATION.md`. A test is never weakened to make code pass.
+- **Why:** Suite Builder's G-239: the first mutation run found tests that caught 53% of mutants in a
+  core file; after it, 97%. Tests that test nothing are worse than none, because they are trusted.
+- **Held by:** proposed: `docs/MUTATION.md` and the vendored tool once TODO.md 1.10 lands; until then review.
+- **Source:** Ghost, 2026-10-18, from Suite Builder (G-239).
+- **Status:** proposed
+- **subject:** tests
+
+### E-020: The maintainer is Ghost; one branch, main
+- **Decision:** In every file, comment and commit the maintainer is "Ghost" (GitHub:
+  ghost-in-the-kernel). Commits are authored as Ghost (`git config user.name Ghost`, `git config
+  user.email 118085043+ghost-in-the-kernel@users.noreply.github.com`); an agent keeps its
+  Co-Authored-By line. There is one working branch, `main`; a finished step lands on it at once.
+- **Why:** Suite Builder's G-085 and G-162, Katana's R-040: commits should count on Ghost's profile,
+  and work on a branch nobody merges is work nobody has.
+- **Held by:** review; `scripts/prepush.sh` (fetches `main` before a push).
+- **Source:** Ghost, 2026-10-18, from Suite Builder and Katana.
+- **Status:** in force
+- **subject:** process
+
+### E-021: The environment: one pinned image, offline, vendored
+- **Decision:** Everything runs in one container image pinned by digest (`Dockerfile`: JDK 21, Gradle
+  8.14.3, git). A clean clone builds and tests with the network off; every dependency is a file under
+  `third_party/` with its license and hash in `third_party/MANIFEST.md`. An agent never installs tooling.
+- **Why:** Katana's R-001 and AGT-01 to AGT-07: a build that needs the network is a build that fails
+  in CI, in a sandbox and in a year; a pinned image is the one environment every session shares.
+- **Held by:** `Dockerfile`; `build.gradle` (no repository declared); `.github/workflows/ci.yml` (`--network none`).
+- **Source:** Ghost, 2026-10-18, from Katana (R-001).
+- **Status:** in force
+- **subject:** environment
+- **See also:** E-001
+
+### E-022: A research findings list
+- **Decision:** `docs/FINDINGS.md` records every flaw the project's tests or runs prove in an
+  existing tool, metric or practice (a static analyzer that miscounts, a hiring heuristic the data
+  refutes), each with the evidence, so an evaluator can see what the project has discovered.
+- **Why:** Ghost's directive for Katana: a research department keeps a findings list; the NSF study
+  (Ghost in the Kernel versus conventional LLM-assisted development) needs one per project.
+- **Held by:** `docs/FINDINGS.md`; review.
+- **Source:** Ghost, 2026-10-18, from Katana.
+- **Status:** in force
+- **subject:** research
+
+### E-023: The public pitch attacks the process, never the people
+- **Decision:** Public copy (the site, the README, the board) argues against resumes, live coding and
+  volume. It never calls the buyer's staff incompetent. The internal pitch may.
+- **Why:** The buyer is the HR director or the CTO beside them; copy that insults them closes the tab
+  before the contract opens. The same argument lands aimed at the process.
+- **Held by:** `docs/DESIGN.md` (Pitch, "Tone note"); review.
+- **Source:** Ghost, with Fable, 2026-10-18.
+- **Status:** in force
+- **subject:** pitch

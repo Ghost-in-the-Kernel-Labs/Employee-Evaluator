@@ -1,0 +1,92 @@
+{
+  "about": "The kernel's modules (E-004): one per concern, each with its purpose, what it takes and gives, what it may import and what it must not. test/ModulesTest.java holds every import in the source to this file. entryPoints are filled as each module is built. docs/MODULES.md is the readable form; it is written by hand until a generator exists (TODO.md 1.10) and says the same thing.",
+  "package": "Each module's Java lives in its folder at the root under the package evaluator.<module> (evaluator.ingest, evaluator.score, ...); the module of an import is the segment after evaluator.",
+  "adding": "To add a module: one entry here with every field; its folder appears with its first code. A module may import only what its mayImport lists; anything else is refused whether or not mustNotImport names it, so mustNotImport records the refusals worth saying. A new module or a new import is an architecture decision (theGhost.md E-004): draft the entry as a proposal, say you are waiting on Ghost, and stop; do not add it to main.",
+  "rules": [
+    {
+      "id": "MOD-01",
+      "rule": "No module of the kernel imports a model client. Judgment lives in agent-runner/ (phase 2), behind a queue, and reaches the kernel only as facts.",
+      "source": "E-003"
+    },
+    {
+      "id": "MOD-02",
+      "rule": "rubric/ imports no module of ours: it is the vocabulary every other module speaks.",
+      "source": "E-004"
+    },
+    {
+      "id": "MOD-03",
+      "rule": "score/ reads rubric/ only and decides nothing about code: it combines facts the analyzers made. The referee does not read the players' code.",
+      "source": "E-004, E-011"
+    },
+    {
+      "id": "MOD-04",
+      "rule": "Nothing imports cli/: the command line names the work and does none of it.",
+      "source": "E-010"
+    }
+  ],
+  "modules": {
+    "rubric": {
+      "purpose": "The vocabulary: the seven metrics and their definitions as data, a Fact (what was measured, its evidence, its confidence, its state), the score card's types and invariants (docs/SCORE-CARD.md).",
+      "inputs": "nothing",
+      "outputs": "types every other module uses",
+      "mayImport": [],
+      "mustNotImport": ["ingest", "analyze", "history", "github", "score", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "ingest": {
+      "purpose": "A repository on disk as an inventory: every source file by path and language, vendored and generated code set aside, nothing interpreted.",
+      "inputs": "a path to a checked-out repository",
+      "outputs": "an Inventory; the Size facts",
+      "mayImport": ["rubric"],
+      "mustNotImport": ["analyze", "history", "github", "score", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "analyze": {
+      "purpose": "Static analysis over the inventory, one adapter per language: complexity per function, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox.",
+      "inputs": "an Inventory",
+      "outputs": "the Complexity, Maintainability and tool-half-of-Quality facts",
+      "mayImport": ["rubric", "ingest"],
+      "mustNotImport": ["history", "github", "score", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "history": {
+      "purpose": "The git history's shape: spread over time, diff variance, reverts and fixups, tests landing beside code, agent fingerprints. Provenance layer 3.",
+      "inputs": "a path to a checked-out repository with its .git",
+      "outputs": "the history-shape facts",
+      "mayImport": ["rubric"],
+      "mustNotImport": ["ingest", "analyze", "github", "score", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "github": {
+      "purpose": "What GitHub verifies: commit signature status and push attribution for the account that submitted. Provenance layer 2. The only module that reaches the network, and only GitHub.",
+      "inputs": "a repository name and the submitting account",
+      "outputs": "the authorship facts",
+      "mayImport": ["rubric"],
+      "mustNotImport": ["ingest", "analyze", "history", "score", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "score": {
+      "purpose": "Facts into a score card: the seven scores, the efficiency ratios, the provenance tier; the card as JSON and as Markdown. It reads no code and runs nothing.",
+      "inputs": "a list of Facts",
+      "outputs": "a ScoreCard and its renderings",
+      "mayImport": ["rubric"],
+      "mustNotImport": ["ingest", "analyze", "history", "github", "cli"],
+      "phase": 1,
+      "entryPoints": []
+    },
+    "cli": {
+      "purpose": "The command line: `evaluator score <path>` and nothing the other modules do not already do.",
+      "inputs": "what was typed",
+      "outputs": "the score card on stdout, what went wrong on stderr, an exit status",
+      "mayImport": ["rubric", "ingest", "analyze", "history", "github", "score"],
+      "mustNotImport": [],
+      "phase": 1,
+      "entryPoints": ["cli/evaluator/cli/Main.java → Main.run()"]
+    }
+  }
+}

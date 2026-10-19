@@ -1,0 +1,2 @@
+# The image holds tools, never the repository: the clone is mounted at /evaluator.
+*

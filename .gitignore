@@ -1,20 +1,25 @@
-# Gradle
+# build
+/build/
 .gradle/
-build/
-*/build/
+*.class
+*.jar
+!third_party/**/*.jar
 
-# IDE
+# IDE and agent scratch
 .idea/
 *.iml
 .vscode/
 
-# Node
-node_modules/
-.next/
+# the other languages' packages, once they exist
+web/node_modules/
+web/.next/
+agent-runner/__pycache__/
+agent-runner/.venv/
 
-# Python
-__pycache__/
-.venv/
+# nothing an applicant submitted, no snapshot, no run output, ever (E-014)
+submissions/
+runs/
+*.tmp
 
 # OS
 .DS_Store

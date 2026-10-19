@@ -16,6 +16,7 @@ says whether the jar reaches an applicant or an employer: nothing here does.
 | `tree-sitter/tree-sitter-0.26.6.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-ng`; the bundled tree-sitter library: `tree-sitter/LICENSE-tree-sitter`) | `analyze/` (E-028) | no | `81b113176c47c6adef9f6e3f7b8ca9f8141c4a8627f69d4423fc2e130a8ba74e` |
 | `tree-sitter/tree-sitter-python-0.25.0.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-python`) | `analyze/` (E-028) | no | `2cf56d951790ca5fbbd3fa64d11cca74e7d7bffc17d445050f9965c80875d640` |
 | `tree-sitter/tree-sitter-typescript-0.23.2.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-typescript`) | `analyze/` (E-028) | no | `5c3d1716441fbda55293b8632f9e691733bd3035a582da3936599d2309183bf0` |
+| `tree-sitter/tree-sitter-tsx-0.23.2.jar` | MIT (`tree-sitter/LICENSE-tree-sitter-typescript`: the same repository) | `analyze/` (E-028) | no | `a5eb98db7157e2693385f9e5af8b668a91112122d8c5a879b616206a841824d4` |
 
 The tree-sitter jars are `io.github.bonede` on Maven Central (github.com/bonede/tree-sitter-ng): a JNI
 binding built for Java 11, so it runs on the kernel's Java 21, with its native libraries inside each

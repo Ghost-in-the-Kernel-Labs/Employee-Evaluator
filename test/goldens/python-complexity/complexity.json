@@ -1,0 +1,21 @@
+{
+  "functions": [
+    {"path": "shapes.py", "function": "sum_of_primes", "line": 1, "cyclomatic": 4, "cognitive": 6},
+    {"path": "shapes.py", "function": "get_words", "line": 12, "cyclomatic": 4, "cognitive": 1},
+    {"path": "shapes.py", "function": "grade", "line": 24, "cyclomatic": 3, "cognitive": 3},
+    {"path": "shapes.py", "function": "logic", "line": 33, "cyclomatic": 6, "cognitive": 4},
+    {"path": "shapes.py", "function": "nested", "line": 37, "cyclomatic": 4, "cognitive": 6},
+    {"path": "shapes.py", "function": "try_it", "line": 45, "cyclomatic": 3, "cognitive": 3},
+    {"path": "shapes.py", "function": "run", "line": 53, "cyclomatic": 1, "cognitive": 0},
+    {"path": "shapes.py", "function": "later", "line": 57, "cyclomatic": 2, "cognitive": 2},
+    {"path": "shapes.py", "function": "fact", "line": 61, "cyclomatic": 2, "cognitive": 2},
+    {"path": "shapes.py", "function": "evens", "line": 65, "cyclomatic": 3, "cognitive": 1},
+    {"path": "shapes.py", "function": "outer", "line": 69, "cyclomatic": 2, "cognitive": 0},
+    {"path": "shapes.py", "function": "outer.inner", "line": 70, "cyclomatic": 2, "cognitive": 1},
+    {"path": "shapes.py", "function": "Shape.area", "line": 79, "cyclomatic": 2, "cognitive": 1},
+    {"path": "shapes.py", "function": "Shape.area#2", "line": 84, "cyclomatic": 1, "cognitive": 0}
+  ],
+  "unread": [
+    {"path": "broken.py", "why": "does not parse: line 1"}
+  ]
+}

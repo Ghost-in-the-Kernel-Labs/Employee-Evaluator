@@ -77,6 +77,6 @@ class JavaAdapterTest {
     void aLanguageNoAdapterReadsIsNotMeasured() {
         Path smallApp = ROOT.resolve("test/fixtures/small-app");
         Complexity.Report report = Complexity.measure(smallApp, Ingest.read(smallApp));
-        assertEquals(List.of("lib/Report.java"), List.copyOf(report.functions().keySet()));
+        assertEquals(List.of("lib/Report.java", "src/app/main.py", "src/app/util.py", "src/web/index.ts", "tests/test_util.py"), List.copyOf(report.functions().keySet()));
     }
 }

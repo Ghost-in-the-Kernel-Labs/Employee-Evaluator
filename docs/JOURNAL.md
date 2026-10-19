@@ -188,3 +188,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   The copy goes in the next commit, a tithe (11 commits since the last).
 - **Caught by:** `gradle metrics` (the duplicate helper).
 - **Touched:** `analyze/`; E-030; docs/modules.json, docs/MODULES.md, CLAUDE.md; `Inventory.quote` made public.
+
+### J-013 TODO 1.3, slice 3: the TypeScript and Python adapters on tree-sitter
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The same two complexities for TypeScript and Python, by E-030's rules.
+- **Found:** tree-sitter's node names were printed from real parses before the rules were written
+  (Python's elif and else hang off the if; TypeScript's else if is an if inside an else clause). Every
+  Python value worked by hand matched on the first run; one TypeScript value did not (`logic`, 3 for
+  4): an arrow function whose body is an expression had its walk start below the body, losing the
+  outer run of `||`. The hand count was right; the walk now starts at the body itself, in both
+  adapters. A `.tsx` file needs tree-sitter's TSX grammar, vendored beside the others.
+- **Options:** for TypeScript, every arrow function a function, or only named ones; for Python, a
+  closure counted in its function, or on its own.
+- **Resolved:** Named functions only; closures on their own (E-031, for Ghost's review). JavaScript has
+  no adapter yet (not in 1.3's check); the handoff names its grammar.
+- **Caught by:** `TreeSitterAdaptersTest` (the hand-worked `logic`).
+- **Touched:** `analyze/`; `third_party/tree-sitter/` (TSX); E-031; CLAUDE.md, docs/MODULES.md.

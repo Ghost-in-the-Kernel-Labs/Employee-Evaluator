@@ -1,0 +1,17 @@
+{
+  "functions": [
+    {"path": "src/examples.ts", "function": "sumOfPrimes", "line": 1, "cyclomatic": 4, "cognitive": 7},
+    {"path": "src/examples.ts", "function": "getWords", "line": 14, "cyclomatic": 4, "cognitive": 1},
+    {"path": "src/examples.ts", "function": "grade", "line": 27, "cyclomatic": 3, "cognitive": 3},
+    {"path": "src/examples.ts", "function": "logic", "line": 37, "cyclomatic": 6, "cognitive": 4},
+    {"path": "src/examples.ts", "function": "Store.nested", "line": 42, "cyclomatic": 4, "cognitive": 6},
+    {"path": "src/examples.ts", "function": "Store.load", "line": 52, "cyclomatic": 3, "cognitive": 3},
+    {"path": "src/examples.ts", "function": "later", "line": 63, "cyclomatic": 2, "cognitive": 2},
+    {"path": "src/examples.ts", "function": "fact", "line": 72, "cyclomatic": 2, "cognitive": 2},
+    {"path": "src/examples.ts", "function": "countdown", "line": 76, "cyclomatic": 2, "cognitive": 1},
+    {"path": "src/view.tsx", "function": "Badge", "line": 1, "cyclomatic": 2, "cognitive": 1}
+  ],
+  "unread": [
+    {"path": "src/broken.ts", "why": "does not parse: line 1"}
+  ]
+}

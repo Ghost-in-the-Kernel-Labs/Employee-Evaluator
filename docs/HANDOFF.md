@@ -23,9 +23,12 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 Read `CLAUDE.md`, then TODO.md 1.3. Ghost asked for 1.3 in slices, each tested and pushed on its own
 (2026-10-19): (1) tree-sitter vendored and proven, **done** (J-010); (2) the adapter interface and the
-Java adapter, **done** (J-012, E-030); (3) the TypeScript and Python adapters; (4) the dependency graph and unused imports.
-1.3 moves to `docs/DONE.md` only when all four are in. Next is slice 3.
+Java adapter, **done** (J-012, E-030); (3) the TypeScript and Python adapters, **done** (J-013, E-031); (4) the dependency graph and unused imports.
+1.3 moves to `docs/DONE.md` only when all four are in. Next is slice 4.
 
+- **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
+  is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes. 1.3's
+  check names TypeScript, Python and Java only.
 - **tree-sitter** is `third_party/tree-sitter/` (the bonede JNI binding, Java 21, natives in the jars;
   E-028, J-010); `org.treesitter.TSParser` with `TreeSitterPython` or `TreeSitterTypescript`, as
   `TreeSitterLoadsTest` shows. The kernel stays on Java 21.

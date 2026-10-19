@@ -431,3 +431,24 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-013, E-017
+
+### E-031: TypeScript and Python are counted by Java's rules, where a function is drawn as each language draws it
+- **Decision:** The TypeScript and Python adapters count as E-030 counts Java. What differs is where a
+  function begins. In TypeScript, a function declaration, a method, and a function or arrow function
+  held by a variable or a class field (`const f = () => ...`) are functions of their own; an unnamed
+  one, a callback, counts in the function around it one level deeper, as a Java lambda does. In
+  Python, every `def` is a function of its own, a closure included, as a class inside a Java method
+  is; a lambda counts one level deeper. A comprehension's `for` and `if` are decisions for
+  cyclomatic complexity; for cognitive, its `if` is +1 flat and its `for` nothing (a map is linear).
+  `case _` is a match's default and `??` is not a decision. `.tsx` files read with the TSX grammar.
+- **Why:** One set of rules across languages lets an employer compare a Java card with a TypeScript
+  one, and the same example written in each gives the same numbers (the fixtures prove it, but for
+  Python's missing labelled continue). Arrow functions are everywhere in TypeScript: counting every
+  callback as a function would split one function's logic into many small, easy-looking ones, which
+  is how agent-written code would hide its complexity.
+- **Held by:** `analyze/evaluator/analyze/TypeScriptAdapter.java`, `PythonAdapter.java`,
+  `TreeSitterAdapter.java`; `test/evaluator/analyze/TreeSitterAdaptersTest.java` and the fixtures' goldens.
+- **Source:** Claude, building TODO.md 1.3, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-028, E-030

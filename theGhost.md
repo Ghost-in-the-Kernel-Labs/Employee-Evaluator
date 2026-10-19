@@ -561,3 +561,26 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-025, E-034
+
+### E-037: A submission's tests run in a Docker container per run, in two phases, with pinned runners
+- **Decision:** A submission's own tests run in a throwaway Docker container, on a copy stripped by
+  `Quarantine.strip`, with no credentials, a read-only root, dropped capabilities, no new privileges,
+  an unprivileged user, and limits on memory, processes, CPU and time. Two phases: first its packages
+  are installed from its lockfile only, install scripts off (`npm ci --ignore-scripts`, `pip install
+  --require-hashes`), with the network reaching the package registries and nothing else; then its
+  tests run with the network off. No lockfile, no install, and the tests are not measured (SC-07).
+  The runners and coverage tools, pinned with their hashes and licenses past the 7-day cooldown:
+  pytest and coverage.py for Python, the repository's own runner and c8 for TypeScript, JUnit's
+  console launcher and JaCoCo for Java. Results are read from the reports they write (JUnit XML,
+  Cobertura, JaCoCo XML), as hostile files: no DTD loaded, no external entity, a size cap.
+- **Why:** Ghost's three answers, 2026-10-19. Docker is already the project's one environment (E-021);
+  a container per run is the isolation every CI service gives untrusted code. Installing needs the
+  network and running must not have it, so the two never share a phase; a lockfile is the only
+  install that is exactly what the applicant committed, and scripts off is the baseline's rule
+  (E-033). The reports are written by the submission's own process, so they are read as an attacker's.
+- **Held by:** `analyze/` (the runner and the readers, TODO.md 1.5); the sandbox image once built;
+  `test/SupplyChainTest.java` for its pins.
+- **Source:** Ghost, 2026-10-19 (the sandbox, the tools, two phases), on Claude's proposals.
+- **Status:** in force
+- **subject:** security
+- **See also:** E-013, E-021, E-033

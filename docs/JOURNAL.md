@@ -271,3 +271,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   docs/DONE.md. Still open for Ghost: docs/DESIGN.md says "three efficiency ratios" once and two
   everywhere else.
 - **Touched:** TODO.md, docs/DONE.md, docs/DESIGN.md, docs/HANDOFF.md.
+
+### J-018 TODO 1.5's three questions answered; one continuous session
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Start 1.5, which runs hostile code and adds dependencies, so it waited on Ghost (E-033).
+- **Found:** Three choices: the sandbox, the runners and coverage tools, and how a submission's packages
+  arrive with the network off. Ghost also said how the work runs: one continuous session, never
+  handed to another; the handoff is the record, not a relay.
+- **Options:** Docker per run, Docker with gVisor, or bubblewrap; all three languages' tools or fewer
+  first; two phases or never installing.
+- **Resolved:** Docker per run, all three languages, two phases (E-037). 1.5 in slices: the readers,
+  the runner, the image, the fixtures. This workspace has no Docker daemon, so the real runs close
+  on Ghost's machine.
+- **Touched:** E-037; docs/HANDOFF.md.

@@ -189,3 +189,7 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.TestFiles` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.isTest` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.ratio` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Coupling.java:Coupling.Coupling` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Coupling.java:Coupling.facts` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Coupling.java:Coupling.edgeFact` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Coupling.java:Coupling.cyclic` |  | 2026-10-19 |  |

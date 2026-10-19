@@ -526,3 +526,18 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-025, E-026
+
+### E-035: Coupling is fan-in, fan-out and import cycles, read from the dependency graph
+- **Decision:** From the graph of E-032: `MAINTAINABILITY.fan_in` and `MAINTAINABILITY.fan_out` per file
+  (the repository's files that import it, and that it imports, each citing them), and
+  `MAINTAINABILITY.import_cycle_files` for the repository (the files in a strongly connected part of
+  more than one file, citing them). Tests are counted like any file: a file that tests import is a
+  file that is tested.
+- **Why:** Fan-in is how far a change to a file spreads; fan-out is how much a file must know; a cycle
+  is files that cannot change one without the others, the coupling that most raises the cost of a
+  change. All three come from the graph already built, so no file is parsed twice.
+- **Held by:** `analyze/evaluator/analyze/Coupling.java`; `test/evaluator/analyze/CouplingTest.java`.
+- **Source:** Claude, building TODO.md 1.4, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-032

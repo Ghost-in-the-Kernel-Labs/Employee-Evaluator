@@ -212,3 +212,16 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/Tokens.java:Tokens.Lexer.word` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/Tokens.java:Tokens.Lexer.skip` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/Tokens.java:Tokens.Lexer.add` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.Outcome.Outcome` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.Refused.Refused` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.Reports` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.junit` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.coverage` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.reachedNetwork` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.parse` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.text` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.name` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/Reports.java:Reports.number` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestRuns.java:TestRuns.TestRuns` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestRuns.java:TestRuns.facts` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestRuns.java:TestRuns.round` |  | 2026-10-19 |  |

@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<!DOCTYPE coverage SYSTEM "https://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<coverage version="7.6.1" timestamp="1760875200000" lines-valid="40" lines-covered="30" line-rate="0.75" branches-covered="0" branches-valid="0" branch-rate="0" complexity="0">
+	<sources><source>/work</source></sources>
+	<packages><package name="app" line-rate="0.75" branch-rate="0" complexity="0"><classes/></package></packages>
+</coverage>

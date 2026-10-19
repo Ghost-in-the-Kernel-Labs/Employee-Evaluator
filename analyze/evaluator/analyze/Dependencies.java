@@ -1,0 +1,206 @@
+package evaluator.analyze;
+
+import evaluator.ingest.Inventory;
+import evaluator.rubric.Evidence;
+import evaluator.rubric.Fact;
+import evaluator.rubric.Subject;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+/**
+ * The repository's dependency graph: each file's imports resolved to the repository's own files by its
+ * language's adapter (anything else is outside it), the longest chain of imports through the graph,
+ * and each file's unused imports. Files that import each other in a cycle are one link of a chain.
+ */
+// Decision: E-032
+public final class Dependencies {
+    /** The graph's edges, file to the files it imports, both in path order; and one longest chain. */
+    public record Graph(Map<String, Set<String>> edges, List<String> longest) {}
+
+    private Dependencies() {}
+
+    /** The graph of a measured repository. */
+    public static Graph graph(Complexity.Report report, Inventory inventory) {
+        Set<String> files = new TreeSet<>();
+        Map<String, String> languages = new HashMap<>();
+        for (Inventory.Source file : inventory.source()) {
+            files.add(file.path());
+            languages.put(file.path(), file.language());
+        }
+        Map<String, Set<String>> edges = new TreeMap<>();
+        for (var file : report.imports().entrySet()) {
+            Adapter adapter = Complexity.adapterFor(languages.get(file.getKey()));
+            Set<String> to = new TreeSet<>();
+            for (Import imported : file.getValue()) to.addAll(adapter.resolve(imported, file.getKey(), files));
+            to.remove(file.getKey());
+            edges.put(file.getKey(), to);
+        }
+        return new Graph(edges, longest(edges));
+    }
+
+    /** The repository's dependency depth (links in its longest chain), and each read file's unused imports. */
+    public static List<Fact> facts(Graph graph, Complexity.Report report, String tool) {
+        List<Fact> facts = new ArrayList<>();
+        List<String> chain = graph.longest().isEmpty() ? List.of("(no file imports another)") : graph.longest();
+        facts.add(Fact.measured("COMPLEXITY.dependency_depth", Subject.repository(), Math.max(0, graph.longest().size() - 1), new Evidence(tool, chain)));
+        for (var file : report.imports().entrySet()) {
+            List<String> where = new ArrayList<>();
+            for (Import imported : file.getValue()) for (String name : imported.unused()) where.add(file.getKey() + ":" + imported.line() + " " + name);
+            Evidence evidence = new Evidence(tool, where.isEmpty() ? List.of(file.getKey()) : where);
+            facts.add(Fact.measured("MAINTAINABILITY.unused_imports", Subject.file(file.getKey()), where.size(), evidence));
+        }
+        return facts;
+    }
+
+    /**
+     * One longest chain of imports, cycles collapsed: the strongly connected parts found (Tarjan, without
+     * recursion, so a deep graph cannot exhaust the stack), then the longest path through them, a part
+     * standing for its first file. Ties go to the chain starting at the first file in path order.
+     */
+    static List<String> longest(Map<String, Set<String>> edges) {
+        Map<String, Integer> part = Tarjan.parts(edges);
+        Map<Integer, Set<Integer>> next = new TreeMap<>();
+        Map<Integer, String> first = new TreeMap<>();
+        for (var e : edges.entrySet()) {
+            int from = part.get(e.getKey());
+            first.merge(from, e.getKey(), (a, b) -> a.compareTo(b) <= 0 ? a : b);
+            next.computeIfAbsent(from, k -> new TreeSet<>());
+            for (String to : e.getValue()) {
+                int target = part.get(to);
+                first.merge(target, to, (a, b) -> a.compareTo(b) <= 0 ? a : b);
+                next.computeIfAbsent(target, k -> new TreeSet<>());
+                if (target != from) next.get(from).add(target);
+            }
+        }
+        return chain(next, first);
+    }
+
+    /** The longest path through the parts (they form no cycle), as the first file of each; empty with no edge. */
+    private static List<String> chain(Map<Integer, Set<Integer>> next, Map<Integer, String> first) {
+        Map<Integer, Integer> length = new HashMap<>();
+        Map<Integer, Integer> step = new HashMap<>();
+        for (int p : Tarjan.order(next)) {
+            int best = 0;
+            for (int q : next.get(p)) {
+                if (length.get(q) + 1 > best) {
+                    best = length.get(q) + 1;
+                    step.put(p, q);
+                }
+            }
+            length.put(p, best);
+        }
+        Integer start = null;
+        for (int p : next.keySet()) {
+            if (start == null || length.get(p) > length.get(start) || (length.get(p).equals(length.get(start)) && first.get(p).compareTo(first.get(start)) < 0)) start = p;
+        }
+        if (start == null || length.get(start) == 0) return List.of();
+        List<String> path = new ArrayList<>();
+        for (Integer p = start; p != null; p = step.get(p)) path.add(first.get(p));
+        return path;
+    }
+
+    /** The graph as JSON, the same bytes for the same repository: each file's edges, then the longest chain. */
+    public static String toJson(Graph graph, Complexity.Report report) {
+        StringBuilder json = new StringBuilder("{\n  \"imports\": [");
+        boolean first = true;
+        for (var file : report.imports().entrySet()) {
+            List<String> unused = new ArrayList<>();
+            for (Import imported : file.getValue()) unused.addAll(imported.unused());
+            json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Inventory.quote(file.getKey()))
+                    .append(", \"to\": ").append(list(graph.edges().get(file.getKey()))).append(", \"unused\": ").append(list(unused)).append('}');
+            first = false;
+        }
+        return json.append(first ? "],\n" : "\n  ],\n").append("  \"longest\": ").append(list(graph.longest())).append("\n}\n").toString();
+    }
+
+    private static String list(java.util.Collection<String> items) {
+        List<String> quoted = new ArrayList<>();
+        for (String item : items) quoted.add(Inventory.quote(item));
+        return "[" + String.join(", ", quoted) + "]";
+    }
+
+    /** Strongly connected parts and a dependency order, both without recursion. */
+    static final class Tarjan {
+        private Tarjan() {}
+
+        /** Each node's part: nodes that reach each other share one. */
+        static Map<String, Integer> parts(Map<String, Set<String>> edges) {
+            Map<String, Set<String>> graph = new TreeMap<>();
+            edges.forEach((from, to) -> {
+                graph.computeIfAbsent(from, k -> new TreeSet<>()).addAll(to);
+                for (String t : to) graph.computeIfAbsent(t, k -> new TreeSet<>());
+            });
+            Map<String, Integer> index = new HashMap<>(), low = new HashMap<>(), part = new HashMap<>();
+            Deque<String> stack = new ArrayDeque<>();
+            Set<String> onStack = new java.util.HashSet<>();
+            int[] counter = {0, 0};
+            for (String root : graph.keySet()) if (!index.containsKey(root)) visit(root, graph, index, low, part, stack, onStack, counter);
+            return part;
+        }
+
+        /** Tarjan's walk from one root, its recursion kept on an explicit stack of iterators. */
+        private static void visit(String root, Map<String, Set<String>> graph, Map<String, Integer> index, Map<String, Integer> low,
+                                  Map<String, Integer> part, Deque<String> stack, Set<String> onStack, int[] counter) {
+            Deque<Map.Entry<String, java.util.Iterator<String>>> work = new ArrayDeque<>();
+            enter(root, graph, index, low, stack, onStack, counter, work);
+            while (!work.isEmpty()) {
+                var top = work.peek();
+                String node = top.getKey();
+                if (top.getValue().hasNext()) {
+                    String next = top.getValue().next();
+                    if (!index.containsKey(next)) enter(next, graph, index, low, stack, onStack, counter, work);
+                    else if (onStack.contains(next)) low.put(node, Math.min(low.get(node), index.get(next)));
+                    continue;
+                }
+                work.pop();
+                if (!work.isEmpty()) low.put(work.peek().getKey(), Math.min(low.get(work.peek().getKey()), low.get(node)));
+                if (low.get(node).equals(index.get(node))) {
+                    String member;
+                    do {
+                        member = stack.pop();
+                        onStack.remove(member);
+                        part.put(member, counter[1]);
+                    } while (!member.equals(node));
+                    counter[1]++;
+                }
+            }
+        }
+
+        private static void enter(String node, Map<String, Set<String>> graph, Map<String, Integer> index, Map<String, Integer> low,
+                                  Deque<String> stack, Set<String> onStack, int[] counter, Deque<Map.Entry<String, java.util.Iterator<String>>> work) {
+            index.put(node, counter[0]);
+            low.put(node, counter[0]++);
+            stack.push(node);
+            onStack.add(node);
+            work.push(Map.entry(node, graph.get(node).iterator()));
+        }
+
+        /** The parts in an order where every part comes after all it points to (they form no cycle). */
+        static List<Integer> order(Map<Integer, Set<Integer>> next) {
+            List<Integer> done = new ArrayList<>();
+            Set<Integer> seen = new java.util.HashSet<>();
+            for (int start : next.keySet()) {
+                if (!seen.add(start)) continue;
+                Deque<Map.Entry<Integer, java.util.Iterator<Integer>>> work = new ArrayDeque<>();
+                work.push(Map.entry(start, next.get(start).iterator()));
+                while (!work.isEmpty()) {
+                    var top = work.peek();
+                    if (top.getValue().hasNext()) {
+                        int n = top.getValue().next();
+                        if (seen.add(n)) work.push(Map.entry(n, next.get(n).iterator()));
+                    } else {
+                        done.add(work.pop().getKey());
+                    }
+                }
+            }
+            return done;
+        }
+    }
+}

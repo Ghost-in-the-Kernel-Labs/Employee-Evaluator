@@ -23,10 +23,11 @@ public final class Complexity {
     /** The adapters, one per language they read. */
     static final List<Adapter> ADAPTERS = List.of(new JavaAdapter(), new TypeScriptAdapter(), new PythonAdapter());
 
-    /** Every function measured, by file in inventory order, and the files an adapter could not read. */
-    public record Report(Map<String, List<Measure>> functions, Map<String, String> unread) {
+    /** Every function measured and every import read, by file in path order, and the files an adapter could not read. */
+    public record Report(Map<String, List<Measure>> functions, Map<String, List<Import>> imports, Map<String, String> unread) {
         public Report {
             functions = new TreeMap<>(functions);
+            imports = new TreeMap<>(imports);
             unread = new TreeMap<>(unread);
         }
     }
@@ -36,15 +37,19 @@ public final class Complexity {
     /** The inventory's source files measured by their adapters; the files are read from root. */
     public static Report measure(Path root, Inventory inventory) {
         Map<String, List<Measure>> functions = new TreeMap<>();
+        Map<String, List<Import>> imports = new TreeMap<>();
         Map<String, String> unread = new TreeMap<>();
         for (Inventory.Source file : inventory.source()) {
             Adapter adapter = adapterFor(file.language());
             if (adapter == null) continue;
             Parsed parsed = adapter.parse(file.path(), read(root.resolve(file.path())));
             if (parsed.unread() != null) unread.put(file.path(), parsed.unread());
-            else functions.put(file.path(), parsed.functions());
+            else {
+                functions.put(file.path(), parsed.functions());
+                imports.put(file.path(), parsed.imports());
+            }
         }
-        return new Report(functions, unread);
+        return new Report(functions, imports, unread);
     }
 
     /** Two facts per function, its cyclomatic and its cognitive complexity, each citing the file and line. */
@@ -85,7 +90,7 @@ public final class Complexity {
         return json.append(first ? "]\n}\n" : "\n  ]\n}\n").toString();
     }
 
-    private static Adapter adapterFor(String language) {
+    static Adapter adapterFor(String language) {
         for (Adapter adapter : ADAPTERS) if (adapter.reads(language)) return adapter;
         return null;
     }

@@ -1,0 +1,16 @@
+{
+  "imports": [
+    {"path": "java/src/main/java/shop/Cart.java", "to": ["java/src/main/java/shop/money/Price.java"], "unused": ["Map"]},
+    {"path": "java/src/main/java/shop/money/Price.java", "to": [], "unused": []},
+    {"path": "py/app/__init__.py", "to": ["py/app/util.py"], "unused": []},
+    {"path": "py/app/config.py", "to": [], "unused": []},
+    {"path": "py/app/main.py", "to": ["py/app/config.py", "py/app/util.py"], "unused": ["json", "unused_helper"]},
+    {"path": "py/app/util.py", "to": [], "unused": []},
+    {"path": "ts/src/index.ts", "to": ["ts/src/lib.ts", "ts/src/polyfill.ts", "ts/src/types.ts", "ts/src/view.tsx"], "unused": ["fs", "Default"]},
+    {"path": "ts/src/lib.ts", "to": [], "unused": []},
+    {"path": "ts/src/polyfill.ts", "to": [], "unused": []},
+    {"path": "ts/src/types.ts", "to": [], "unused": []},
+    {"path": "ts/src/view.tsx", "to": ["ts/src/types.ts"], "unused": []}
+  ],
+  "longest": ["ts/src/index.ts", "ts/src/view.tsx", "ts/src/types.ts"]
+}

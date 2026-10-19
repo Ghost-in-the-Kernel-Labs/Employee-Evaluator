@@ -8,13 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.3 Static analysis adapters
-
-Check: one adapter interface; adapters for TypeScript and Python (tree-sitter, vendored with its
-licenses and native libraries, E-028; its Java binding and the image proven first) and for Java (the JDK's own parser, as `scripts/Scan.java` does); each gives cyclomatic and
-cognitive complexity per function and the dependency graph on the fixtures; the Complexity facts
-are goldens. Two adapters disagreeing on one function is a finding (`docs/FINDINGS.md`).
-
 ### 1.4 Maintainability
 
 Check: coupling, duplication by token shingling and the test-to-code ratio on the fixtures; the

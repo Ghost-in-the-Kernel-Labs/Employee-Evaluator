@@ -19,27 +19,20 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## For the next session (1.3, in slices)
+## For the next session (1.4)
 
-Read `CLAUDE.md`, then TODO.md 1.3. Ghost asked for 1.3 in slices, each tested and pushed on its own
-(2026-10-19): (1) tree-sitter vendored and proven, **done** (J-010); (2) the adapter interface and the
-Java adapter, **done** (J-012, E-030); (3) the TypeScript and Python adapters, **done** (J-013, E-031); (4) the dependency graph and unused imports.
-1.3 moves to `docs/DONE.md` only when all four are in. Next is slice 4.
+Read `CLAUDE.md`, then TODO.md 1.4: coupling, duplication by token shingling, the test-to-code ratio,
+and the Maintainability facts and two ratios as goldens; a fixture with a copied function is caught.
 
+- **Coupling** has its graph already: `Dependencies.graph()` gives each file's edges into the
+  repository (E-032). Fan-in and fan-out per file, or per folder, come from it without a new parse.
+- **Duplication** needs tokens, not lines: tree-sitter's leaves for TypeScript and Python, javac's
+  scanner for Java. A renamed copy is the padding an agent writes most (E-025's weak spot: a library
+  renamed out of `vendor/` is caught here or nowhere).
+- **Test-to-code ratio** needs to know a test file: by path and name (`test/`, `tests/`, `*_test.py`,
+  `test_*.py`, `*.test.ts`, `*Test.java`); record the rule as a decision.
 - **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
-  is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes. 1.3's
-  check names TypeScript, Python and Java only.
-- **tree-sitter** is `third_party/tree-sitter/` (the bonede JNI binding, Java 21, natives in the jars;
-  E-028, J-010); `org.treesitter.TSParser` with `TreeSitterPython` or `TreeSitterTypescript`, as
-  `TreeSitterLoadsTest` shows. The kernel stays on Java 21.
-- **An adapter** implements `analyze/evaluator/analyze/Adapter.java` and joins `Complexity.ADAPTERS`;
-  `JavaComplexity.java` is the counting to mirror (E-030), and the java-complexity fixture's README
-  the way to prove it: every function's values worked by hand, the golden only after.
-- **`analyze/`** reads `ingest/`'s Inventory (`Ingest.read()`); its Complexity facts are built with
-  `Fact.measured()`.
-- **Padding** the applicant writes themselves is not set aside (E-025 sets aside only what they did
-  not write): Ghost, 2026-10-19, "someone just spamming imports is not a good candidate". In slice 4,
-  make imports nothing uses a fact per file (`MAINTAINABILITY.unused_imports`, say), so padding counts
-  against the applicant; 1.4's duplication catches the copy-paste kind.
-- Add a fixture beside `test/fixtures/small-app/` when a case needs one, its golden under
-  `test/goldens/`. Run `gradle kernelMap` before the commit, and write the journal entry.
+  is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes.
+- Add a fixture beside the others when a case needs one, its golden under `test/goldens/`; work each
+  value by hand before the golden is written. Run `gradle kernelMap` before the commit, and write
+  the journal entry.

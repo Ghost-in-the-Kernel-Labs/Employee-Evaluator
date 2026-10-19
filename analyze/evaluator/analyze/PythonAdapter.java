@@ -58,6 +58,16 @@ public final class PythonAdapter extends TreeSitterAdapter {
     }
 
     @Override
+    List<Import> imports(TSNode root, Source source, String path) {
+        return PythonImports.of(root, source, path);
+    }
+
+    @Override
+    public List<String> resolve(Import imported, String from, java.util.Set<String> files) {
+        return PythonImports.resolve(imported, from, files);
+    }
+
+    @Override
     int cognitive(TSNode function, String name, Source source) {
         Cognitive walk = new Cognitive(name, source);
         walk.node(field(function, "body"), 0);

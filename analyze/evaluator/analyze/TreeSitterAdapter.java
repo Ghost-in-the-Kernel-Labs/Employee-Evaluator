@@ -42,6 +42,9 @@ abstract class TreeSitterAdapter implements Adapter {
     /** The cognitive complexity of a function's own code, its name given for recursion. */
     abstract int cognitive(TSNode function, String name, Source source);
 
+    /** The file's imports, each with the names it binds that the file never uses. */
+    abstract List<Import> imports(TSNode root, Source source, String path);
+
     @Override
     public Parsed parse(String path, String text) {
         Source source = new Source(text.getBytes(StandardCharsets.UTF_8));
@@ -51,7 +54,7 @@ abstract class TreeSitterAdapter implements Adapter {
         if (root.hasError()) return Parsed.unread("does not parse: line " + (firstError(root).getStartPoint().getRow() + 1));
         List<Measure> found = new ArrayList<>();
         functions(root, source, new ArrayDeque<>(), new HashMap<>(), found);
-        return new Parsed(found, null);
+        return new Parsed(found, imports(root, source, path), null);
     }
 
     // Unsure: the walks recurse; code nested thousands deep could exhaust the stack (the sandbox's limits, TODO.md 1.5).
@@ -97,6 +100,41 @@ abstract class TreeSitterAdapter implements Adapter {
             if (child.hasError() || child.isMissing()) return firstError(child);
         }
         return node;
+    }
+
+    /** The text of every node of these types outside the nodes of the skipped types: the names a file uses. */
+    static Set<String> names(TSNode node, Source source, Set<String> types, Set<String> skipped) {
+        Set<String> found = new java.util.HashSet<>();
+        collect(node, source, types, skipped, found);
+        return found;
+    }
+
+    private static void collect(TSNode node, Source source, Set<String> types, Set<String> skipped, Set<String> found) {
+        if (skipped.contains(node.getType())) return;
+        if (types.contains(node.getType())) found.add(source.text(node));
+        for (int i = 0; i < node.getChildCount(); i++) collect(node.getChild(i), source, types, skipped, found);
+    }
+
+    /** The bound names not in `used`, in order. */
+    static List<String> unused(List<String> bound, Set<String> used) {
+        return bound.stream().filter(name -> !used.contains(name)).toList();
+    }
+
+    /** A path with its `.` and `..` segments resolved, or null when it climbs out of the repository. */
+    static String normalize(String path) {
+        Deque<String> parts = new ArrayDeque<>();
+        for (String part : path.split("/")) {
+            if (part.isEmpty() || part.equals(".")) continue;
+            if (!part.equals("..")) parts.addLast(part);
+            else if (parts.pollLast() == null) return null;
+        }
+        return String.join("/", parts);
+    }
+
+    /** The folder a file is in, "" at the root. */
+    static String folder(String path) {
+        int slash = path.lastIndexOf('/');
+        return slash < 0 ? "" : path.substring(0, slash);
     }
 
     /** A node's child by its field name, or null. */

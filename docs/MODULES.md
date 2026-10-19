@@ -27,7 +27,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 - **Purpose:** static analysis over the inventory, one adapter per language: complexity, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox (E-013).
 - **Input:** an Inventory. **Output:** the Complexity, Maintainability and tool-half-of-Quality facts.
 - **May import:** `rubric`, `ingest`.
-- **Start at:** `analyze/evaluator/analyze/Complexity.java` (`Complexity.measure()`, `Complexity.facts()`); a language's reader implements `analyze/evaluator/analyze/Adapter.java` (Java: `JavaAdapter.java`, its counting in `JavaComplexity.java`, E-030; TypeScript and Python: `TypeScriptAdapter.java` and `PythonAdapter.java` on `TreeSitterAdapter.java`, E-031).
+- **Start at:** `analyze/evaluator/analyze/Complexity.java` (`Complexity.measure()`, `Complexity.facts()`); the dependency graph and unused imports, `Dependencies.java` (E-032); a language's reader implements `analyze/evaluator/analyze/Adapter.java` (Java: `JavaAdapter.java`, its counting in `JavaComplexity.java`, E-030; TypeScript and Python: `TypeScriptAdapter.java` and `PythonAdapter.java` on `TreeSitterAdapter.java`, E-031).
 
 ### `history/`
 - **Purpose:** the git history's shape: spread, diff variance, reverts and fixups, tests beside code, agent fingerprints. Provenance layer 3.

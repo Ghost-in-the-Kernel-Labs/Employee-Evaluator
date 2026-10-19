@@ -204,3 +204,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   no adapter yet (not in 1.3's check); the handoff names its grammar.
 - **Caught by:** `TreeSitterAdaptersTest` (the hand-worked `logic`).
 - **Touched:** `analyze/`; `third_party/tree-sitter/` (TSX); E-031; CLAUDE.md, docs/MODULES.md.
+
+### J-014 TODO 1.3 done: the dependency graph and unused imports, slice 4
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The last slice of 1.3: the dependency graph on the fixtures, and unused imports as a fact
+  (Ghost's ask, J-009's follow-up).
+- **Found:** Every edge, the longest chain and each unused name on the imports fixture matched the hand
+  count on the first run. The test that an import cannot climb out of the repository caught a real
+  escape: Python's `from ...x import` in `a/b.py` stopped at the root and matched `x.py` there,
+  where Python itself would refuse it. Fixed: a relative import above the root leads nowhere.
+- **Options:** for depth with cycles, refuse a cyclic graph, count each file, or collapse each cycle to
+  one link; for resolution, a build tool's view, or paths.
+- **Resolved:** Cycles collapsed (Tarjan, without recursion: a 100,000-file chain is tested), paths
+  only (E-032, for Ghost's review). 1.3 moved to docs/DONE.md; the handoff is for 1.4.
+- **Caught by:** `DependenciesTest.aPathOutOfTheRepositoryLeadsNowhere`.
+- **Touched:** `analyze/`; E-032; TODO.md, docs/DONE.md, docs/HANDOFF.md, CLAUDE.md, docs/MODULES.md,
+  docs/modules.json.

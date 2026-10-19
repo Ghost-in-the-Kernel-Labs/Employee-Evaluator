@@ -452,3 +452,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-028, E-030
+
+### E-032: The dependency graph is the repository's own files, resolved by path; unused imports count against a file
+- **Decision:** Each file's imports are resolved to the repository's own source files by its language's
+  rule: Java's `a.b.C` to a file ending `a/b/C.java` (a static member or nested class dropping a
+  segment), Python's module to `m.py` or `m/__init__.py` (relative from the file's folder, never above
+  the root), TypeScript's relative path with its endings and `index`; anything else is outside the
+  repository and no edge. `COMPLEXITY.dependency_depth` is the links in the longest chain of imports,
+  files that import each other in a cycle counting as one link, citing the chain.
+  `MAINTAINABILITY.unused_imports` counts, per file, the names an import binds that the file never
+  uses, citing each line; a Python package's `__init__.py` re-exports and is not counted.
+- **Why:** Depth is how far a change can travel, the dependency graph's part of Complexity (the score
+  card's Size and Complexity rows). Resolving by path needs no build and runs nothing (E-013). Unused
+  imports are padding the applicant wrote themselves, which set-aside (E-025) cannot see: Ghost,
+  2026-10-19, "someone just spamming imports is not a good candidate".
+- **Held by:** `analyze/evaluator/analyze/Dependencies.java`, `JavaImports.java`, `PythonImports.java`,
+  `TypeScriptImports.java`; `test/evaluator/analyze/DependenciesTest.java` and the imports fixture's golden.
+- **Source:** Claude, building TODO.md 1.3, 2026-10-19, on Ghost's direction for unused imports; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-025, E-030

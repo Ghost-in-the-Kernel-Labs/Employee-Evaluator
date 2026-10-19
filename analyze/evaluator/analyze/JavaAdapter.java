@@ -17,6 +17,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
@@ -39,6 +40,18 @@ public final class JavaAdapter implements Adapter {
         return "evaluator analyze java 1 (JDK " + Runtime.version().feature() + " parser)";
     }
 
+    /** A class in this repository: `a.b.C` is a file ending `a/b/C.java`; a static import's member, or a nested class, drops a segment at a time. */
+    @Override
+    public List<String> resolve(Import imported, String from, Set<String> files) {
+        String module = imported.module();
+        if (module.endsWith(".*")) return JavaImports.packageFiles(module.substring(0, module.length() - 2), files);
+        for (String name = module; name.contains("."); name = name.substring(0, name.lastIndexOf('.'))) {
+            List<String> found = Adapter.endingWith(name.replace('.', '/') + ".java", files);
+            if (!found.isEmpty()) return found;
+        }
+        return List.of();
+    }
+
     /** The file's methods measured, or why it does not parse; javac's parser only, no compile, no annotation processing. */
     @Override
     public Parsed parse(String path, String text) {
@@ -52,12 +65,16 @@ public final class JavaAdapter implements Adapter {
         JavacTask task = (JavacTask) ToolProvider.getSystemJavaCompiler().getTask(null, null, diagnostics, List.of("-proc:none"), null, List.of(source));
         try {
             List<Measure> found = new ArrayList<>();
+            List<Import> imports = new ArrayList<>();
             SourcePositions positions = Trees.instance(task).getSourcePositions();
-            for (CompilationUnitTree unit : task.parse()) new Methods(unit, positions, found).scan(unit, null);
+            for (CompilationUnitTree unit : task.parse()) {
+                new Methods(unit, positions, found).scan(unit, null);
+                imports.addAll(JavaImports.of(unit, positions));
+            }
             for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
                 if (d.getKind() == Diagnostic.Kind.ERROR) return Parsed.unread("does not parse: line " + d.getLineNumber());
             }
-            return new Parsed(found, null);
+            return new Parsed(found, imports, null);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

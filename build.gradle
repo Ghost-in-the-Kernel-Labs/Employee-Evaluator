@@ -49,6 +49,8 @@ test {
     systemProperty 'evaluator.root', rootDir.absolutePath
     // `gradle test -PwriteGoldens` rewrites the goldens under test/goldens/ instead of comparing (E-018); review the diff.
     systemProperty 'evaluator.writeGoldens', project.hasProperty('writeGoldens')
+    // `gradle test -Pdocker` also runs the run fixtures in the real sandbox (sandbox/setup.sh first, E-037).
+    systemProperty 'evaluator.docker', project.hasProperty('docker')
     testLogging { events 'failed'; exceptionFormat = 'full' }
 }
 

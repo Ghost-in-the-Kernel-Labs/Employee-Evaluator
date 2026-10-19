@@ -336,3 +336,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `SupplyChainTest` (the wrong hash, mine; the comment, my test's).
 - **Touched:** `sandbox/`; `third_party/jacoco/`, `third_party/MANIFEST.md`; `analyze/` (`RegistriesProxy`,
   `DockerSandbox`); `test/SupplyChainTest.java`; docs/MODULES.md, docs/HANDOFF.md.
+
+### J-022 TODO 1.5, S4: fixtures that run, their real reports recorded
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** Fixtures whose own tests pass, fail and reach for the network, held to facts worked by hand.
+- **Found:** Each fixture's real plan was taken from `TestPlans` and run here, outside a container (the
+  fixtures are ours), with the tools S3 proved; every count matched the hand count. The counts showed a
+  real inconsistency: Python's coverage counted the test files themselves (7 lines, always run), while
+  c8 leaves tests out. Coverage of tests is no measure, and it inflated the number (13 of 13 where the
+  code was 6 of 6). The Node plan was also labelled "TypeScript" for a JavaScript repository.
+- **Options:** leave Python counting tests; leave them out by E-034's names, as c8 does.
+- **Resolved:** Python's coverage omits test files (E-034's names); the Node plan is labelled "Node".
+  The recorded reports are goldens; `gradle test -Pdocker` runs the same fixtures in the real sandbox
+  and must give the same facts. 1.5 waits on that run, on Ghost's machine.
+- **Caught by:** reading the recorded coverage report's files, before writing the expected values.
+- **Touched:** `analyze/evaluator/analyze/TestPlans.java`, `TestRunner.java`; `test/fixtures/runs/`,
+  `test/goldens/runs/`; build.gradle (`-Pdocker`); docs/HANDOFF.md.

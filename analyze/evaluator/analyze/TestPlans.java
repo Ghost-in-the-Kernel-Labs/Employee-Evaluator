@@ -46,7 +46,10 @@ public final class TestPlans {
         return inventory.source().stream().anyMatch(f -> f.language().equals(language) && TestFiles.isTest(f.path()));
     }
 
-    /** pytest under coverage.py; packages from requirements files whose every line is pinned by hash, as binaries only. */
+    /**
+     * pytest under coverage.py, the tests themselves left out of coverage as c8 leaves them out (E-034's
+     * names); packages from requirements files whose every line is pinned by hash, as binaries only.
+     */
     static Plan python(Path work) {
         List<String> locked = new ArrayList<>();
         for (String name : rootFiles(work)) {
@@ -59,7 +62,7 @@ public final class TestPlans {
         String install = locked.isEmpty() ? null : String.join(" && ", locked.stream().map(name ->
                 "pip install --no-input --disable-pip-version-check --no-deps --require-hashes --only-binary=:all: --target /work/.evaluator-deps -r " + name).toList());
         String test = "mkdir -p /out/python && PYTHONPATH=/work/.evaluator-deps:/work/src:/work python -m coverage run --data-file=/tmp/.coverage"
-                + " --source=/work --omit='/work/.evaluator-deps/*' -m pytest -p no:cacheprovider -q --junitxml=/out/python/junit.xml;"
+                + " --source=/work --omit='/work/.evaluator-deps/*,*/test/*,*/tests/*,*/test_*.py,*_test.py,*/conftest.py' -m pytest -p no:cacheprovider -q --junitxml=/out/python/junit.xml;"
                 + " python -m coverage xml --data-file=/tmp/.coverage -o /out/python/coverage.xml";
         return new Plan("Python", install, test, null);
     }
@@ -68,18 +71,18 @@ public final class TestPlans {
     @SuppressWarnings("unchecked")
     static Plan node(Path work) {
         Path manifest = work.resolve("package.json");
-        if (!Files.isRegularFile(manifest)) return Plan.not("TypeScript", "no package.json at the root");
+        if (!Files.isRegularFile(manifest)) return Plan.not("Node", "no package.json at the root");
         Map<String, Object> pkg;
         try {
             pkg = (Map<String, Object>) Json.parse(read(manifest));
         } catch (IllegalArgumentException | ClassCastException e) {
-            return Plan.not("TypeScript", "package.json does not parse");
+            return Plan.not("Node", "package.json does not parse");
         }
         boolean packages = !map(pkg.get("dependencies")).isEmpty() || !map(pkg.get("devDependencies")).isEmpty();
         boolean npmLock = Files.isRegularFile(work.resolve("package-lock.json")) || Files.isRegularFile(work.resolve("npm-shrinkwrap.json"));
-        if (packages && !npmLock) return Plan.not("TypeScript", "packages declared, but no package-lock.json for npm ci (E-037)");
+        if (packages && !npmLock) return Plan.not("Node", "packages declared, but no package-lock.json for npm ci (E-037)");
         String runner = runner(pkg);
-        if (runner == null) return Plan.not("TypeScript", "no test runner the sandbox reads (vitest, jest, mocha, node --test)");
+        if (runner == null) return Plan.not("Node", "no test runner the sandbox reads (vitest, jest, mocha, node --test)");
         String c8 = "mkdir -p /out/node && c8 --reporter=cobertura --reports-dir=/out/node --temp-directory=/tmp/c8 ";
         String test = c8 + switch (runner) {
             case "vitest" -> "npx --no-install vitest run --reporter=junit --outputFile=/out/node/junit.xml";
@@ -87,7 +90,7 @@ public final class TestPlans {
             case "mocha" -> "npx --no-install mocha --reporter xunit --reporter-option output=/out/node/junit.xml";
             default -> "node --test --test-reporter=junit --test-reporter-destination=/out/node/junit.xml";
         };
-        return new Plan("TypeScript", packages ? "npm ci --ignore-scripts --no-audit --no-fund" : null, test, null);
+        return new Plan("Node", packages ? "npm ci --ignore-scripts --no-audit --no-fund" : null, test, null);
     }
 
     /**

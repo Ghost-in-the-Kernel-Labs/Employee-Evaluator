@@ -29,7 +29,7 @@ public final class TestRunner {
     public static final String TOOL = "evaluator analyze tests-run 1 (sandbox " + DockerSandbox.IMAGE + ")";
     static final Duration INSTALL_LIMIT = Duration.ofMinutes(10);
     static final Duration TEST_LIMIT = Duration.ofMinutes(10);
-    private static final Map<String, String> OUT = Map.of("Python", "python", "TypeScript", "node", "Java", "java");
+    private static final Map<String, String> OUT = Map.of("Python", "python", "Node", "node", "Java", "java");
 
     /** The facts of the run, and each language that was not measured, with why. */
     public record Result(List<evaluator.rubric.Fact> facts, List<String> notMeasured) {}

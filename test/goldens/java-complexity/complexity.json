@@ -1,0 +1,22 @@
+{
+  "functions": [
+    {"path": "src/Examples.java", "function": "Examples.Examples", "line": 6, "cyclomatic": 2, "cognitive": 1},
+    {"path": "src/Examples.java", "function": "Examples.sumOfPrimes", "line": 13, "cyclomatic": 4, "cognitive": 7},
+    {"path": "src/Examples.java", "function": "Examples.getWords", "line": 27, "cyclomatic": 4, "cognitive": 1},
+    {"path": "src/Examples.java", "function": "Examples.grade", "line": 40, "cyclomatic": 3, "cognitive": 3},
+    {"path": "src/Examples.java", "function": "Examples.logic", "line": 50, "cyclomatic": 6, "cognitive": 4},
+    {"path": "src/Examples.java", "function": "Examples.nested", "line": 54, "cyclomatic": 4, "cognitive": 6},
+    {"path": "src/Examples.java", "function": "Examples.tryIt", "line": 64, "cyclomatic": 3, "cognitive": 3},
+    {"path": "src/Examples.java", "function": "Examples.run", "line": 74, "cyclomatic": 1, "cognitive": 0},
+    {"path": "src/Examples.java", "function": "Examples.run#2", "line": 76, "cyclomatic": 1, "cognitive": 0},
+    {"path": "src/Examples.java", "function": "Examples.later", "line": 78, "cyclomatic": 2, "cognitive": 2},
+    {"path": "src/Examples.java", "function": "Examples.fact", "line": 86, "cyclomatic": 2, "cognitive": 2},
+    {"path": "src/Examples.java", "function": "Examples.kind", "line": 90, "cyclomatic": 3, "cognitive": 1},
+    {"path": "src/Examples.java", "function": "Examples.anon", "line": 98, "cyclomatic": 1, "cognitive": 0},
+    {"path": "src/Examples.java", "function": "Examples.<anonymous>.run", "line": 100, "cyclomatic": 2, "cognitive": 1},
+    {"path": "src/Examples.java", "function": "Examples.Inner.go", "line": 108, "cyclomatic": 2, "cognitive": 1}
+  ],
+  "unread": [
+    {"path": "src/Broken.java", "why": "does not parse: line 2"}
+  ]
+}

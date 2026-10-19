@@ -36,7 +36,7 @@ public record Inventory(List<Source> source, List<Aside> setAside) {
     }
 
     /** A JSON string: a hostile file name is data, so every control character is escaped. */
-    static String quote(String text) {
+    public static String quote(String text) {
         StringBuilder q = new StringBuilder("\"");
         for (char c : text.toCharArray()) {
             if (c == '"' || c == '\\') q.append('\\').append(c);

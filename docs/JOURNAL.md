@@ -171,3 +171,20 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** keep it; strike it; keep it but count slices instead of steps.
 - **Resolved:** Struck (E-029): each step is closed and pushed as before, then the next one starts.
 - **Touched:** E-029; CLAUDE.md.
+
+### J-012 TODO 1.3, slice 2: the adapter interface and the Java adapter
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Each Java function's cyclomatic and cognitive complexity as facts, behind one adapter
+  interface the TypeScript and Python adapters will share.
+- **Found:** Every value worked by hand on the java-complexity fixture matched on the first run,
+  SonarSource's own examples included (`sumOfPrimes` 7, `getWords` 1). Two calls had to be made: how
+  cyclomatic counts (as `scripts/Scan.java` already did, one per case), and where a class inside a
+  method is counted (its own functions, not the enclosing one's). A file that does not parse would
+  give a partial tree; it is listed as unread instead. `gradle metrics` then found the kernel's
+  cyclomatic count and `Scan.paths` with one body under two names.
+- **Options:** for a broken file, measure the partial tree, or say it was not read; for the copy, keep
+  both, or the scripts calling the kernel's.
+- **Resolved:** E-030 records the counting, for Ghost's review; a broken file is unread with its line.
+  The copy goes in the next commit, a tithe (11 commits since the last).
+- **Caught by:** `gradle metrics` (the duplicate helper).
+- **Touched:** `analyze/`; E-030; docs/modules.json, docs/MODULES.md, CLAUDE.md; `Inventory.quote` made public.

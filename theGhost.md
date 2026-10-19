@@ -411,3 +411,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** process
 - **See also:** E-016, E-018
+
+### E-030: Complexity is counted two ways: McCabe's paths, and SonarSource's cognitive complexity
+- **Decision:** Every function gets two Complexity facts. `COMPLEXITY.cyclomatic` is decision points
+  plus one (if, loops, a case that is not default, catch, `?:`, `&&`, `||`), counted as
+  `scripts/Scan.java` counts paths. `COMPLEXITY.cognitive` is SonarSource's cognitive complexity
+  (G. Ann Campbell, 2017): +1 for each break in linear flow, plus the nesting level for those that
+  nest, one per run of like logical operators, and one per call of the function to itself. A class
+  declared inside a function is not counted in it: its methods are functions of their own. A file
+  that does not parse is listed as unread, with why, and gets no fact.
+- **Why:** Cyclomatic complexity is the measure every tool reports, so an employer and another tool
+  can check it; it counts a flat switch the same as nested ifs, which is how agent-written code games
+  it. Cognitive complexity weights nesting, which is what makes code hard to read and change, and its
+  paper's worked examples (7 and 1) are the fixture's anchors. A guessed number from a broken parse
+  would be a fact nobody could check (E-017).
+- **Held by:** `analyze/evaluator/analyze/JavaComplexity.java`; `test/evaluator/analyze/JavaAdapterTest.java`
+  (every method of the java-complexity fixture worked by hand) and its golden.
+- **Source:** Claude, building TODO.md 1.3, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-013, E-017

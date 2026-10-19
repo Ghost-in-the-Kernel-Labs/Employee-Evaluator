@@ -186,3 +186,6 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine.delete` |  | 2026-10-19 |  |
 | ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..visitFile#2` |  | 2026-10-19 |  |
 | ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..postVisitDirectory` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.TestFiles` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.isTest` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/TestFiles.java:TestFiles.ratio` |  | 2026-10-19 |  |

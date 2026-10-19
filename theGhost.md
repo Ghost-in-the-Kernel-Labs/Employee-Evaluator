@@ -510,3 +510,19 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** security
 - **See also:** E-013, E-014, E-021
+
+### E-034: A test file is known by its path, as test runners find them
+- **Decision:** A counted source file is a test when a folder on its path is `test`, `tests`,
+  `__tests__`, `spec`, `specs` or `testing`, or when its name is a test runner's (`test_*.py`,
+  `*_test.py`, `conftest.py`, `*_test.go`, `*.test.ts`, `*.spec.ts` and their JavaScript kin,
+  `*Test.java`, `*Tests.java`, `*IT.java`, `*Spec.java` and their JVM kin). `MAINTAINABILITY.test_to_code_ratio`
+  is test lines over the lines of every other counted file, to three places, citing the test files;
+  with no code that is not a test there is no fact (SC-07).
+- **Why:** These are the defaults of pytest, Jest, Vitest, Go, Maven's Surefire and Failsafe, and
+  RSpec, so a repository is read as its own runner reads it, without running anything (E-013). Lines
+  come from the inventory, so vendored and generated tests are already set aside (E-025).
+- **Held by:** `analyze/evaluator/analyze/TestFiles.java`; `test/evaluator/analyze/TestFilesTest.java`.
+- **Source:** Claude, building TODO.md 1.4, 2026-10-19; for Ghost's review.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-025, E-026

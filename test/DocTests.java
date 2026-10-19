@@ -41,6 +41,11 @@ class DocTests {
     }
 
     @Test
+    void supplyChain() {
+        assertEquals(List.of(), SupplyChainTest.run().problems());
+    }
+
+    @Test
     void kernelMap() {
         assertEquals(List.of(), KernelMapTest.run().problems());
     }

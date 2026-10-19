@@ -15,13 +15,14 @@ Maintainability facts and the two ratios are goldens; a fixture with a copied fu
 
 ### 1.5 Test runner adapter
 
-Check: a fixture's own tests are found and run inside the sandbox (no network, a timeout, a
-memory cap); pass rate and coverage become `QUALITY.tests` facts; a fixture whose tests try to reach
+Check: a fixture's own tests are found and run inside the sandbox (no network, no credentials, a
+timeout, a memory cap), on a copy stripped by `Quarantine.strip` first and with no install script run
+(E-033); pass rate and coverage become `QUALITY.tests` facts; a fixture whose tests try to reach
 the network fails the run and says so.
 
 ### 1.6 Git history analysis
 
-Check: spread, diff variance, reverts and fixups, test co-location and agent fingerprints on
+Check: git runs on a submission only with its hooks off (`-c core.hooksPath=/dev/null`, E-033); spread, diff variance, reverts and fixups, test co-location and agent fingerprints on
 fixtures with real histories; a fixture replayed as 300 uniform commits in one hour scores under 30
 on history shape; one with weeks of varied work scores over 70.
 

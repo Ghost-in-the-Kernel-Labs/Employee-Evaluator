@@ -179,3 +179,10 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/TypeScriptImports.java:TypeScriptImports.bound` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TypeScriptImports.java:TypeScriptImports.specifiers` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/TypeScriptImports.java:TypeScriptImports.resolve` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine.Quarantine` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine.strip` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..preVisitDirectory` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..visitFile` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine.delete` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..visitFile#2` |  | 2026-10-19 |  |
+| ingest | `ingest/evaluator/ingest/Quarantine.java:Quarantine..postVisitDirectory` |  | 2026-10-19 |  |

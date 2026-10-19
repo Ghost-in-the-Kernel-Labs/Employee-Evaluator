@@ -220,3 +220,24 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `DependenciesTest.aPathOutOfTheRepositoryLeadsNowhere`.
 - **Touched:** `analyze/`; E-032; TODO.md, docs/DONE.md, docs/HANDOFF.md, CLAUDE.md, docs/MODULES.md,
   docs/modules.json.
+
+### J-015 The supply-chain baseline, institutionalized as a test
+- **Who:** Ghost, with Claude. **Class:** direction.
+- **Intent:** Ghost's Supply-Chain Security Baseline (2026-10-19, from Ghost's research with another
+  Claude session), rolled out to this repository, its item 2: "This gets institutionalized. it goes
+  into tests, and is validated against."
+- **Found:** Run first against the repository as it stood, the new test failed on three real gaps: the
+  one workflow's action pinned to a tag (`actions/checkout@v4`), the workflow with no `permissions`
+  block, and the directive missing. It also failed once on its own fault, reading the word
+  "repositories" in a `build.gradle` comment as a declaration; it now reads code only. The vendored
+  jars had SHA-256s in the manifest but nothing checked them.
+- **Options:** the baseline as a document reviewers remember; as a test that fails the fast loop.
+- **Resolved:** E-033 and `test/SupplyChainTest.java`, each rule proven on a broken sample;
+  `actions/checkout` pinned to v4.4.0's SHA (`11d5960…`, July 2026, past the 7-day cooldown),
+  `permissions: contents: read`; the directive in CLAUDE.md and theGhost.md, held equal;
+  `Quarantine.strip` for submissions; TODO.md 1.5 and 1.6 carry the sandbox's and git's part. Left to
+  Ghost (the handoff): branch protection, scanning, MFA, tokens, the audit script. Suite Builder,
+  the baseline's first repository, waits for its own session.
+- **Caught by:** `SupplyChainTest`, on its first run.
+- **Touched:** E-033; CLAUDE.md, theGhost.md, TODO.md, docs/HANDOFF.md; `.github/workflows/ci.yml`;
+  `ingest/evaluator/ingest/Quarantine.java`; `test/SupplyChainTest.java`.

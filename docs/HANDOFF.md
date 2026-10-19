@@ -12,6 +12,13 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
   piece. The fast loop in the image now also proves tree-sitter's native library loads there with the
   network off (`test/evaluator/analyze/TreeSitterLoadsTest.java`); the same test on your Windows
   machine proves the Windows library.
+- **Supply chain (E-033), what only you can do:** branch protection on `main` (pull requests
+  required, force-pushes blocked; note this changes E-020's "a finished step lands on main at once",
+  so decide how an agent's work lands), secret scanning and Dependabot alerts, passkey MFA on GitHub,
+  fine-grained tokens with an expiry, and `audit-agent-configs.ps1` on this repository as the
+  rollout's acceptance test. `osv-scanner` has no lockfile to read here: every dependency is a
+  vendored jar, held by its SHA-256 (`test/SupplyChainTest.java`). Suite Builder is the baseline's
+  first repository and has not had its session yet.
 - **Calibration set.** Phase 2 cannot start until 30 repositories are hand-labeled on Ambition and
   Quality (TODO.md 2.1). Only Ghost can label; the fixture format comes from Opus first.
 - **Mutation tool.** E-019 is proposed until a Java mutation tool is vendored (PIT, Apache-2.0, is the

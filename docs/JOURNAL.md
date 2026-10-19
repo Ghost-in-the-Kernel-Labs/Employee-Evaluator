@@ -87,3 +87,25 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   build stays with Ghost (docs/HANDOFF.md).
 - **Caught by:** `gradle test --warning-mode all`.
 - **Touched:** build.gradle.
+
+### J-006 TODO 1.2 built: the rubric's types and the first golden
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.2: the Fact and ScoreCard types held to docs/SCORE-CARD.md, and a repository
+  read into an inventory with its Size facts, the inventory a golden.
+- **Found:** The score card's table named the card's fields in prose ("seven scores", "provenance
+  tier"), which no test can match against a type; two invariants (SC-08 the anonymized card, SC-09
+  the card goldens) belong to steps not yet built; "modules" in Size has no meaning before something
+  reads imports; the fixtures' own `.java` would have been compiled as our tests and counted in our
+  metrics.
+- **Options:** for the table, a mapping from prose to field names inside the test, or the table
+  naming the fields; for SC-08 and SC-09, stub code citing them, or the document naming the step
+  that holds each; for modules, a guess now, or folders now and modules at 1.3.
+- **Resolved:** The card table names the record's components in backticks; an invariant is cited in
+  `rubric/` or names an open TODO step, and the test fails once that step is done and nothing cites
+  it. Size counts folders (E-026), set-aside rules recorded (E-025), both for Ghost's review. Fixtures
+  excluded from the test source set and from `scripts/Repo.java`. One count in a new test was wrong
+  (20 for 23); the code was right.
+- **Caught by:** the doc test on its first run (the `(E-011)` after a heading); the unit test.
+- **Touched:** `rubric/`, `ingest/`; E-025, E-026; docs/SCORE-CARD.md, docs/GLOSSARY.md,
+  docs/modules.json, docs/MODULES.md, CLAUDE.md; build.gradle; scripts/Repo.java.
+- **Cost:** one session, four commits.

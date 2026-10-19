@@ -8,13 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.2 Rubric types and repo ingestion
-
-Check: `rubric/` holds the Fact and ScoreCard types of `docs/SCORE-CARD.md`, and a doc test holds
-the document to them (every type and invariant in both). `ingest/` reads a fixture repository under
-`test/fixtures/` into an inventory, vendored and generated code set aside, and its Size facts; the
-inventory's JSON is a golden, byte for byte.
-
 ### 1.3 Static analysis adapters
 
 Check: one adapter interface; adapters for TypeScript and Python (tree-sitter, vendored with its

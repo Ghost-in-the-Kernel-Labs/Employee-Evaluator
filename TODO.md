@@ -10,8 +10,8 @@ order, every item with a check, and the first open item's check a real one.
 
 ### 1.3 Static analysis adapters
 
-Check: one adapter interface; adapters for TypeScript and Python (tree-sitter, vendored with its
-license) and for Java (the JDK's own parser, as `scripts/Scan.java` does); each gives cyclomatic and
+Check: one adapter interface; adapters for TypeScript and Python (ANTLR with the grammars-v4
+Python and TypeScript grammars, vendored with their licenses, E-027) and for Java (the JDK's own parser, as `scripts/Scan.java` does); each gives cyclomatic and
 cognitive complexity per function and the dependency graph on the fixtures; the Complexity facts
 are goldens. Two adapters disagreeing on one function is a finding (`docs/FINDINGS.md`).
 

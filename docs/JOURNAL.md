@@ -109,3 +109,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Touched:** `rubric/`, `ingest/`; E-025, E-026; docs/SCORE-CARD.md, docs/GLOSSARY.md,
   docs/modules.json, docs/MODULES.md, CLAUDE.md; build.gradle; scripts/Repo.java.
 - **Cost:** one session, four commits.
+
+### J-007 ANTLR chosen over tree-sitter for 1.3
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Unblock TODO.md 1.3 before it starts.
+- **Found:** tree-sitter is free (MIT) but brings native libraries per platform into an offline,
+  pure-Java build; Ghost asked whether "vendoring" meant a paid service (it does not: a free
+  library's files committed under `third_party/`).
+- **Options:** tree-sitter with its native libraries; ANTLR with grammars-v4; a separate parsing process.
+- **Resolved:** ANTLR (E-027); TODO.md 1.3's check and the handoff updated.
+- **Touched:** E-027; TODO.md; docs/HANDOFF.md.

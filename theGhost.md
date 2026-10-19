@@ -359,3 +359,18 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** ingestion
 - **See also:** E-011, E-025
+
+### E-027: ANTLR, not tree-sitter, parses TypeScript and Python
+- **Decision:** The TypeScript and Python adapters of `analyze/` (TODO.md 1.3) parse with ANTLR and
+  the community grammars-v4 Python and TypeScript grammars, vendored under `third_party/` with their
+  licenses (BSD). tree-sitter, which the plan first named, is not used.
+- **Why:** tree-sitter's Java bindings carry a native library per platform, the first platform-specific
+  files the offline, vendored build (E-021) would hold, and the official bindings are believed to need
+  a newer Java than 21. ANTLR is pure Java: plain jars, like JUnit. Both are free; the project runs
+  lean and spends nothing on a service it does not need. The cost is a little more work turning
+  ANTLR's parse trees into complexity counts.
+- **Held by:** TODO.md 1.3 (its check); `third_party/MANIFEST.md` once vendored.
+- **Source:** Ghost, 2026-10-19, on Claude's recommendation.
+- **Status:** in force
+- **subject:** environment
+- **See also:** E-021

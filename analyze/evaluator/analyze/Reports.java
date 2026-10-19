@@ -17,7 +17,7 @@ import org.w3c.dom.NodeList;
 /**
  * The reports a submission's test run writes, read as an attacker's files (E-037): JUnit XML (pytest,
  * Jest and Vitest's reporters, Maven's Surefire) for what passed, and Cobertura (coverage.py, c8) or
- * JaCoCo XML for line coverage. No DTD is loaded, no entity declared in the file is accepted, and a
+ * JaCoCo XML for line coverage, and Jest's JSON report. No DTD is loaded, no entity declared in the file is accepted, and a
  * report over the size cap is refused, so a report can neither read our files nor exhaust our memory.
  */
 // Decision: E-037
@@ -71,23 +71,58 @@ public final class Reports {
         return new Outcome(total, passed, failed, skipped, network);
     }
 
-    /** Line coverage, 0–1, from a Cobertura report (`<coverage>`) or a JaCoCo one (`<report>`); empty when it says nothing. */
-    public static Optional<Double> coverage(String report) throws Refused {
+    /** Lines run and lines that could run, so coverage from several reports can be summed. */
+    public record Lines(long covered, long valid) {}
+
+    /** Line coverage from a Cobertura report (`<coverage>`, coverage.py and c8) or a JaCoCo one (`<report>`, its own LINE counter); empty when it counts nothing. */
+    public static Optional<Lines> coverage(String report) throws Refused {
         Element root = parse(report).getDocumentElement();
         if (root.getTagName().equals("coverage")) {
             long valid = number(root.getAttribute("lines-valid")), covered = number(root.getAttribute("lines-covered"));
-            if (valid > 0) return Optional.of((double) covered / valid);
-            return root.hasAttribute("line-rate") ? Optional.of(Double.parseDouble(root.getAttribute("line-rate"))) : Optional.empty();
+            return valid > 0 ? Optional.of(new Lines(covered, valid)) : Optional.empty();
         }
         if (root.getTagName().equals("report")) {
             for (Node n = root.getFirstChild(); n != null; n = n.getNextSibling()) {
                 if (n instanceof Element counter && counter.getTagName().equals("counter") && counter.getAttribute("type").equals("LINE")) {
                     long missed = number(counter.getAttribute("missed")), covered = number(counter.getAttribute("covered"));
-                    return missed + covered == 0 ? Optional.empty() : Optional.of((double) covered / (missed + covered));
+                    return missed + covered == 0 ? Optional.empty() : Optional.of(new Lines(covered, missed + covered));
                 }
             }
         }
         return Optional.empty();
+    }
+
+    /** Jest's `--json` report: each assertion's status, a failed one's messages read for the network. */
+    @SuppressWarnings("unchecked")
+    public static Outcome jest(String report) throws Refused {
+        if (report.getBytes(StandardCharsets.UTF_8).length > MAX_BYTES) throw new Refused("over " + MAX_BYTES + " bytes");
+        Object root;
+        try {
+            root = Json.parse(report);
+        } catch (IllegalArgumentException e) {
+            throw new Refused("not a report: " + e.getMessage());
+        }
+        int total = 0, passed = 0, failed = 0, skipped = 0;
+        List<String> network = new ArrayList<>();
+        for (Object file : list(root instanceof java.util.Map<?, ?> m ? m.get("testResults") : null)) {
+            for (Object a : list(file instanceof java.util.Map<?, ?> f ? f.get("assertionResults") : null)) {
+                if (!(a instanceof java.util.Map<?, ?> test)) continue;
+                total++;
+                switch (String.valueOf(test.get("status"))) {
+                    case "passed" -> passed++;
+                    case "failed" -> {
+                        failed++;
+                        if (reachedNetwork(String.valueOf(test.get("failureMessages")))) network.add(String.valueOf(test.get("fullName")));
+                    }
+                    default -> skipped++;
+                }
+            }
+        }
+        return new Outcome(total, passed, failed, skipped, network);
+    }
+
+    private static List<?> list(Object value) {
+        return value instanceof List<?> l ? l : List.of();
     }
 
     /** Whether a failure's text is the sandbox's missing network, not the code's own fault. */

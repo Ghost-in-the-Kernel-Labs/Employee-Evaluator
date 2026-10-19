@@ -18,7 +18,7 @@ public final class TestRuns {
     private TestRuns() {}
 
     /** The facts of one run, citing the reports they were read from. */
-    public static List<Fact> facts(Reports.Outcome outcome, Optional<Double> coverage, String tool, List<String> reports) {
+    public static List<Fact> facts(Reports.Outcome outcome, Optional<Reports.Lines> coverage, String tool, List<String> reports) {
         List<Fact> facts = new ArrayList<>();
         Evidence read = new Evidence(tool, reports.isEmpty() ? List.of("(no report)") : reports);
         if (!outcome.networkAttempts().isEmpty()) {
@@ -27,7 +27,7 @@ public final class TestRuns {
         } else if (outcome.total() - outcome.skipped() > 0) {
             facts.add(Fact.measured("QUALITY.tests.pass_rate", Subject.repository(), round((double) outcome.passed() / (outcome.total() - outcome.skipped())), read));
         }
-        coverage.ifPresent(c -> facts.add(Fact.measured("QUALITY.tests.coverage", Subject.repository(), round(c), read)));
+        coverage.filter(c -> c.valid() > 0).ifPresent(c -> facts.add(Fact.measured("QUALITY.tests.coverage", Subject.repository(), round((double) c.covered() / c.valid()), read)));
         return facts;
     }
 

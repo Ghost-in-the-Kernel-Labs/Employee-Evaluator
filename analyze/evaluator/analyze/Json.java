@@ -1,26 +1,38 @@
+package evaluator.analyze;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * The smallest JSON reader the doc tests need (objects, arrays, strings, numbers, booleans, null),
- * so docs/modules.json is read with no library until phase 0.3 vendors one.
+ * The smallest JSON reader the kernel needs (objects, arrays, strings, numbers, booleans, null), with
+ * no library: Jest's report of a submission's run (E-037), and, for the project's own tooling and doc
+ * tests, docs/modules.json. A report is an attacker's file, so nesting is capped and every malformed
+ * input is an IllegalArgumentException, never an index error or a blown stack.
  */
-final class Json {
+public final class Json {
+    /** The deepest an object or array may nest. */
+    static final int MAX_DEPTH = 256;
     private final String text;
     private int at;
+    private int depth;
 
     private Json(String text) {
         this.text = text;
     }
 
-    static Object parse(String text) {
+    /** The value the text holds: a Map, a List, a String, a Double, a Boolean or null. */
+    public static Object parse(String text) {
         Json json = new Json(text);
-        Object value = json.value();
-        json.space();
-        if (json.at != text.length()) throw json.error("trailing text");
-        return value;
+        try {
+            Object value = json.value();
+            json.space();
+            if (json.at != text.length()) throw json.error("trailing text");
+            return value;
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            throw json.error("malformed (" + e.getMessage() + ")");
+        }
     }
 
     /** The next JSON value: an object, an array, a string, a number, true, false or null. */
@@ -42,9 +54,13 @@ final class Json {
     /** An object, its keys in order. */
     private Map<String, Object> object() {
         Map<String, Object> map = new LinkedHashMap<>();
+        deeper();
         at++;
         space();
-        if (peek('}')) return map;
+        if (peek('}')) {
+            depth--;
+            return map;
+        }
         do {
             space();
             String key = string();
@@ -54,19 +70,26 @@ final class Json {
             space();
         } while (take(','));
         expect('}');
+        depth--;
         return map;
     }
 
+    /** An array, its items in order. */
     private List<Object> array() {
         List<Object> list = new ArrayList<>();
+        deeper();
         at++;
         space();
-        if (peek(']')) return list;
+        if (peek(']')) {
+            depth--;
+            return list;
+        }
         do {
             list.add(value());
             space();
         } while (take(','));
         expect(']');
+        depth--;
         return list;
     }
 
@@ -127,6 +150,10 @@ final class Json {
 
     private void expect(char c) {
         if (!peek(c)) throw error("expected '" + c + "'");
+    }
+
+    private void deeper() {
+        if (++depth > MAX_DEPTH) throw error("nested deeper than " + MAX_DEPTH);
     }
 
     private IllegalArgumentException error(String what) {

@@ -284,3 +284,23 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   the runner, the image, the fixtures. This workspace has no Docker daemon, so the real runs close
   on Ghost's machine.
 - **Touched:** E-037; docs/HANDOFF.md.
+
+### J-019 TODO 1.5, S1 and S2: the readers and the runner, against a fake sandbox
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The parts of 1.5 that can be proven without Docker: reading a run's reports, and running
+  each language's plan behind a `Sandbox` interface.
+- **Found:** Every hand count of the report fixtures held on the first run; the XXE and billion-laughs
+  reports were refused. Running as `nobody` (E-037's first wording) would leave files only `nobody` can
+  delete in our temporary copy, so the container runs as the copy's owner: unprivileged, never root.
+  The JSON reader the doc tests used (`scripts/Json.java`) moved into the kernel for Jest's report,
+  with a nesting cap, since a report is an attacker's file. A test of mine matched `--pid` inside
+  `--pids-limit`; it now matches whole flags. One name from the repository reaches a shell, a
+  requirements file's: only plain names pass. Maven has no lockfile, so E-037 as written measures no
+  Maven build; that rule is one switch (`TestPlans.MAVEN_WITHOUT_LOCKFILE`), off, put to Ghost.
+  Gradle is not run yet.
+- **Options:** for Maven: not measured until it has a lockfile; versions pinned in the pom count as
+  locked; or Maven runs with its checksums checked against Maven Central.
+- **Resolved:** S1 and S2 built and pushed; the Maven question to Ghost; S3 (the image) next.
+- **Caught by:** `DockerSandboxTest` (the loose match, mine).
+- **Touched:** `analyze/` (`Reports`, `TestRuns`, `Sandbox`, `DockerSandbox`, `TestPlans`,
+  `TestRunner`, `Json` moved from `scripts/`); CLAUDE.md, docs/MODULES.md, docs/modules.json.

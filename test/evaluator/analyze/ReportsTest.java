@@ -40,8 +40,8 @@ class ReportsTest {
     /** coverage.py: 30 of 40 lines; JaCoCo: the report's own LINE counter (15 of 20), not a package's. Neither DTD is fetched. */
     @Test
     void coverageFromCoberturaAndJacoco() throws Reports.Refused {
-        assertEquals(Optional.of(0.75), Reports.coverage(report("cobertura.xml")));
-        assertEquals(Optional.of(0.75), Reports.coverage(report("jacoco.xml")));
+        assertEquals(Optional.of(new Reports.Lines(30, 40)), Reports.coverage(report("cobertura.xml")));
+        assertEquals(Optional.of(new Reports.Lines(15, 20)), Reports.coverage(report("jacoco.xml")));
         assertEquals(Optional.empty(), Reports.coverage("<coverage/>"));
     }
 
@@ -52,6 +52,14 @@ class ReportsTest {
         assertThrows(Reports.Refused.class, () -> Reports.junit(List.of(report("laughs.xml"))));
         assertThrows(Reports.Refused.class, () -> Reports.junit(List.of("<testsuite>" + "x".repeat(Reports.MAX_BYTES) + "</testsuite>")));
         assertThrows(Reports.Refused.class, () -> Reports.junit(List.of("not xml")));
+    }
+
+    /** Jest: 3 assertions, 1 passed, 1 failed on a name that would not resolve, 1 todo. */
+    @Test
+    void jestsJsonReport() throws Reports.Refused {
+        assertEquals(new Reports.Outcome(3, 1, 1, 1, List.of("prices fetches rates")), Reports.jest(report("jest.json")));
+        assertThrows(Reports.Refused.class, () -> Reports.jest("[".repeat(10_000)));
+        assertThrows(Reports.Refused.class, () -> Reports.jest("{\"testResults\": [{\"assertionResults\": [\"unterminated"));
     }
 
     @Test

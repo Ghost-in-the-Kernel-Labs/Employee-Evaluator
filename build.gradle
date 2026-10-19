@@ -36,6 +36,8 @@ sourceSets {
 }
 
 dependencies {
+    // tree-sitter and its grammars, for analyze/'s TypeScript and Python adapters (E-028).
+    implementation fileTree(dir: 'third_party/tree-sitter', include: '*.jar')
     testImplementation fileTree(dir: 'third_party/junit', include: '*.jar')
 }
 

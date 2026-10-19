@@ -141,3 +141,23 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** approve; change the folder list; strip comments once 1.3 can parse.
 - **Resolved:** Both approved as built.
 - **Touched:** E-025, E-026 (their Source); docs/HANDOFF.md.
+
+### J-010 tree-sitter's gate passed: a Java 21 binding, its natives in its jars
+- **Who:** Claude. **Class:** measurement.
+- **Intent:** TODO.md 1.3, slice 1 (Ghost: "keep the order, lets push through", with 1.3 in slices):
+  the two checks E-028 asks before anything is vendored.
+- **Found:** The official binding, `io.github.tree-sitter:jtreesitter` 0.26.1, is compiled for Java 23
+  (class version 67) and ships no native library. The community JNI binding, `io.github.bonede:tree-sitter`
+  0.26.6 (MIT), is compiled for Java 11, bundles tree-sitter's native library for Linux, macOS and
+  Windows, and its Python (0.25.0) and TypeScript (0.23.2) grammars come the same way. On Java 21 it
+  parsed both languages, `satisfies` included, and gave a tree with its error flagged for broken
+  Python; run again with every proxy pointed nowhere, nothing changed. Its Maven `.pom` names no
+  license; the project's repository says MIT.
+- **Options:** the official binding, with the kernel moved to Java 23+ and natives built by us; the
+  bonede binding on Java 21; ANTLR (E-027).
+- **Resolved:** The bonede binding, vendored under `third_party/tree-sitter/` with four MIT licenses,
+  checked against Maven Central's SHA-1 and recorded by SHA-256; the kernel stays on Java 21.
+  `TreeSitterLoadsTest` proves the natives load wherever the fast loop runs. Still unproven: the image
+  (no Docker daemon here) and Windows; both are Ghost's run. The risk kept: one maintainer behind the
+  binding; it is MIT and vendored, so a fork or our own build of the natives stays open.
+- **Touched:** `third_party/tree-sitter/`, `third_party/MANIFEST.md`; build.gradle; docs/HANDOFF.md.

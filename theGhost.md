@@ -584,3 +584,19 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** security
 - **See also:** E-013, E-021, E-033
+
+### E-038: A Maven build is installed with exact versions and strict checksums, Maven having no lockfile
+- **Decision:** A Maven repository's tests run when every version its pom names is exact (no range, no
+  SNAPSHOT, no LATEST or RELEASE); its install phase runs with strict checksums (`mvn -C`), so a file
+  whose checksum does not match Maven Central's fails the install, and its test phase runs offline.
+  Otherwise its tests are not measured. This is E-037's lockfile rule as Maven can keep it.
+- **Why:** Maven has no lockfile, and most Java repositories are Maven builds; strict E-037 would leave
+  their tests unmeasured. Exact versions are what a lockfile pins; Central's checksums are what its
+  hashes check. Ghost's answer of 2026-10-19, of three: checksums enforced, pinned versions alone, or
+  not measured.
+- **Held by:** `analyze/evaluator/analyze/TestPlans.java` (`java`, `exactVersions`);
+  `test/evaluator/analyze/TestPlansTest.java`.
+- **Source:** Ghost, 2026-10-19, on Claude's proposal (J-019).
+- **Status:** in force
+- **subject:** security
+- **See also:** E-033, E-037

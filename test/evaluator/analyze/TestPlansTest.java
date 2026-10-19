@@ -86,11 +86,19 @@ class TestPlansTest {
         assertTrue(plans(repo).get(0).test().contains("node --test --test-reporter=junit"));
     }
 
+    /** Maven with exact versions installs with strict checksums and runs offline under JaCoCo; a loose version is not measured. */
     @Test
-    void javaWithMavenWaitsOnALockfileAndGradleIsNotRunYet(@TempDir Path repo) throws IOException {
+    void javaWithMavenNeedsExactVersionsAndChecksumsAndGradleIsNotRunYet(@TempDir Path repo) throws IOException {
         write(repo.resolve("src/test/java/a/CartTest.java"), "class CartTest {}\n");
-        write(repo.resolve("pom.xml"), "<project/>");
-        assertEquals("Maven has no lockfile, and E-037 installs from a lockfile only", plans(repo).get(0).notMeasured());
+        write(repo.resolve("pom.xml"), "<project><dependencies><dependency><version>5.11.4</version></dependency></dependencies></project>");
+        TestPlans.Plan plan = plans(repo).get(0);
+        assertEquals("mvn -B -q -C -Dmaven.repo.local=/work/.evaluator-m2 dependency:go-offline", plan.install());
+        assertTrue(plan.test().contains("mvn -B -o -q -C -Dmaven.repo.local=/work/.evaluator-m2 test"));
+        assertTrue(plan.test().contains("-javaagent:/opt/evaluator/jacoco/jacocoagent.jar"));
+        for (String loose : List.of("<version>[1.0,2.0)</version>", "<version>1.0-SNAPSHOT</version>", "<version>LATEST</version>", "<version> RELEASE </version>")) {
+            write(repo.resolve("pom.xml"), "<project><dependencies><dependency>" + loose + "</dependency></dependencies></project>");
+            assertEquals("pom.xml uses a version range, a SNAPSHOT, LATEST or RELEASE (E-038)", plans(repo).get(0).notMeasured(), loose);
+        }
         Files.delete(repo.resolve("pom.xml"));
         write(repo.resolve("build.gradle"), "plugins { id 'java' }");
         assertEquals("Gradle builds are not run yet (TODO.md 1.5)", plans(repo).get(0).notMeasured());

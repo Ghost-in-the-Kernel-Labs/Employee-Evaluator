@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
  */
 // Decision: E-037
 public final class TestPlans {
-    /** Maven has no lockfile, so E-037 measures no Maven build until Ghost says otherwise (J-019). */
-    static final boolean MAVEN_WITHOUT_LOCKFILE = false;
+    /** A version a pom may not use: a range, a snapshot, or the newest of anything (E-038). */
+    private static final Pattern LOOSE_VERSION = Pattern.compile("<version>\\s*[\\[(]|SNAPSHOT|<version>\\s*(LATEST|RELEASE)\\s*</version>|version>\\s*\\$\\{[^}]*\\}\\s*[\\[(]");
     private static final Pattern PLAIN = Pattern.compile("[A-Za-z0-9._-]+");
     private static final int MAX_MANIFEST = 1024 * 1024;
 
@@ -90,11 +90,16 @@ public final class TestPlans {
         return new Plan("TypeScript", packages ? "npm ci --ignore-scripts --no-audit --no-fund" : null, test, null);
     }
 
-    /** Maven with JaCoCo's agent, its Surefire reports copied out; a Gradle build is not measured yet. */
+    /**
+     * Maven with JaCoCo's agent, its Surefire reports copied out: Maven has no lockfile, so its pom's
+     * versions must be exact and every download's checksum must match (`-C`, E-038). A Gradle build is
+     * not measured yet.
+     */
+    // Decision: E-038
     static Plan java(Path work) {
         if (Files.isRegularFile(work.resolve("pom.xml"))) {
-            if (!MAVEN_WITHOUT_LOCKFILE) return Plan.not("Java", "Maven has no lockfile, and E-037 installs from a lockfile only");
-            String repo = "-Dmaven.repo.local=/work/.evaluator-m2";
+            if (!exactVersions(read(work.resolve("pom.xml")))) return Plan.not("Java", "pom.xml uses a version range, a SNAPSHOT, LATEST or RELEASE (E-038)");
+            String repo = "-C -Dmaven.repo.local=/work/.evaluator-m2";
             String test = "mkdir -p /out/java/surefire && mvn -B -o -q " + repo + " test -Dmaven.test.failure.ignore=true"
                     + " -DargLine=-javaagent:/opt/evaluator/jacoco/jacocoagent.jar=destfile=/out/java/jacoco.exec;"
                     + " cp target/surefire-reports/TEST-*.xml /out/java/surefire/ 2>/dev/null;"
@@ -105,6 +110,12 @@ public final class TestPlans {
             return Plan.not("Java", "Gradle builds are not run yet (TODO.md 1.5)");
         }
         return Plan.not("Java", "no build file the sandbox runs (pom.xml)");
+    }
+
+    /** Whether every version the pom names is exact, so what installs is what it says. */
+    // Unsure: a parent pom or an imported BOM outside the repository is not read; their versions are Maven Central's to hold.
+    static boolean exactVersions(String pom) {
+        return !LOOSE_VERSION.matcher(pom).find();
     }
 
     /** The runner named in the package's dependencies, or `node --test` in its test script; null when none. */

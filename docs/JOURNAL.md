@@ -304,3 +304,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `DockerSandboxTest` (the loose match, mine).
 - **Touched:** `analyze/` (`Reports`, `TestRuns`, `Sandbox`, `DockerSandbox`, `TestPlans`,
   `TestRunner`, `Json` moved from `scripts/`); CLAUDE.md, docs/MODULES.md, docs/modules.json.
+
+### J-020 Maven's tests run with exact versions and strict checksums
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Answer J-019's question: Maven has no lockfile.
+- **Found:** Strict E-037 would leave most Java repositories' tests unmeasured.
+- **Options:** strict checksums with exact versions; exact versions alone; not measured.
+- **Resolved:** Ghost: checksums enforced (E-038). The off-switch is gone; a pom with a range,
+  SNAPSHOT, LATEST or RELEASE is not measured, and the install runs `mvn -C`.
+- **Touched:** E-038; `analyze/evaluator/analyze/TestPlans.java` and its test.

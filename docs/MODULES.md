@@ -45,6 +45,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 - **Purpose:** facts into a score card: the seven scores, the ratios, the tier; the card as JSON and Markdown. It reads no code and runs nothing (MOD-03).
 - **Input:** a list of Facts. **Output:** a ScoreCard and its renderings.
 - **May import:** `rubric` only.
+- **Start at:** `score/evaluator/score/Cards.java` (`Cards.card()`), the formulas `Formulas.java` (E-045), the renderings `CardJson.java` and `CardMarkdown.java`.
 
 ### `cli/`
 - **Purpose:** `evaluator score <path>`, and nothing the other modules do not already do (MOD-04).

@@ -36,6 +36,7 @@ final class ModulesTest {
         run().exit();
     }
 
+    /** Every rule on docs/modules.json: the imports each module may make, MOD-05's network rule, the entry points named. */
     static Check run() {
         String json = Check.read("docs/modules.json");
         return new Check("modules")

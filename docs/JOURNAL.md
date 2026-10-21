@@ -459,3 +459,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-044, freshness 0.35, for Ghost's review. 1.8 to docs/DONE.md; 1.9 next, 1.7 still open.
 - **Touched:** `analyze/` (`Navigability`, `DocPaths`, `Naming`); E-044; CLAUDE.md, docs/MODULES.md,
   docs/modules.json, TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-030 TODO 1.9, first slice: facts into a card, as JSON and as Markdown
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.9, sliced in three (Ghost: "yes"): the card's machinery; the formulas, one decision
+  each; the CLI, the fixtures' goldens and the corpus.
+- **Found:** Every card test held on the first run. Writing the ratios as DESIGN.md words them shows they
+  favour small, simple repositories; flagged in E-045 rather than changed.
+- **Options:** score every metric with a placeholder formula now; score only what is decided.
+- **Resolved:** E-045: only AI navigability scores; the rest is "not measured" until its formula is decided.
+- **Touched:** `score/` (`Cards`, `Formula`, `Formulas`, `CardJson`, `CardMarkdown`); E-045; docs/modules.json,
+  docs/MODULES.md, docs/HANDOFF.md.

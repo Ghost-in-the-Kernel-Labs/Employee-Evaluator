@@ -718,3 +718,24 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** navigability
 - **See also:** E-004, E-006, E-032
+
+## Scoring
+
+### E-045: Facts into a card: a formula per metric, none until decided; the ratios as DESIGN.md words them
+- **Decision:** `score/` builds the card from facts: refuted facts set aside (a fact marked refuted with no
+  person named is refused), two facts with one key refused, each metric's facts through its formula. A
+  metric with no formula is "not measured" (SC-07); each metric's formula is its own decision, made with
+  Ghost before it scores. The first: AI navigability is its checklist (E-044), already 0–100. The ratios:
+  Quality ÷ (source lines ÷ 1,000), and Maintainability ÷ Complexity, both scores, to two decimals; absent
+  when a part is absent or zero. The tooling bucket reads "unknown" until its rule is decided. JSON's
+  fields follow docs/SCORE-CARD.md's order and the metrics the enum's, so one card is always one text.
+- **Why:** TODO.md 1.9 sliced (Ghost, 2026-10-21): the card's machinery first, its formulas one at a time
+  after. Writing the ratios down exposed a question for Ghost: both reward the small and the simple (a
+  200-line toy at Quality 90 scores 450 per thousand lines; a hard problem's high Complexity lowers its
+  Maintainability ratio). They are built as worded, and rank nothing until a corpus does.
+- **Held by:** `score/evaluator/score/Cards.java`, `Formulas.java`, `CardJson.java`, `CardMarkdown.java`;
+  `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude, building TODO.md 1.9's first slice, 2026-10-21; the ratios' question for Ghost.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-011, E-017, E-044

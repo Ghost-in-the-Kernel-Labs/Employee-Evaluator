@@ -1,4 +1,4 @@
-package evaluator.analyze;
+package evaluator.rubric;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,8 +7,9 @@ import java.util.Map;
 
 /**
  * The smallest JSON reader the kernel needs (objects, arrays, strings, numbers, booleans, null), with
- * no library: Jest's report of a submission's run (E-037), and, for the project's own tooling and doc
- * tests, docs/modules.json. A report is an attacker's file, so nesting is capped and every malformed
+ * no library: GitHub's API (E-043), Jest's report of a submission's run (E-037), and, for the project's
+ * own tooling and doc tests, docs/modules.json. In rubric/ because every module may import rubric/ and
+ * rubric/ imports nothing of ours (MOD-02). A report is an attacker's file, so nesting is capped and every malformed
  * input is an IllegalArgumentException, never an index error or a blown stack.
  */
 public final class Json {

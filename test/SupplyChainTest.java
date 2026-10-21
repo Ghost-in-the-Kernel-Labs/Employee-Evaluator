@@ -204,7 +204,7 @@ final class SupplyChainTest {
             String bare = line.strip();
             if (!bare.isEmpty() && !bare.startsWith("#") && !bare.startsWith("-") && !bare.contains("--hash=sha256:")) failures.add("sandbox/requirements.txt: `" + bare + "` has no hash");
         }
-        Map<String, Object> packages = (Map<String, Object>) ((Map<String, Object>) evaluator.analyze.Json.parse(packageLock)).get("packages");
+        Map<String, Object> packages = (Map<String, Object>) ((Map<String, Object>) evaluator.rubric.Json.parse(packageLock)).get("packages");
         packages.forEach((name, value) -> {
             if (name.isEmpty()) return;
             Map<String, Object> pkg = (Map<String, Object>) value;

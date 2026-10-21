@@ -1,4 +1,4 @@
-import evaluator.analyze.Json;
+import evaluator.rubric.Json;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;

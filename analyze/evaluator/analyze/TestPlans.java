@@ -1,5 +1,6 @@
 package evaluator.analyze;
 
+import evaluator.rubric.Json;
 import evaluator.ingest.Inventory;
 import java.io.IOException;
 import java.io.UncheckedIOException;

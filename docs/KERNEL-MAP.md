@@ -308,3 +308,31 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | history | `history/evaluator/history/Shape.java:Shape.agentFile` |  | 2026-10-21 |  |
 | history | `history/evaluator/history/Shape.java:Shape.fact` |  | 2026-10-21 |  |
 | history | `history/evaluator/history/Shape.java:Shape.round` |  | 2026-10-21 |  |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.Json` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.Json` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.parse` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.parse` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.value` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.value` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.object` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.object` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.array` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.array` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.string` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.string` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.number` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.number` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.word` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.word` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.space` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.space` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.peek` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.peek` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.take` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.take` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.expect` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.expect` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.deeper` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.deeper` |
+| analyze | `analyze/evaluator/analyze/Json.java:Json.error` |  | 2026-10-21 | superseded-by: `rubric/evaluator/rubric/Json.java:Json.error` |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.Json` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.parse` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.value` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.object` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.array` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.string` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.number` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.word` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.space` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.peek` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.take` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.expect` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.deeper` |  | 2026-10-21 |  |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.error` |  | 2026-10-21 |  |

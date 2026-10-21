@@ -382,3 +382,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   setup.sh, then the fast loop with `-Pdocker`. Windows asks removed from the handoff. The website the
   work aims at is phase 3's web app (E-002).
 - **Touched:** E-039; `.github/workflows/ci.yml`; docs/HANDOFF.md.
+
+### J-025 The agent starts runs; the month's minutes are spent
+- **Who:** Ghost, with Claude. **Class:** decision.
+- **Intent:** Start the `sandbox` job to close 1.5.
+- **Found:** The organization's GitHub Actions minutes are spent until November 2026; Ghost also hands the
+  agent the starting of runs.
+- **Options:** start the run now (it would fail or bill); wait for the minutes; give the session a Docker
+  daemon instead.
+- **Resolved:** E-040 (supersedes E-024): the agent starts runs, by hand, within the minutes. No run now;
+  the handoff says 1.5 waits on the renewal, or on Ghost allowing a Docker daemon in the session.
+- **Touched:** E-024, E-040; `.github/workflows/ci.yml`; docs/HANDOFF.md.

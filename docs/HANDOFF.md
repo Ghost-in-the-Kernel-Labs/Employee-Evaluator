@@ -35,8 +35,8 @@ tunnels a registry and refuses all else on loopback. Not provable here (no Docke
 and the proxy come up), then a real run; both are the `sandbox` job's, on a GitHub runner (E-039).
 S4 is built (J-022): `test/fixtures/test-runs/` (py-pass, py-fail, py-network, node-pass), their reports
 from a real run recorded in `test/goldens/test-runs/`, and `TestRunnerFixturesTest` holding the runner to the
-facts worked by hand. **1.5 waits on one run of the `sandbox` job** (GitHub Actions, started by hand,
-E-024, E-039): it runs `sandbox/setup.sh` and `gradle test -Pdocker` on a Linux runner;
+facts worked by hand. **1.5 waits on one run of the `sandbox` job** (GitHub Actions, started by hand, by
+the agent, E-040; the organization's minutes are spent until November 2026): it runs `sandbox/setup.sh` and `gradle test -Pdocker` on a Linux runner;
 `theRealSandboxGivesTheSameFacts` must pass (it is skipped without `-Pdocker`). Then 1.5 moves to
 docs/DONE.md, and 1.6 (git history) starts.
 

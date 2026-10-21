@@ -1,5 +1,5 @@
 # The fast loop in the pinned image with the network off (E-021): what passes here is what a clean
-# clone builds offline. Run by hand only (E-024): GitHub's minutes are scarce and reserved for what
+# clone builds offline. Run by hand only (E-040): GitHub's minutes are scarce and reserved for what
 # a local machine cannot do, so no push or pull request starts a run. The gate before a push is
 # scripts/prepush.sh, which runs the same loop locally.
 name: ci

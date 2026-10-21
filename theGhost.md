@@ -332,7 +332,7 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
   Katana ran under the same constraint with its pre-push script as the gate.
 - **Held by:** `.github/workflows/ci.yml` (`on: workflow_dispatch` alone); `scripts/prepush.sh`.
 - **Source:** Ghost, 2026-10-19.
-- **Status:** in force
+- **Status:** superseded by E-040
 - **subject:** environment
 - **See also:** E-021
 
@@ -619,3 +619,17 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** environment
 - **See also:** E-021, E-024, E-037
+
+### E-040: The agent starts GitHub runs itself, within the month's minutes
+- **Decision:** The agent may start the workflow's runs itself (the `sandbox` job and the fast loop), no
+  longer only Ghost; runs stay by hand, never on a push or a schedule. When the organization's Actions
+  minutes are spent, no run is started until they renew, and what waits on a run says so in the handoff.
+- **Why:** Ghost, 2026-10-21: "You trigger it yourself. We are out of minutes on the github cl runner until
+  next month as well." Linux everywhere means the work can run in the agent's own session; GitHub's runner
+  is kept for what the session cannot do (a Docker daemon, E-039).
+- **Held by:** `.github/workflows/ci.yml` (`workflow_dispatch` only); docs/HANDOFF.md.
+- **Source:** Ghost, 2026-10-21.
+- **Status:** in force
+- **subject:** environment
+- **Supersedes:** E-024
+- **See also:** E-039

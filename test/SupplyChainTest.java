@@ -159,24 +159,41 @@ final class SupplyChainTest {
             boolean sandboxScript = path.startsWith("sandbox/") && name.endsWith(".sh");
             if (!name.equals("Dockerfile") && !name.endsWith(".Dockerfile") && !sandboxScript) return;
             String joined = String.join("\n", text.lines().filter(l -> !l.strip().startsWith("#")).toList()).replace("\\\n", " ");
-            for (String line : joined.lines().toList()) {
-                String bare = line.strip();
-                if (bare.startsWith("FROM ") && !bare.matches("FROM \\S+@sha256:[0-9a-f]{64}( AS \\S+)?")) failures.add(path + ": `" + bare + "` is not pinned by digest");
-            }
-            Matcher fetch = Pattern.compile("fetch\\.py (get|unpack) (\\S+) (\\S+) ([0-9a-f]*)").matcher(joined);
-            while (fetch.find()) {
-                boolean hashed = fetch.group(3).equals("sha256") && fetch.group(4).length() == 64 || fetch.group(3).equals("sha512") && fetch.group(4).length() == 128;
-                if (!hashed) failures.add(path + ": " + fetch.group(2) + " is fetched with no hash");
-            }
-            if (joined.contains("fetch.py ") && !fetch.reset().find()) failures.add(path + ": fetch.py is called without get or unpack and a hash");
-            for (String command : joined.split("&&|;|\\n")) {
-                String c = command.strip();
-                if (c.contains("pip install") && !c.contains("--require-hashes")) failures.add(path + ": `" + c + "` installs without hashes");
-                if (c.matches(".*\\bnpm (install|i|add)\\b.*") || (c.contains("npm ci") && !c.contains("--ignore-scripts"))) failures.add(path + ": `" + c + "` is not npm ci with scripts off");
-                if (c.matches(".*\\|\\s*(sh|bash)\\b.*")) failures.add(path + ": `" + c + "` pipes a download into a shell");
-            }
+            bases(path, joined, failures);
+            fetches(path, joined, failures);
+            installs(path, joined, failures);
         });
         return failures;
+    }
+
+    /** Every `FROM` pinned by `@sha256`. */
+    private static void bases(String path, String joined, List<String> failures) {
+        for (String line : joined.lines().toList()) {
+            String bare = line.strip();
+            if (bare.startsWith("FROM ") && !bare.matches("FROM \\S+@sha256:[0-9a-f]{64}( AS \\S+)?")) failures.add(path + ": `" + bare + "` is not pinned by digest");
+        }
+    }
+
+    /** Every fetch.py call a `get` or an `unpack` with a SHA-256 or SHA-512 of the right length. */
+    private static void fetches(String path, String joined, List<String> failures) {
+        Matcher fetch = Pattern.compile("fetch\\.py (get|unpack) (\\S+) (\\S+) ([0-9a-f]*)").matcher(joined);
+        boolean any = false;
+        while (fetch.find()) {
+            any = true;
+            boolean hashed = fetch.group(3).equals("sha256") && fetch.group(4).length() == 64 || fetch.group(3).equals("sha512") && fetch.group(4).length() == 128;
+            if (!hashed) failures.add(path + ": " + fetch.group(2) + " is fetched with no hash");
+        }
+        if (joined.contains("fetch.py ") && !any) failures.add(path + ": fetch.py is called without get or unpack and a hash");
+    }
+
+    /** pip only with hashes, npm only as `npm ci --ignore-scripts`, nothing piped into a shell. */
+    private static void installs(String path, String joined, List<String> failures) {
+        for (String command : joined.split("&&|;|\\n")) {
+            String c = command.strip();
+            if (c.contains("pip install") && !c.contains("--require-hashes")) failures.add(path + ": `" + c + "` installs without hashes");
+            if (c.matches(".*\\bnpm (install|i|add)\\b.*") || (c.contains("npm ci") && !c.contains("--ignore-scripts"))) failures.add(path + ": `" + c + "` is not npm ci with scripts off");
+            if (c.matches(".*\\|\\s*(sh|bash)\\b.*")) failures.add(path + ": `" + c + "` pipes a download into a shell");
+        }
     }
 
     /** The sandbox's own locks: every Python requirement hashed; every npm package with a SHA-512 and no install script. */

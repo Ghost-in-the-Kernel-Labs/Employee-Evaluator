@@ -24,14 +24,17 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.7, the GitHub adapter (built, its live check waiting on a token)
+## Now: 1.9, the score card and the seed corpus
 
-`github/` is built (J-028, E-043) and tested on GitHub's answers recorded from real Suite Builder commits.
-TODO.md 1.7's check (told apart through the API, on a real repository of Ghost's) waits on Ghost: a
-fine-grained, read-only token for Ghost-in-the-Kernel-Labs/suite-builder (Contents and Metadata: read,
-with an expiry), added in the environment's settings as `EVALUATOR_GITHUB_TOKEN` (Network secrets, or an
-environment variable); a new session picks it up. Then `AuthorshipLiveTest` runs, and passes or says why.
-The session's own GitHub credentials are not the product's and are not used.
+1.8 is done (J-029). 1.9 is `score/`: facts into the card (the seven scores, the two ratios moved here
+from 1.4, the tier), as JSON and Markdown, goldens; then the cards of Suite Builder, Katana and Flight
+Recorder under `corpus/`. Scoring formulas (facts to 0–100 per metric) are new decisions for Ghost.
+
+**1.7 is open, out of order by Ghost's leave (2026-10-21):** `github/` is built (J-028, E-043) and tested
+on recorded answers; its check waits on a fine-grained, read-only token for
+Ghost-in-the-Kernel-Labs/suite-builder (Contents and Metadata: read, with an expiry), set in the
+environment's settings as `EVALUATOR_GITHUB_TOKEN`; a new session picks it up, and `AuthorshipLiveTest`
+runs. The session's own GitHub credentials are not the product's and are not used.
 
 This session runs a Docker daemon (Ghost allowed it, 2026-10-21): `dockerd` started by hand, in the
 background (it stops at the background limit; start it again), base images pulled by digest from

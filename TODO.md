@@ -14,11 +14,6 @@ Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on
 of Ghost's through the API, with the token read from the environment and never logged; the module
 is the only one that reaches the network (`docs/modules.json`).
 
-### 1.8 Navigability checklist
-
-Check: `CLAUDE.md`/`AGENTS.md` presence and freshness (every path they name exists), module
-boundary consistency and naming consistency on the fixtures; this repository scores above 80.
-
 ### 1.9 Score card and the seed corpus
 
 Check: `evaluator score <path>` prints the card as JSON and as Markdown for every fixture, each a

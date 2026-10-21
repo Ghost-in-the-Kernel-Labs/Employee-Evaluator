@@ -26,6 +26,7 @@ files yet points at the plan.
 | The git history's shape; provenance layer 3 | `history/evaluator/history/Shape.java`, `history/evaluator/history/Commits.java`, `history/evaluator/history/Git.java` | E-042, E-033; docs/DESIGN.md (Provenance) | `test/evaluator/history/ShapeTest.java` (histories built by `GitFixture`) |
 | Commit verification and push attribution; layer 2 | `github/evaluator/github/Authorship.java`, `github/evaluator/github/HttpGitHub.java` | E-043; MOD-05 | `test/evaluator/github/AuthorshipTest.java` (recorded answers), `AuthorshipLiveTest` (with `EVALUATOR_GITHUB_TOKEN`) |
 | Facts into a card; the ratios; the tier; JSON and Markdown | `score/` (phase 1) | SC-01 to SC-09; MOD-03 | the fixtures' goldens (phase 1) |
+| The navigability checklist: agent docs, their paths, module cycles, naming | `analyze/evaluator/analyze/Navigability.java`, `analyze/evaluator/analyze/DocPaths.java`, `analyze/evaluator/analyze/Naming.java` | E-044 | `test/evaluator/analyze/NavigabilityTest.java` |
 | The command line | `cli/evaluator/cli/Main.java` | E-010 | `test/evaluator/cli/MainTest.java` |
 | Writing down what happened | `docs/JOURNAL.md` (one entry, its fields) | E-008 | `test/JournalTest.java` |
 | A word | `docs/GLOSSARY.md` | E-007 | `test/GlossaryTest.java` |

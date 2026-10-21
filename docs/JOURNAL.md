@@ -447,3 +447,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   made for the test). MOD-05 (only `github/` reaches the network) is now a test.
 - **Touched:** `github/`; `rubric/evaluator/rubric/Json.java`; E-043, MOD-05; `test/ModulesTest.java`;
   CLAUDE.md, docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.
+
+### J-029 TODO 1.8 done: the navigability checklist; this repository scores 99
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.8, while 1.7 waits on its token (Ghost: "yes, go on to 1.8").
+- **Found:** Every value of a repository worked by hand held on the first run (70: a stale path, one out of
+  the repository, two modules in a cycle, one camelCase name among snake_case ones). This repository:
+  CLAUDE.md and AGENTS.md, 62 of 64 named paths present (the two missing are the planned `score/` and
+  `agent-runner/`), no cycle among its 9 modules, 766 of 770 names in style: 99.
+- **Options:** weigh the four parts equally; weigh freshness most.
+- **Resolved:** E-044, freshness 0.35, for Ghost's review. 1.8 to docs/DONE.md; 1.9 next, 1.7 still open.
+- **Touched:** `analyze/` (`Navigability`, `DocPaths`, `Naming`); E-044; CLAUDE.md, docs/MODULES.md,
+  docs/modules.json, TODO.md, docs/DONE.md, docs/HANDOFF.md.

@@ -697,3 +697,24 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** provenance
 - **See also:** E-012, E-014, E-042
+
+## Navigability
+
+### E-044: The navigability checklist: agent docs, their paths, module cycles, naming, weighted to 0–100
+- **Decision:** `NAVIGABILITY.checklist` is 100 × the weighted sum of four parts: agent docs present
+  (CLAUDE.md, AGENTS.md, GEMINI.md, .cursorrules, .github/copilot-instructions.md; 0.25); their freshness
+  (of the paths their code spans and links name, the share that exist in the repository, a path leaving it
+  counted missing; 0.35); module boundaries (1 less the share of modules caught in an import cycle between
+  modules, a module being a top-level folder with containers such as `src/` looked through; 0.20); and
+  naming (per language, the share of function and file names in the style most of them use, a one-word
+  lowercase name fitting any; 0.20). Each part is a fact beside it. The docs are data, read, never followed.
+- **Why:** docs/DESIGN.md's phase-1 proxy for AI navigability, until the navigability task (TODO.md 2.5)
+  measures it with an agent. Freshness weighs most: a map that sends an agent to files that are gone costs
+  more than having no map, and it is what Suite Builder's and this repository's own doc tests hold. This
+  repository scores 99 (its two missing paths are the planned `score/` and `agent-runner/`).
+- **Held by:** `analyze/evaluator/analyze/Navigability.java`, `DocPaths.java`, `Naming.java`;
+  `test/evaluator/analyze/NavigabilityTest.java` (a repository worked by hand to 70, this one above 80).
+- **Source:** Claude, building TODO.md 1.8, 2026-10-21; weights for Ghost's review.
+- **Status:** in force
+- **subject:** navigability
+- **See also:** E-004, E-006, E-032

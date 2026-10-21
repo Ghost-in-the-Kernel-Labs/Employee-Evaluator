@@ -67,3 +67,11 @@ whose repository-set commands (fsmonitor, pager, external diff, textconv) are ov
 planted fsmonitor that plain git runs and ours does not; spread, cadence, diff variation, the messy
 middle, test co-location and agent fingerprints, each a fact; the shape (E-042): a history worked by
 hand to 70, a replay faking all but time at 23, six weeks of work over 70.
+
+### 1.8 Navigability checklist
+
+Check: `CLAUDE.md`/`AGENTS.md` presence and freshness (every path they name exists), module
+boundary consistency and naming consistency on the fixtures; this repository scores above 80.
+Done 2026-10-21 (J-029): the checklist (E-044) of agent docs, their paths' freshness, module cycles and
+naming, each a fact; a repository worked by hand to 70; this one at 99, its two missing paths the planned
+`score/` and `agent-runner/`.

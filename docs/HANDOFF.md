@@ -24,25 +24,22 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.5, in slices (Ghost's answers in E-037, E-038)
+## Now: 1.6, git history
 
-The work runs in one continuous session (Ghost, 2026-10-19); this file is its record, kept current at
-each step. S1 (the readers) and S2 (the runner) are built and proven against a fake sandbox (J-019).
-S3 (the image) is built (J-021): `sandbox/Dockerfile`, its pins, `sandbox/fetch.py`, the registries proxy
-and `sandbox/setup.sh`. Proven here: fetch.py unpacks Maven and refuses a wrong hash; the Python pins
-install with every hash checked; c8's lockfile installs with scripts off and reports coverage; the proxy
-tunnels a registry and refuses all else on loopback. Not provable here (no Docker daemon in the session): `sandbox/setup.sh` (both images build, the network
-and the proxy come up), then a real run; both are the `sandbox` job's, on a GitHub runner (E-039).
-S4 is built (J-022): `test/fixtures/test-runs/` (py-pass, py-fail, py-network, node-pass), their reports
-from a real run recorded in `test/goldens/test-runs/`, and `TestRunnerFixturesTest` holding the runner to the
-facts worked by hand. **1.5 waits on one run of the `sandbox` job** (GitHub Actions, started by hand, by
-the agent, E-040; the organization's minutes are spent until November 2026): it runs `sandbox/setup.sh` and `gradle test -Pdocker` on a Linux runner;
-`theRealSandboxGivesTheSameFacts` must pass (it is skipped without `-Pdocker`). Then 1.5 moves to
-docs/DONE.md, and 1.6 (git history) starts.
+1.5 is done (docs/DONE.md, J-026). This session runs a Docker daemon (Ghost allowed it, 2026-10-21):
+`dockerd` started by hand, base images pulled by digest from `mirror.gcr.io` and tagged when Docker Hub
+refuses (E-041), then `sandbox/prefetch.sh`, the two builds, and `gradle test -Pdocker`. A new session
+must start the daemon again; nothing persists. `scripts/prepush.sh` runs as written here now.
+
+**Waiting on a run, on paper only:** the install phase through the registries network and its proxy in
+Docker; the proxy is proven on loopback, but this session's egress cannot be routed through it. The
+first hosted machine runs `sandbox/setup.sh` and a fixture with a locked dependency.
 
 - **For Ghost:** the kernel's `Dockerfile` installs git with `apt-get` unpinned, the one install in the
   repository not held by a hash; the supply-chain test does not check apt. Pin it (a version, or a
   snapshot date of the archive) or record why apt's signatures are enough.
+- **For Ghost:** this session's container has no seccomp or AppArmor (Docker reports no security
+  options), so isolation here is our flags alone; the hosted machine must have both (TODO.md 2.7).
 - **Not yet read:** JavaScript (`.js`, `.jsx`, `.mjs`) has no adapter; tree-sitter's JavaScript grammar
   is `io.github.bonede:tree-sitter-javascript` (MIT), vendored the same way when its turn comes.
 - **Still open:** docs/DESIGN.md says "three efficiency ratios" once and two everywhere else.

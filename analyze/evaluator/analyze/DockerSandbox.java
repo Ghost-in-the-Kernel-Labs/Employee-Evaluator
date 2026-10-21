@@ -26,6 +26,8 @@ public final class DockerSandbox implements Sandbox {
     public static final String REGISTRIES = "evaluator-registries";
     /** The registries proxy, as the install phase's tools are told to reach it. */
     public static final String PROXY = "http://registries-proxy:3128";
+    /** The user a run takes when the working copy's owner is root, or cannot be told. */
+    static final String NOBODY = "65534:65534";
     /** The most of a run's output kept: its end, where the errors are. */
     static final int OUTPUT_TAIL = 64 * 1024;
 
@@ -53,6 +55,10 @@ public final class DockerSandbox implements Sandbox {
     public Run run(Phase phase, Path work, Path out, String script, Duration timeout) {
         String name = "evaluator-" + UUID.randomUUID();
         try {
+            if (owner(work).equals(NOBODY)) {
+                handOver(work);
+                handOver(out);
+            }
             Path log = Files.createTempFile("evaluator-run", ".log");
             Process docker = new ProcessBuilder(argv(phase, work, out, script, name, owner(work))).redirectErrorStream(true).redirectOutput(log.toFile()).start();
             boolean finished = docker.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
@@ -75,10 +81,36 @@ public final class DockerSandbox implements Sandbox {
     static String owner(Path work) {
         try {
             int uid = (Integer) Files.getAttribute(work, "unix:uid"), gid = (Integer) Files.getAttribute(work, "unix:gid");
-            return uid == 0 ? "65534:65534" : uid + ":" + gid;
+            return uid == 0 ? NOBODY : uid + ":" + gid;
         } catch (UnsupportedOperationException | IllegalArgumentException | IOException e) {
-            return "65534:65534";
+            return NOBODY;
         }
+    }
+
+    /**
+     * A tree given to nobody, so a run as nobody can read and write it: what the scorer does when it runs
+     * as root (a container never does). A link is re-owned itself and never followed, so one the run
+     * planted cannot hand a file of the host's to nobody; the scorer, as root, still removes it all after.
+     */
+    static void handOver(Path root) throws IOException {
+        Files.walkFileTree(root, new java.nio.file.SimpleFileVisitor<>() {
+            @Override
+            public java.nio.file.FileVisitResult preVisitDirectory(Path dir, java.nio.file.attribute.BasicFileAttributes attrs) throws IOException {
+                toNobody(dir);
+                return java.nio.file.FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public java.nio.file.FileVisitResult visitFile(Path file, java.nio.file.attribute.BasicFileAttributes attrs) throws IOException {
+                toNobody(file);
+                return java.nio.file.FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    private static void toNobody(Path path) throws IOException {
+        Files.setAttribute(path, "unix:uid", 65534, java.nio.file.LinkOption.NOFOLLOW_LINKS);
+        Files.setAttribute(path, "unix:gid", 65534, java.nio.file.LinkOption.NOFOLLOW_LINKS);
     }
 
     /** The log's last OUTPUT_TAIL bytes, read from its end: a run that printed gigabytes costs this much memory. */

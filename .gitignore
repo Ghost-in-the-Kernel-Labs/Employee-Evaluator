@@ -23,3 +23,6 @@ runs/
 
 # OS
 .DS_Store
+
+# the sandbox image's fetched pieces, each checked by hash (sandbox/prefetch.sh, E-041)
+sandbox/cache/

@@ -282,3 +282,7 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.header` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.reply` |  | 2026-10-19 |  |
 | analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.pipe` |  | 2026-10-19 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox.handOver` |  | 2026-10-21 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox..preVisitDirectory` |  | 2026-10-21 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox..visitFile` |  | 2026-10-21 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox.toNobody` |  | 2026-10-21 |  |

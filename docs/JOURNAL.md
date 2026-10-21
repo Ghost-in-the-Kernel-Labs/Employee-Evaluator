@@ -393,3 +393,21 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-040 (supersedes E-024): the agent starts runs, by hand, within the minutes. No run now;
   the handoff says 1.5 waits on the renewal, or on Ghost allowing a Docker daemon in the session.
 - **Touched:** E-024, E-040; `.github/workflows/ci.yml`; docs/HANDOFF.md.
+
+### J-026 TODO 1.5 done: the first real sandbox runs, and one bug only they could find
+- **Who:** Ghost, with Claude. **Class:** failure-caught.
+- **Intent:** Close 1.5 with a real run, in this session, now that Ghost allowed a Docker daemon here.
+- **Found:** The daemon started (Docker 29.8.2; cgroup v1, no seccomp or AppArmor in this container).
+  Docker Hub refused the base images (429); the same digests came from `mirror.gcr.io`. The kernel's image
+  built for the first time anywhere, and its fast loop passed offline, tree-sitter's native library
+  loading in it. The sandbox build could not reach the internet from a build container through the
+  session's proxy, so the image now builds offline from pieces prefetched and checked (E-041). The real
+  run then failed: as root, the scorer gave the sandbox nobody's user, and nobody could not read the
+  root-owned `700` working copy or write the output. No fake or recorded run could have shown it.
+- **Options:** run the sandbox as root (never); open the trees to everyone; hand them to nobody.
+- **Resolved:** `DockerSandbox.handOver` gives the trees to nobody when the scorer runs as root, re-owning
+  a planted link itself and never its target (tested). `gradle test -Pdocker`: 102 tests, the fixtures
+  giving the recorded facts. 1.5 to docs/DONE.md; the install phase through the proxy stays on paper.
+- **Caught by:** `TestRunnerFixturesTest.theRealSandboxGivesTheSameFacts`, on its first real run.
+- **Touched:** E-041; `sandbox/`; `analyze/evaluator/analyze/DockerSandbox.java`; `.gitignore`;
+  TODO.md, docs/DONE.md, docs/HANDOFF.md.

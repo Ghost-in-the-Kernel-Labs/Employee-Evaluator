@@ -8,13 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.5 Test runner adapter
-
-Check: a fixture's own tests are found and run inside the sandbox (no network, no credentials, a
-timeout, a memory cap), on a copy stripped by `Quarantine.strip` first and with no install script run
-(E-033); pass rate and coverage become `QUALITY.tests` facts; a fixture whose tests try to reach
-the network fails the run and says so.
-
 ### 1.6 Git history analysis
 
 Check: git runs on a submission only with its hooks off (`-c core.hooksPath=/dev/null`, E-033); spread, diff variance, reverts and fixups, test co-location and agent fingerprints on

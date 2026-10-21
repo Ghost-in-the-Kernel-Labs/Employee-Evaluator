@@ -51,6 +51,21 @@ class DockerSandboxTest {
         assertFalse(owner.startsWith("0:"), owner);
     }
 
+    /** As root (the scorer on a server): the tree goes to nobody, and a link planted in it moves, never its target. */
+    @Test
+    void aTreeIsHandedToNobodyAndALinkIsNotFollowed(@TempDir Path work, @TempDir Path outside) throws IOException {
+        org.junit.jupiter.api.Assumptions.assumeTrue(((Integer) Files.getAttribute(work, "unix:uid")) == 0, "only root can hand a tree over");
+        Files.writeString(Files.createDirectories(work.resolve("app")).resolve("a.py"), "x = 1\n");
+        Path secret = Files.writeString(outside.resolve("secret"), "the host's");
+        Files.createSymbolicLink(work.resolve("app/link"), secret);
+        DockerSandbox.handOver(work);
+        assertEquals(65534, Files.getAttribute(work.resolve("app/a.py"), "unix:uid"));
+        assertEquals(65534, Files.getAttribute(work.resolve("app"), "unix:gid"));
+        assertEquals(65534, Files.getAttribute(work.resolve("app/link"), "unix:uid", java.nio.file.LinkOption.NOFOLLOW_LINKS));
+        assertEquals(0, Files.getAttribute(secret, "unix:uid"), "the link's target is the host's and stays so");
+        assertEquals(DockerSandbox.NOBODY, DockerSandbox.owner(work));
+    }
+
     @Test
     void onlyTheEndOfAFloodIsKept(@TempDir Path dir) throws IOException {
         Path log = dir.resolve("run.log");

@@ -633,3 +633,20 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **subject:** environment
 - **Supersedes:** E-024
 - **See also:** E-039
+
+### E-041: The sandbox image builds with the network off, from pieces fetched and checked first
+- **Decision:** `sandbox/prefetch.sh` fetches every pinned piece of the sandbox image (Node, Maven, the
+  Python wheels, c8's packages) into `sandbox/cache/`, which git ignores, each checked by its hash; the
+  image then builds with `--network none`, checking each piece's hash again before it is used. Base
+  images are pinned by digest, so they may be pulled from any mirror of Docker Hub (`mirror.gcr.io` when
+  Docker Hub refuses with 429): a digest names the same bytes wherever it is fetched.
+- **Why:** The first real build (2026-10-21, J-026) could not reach the internet from inside a build
+  container through the session's proxy, and Docker Hub rate-limited the base images. Building offline
+  works wherever the fetch works, and a compromised build step has no network to call. The hashes are
+  checked twice, so the cache is no more trusted than the internet was.
+- **Held by:** `sandbox/prefetch.sh`, `sandbox/fetch.py`, `sandbox/Dockerfile`; `test/SupplyChainTest.java`
+  (every fetch hashed, in the Dockerfile and the sandbox's scripts).
+- **Source:** Claude, building TODO.md 1.5, 2026-10-21; for Ghost's review.
+- **Status:** in force
+- **subject:** environment
+- **See also:** E-021, E-033, E-037

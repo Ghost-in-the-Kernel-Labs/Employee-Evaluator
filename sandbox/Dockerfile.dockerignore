@@ -4,5 +4,6 @@
 !sandbox/requirements.txt
 !sandbox/node/package.json
 !sandbox/node/package-lock.json
+!sandbox/cache
 !third_party/jacoco/org.jacoco.agent-0.8.15-runtime.jar
 !third_party/jacoco/org.jacoco.cli-0.8.15-nodeps.jar

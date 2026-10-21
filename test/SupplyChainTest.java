@@ -49,11 +49,13 @@ final class SupplyChainTest {
                 .repository(sandboxLocks(Check.read("sandbox/requirements.txt"), Check.read("sandbox/node/package-lock.json")))
                 .rejects("a base image by tag", () -> images(Map.of("sandbox/Dockerfile", "FROM python:3.12-slim\n")))
                 .rejects("a download with no hash", () -> images(Map.of("sandbox/Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN python3 /tmp/fetch.py https://x/y.tgz /opt/y\n")))
+                .rejects("a hash of the wrong length", () -> images(Map.of("sandbox/prefetch.sh", "python3 fetch.py get https://x/y.tgz sha256 abc cache/y.tgz\n")))
+                .rejects("a prefetch that installs with npm install", () -> images(Map.of("sandbox/prefetch.sh", "npm install --cache c\n")))
                 .rejects("a pip install without hashes", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN pip install pytest\n")))
                 .rejects("an npm install", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN npm install c8\n")))
                 .rejects("a script piped to a shell", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + "\nRUN curl -fsSL https://x/install.sh | sh\n")))
                 .accepts("a comment naming fetch.py", () -> images(Map.of("Dockerfile", "# checked by sandbox/fetch.py before use\nFROM a@sha256:" + "0".repeat(64) + "\n")))
-                .accepts("the sandbox's own way", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + " AS b\nRUN python3 /tmp/fetch.py https://x/y.tgz sha256 " + "a".repeat(64) + " /opt/y\nRUN pip install --require-hashes -r r.txt\nRUN npm ci --ignore-scripts\n")))
+                .accepts("the sandbox's own way", () -> images(Map.of("Dockerfile", "FROM a@sha256:" + "0".repeat(64) + " AS b\nRUN python3 /tmp/fetch.py unpack /c/y.tgz sha256 " + "a".repeat(64) + " /opt/y\nRUN pip install --require-hashes -r r.txt\nRUN npm ci --ignore-scripts\n")))
                 .rejects("an unhashed requirement", () -> sandboxLocks("pytest==9.1.1\n", "{\"packages\": {}}"))
                 .rejects("a package with an install script", () -> sandboxLocks("a==1 --hash=sha256:" + "0".repeat(64) + "\n", "{\"packages\": {\"node_modules/x\": {\"integrity\": \"sha512-x\", \"hasInstallScript\": true}}}"))
                 .rejects("a package with no sha512", () -> sandboxLocks("a==1 --hash=sha256:" + "0".repeat(64) + "\n", "{\"packages\": {\"node_modules/x\": {\"integrity\": \"sha1-x\"}}}"))
@@ -154,14 +156,19 @@ final class SupplyChainTest {
         List<String> failures = new ArrayList<>();
         files.forEach((path, text) -> {
             String name = path.substring(path.lastIndexOf('/') + 1);
-            if (!name.equals("Dockerfile") && !name.endsWith(".Dockerfile")) return;
+            boolean sandboxScript = path.startsWith("sandbox/") && name.endsWith(".sh");
+            if (!name.equals("Dockerfile") && !name.endsWith(".Dockerfile") && !sandboxScript) return;
             String joined = String.join("\n", text.lines().filter(l -> !l.strip().startsWith("#")).toList()).replace("\\\n", " ");
             for (String line : joined.lines().toList()) {
                 String bare = line.strip();
                 if (bare.startsWith("FROM ") && !bare.matches("FROM \\S+@sha256:[0-9a-f]{64}( AS \\S+)?")) failures.add(path + ": `" + bare + "` is not pinned by digest");
             }
-            Matcher fetch = Pattern.compile("fetch\\.py (\\S+) (\\S+)").matcher(joined);
-            while (fetch.find()) if (!fetch.group(2).matches("sha256|sha512")) failures.add(path + ": " + fetch.group(1) + " is fetched with no hash");
+            Matcher fetch = Pattern.compile("fetch\\.py (get|unpack) (\\S+) (\\S+) ([0-9a-f]*)").matcher(joined);
+            while (fetch.find()) {
+                boolean hashed = fetch.group(3).equals("sha256") && fetch.group(4).length() == 64 || fetch.group(3).equals("sha512") && fetch.group(4).length() == 128;
+                if (!hashed) failures.add(path + ": " + fetch.group(2) + " is fetched with no hash");
+            }
+            if (joined.contains("fetch.py ") && !fetch.reset().find()) failures.add(path + ": fetch.py is called without get or unpack and a hash");
             for (String command : joined.split("&&|;|\\n")) {
                 String c = command.strip();
                 if (c.contains("pip install") && !c.contains("--require-hashes")) failures.add(path + ": `" + c + "` installs without hashes");

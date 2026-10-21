@@ -42,3 +42,17 @@ Done 2026-10-19 (J-016, J-017): test files and the test-to-code ratio (E-034), c
 duplication by token shingling (E-036), each a fact proven on a fixture; the duplication fixture's
 renamed copy caught, and its Maintainability facts a golden. The two ratios are ratios of scores, which
 are `score/`'s (MOD-03): moved to 1.9 by Ghost's call.
+
+### 1.5 Test runner adapter
+
+Check: a fixture's own tests are found and run inside the sandbox (no network, no credentials, a
+timeout, a memory cap), on a copy stripped by `Quarantine.strip` first and with no install script run
+(E-033); pass rate and coverage become `QUALITY.tests` facts; a fixture whose tests try to reach
+the network fails the run and says so.
+Done 2026-10-21 in four slices (J-018 to J-022, J-026): the readers of a run's reports as hostile files;
+the runner behind a `Sandbox` interface, each language's plan (E-037, E-038); the sandbox image, every
+piece pinned and its build offline (E-041), and the registries proxy; four fixtures that run. Proven in
+real containers in this session's Docker: `gradle test -Pdocker`, 102 tests, the fixtures giving the
+facts their recorded runs gave, the network attempt named. On paper still: the install phase through
+the registries network and its proxy in Docker (the proxy proven on loopback; this session's egress
+cannot be routed through it).

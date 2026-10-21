@@ -7,11 +7,9 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 ## For Ghost
 
-- **The image.** `docker build -t evaluator .` has still never run: no workspace so far had a
-  Docker daemon. Gradle itself has run the build (J-005), so `scripts/prepush.sh` is the one untried
-  piece. The fast loop in the image now also proves tree-sitter's native library loads there with the
-  network off (`test/evaluator/analyze/TreeSitterLoadsTest.java`); the same test on your Windows
-  machine proves the Windows library.
+- **The image.** `docker build -t evaluator .` has still never run: no session has a Docker daemon.
+  The `sandbox` job builds it on a GitHub runner (E-039), and its fast loop proves tree-sitter's native
+  library loads there. Linux only: no Windows or macOS run is wanted.
 - **Supply chain (E-033), what only you can do:** branch protection on `main` (pull requests
   required, force-pushes blocked; note this changes E-020's "a finished step lands on main at once",
   so decide how an agent's work lands), secret scanning and Dependabot alerts, passkey MFA on GitHub,
@@ -33,13 +31,14 @@ each step. S1 (the readers) and S2 (the runner) are built and proven against a f
 S3 (the image) is built (J-021): `sandbox/Dockerfile`, its pins, `sandbox/fetch.py`, the registries proxy
 and `sandbox/setup.sh`. Proven here: fetch.py unpacks Maven and refuses a wrong hash; the Python pins
 install with every hash checked; c8's lockfile installs with scripts off and reports coverage; the proxy
-tunnels a registry and refuses all else on loopback. Not provable here (no Docker daemon), for Ghost's
-machine: `sandbox/setup.sh` (both images build, the network and the proxy come up), then a real run.
+tunnels a registry and refuses all else on loopback. Not provable here (no Docker daemon in the session): `sandbox/setup.sh` (both images build, the network
+and the proxy come up), then a real run; both are the `sandbox` job's, on a GitHub runner (E-039).
 S4 is built (J-022): `test/fixtures/test-runs/` (py-pass, py-fail, py-network, node-pass), their reports
 from a real run recorded in `test/goldens/test-runs/`, and `TestRunnerFixturesTest` holding the runner to the
-facts worked by hand. **1.5 waits on one run, Ghost's:** on a machine with Docker, `sandbox/setup.sh`,
-then `gradle test -Pdocker`; `theRealSandboxGivesTheSameFacts` must pass (it is skipped without
-`-Pdocker`). Then 1.5 moves to docs/DONE.md, and 1.6 (git history) starts.
+facts worked by hand. **1.5 waits on one run of the `sandbox` job** (GitHub Actions, started by hand,
+E-024, E-039): it runs `sandbox/setup.sh` and `gradle test -Pdocker` on a Linux runner;
+`theRealSandboxGivesTheSameFacts` must pass (it is skipped without `-Pdocker`). Then 1.5 moves to
+docs/DONE.md, and 1.6 (git history) starts.
 
 - **For Ghost:** the kernel's `Dockerfile` installs git with `apt-get` unpinned, the one install in the
   repository not held by a hash; the supply-chain test does not check apt. Pin it (a version, or a

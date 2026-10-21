@@ -18,3 +18,22 @@ jobs:
         run: docker build -t evaluator .
       - name: Build and test, network off
         run: docker run --rm --network none -u "$(id -u)" -v "$PWD":/evaluator evaluator gradle build --offline --warning-mode fail
+
+  # The real sandbox (E-037, E-039): both images built, the registries network and its proxy up, then
+  # the fast loop with -Pdocker, which runs the run fixtures in real containers. Gradle and the JDK come
+  # out of the kernel's own pinned image, so nothing is downloaded that is not pinned already.
+  sandbox:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0 (E-033: pinned by SHA)
+      - name: Set up the sandbox (both images, the registries network, the proxy)
+        run: sandbox/setup.sh
+      - name: Gradle and the JDK from the pinned kernel image, onto the runner
+        run: |
+          id=$(docker create evaluator)
+          docker cp "$id":/opt/gradle "$RUNNER_TEMP/gradle"
+          docker cp "$id":/opt/java/openjdk "$RUNNER_TEMP/jdk"
+          docker rm "$id"
+      - name: The fast loop, and the run fixtures in real containers
+        run: JAVA_HOME="$RUNNER_TEMP/jdk" "$RUNNER_TEMP/gradle/bin/gradle" test --offline -Pdocker

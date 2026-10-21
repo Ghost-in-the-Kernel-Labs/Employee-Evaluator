@@ -600,3 +600,22 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** security
 - **See also:** E-033, E-037
+
+## Where it runs
+
+### E-039: Linux only, and every run in the cloud
+- **Decision:** Employee Evaluator is built for, and runs on, Linux only: the kernel, the sandbox and,
+  later, the web app behind the website. Development and every check run in the cloud: the agent's
+  cloud session for the fast loop, and GitHub's Linux runners, started by hand (E-024), for what needs a
+  Docker daemon (the `sandbox` job). No check depends on Ghost's machine, and no Windows or macOS build
+  is kept working.
+- **Why:** Ghost, 2026-10-21: his machine overheats; "keep this linux only as much as possible, and run
+  it as much as possible in the cloud. The goal is to eventually put a wrapper on it and push it to a
+  website." The website's servers are Linux, so a second platform buys nothing. The agent's session
+  cannot start a Docker daemon (refused as a containment escape, rightly), so Docker's proofs run on a
+  GitHub runner, which is Linux and disposable.
+- **Held by:** `.github/workflows/ci.yml` (the `sandbox` job); docs/HANDOFF.md.
+- **Source:** Ghost, 2026-10-21.
+- **Status:** in force
+- **subject:** environment
+- **See also:** E-021, E-024, E-037

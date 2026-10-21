@@ -370,3 +370,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** the fresh clone's test run, whose failure lines were printed above the false "ok".
 - **Cost:** one broken commit on main, fixed by the next.
 - **Touched:** `test/fixtures/test-runs/`, `test/goldens/test-runs/`; `TestRunnerFixturesTest`; docs/HANDOFF.md.
+
+### J-024 Linux only and cloud first; Docker's proofs move to a GitHub runner
+- **Who:** Ghost, with Claude. **Class:** direction.
+- **Intent:** Finish 1.5 without Ghost's machine, which overheats.
+- **Found:** This session has `dockerd` but starting it was refused as a containment escape, rightly.
+  Gradle's download is blocked from here, and a checksum from memory is not a pin; but the kernel's own
+  pinned image holds Gradle 8.14.3 and JDK 21, and `docker cp` takes them out of it on a runner.
+- **Options:** grant this session a Docker daemon; a GitHub runner, started by hand.
+- **Resolved:** E-039: Linux only, every run in the cloud. A `sandbox` job in `ci.yml`, by hand (E-024):
+  setup.sh, then the fast loop with `-Pdocker`. Windows asks removed from the handoff. The website the
+  work aims at is phase 3's web app (E-002).
+- **Touched:** E-039; `.github/workflows/ci.yml`; docs/HANDOFF.md.

@@ -24,12 +24,14 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.7, the GitHub adapter
+## Now: 1.7, the GitHub adapter (built, its live check waiting on a token)
 
-1.6 is done (docs/DONE.md, J-027). 1.7 reads what GitHub verifies: signatures and push attribution, layer
-2, through GitHub's API with a token from the environment, never logged; `github/` is the only module that
-reaches the network. Its check names a real repository of Ghost's. The history's commit times (E-042) are
-claims; layer 2's push times are what checks them.
+`github/` is built (J-028, E-043) and tested on GitHub's answers recorded from real Suite Builder commits.
+TODO.md 1.7's check (told apart through the API, on a real repository of Ghost's) waits on Ghost: a
+fine-grained, read-only token for Ghost-in-the-Kernel-Labs/suite-builder (Contents and Metadata: read,
+with an expiry), added in the environment's settings as `EVALUATOR_GITHUB_TOKEN` (Network secrets, or an
+environment variable); a new session picks it up. Then `AuthorshipLiveTest` runs, and passes or says why.
+The session's own GitHub credentials are not the product's and are not used.
 
 This session runs a Docker daemon (Ghost allowed it, 2026-10-21): `dockerd` started by hand, in the
 background (it stops at the background limit; start it again), base images pulled by digest from

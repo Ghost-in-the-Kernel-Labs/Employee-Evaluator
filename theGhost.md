@@ -674,3 +674,26 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** provenance
 - **See also:** E-012, E-033
+
+### E-043: Authorship is read from GitHub's API with a token of its own, read only, never logged
+- **Decision:** `github/` reads, for the submitting account, each commit's class: signed (GitHub verified
+  its signature and the applicant is its author), pushed (unsigned, but the applicant's push in GitHub's log
+  brought it, by the push's own commit list or by GitHub's compare of its before and head), claimed (the
+  applicant's by its author field alone), foreign (another account's) or unmatched (no account's). The
+  facts count each class, citing commits; give the applicant's share; and say how far back the push log
+  reaches (GitHub keeps 90 days, at most 300 events). The token is `EVALUATOR_GITHUB_TOKEN`, fine-grained
+  and read only, set in the environment, never in a message, an error, a fact or the repository. Only GET,
+  only api.github.com, no redirect followed, answers capped; names that could steer a URL are refused.
+  `github/` is the kernel's one door to the network (MOD-05, now held by `ModulesTest`), the sandbox's
+  registries proxy the one named exception.
+- **Why:** docs/DESIGN.md's layer 2: a commit's author is free text, what GitHub verifies is the signature
+  and the push. The agent's session has GitHub credentials of its own, but they are not the product's and
+  are not read only, so the adapter is built and tested on GitHub's answers recorded from real Suite
+  Builder commits, and its live check waits on a token of its own (Ghost, 2026-10-21: "check against suite
+  builder. Read only").
+- **Held by:** `github/evaluator/github/Authorship.java`, `HttpGitHub.java`; `test/evaluator/github/`
+  (`AuthorshipTest` on the recorded answers, `AuthorshipLiveTest` when the token is set); `test/ModulesTest.java` (MOD-05).
+- **Source:** Claude, building TODO.md 1.7, 2026-10-21; for Ghost's review.
+- **Status:** in force
+- **subject:** provenance
+- **See also:** E-012, E-014, E-042

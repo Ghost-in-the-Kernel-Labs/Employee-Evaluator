@@ -26,6 +26,11 @@ final class ModulesTest {
     private static final List<String> MODEL_CLIENTS =
             List.of("com.anthropic", "com.openai", "dev.langchain4j", "com.google.cloud.vertexai", "software.amazon.awssdk.services.bedrock");
     private static final Set<String> NOT_SOURCE = Set.of("test", "scripts", "build", "third_party", "docs", "web", "agent-runner");
+    /** What reaches the network (MOD-05): HTTP, sockets, URL connections. */
+    private static final List<String> NETWORK = List.of("java.net.http", "java.net.Socket", "java.net.ServerSocket", "java.net.URL",
+            "java.net.HttpURLConnection", "java.net.URLConnection", "java.net.DatagramSocket", "java.nio.channels.SocketChannel");
+    /** The one door outside github/ (MOD-05): the sandbox's registries proxy. */
+    private static final String PROXY = "analyze/evaluator/analyze/RegistriesProxy.java";
 
     public static void main(String[] args) {
         run().exit();
@@ -41,6 +46,12 @@ final class ModulesTest {
                 .rejects("rubric/ allowed an import", () -> check(json.replaceFirst("(\"rubric\": \\{[^}]*\"mayImport\": \\[)", "$1\"ingest\""), Map.of()))
                 .rejects("a module importing cli/", () -> check(json, Map.of("ingest/Walk.java", "package evaluator.ingest;\nimport evaluator.cli.Main;\n")))
                 .rejects("a file in the wrong package", () -> check(json, Map.of("ingest/Walk.java", "package evaluator.score;\n")))
+                .rejects("the network outside github/", () -> check(json, Map.of("history/Fetch.java", "package evaluator.history;\nimport java.net.http.HttpClient;\n")))
+                .rejects("a socket outside github/", () -> check(json, Map.of("analyze/Beacon.java", "package evaluator.analyze;\nimport java.net.Socket;\n")))
+                .accepts("the network in github/, the proxy's sockets, and a URI anywhere", () -> check(json, Map.of(
+                        "github/Api.java", "package evaluator.github;\nimport java.net.http.HttpClient;\n",
+                        PROXY, "package evaluator.analyze;\nimport java.net.ServerSocket;\n",
+                        "history/Name.java", "package evaluator.history;\nimport java.net.URI;\n")))
                 .accepts("an allowed import", () -> check(json, Map.of("analyze/Complexity.java", "package evaluator.analyze;\nimport evaluator.ingest.Inventory;\nimport java.util.List;\n")));
     }
 
@@ -106,6 +117,8 @@ final class ModulesTest {
         while (imp.find()) {
             String name = imp.group(1);
             for (String client : MODEL_CLIENTS) if (name.startsWith(client)) failures.add(path + " imports a model client, " + name + " (MOD-01, E-003)");
+            boolean network = NETWORK.stream().anyMatch(n -> name.equals(n) || name.startsWith(n + "."));
+            if (network && !module.equals("github") && !path.equals(PROXY)) failures.add(path + " reaches the network with " + name + ": only github/ does (MOD-05)");
             if (!name.startsWith("evaluator.")) continue;
             String target = name.split("\\.")[1];
             if (target.equals("cli") && !module.equals("cli")) failures.add(path + " imports " + name + ": nothing imports cli/ (MOD-04)");

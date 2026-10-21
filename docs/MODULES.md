@@ -39,6 +39,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 - **Purpose:** what GitHub verifies: commit signatures and push attribution for the submitting account. Provenance layer 2. The only module that reaches the network, and only GitHub.
 - **Input:** a repository name and the submitting account. **Output:** the authorship facts.
 - **May import:** `rubric`.
+- **Start at:** `github/evaluator/github/Authorship.java` (`Authorship.facts()`, E-043) over `GitHubApi.java`; live, `HttpGitHub.java` with `EVALUATOR_GITHUB_TOKEN`. The only module that reaches the network (MOD-05).
 
 ### `score/`
 - **Purpose:** facts into a score card: the seven scores, the ratios, the tier; the card as JSON and Markdown. It reads no code and runs nothing (MOD-03).

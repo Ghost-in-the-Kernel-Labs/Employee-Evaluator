@@ -429,3 +429,21 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** the mutation by hand of `Git.SAFE` (the test's teeth).
 - **Touched:** `history/`; E-042; CLAUDE.md, docs/MODULES.md, docs/modules.json, TODO.md, docs/DONE.md,
   docs/HANDOFF.md.
+
+### J-028 TODO 1.7 built; its live check waits on a token of the product's own
+- **Who:** Claude. **Class:** deferred.
+- **Intent:** Layer 2: signed, pushed and foreign commits told apart through GitHub's API, on Suite Builder
+  (Ghost: "check against suite builder. Read only").
+- **Found:** Suite Builder's 711 commits hold every kind: 8 pull-request merges GitHub signed, 435 of
+  Ghost's unsigned, 268 by GitHub's `claude` account (`noreply@anthropic.com`). This session reaches
+  api.github.com, but authenticated with the session's own credentials, which are not the product's
+  and not read only, and the session is to use its GitHub tools rather than call the API; those tools
+  return no verification verdict and no push events. `github/` may not import `analyze/`'s JSON reader:
+  it moved to `rubric/` first, in a commit of its own. Every value of the recorded answers worked by hand
+  held on the first run, the push by another account not counting for Ghost among them.
+- **Options:** use the session's credentials for the live check; wait for a token of the product's own.
+- **Resolved:** E-043; the live test waits on `EVALUATOR_GITHUB_TOKEN`, and 1.7 stays open. The recorded
+  answers say what is real (the commits, their accounts) and what is not (verdicts read from git; events
+  made for the test). MOD-05 (only `github/` reaches the network) is now a test.
+- **Touched:** `github/`; `rubric/evaluator/rubric/Json.java`; E-043, MOD-05; `test/ModulesTest.java`;
+  CLAUDE.md, docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.

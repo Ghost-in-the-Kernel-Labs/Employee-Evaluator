@@ -22,6 +22,11 @@
       "id": "MOD-04",
       "rule": "Nothing imports cli/: the command line names the work and does none of it.",
       "source": "E-010"
+    },
+    {
+      "id": "MOD-05",
+      "rule": "Only github/ reaches the network (java.net.http, sockets, URL connections); the one other door is the sandbox's registries proxy, analyze/evaluator/analyze/RegistriesProxy.java, named here. java.net.URI is a name, not a door.",
+      "source": "E-043, E-037"
     }
   ],
   "modules": {
@@ -68,7 +73,7 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "history", "score", "cli"],
       "phase": 1,
-      "entryPoints": []
+      "entryPoints": ["github/evaluator/github/Authorship.java → Authorship.facts()", "github/evaluator/github/HttpGitHub.java → HttpGitHub.fromEnvironment()"]
     },
     "score": {
       "purpose": "Facts into a score card: the seven scores, the efficiency ratios, the provenance tier; the card as JSON and as Markdown. It reads no code and runs nothing.",

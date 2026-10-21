@@ -336,3 +336,16 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | rubric | `rubric/evaluator/rubric/Json.java:Json.expect` |  | 2026-10-21 |  |
 | rubric | `rubric/evaluator/rubric/Json.java:Json.deeper` |  | 2026-10-21 |  |
 | rubric | `rubric/evaluator/rubric/Json.java:Json.error` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.Authorship` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.facts` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.classify` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.pushes` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.facts#2` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.pages` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.login` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.date` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/Authorship.java:Authorship.fact` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.HttpGitHub` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.fromEnvironment` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.get` |  | 2026-10-21 |  |
+| github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.toString` |  | 2026-10-21 |  |

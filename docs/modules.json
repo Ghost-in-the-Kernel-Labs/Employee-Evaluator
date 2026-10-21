@@ -59,7 +59,7 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": []
+      "entryPoints": ["history/evaluator/history/Commits.java → Commits.read(), Commits.paths()", "history/evaluator/history/Shape.java → Shape.facts()"]
     },
     "github": {
       "purpose": "What GitHub verifies: commit signature status and push attribution for the account that submitted. Provenance layer 2. The only module that reaches the network, and only GitHub.",

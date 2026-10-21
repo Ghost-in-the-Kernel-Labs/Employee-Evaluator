@@ -24,12 +24,18 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.6, git history
+## Now: 1.7, the GitHub adapter
 
-1.5 is done (docs/DONE.md, J-026). This session runs a Docker daemon (Ghost allowed it, 2026-10-21):
-`dockerd` started by hand, base images pulled by digest from `mirror.gcr.io` and tagged when Docker Hub
-refuses (E-041), then `sandbox/prefetch.sh`, the two builds, and `gradle test -Pdocker`. A new session
-must start the daemon again; nothing persists. `scripts/prepush.sh` runs as written here now.
+1.6 is done (docs/DONE.md, J-027). 1.7 reads what GitHub verifies: signatures and push attribution, layer
+2, through GitHub's API with a token from the environment, never logged; `github/` is the only module that
+reaches the network. Its check names a real repository of Ghost's. The history's commit times (E-042) are
+claims; layer 2's push times are what checks them.
+
+This session runs a Docker daemon (Ghost allowed it, 2026-10-21): `dockerd` started by hand, in the
+background (it stops at the background limit; start it again), base images pulled by digest from
+`mirror.gcr.io` and tagged when Docker Hub refuses (E-041), then `sandbox/prefetch.sh`, the two builds,
+and `gradle test -Pdocker`. A new session must start the daemon again; nothing persists.
+`scripts/prepush.sh` runs as written here.
 
 **Waiting on a run, on paper only:** the install phase through the registries network and its proxy in
 Docker; the proxy is proven on loopback, but this session's egress cannot be routed through it. The

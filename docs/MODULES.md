@@ -33,6 +33,7 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 - **Purpose:** the git history's shape: spread, diff variance, reverts and fixups, tests beside code, agent fingerprints. Provenance layer 3.
 - **Input:** a repository with its `.git`. **Output:** the history-shape facts.
 - **May import:** `rubric`.
+- **Start at:** `history/evaluator/history/Shape.java` (`Shape.facts()`, E-042) over `Commits.java` (`Commits.read()`); git run safely, `Git.java` (E-033). A test-file rule comes in as a predicate: `history/` may not import `analyze/`.
 
 ### `github/`
 - **Purpose:** what GitHub verifies: commit signatures and push attribution for the submitting account. Provenance layer 2. The only module that reaches the network, and only GitHub.

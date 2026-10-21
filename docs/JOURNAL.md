@@ -411,3 +411,21 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** `TestRunnerFixturesTest.theRealSandboxGivesTheSameFacts`, on its first real run.
 - **Touched:** E-041; `sandbox/`; `analyze/evaluator/analyze/DockerSandbox.java`; `.gitignore`;
   TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-027 TODO 1.6 done: the history's shape, read by a git that runs nothing
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Provenance layer 3: the shape of a history, and a replay told from weeks of work.
+- **Found:** Every value of a five-commit history worked by hand held on the first run (shape 70); a
+  replay of 300 commits in an hour faking every signal but time scored 23; six weeks of varied work
+  over 70. A repository's own `.git/config` can make git run commands: plain `git status` ran a planted
+  fsmonitor (checked by hand); the scorer only calls `log` and `ls-tree`, which never touch it, so the
+  hostile-config test now also runs `status` through the safe runner, and with the fsmonitor override
+  taken out, the test failed, as it must. A textconv driver did not fire under `log -p` on git 2.43;
+  its override stays.
+- **Options:** for the shape's weights, equal parts, or time first; for identity, read authors here, or
+  leave them to layer 2.
+- **Resolved:** E-042, time first (0.45), weights for Ghost's review; no author is read (E-014), layer 2's
+  push times check the claimed dates. 1.6 to docs/DONE.md; 1.7 next.
+- **Caught by:** the mutation by hand of `Git.SAFE` (the test's teeth).
+- **Touched:** `history/`; E-042; CLAUDE.md, docs/MODULES.md, docs/modules.json, TODO.md, docs/DONE.md,
+  docs/HANDOFF.md.

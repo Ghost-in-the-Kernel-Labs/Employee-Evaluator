@@ -56,3 +56,14 @@ real containers in this session's Docker: `gradle test -Pdocker`, 102 tests, the
 facts their recorded runs gave, the network attempt named. On paper still: the install phase through
 the registries network and its proxy in Docker (the proxy proven on loopback; this session's egress
 cannot be routed through it).
+
+### 1.6 Git history analysis
+
+Check: git runs on a submission only with its hooks off (`-c core.hooksPath=/dev/null`, E-033); spread, diff variance, reverts and fixups, test co-location and agent fingerprints on
+fixtures with real histories; a fixture replayed as 300 uniform commits in one hour scores under 30
+on history shape; one with weeks of varied work scores over 70.
+Done 2026-10-21 (J-027): `history/` reads a repository's commits through a git whose hooks are off and
+whose repository-set commands (fsmonitor, pager, external diff, textconv) are overridden, proven by a
+planted fsmonitor that plain git runs and ours does not; spread, cadence, diff variation, the messy
+middle, test co-location and agent fingerprints, each a fact; the shape (E-042): a history worked by
+hand to 70, a replay faking all but time at 23, six weeks of work over 70.

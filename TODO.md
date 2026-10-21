@@ -8,12 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.6 Git history analysis
-
-Check: git runs on a submission only with its hooks off (`-c core.hooksPath=/dev/null`, E-033); spread, diff variance, reverts and fixups, test co-location and agent fingerprints on
-fixtures with real histories; a fixture replayed as 300 uniform commits in one hour scores under 30
-on history shape; one with weeks of varied work scores over 70.
-
 ### 1.7 GitHub adapter
 
 Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on a real repository

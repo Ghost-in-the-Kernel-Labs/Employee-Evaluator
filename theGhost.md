@@ -650,3 +650,27 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** environment
 - **See also:** E-021, E-033, E-037
+
+## Provenance
+
+### E-042: The history's shape is six parts of how it was written, weighted, 0–100
+- **Decision:** `PROVENANCE.history.shape` is 100 × the weighted sum of six parts, each 0–1: spread (active
+  days over 14, weight 0.25), cadence (15 commits a day or fewer, 0.20), variation (commit sizes'
+  standard deviation over their mean, 0.20), the messy middle (reverts, fixes, fixups, typos, as a
+  share of a twentieth of the commits, 0.15), co-location (of commits touching tests, the share touching
+  code too, 0.10), and an agent's fingerprints (Co-Authored-By trailers naming an agent on a tenth of
+  commits, or an agent file such as CLAUDE.md kept in two commits or more, 0.10). Each measure is a fact
+  beside it. Commit times are the author's claim: anyone can set them, so the shape is evidence, and
+  layer 2 (TODO.md 1.7) checks push times against them. No author's name or address is read here.
+- **Why:** docs/DESIGN.md's layer 3: a stolen repository replayed as 300 commits in an evening has
+  history but not shape. The weights put time first (spread and cadence, 0.45), since time is what a
+  replay cannot spend; the fixture that fakes everything else (a test beside each commit, a trailer on
+  each) still scores 23. Fingerprints count because the platform ranks agent-assisted work (DESIGN:
+  "double duty"), lightly, since a person without an agent built it too.
+- **Held by:** `history/evaluator/history/Shape.java`; `test/evaluator/history/ShapeTest.java` (a history
+  worked by hand to 70, a replay under 30, weeks of work over 70).
+- **Source:** Claude, building TODO.md 1.6, 2026-10-21; weights for Ghost's review (DESIGN: "a tuning
+  question").
+- **Status:** in force
+- **subject:** provenance
+- **See also:** E-012, E-033

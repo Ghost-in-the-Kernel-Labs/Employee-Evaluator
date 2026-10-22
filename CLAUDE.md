@@ -28,6 +28,7 @@ files yet points at the plan.
 | Facts into a card; a metric's formula; the ratios; the tier; JSON and Markdown | `score/evaluator/score/Cards.java`, `score/evaluator/score/Formulas.java`, `score/evaluator/score/CardJson.java`, `score/evaluator/score/CardMarkdown.java` | SC-01 to SC-10; MOD-03; E-045 | `test/evaluator/score/CardsTest.java`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/` |
 | The navigability checklist: agent docs, their paths, module cycles, naming | `analyze/evaluator/analyze/Navigability.java`, `analyze/evaluator/analyze/DocPaths.java`, `analyze/evaluator/analyze/Naming.java` | E-044 | `test/evaluator/analyze/NavigabilityTest.java` |
 | The command line: `evaluator score`, every module's facts in order | `cli/evaluator/cli/Main.java`, `cli/evaluator/cli/Pipeline.java` | E-010, E-054 | `test/evaluator/cli/MainTest.java`, `CardGoldensTest` and `test/goldens/cards/` (`gradle test -PwriteGoldens` rewrites them; review the diff) |
+| Which model judges code: the judge trials (phase 2's groundwork) | `docs/judges/` (one file per trial: the brief, every run's scores, the comparisons) | E-017; TODO.md 2.1, 2.2 | |
 | Writing down what happened | `docs/JOURNAL.md` (one entry, its fields) | E-008 | `test/JournalTest.java` |
 | A word | `docs/GLOSSARY.md` | E-007 | `test/GlossaryTest.java` |
 | Why a rule is what it is | `docs/GHOST-IN-THE-KERNEL.md` | | |

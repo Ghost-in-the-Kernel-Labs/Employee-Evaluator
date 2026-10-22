@@ -136,7 +136,7 @@ Phase 1 delivers a command-line scorer that takes a repository path and emits a 
 6. Git history analysis: spread, diff variance, revert and fixup detection, test co-location, agent fingerprints. Output provenance layer 3.
 7. GitHub adapter: commit verification status and push attribution via the API. Output provenance layer 2.
 8. Navigability checklist: `CLAUDE.md` / `AGENTS.md` presence and freshness (does it name modules that still exist?), module boundary consistency. Output the proxy navigability score.
-9. Score card JSON schema plus a Markdown renderer, with the two efficiency ratios. Run the scorer on Suite Builder, Katana and Flight Recorder and commit the cards as the first corpus entries.
+9. Score card JSON schema plus a Markdown renderer, with the two efficiency ratios. Run the scorer on Suite Builder, Katana and this repository (Flight Recorder is not started yet) and commit the cards as the first corpus entries.
 10. Navigability pass: refactor for the agent, tighten `CLAUDE.md`, delete dead paths.
 
 **Done when:** `evaluator score <path>` runs on three of our repos and the numbers survive a sanity read.

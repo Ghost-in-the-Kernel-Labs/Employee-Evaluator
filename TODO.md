@@ -18,7 +18,7 @@ is the only one that reaches the network (`docs/modules.json`).
 
 Check: `evaluator score <path>` prints the card as JSON and as Markdown for every fixture, each a
 golden, its two efficiency ratios (SC-04: Quality per thousand lines, Maintainability per unit of
-Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and Flight Recorder are committed under `corpus/` and
+Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and this repository (Flight Recorder is not started; Ghost, 2026-10-22) are committed under `corpus/` and
 survive Ghost's sanity read.
 
 ### 1.10 Tithe pass: the phase-1 boundary

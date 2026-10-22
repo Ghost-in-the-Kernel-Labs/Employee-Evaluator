@@ -1,0 +1,8 @@
+judge	quality	complexity	size	ambition	navigability	maintainability	provenance	tier	q1to5	fixtures_right	tool_uses	tokens	seconds
+haiku-1	72	66	35	68	88	74	62	product	4	yes	10	107258	40
+sonnet-1	74	72	40	82	92	82	72	product	4	yes	6	71928	23
+haiku-2	78	72	40	80	88	80	55	product	4	yes	11	102415	44
+sonnet-3	72	72	38	85	93	78	68	product	4	partly(sandbox/ called fixture data)	2	62546	14
+sonnet-2	74	70	38	80	92	80	68	product	4	yes	7	76288	26
+haiku-3	74	68	57	74	85	78	55	product	4	yes	13	99849	46
+opus-1	78	62	42	72	90	78	60	product	4	yes	13	109600	62

@@ -32,9 +32,22 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
    (E-046), Size (E-048), Complexity (E-050, after Java's depth, E-049), Maintainability (E-051), Quality
    (E-052); the ratios (E-047); the tooling bucket (E-053). Ambition waits on its judge (phase 2).
 3. `evaluator score <path>` and the fixtures' cards as goldens: done (J-039, E-054). Next: the cards of
-   Suite Builder, Katana and Flight Recorder under `corpus/`, waiting on Ghost's word on two gaps J-039
-   found: a repository's fixture folders run as its tests (this one's Quality read 0), and no plan runs a
-   Gradle build.
+   Suite Builder, Katana and this repository under `corpus/` (Flight Recorder is not started). J-039's two
+   gaps go to the judges, not to rules (Ghost, 2026-10-22): which test files are fixture data is a judgment,
+   and every model made it right in trials 1 and 2 (`docs/judges/`). A Gradle plan is still unplanned.
+
+**For Ghost, from judge trial 2 (J-041):**
+- The judge: Haiku three times, averaged, schema-enforced output, given the kernel's facts to judge rather
+  than count; Opus when the three disagree by more than 15. Opus's deep read found real defects no cheaper
+  model did. A decision for Ghost before 2.2.
+- `docs/DESIGN.md` names a labeller by a first name (calibration set, open questions); CLAUDE.md's rule
+  names only the maintainer. An Opus judge flagged it; left as it is until Ghost says.
+- Found in other repositories, reported, not touched (read only): Suite Builder's
+  `docs/HOSTILE-REVIEW-2026-10-20.md` records a critical bypass of the crawler's address guard
+  (IPv6-mapped IPv4), whether fixed unchecked; Suite Builder keeps saved third-party crawls in `test/data`
+  and `test/bench` beside a rule against pages saved from others' sites (perhaps an allowed exception);
+  Katana keeps about 19k lines of GPL-licensed opensourcecobol4j output under `lower/prototypes/` as
+  reference.
 
 **1.7 is open, out of order by Ghost's leave (2026-10-21):** `github/` is built (J-028, E-043) and tested
 on recorded answers; its check waits on a fine-grained, read-only token for

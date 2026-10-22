@@ -582,3 +582,18 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** Haiku ×3 averaged, flagging spreads over 15 to Opus; Sonnet once, its offset calibrated; Opus.
 - **Resolved:** none yet: for Ghost. The fixture question (J-039) goes to the judges, not to a rule.
 - **Touched:** docs/judges/trial-1.md.
+
+### J-041 Judge trial 2: every model ranks like Opus; Haiku three times comes nearest Opus's scores
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Ghost: "attach them and run the trial with opus x3", after trial 1 (J-040). Katana attached read
+  only; Suite Builder judged from a copy of `origin/main`. Flight Recorder is not started (Ghost), so it is
+  struck from TODO.md 1.9 and DESIGN.md; theGhost.md's mention stays, the log being append-only.
+- **Found:** docs/judges/trial-2.md. Opus agrees with itself within about 2 points; one cheaper run is 3.6–5.8
+  off; Haiku's mean of three 2.1–4.0, at about a fourteenth of one Opus run. Ranking the three repositories,
+  one run of any model puts pairs in Opus's order 90–93% of the time. Haiku's Provenance bias came from
+  miscounting history the kernel already counts. 7 of 9 Opus answers were malformed JSON. An Opus judge found
+  a crash in `--date` (fixed, f0ea3be) and Suite Builder's recorded address-guard bypass (reported).
+- **Options:** Opus once; Sonnet once with its offset corrected; Haiku three times averaged, Opus on a split.
+- **Resolved:** none yet: the judge's design is for Ghost (docs/HANDOFF.md). The tithe (30591ab) came a commit
+  late; the cadence is back.
+- **Touched:** docs/judges/ (trial-2.md, both trials' score tables), TODO.md, docs/DESIGN.md, docs/HANDOFF.md.

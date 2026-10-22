@@ -1,5 +1,5 @@
 {
-  "about": "The kernel's modules (E-004): one per concern, each with its purpose, what it takes and gives, what it may import and what it must not. test/ModulesTest.java holds every import in the source to this file. entryPoints are filled as each module is built. docs/MODULES.md is the readable form; it is written by hand until a generator exists (TODO.md 1.11) and says the same thing.",
+  "about": "The kernel's modules (E-004): one per concern, each with its purpose, what it takes and gives, what it may import and what it must not. test/ModulesTest.java holds every import in the source to this file. entryPoints are filled as each module is built. docs/MODULES.md is the readable form, written from this file by `gradle modulesDoc` (never by hand); startAt says where to begin reading, in words.",
   "package": "Each module's Java lives in its folder at the root under the package evaluator.<module> (evaluator.ingest, evaluator.score, ...); the module of an import is the segment after evaluator.",
   "adding": "To add a module: one entry here with every field; its folder appears with its first code. A module may import only what its mayImport lists; anything else is refused whether or not mustNotImport names it, so mustNotImport records the refusals worth saying. A new module or a new import is an architecture decision (theGhost.md E-004): draft the entry as a proposal, say you are waiting on Ghost, and stop; do not add it to main.",
   "rules": [
@@ -29,6 +29,7 @@
       "source": "E-043, E-037"
     }
   ],
+  "pipeline": "The pipeline: `ingest` reads → `analyze`, `history` and `github` measure → `score` combines facts into the card → `cli` names the work. `rubric` is the vocabulary all of them speak.",
   "modules": {
     "rubric": {
       "purpose": "The vocabulary: the seven metrics and their definitions as data, a Fact (what was measured, its evidence, its confidence, its state), the score card's types and invariants (docs/SCORE-CARD.md).",
@@ -37,7 +38,8 @@
       "mayImport": [],
       "mustNotImport": ["ingest", "analyze", "history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["rubric/evaluator/rubric/Fact.java → Fact.measured(), Fact.judged()", "rubric/evaluator/rubric/ScoreCard.java → new ScoreCard()"]
+      "entryPoints": ["rubric/evaluator/rubric/Fact.java → Fact.measured(), Fact.judged()", "rubric/evaluator/rubric/ScoreCard.java → new ScoreCard()"],
+      "startAt": "`rubric/evaluator/rubric/Fact.java` (`Fact.measured()`, `Fact.judged()`), `rubric/evaluator/rubric/ScoreCard.java`."
     },
     "ingest": {
       "purpose": "A repository on disk as an inventory: every source file by path and language, vendored and generated code set aside, nothing interpreted.",
@@ -46,7 +48,8 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["analyze", "history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["ingest/evaluator/ingest/Ingest.java → Ingest.read()", "ingest/evaluator/ingest/Size.java → Size.facts()"]
+      "entryPoints": ["ingest/evaluator/ingest/Ingest.java → Ingest.read()", "ingest/evaluator/ingest/Size.java → Size.facts()"],
+      "startAt": "`ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025)."
     },
     "analyze": {
       "purpose": "Static analysis over the inventory, one adapter per language: complexity per function, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox.",
@@ -55,7 +58,8 @@
       "mayImport": ["rubric", "ingest"],
       "mustNotImport": ["history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["analyze/evaluator/analyze/Complexity.java → Complexity.measure(), Complexity.facts()", "analyze/evaluator/analyze/Dependencies.java → Dependencies.graph(), Dependencies.facts()", "analyze/evaluator/analyze/TestFiles.java → TestFiles.ratio()", "analyze/evaluator/analyze/Coupling.java → Coupling.facts()", "analyze/evaluator/analyze/Duplication.java → Duplication.fact()", "analyze/evaluator/analyze/TestRunner.java → TestRunner.run() (a submission's own tests, E-037)", "analyze/evaluator/analyze/Navigability.java → Navigability.facts() (the checklist, E-044)", "analyze/evaluator/analyze/Adapter.java (one per language)"]
+      "entryPoints": ["analyze/evaluator/analyze/Complexity.java → Complexity.measure(), Complexity.facts()", "analyze/evaluator/analyze/Dependencies.java → Dependencies.graph(), Dependencies.facts()", "analyze/evaluator/analyze/TestFiles.java → TestFiles.ratio()", "analyze/evaluator/analyze/Coupling.java → Coupling.facts()", "analyze/evaluator/analyze/Duplication.java → Duplication.fact()", "analyze/evaluator/analyze/TestRunner.java → TestRunner.run() (a submission's own tests, E-037)", "analyze/evaluator/analyze/Navigability.java → Navigability.facts() (the checklist, E-044)", "analyze/evaluator/analyze/Adapter.java (one per language)"],
+      "startAt": "`analyze/evaluator/analyze/Complexity.java` (`Complexity.measure()`, `Complexity.facts()`); the dependency graph and unused imports, `Dependencies.java` (E-032); Maintainability's test files, coupling and duplication, `TestFiles.java`, `Coupling.java`, `Duplication.java` (E-034 to E-036); a submission's own tests, `TestRunner.java` over `TestPlans.java`, `Sandbox.java` (Docker: `DockerSandbox.java`) and `Reports.java`, the install phase's one way out `RegistriesProxy.java`, the image itself `sandbox/` (E-037, E-038); the navigability checklist, `Navigability.java` with `DocPaths.java` and `Naming.java` (E-044); a language's reader implements `analyze/evaluator/analyze/Adapter.java` (Java: `JavaAdapter.java`, its counting in `JavaComplexity.java`, E-030; TypeScript and Python: `TypeScriptAdapter.java` and `PythonAdapter.java` on `TreeSitterAdapter.java`, E-031)."
     },
     "history": {
       "purpose": "The git history's shape: spread over time, diff variance, reverts and fixups, tests landing beside code, agent fingerprints. Provenance layer 3.",
@@ -64,7 +68,8 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["history/evaluator/history/Commits.java → Commits.read(), Commits.paths()", "history/evaluator/history/Shape.java → Shape.facts()"]
+      "entryPoints": ["history/evaluator/history/Commits.java → Commits.read(), Commits.paths()", "history/evaluator/history/Shape.java → Shape.facts()"],
+      "startAt": "`history/evaluator/history/Shape.java` (`Shape.facts()`, E-042) over `Commits.java` (`Commits.read()`); git run safely, `Git.java` (E-033). A test-file rule comes in as a predicate: `history/` may not import `analyze/`."
     },
     "github": {
       "purpose": "What GitHub verifies: commit signature status and push attribution for the account that submitted. Provenance layer 2. The only module that reaches the network, and only GitHub.",
@@ -73,7 +78,8 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "history", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["github/evaluator/github/Authorship.java → Authorship.facts()", "github/evaluator/github/HttpGitHub.java → HttpGitHub.fromEnvironment()"]
+      "entryPoints": ["github/evaluator/github/Authorship.java → Authorship.facts()", "github/evaluator/github/HttpGitHub.java → HttpGitHub.fromEnvironment()"],
+      "startAt": "`github/evaluator/github/Authorship.java` (`Authorship.facts()`, E-043) over `GitHubApi.java`; live, `HttpGitHub.java` with `EVALUATOR_GITHUB_TOKEN`. The only module that reaches the network (MOD-05)."
     },
     "score": {
       "purpose": "Facts into a score card: the seven scores, the efficiency ratios, the provenance tier; the card as JSON and as Markdown. It reads no code and runs nothing.",
@@ -82,7 +88,8 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "history", "github", "cli"],
       "phase": 1,
-      "entryPoints": ["score/evaluator/score/Cards.java → Cards.card()", "score/evaluator/score/Formulas.java → Formulas.phaseOne() (E-045)", "score/evaluator/score/Maintainability.java → Maintainability.score() (E-051)", "score/evaluator/score/Buckets.java → Buckets.of() (E-053)", "score/evaluator/score/CardJson.java → CardJson.render()", "score/evaluator/score/CardMarkdown.java → CardMarkdown.render()"]
+      "entryPoints": ["score/evaluator/score/Cards.java → Cards.card()", "score/evaluator/score/Formulas.java → Formulas.phaseOne() (E-045)", "score/evaluator/score/Maintainability.java → Maintainability.score() (E-051)", "score/evaluator/score/Buckets.java → Buckets.of() (E-053)", "score/evaluator/score/CardJson.java → CardJson.render()", "score/evaluator/score/CardMarkdown.java → CardMarkdown.render()"],
+      "startAt": "`score/evaluator/score/Cards.java` (`Cards.card()`), the formulas `Formulas.java` (E-045) and `Maintainability.java` (E-051), the bucket `Buckets.java` (E-053), the renderings `CardJson.java` and `CardMarkdown.java`."
     },
     "cli": {
       "purpose": "The command line: `evaluator score <path>` and nothing the other modules do not already do.",
@@ -91,7 +98,8 @@
       "mayImport": ["rubric", "ingest", "analyze", "history", "github", "score"],
       "mustNotImport": [],
       "phase": 1,
-      "entryPoints": ["cli/evaluator/cli/Main.java → Main.run()", "cli/evaluator/cli/Pipeline.java → Pipeline.facts() (every module, in order, E-054)"]
+      "entryPoints": ["cli/evaluator/cli/Main.java → Main.run()", "cli/evaluator/cli/Pipeline.java → Pipeline.facts() (every module, in order, E-054)"],
+      "startAt": "`cli/evaluator/cli/Main.java` (`Main.run()`, `Main.parse()`), the order of the modules `Pipeline.java` (E-054)."
     }
   }
 }

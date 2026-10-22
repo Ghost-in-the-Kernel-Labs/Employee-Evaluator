@@ -64,6 +64,13 @@ tasks.register('metrics', JavaExec) {
     systemProperty 'evaluator.root', rootDir.absolutePath
 }
 
+tasks.register('modulesDoc', JavaExec) {
+    description = 'Writes docs/MODULES.md from docs/modules.json; never edit the Markdown by hand.'
+    classpath = sourceSets.scripts.runtimeClasspath
+    mainClass = 'ModulesDoc'
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
 tasks.register('kernelMap', JavaExec) {
     description = 'Appends to docs/KERNEL-MAP.md a row for every function in a module it does not hold.'
     classpath = sourceSets.scripts.runtimeClasspath

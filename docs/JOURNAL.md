@@ -737,3 +737,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** test/MetricsTest.java holds every target in the table and that each named metric is measured,
   proving itself on four broken copies; the fast loop is timed at tithe passes, the cadence at push (slice 3).
 - **Touched:** test/MetricsTest.java, test/DocTests.java, docs/AGENT.md.
+
+### J-053 TODO 1.11, slice 2: docs/MODULES.md written from docs/modules.json
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.11 in slices (Ghost: "start 1.11 with slices 1-3"); this one a tithe.
+- **Found:** The hand-written file had drifted from the JSON in small ways: purposes shortened, `cli/` and
+  `rubric/` without inputs and outputs, no "Imported by" for most modules, the rules not listed. The
+  "Start at" prose had no home in the JSON.
+- **Options:** keep it by hand with a test comparing fields; generate it, the prose moved into the JSON.
+- **Resolved:** generated. modules.json gains `pipeline` and each module's `startAt`; scripts/ModulesDoc.java
+  writes the file (`gradle modulesDoc`), "Imported by" read off the other modules' mayImport and the MOD rules
+  listed; ModulesTest fails on a stale or hand-edited file, and `gradle metrics` counts it as stale.
+- **Touched:** scripts/ModulesDoc.java, scripts/Metrics.java, build.gradle, docs/modules.json, docs/MODULES.md,
+  test/ModulesTest.java, CLAUDE.md.

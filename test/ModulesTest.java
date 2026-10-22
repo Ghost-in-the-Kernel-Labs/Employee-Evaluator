@@ -39,8 +39,13 @@ final class ModulesTest {
     /** Every rule on docs/modules.json: the imports each module may make, MOD-05's network rule, the entry points named. */
     static Check run() {
         String json = Check.read("docs/modules.json");
+        String doc = Check.read(ModulesDoc.PATH);
         return new Check("modules")
                 .repository(check(json, source()))
+                .repository(ModulesDoc.check(doc, json))
+                .rejects("docs/MODULES.md edited by hand", () -> ModulesDoc.check(doc.replace("- **Imported by:** nothing.", "- **Imported by:** `score`."), json))
+                .rejects("docs/modules.json changed and the Markdown not rewritten", () -> ModulesDoc.check(doc, json.replace("The pipeline:", "The flow:")))
+                .accepts("docs/MODULES.md as written from the JSON", () -> ModulesDoc.check(ModulesDoc.render(json), json))
                 .rejects("score/ importing analyze/", () -> check(json, Map.of("score/Card.java", "package evaluator.score;\nimport evaluator.analyze.Complexity;\n")))
                 .rejects("a model client in the kernel", () -> check(json, Map.of("analyze/Judge.java", "package evaluator.analyze;\nimport com.anthropic.Client;\n")))
                 .rejects("source outside any module", () -> check(json, Map.of("misc/X.java", "package evaluator.misc;\n")))

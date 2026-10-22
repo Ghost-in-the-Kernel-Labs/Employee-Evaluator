@@ -17,7 +17,7 @@ files yet points at the plan.
 | --- | --- | --- | --- |
 | What to work on; a decision; a plan | `TODO.md` (its first item), `theGhost.md`, `docs/HANDOFF.md` | `theGhost.md` | `test/TodoTest.java`, `test/GhostTest.java` |
 | The design: pitch, architecture, provenance, the phases | `docs/DESIGN.md` | | |
-| A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` | E-004 | `test/ModulesTest.java` |
+| A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` (written from it) | E-004 | `test/ModulesTest.java` |
 | The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`, `rubric/evaluator/rubric/Fact.java`, `rubric/evaluator/rubric/ScoreCard.java` | `docs/SCORE-CARD.md` (SC-01 onward) | `test/ScoreCardDocTest.java`, `test/evaluator/rubric/` |
 | Reading a repository: inventory, languages, what is vendored | `ingest/evaluator/ingest/Ingest.java`, `ingest/evaluator/ingest/SetAside.java`, `ingest/evaluator/ingest/Size.java` | E-025, E-026 | `test/evaluator/ingest/`, the golden `test/goldens/small-app/inventory.json` (`gradle test -PwriteGoldens` rewrites it; review the diff) |
 | Complexity and the dependency graph: a language's adapter | `analyze/evaluator/analyze/Complexity.java`, `analyze/evaluator/analyze/Dependencies.java`, `analyze/evaluator/analyze/Adapter.java`, the language's adapter (`analyze/evaluator/analyze/JavaComplexity.java`, or `analyze/evaluator/analyze/TreeSitterAdapter.java` and its subclass) | E-030, E-031, E-032 | `test/evaluator/analyze/`, the goldens under `test/goldens/` |
@@ -40,7 +40,7 @@ files yet points at the plan.
 Everything runs in the pinned image (`Dockerfile`, built once): `docker run --rm --network none -u
 "$(id -u)" -v "$PWD":/evaluator evaluator gradle test --offline` is the fast loop (doc and unit
 tests). `gradle metrics` prints `docs/AGENT.md`'s numbers and warnings; `gradle kernelMap` adds new
-functions to the kernel map. `scripts/prepush.sh` is the check before a push: it fetches `main`,
+functions to the kernel map; `gradle modulesDoc` writes `docs/MODULES.md` from `docs/modules.json`. `scripts/prepush.sh` is the check before a push: it fetches `main`,
 runs the fast loop in the image, and refuses a stale kernel map. GitHub's workflow runs only by hand, started by the agent within the month's minutes (E-040): never count on it. Without Docker, `gradle test
 --offline` on JDK 21 with Gradle 8.14.3 is the same loop.
 

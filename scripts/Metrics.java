@@ -110,8 +110,10 @@ final class Metrics {
 
     /** Generated artifacts whose generator would change them: today, the kernel map. */
     private static String stale() {
-        boolean kernelMap = !KernelMap.check(Repo.read(KernelMap.PATH), Repo.moduleSources()).isEmpty();
-        return kernelMap ? "1 (" + KernelMap.PATH + ")" : "0";
+        List<String> stale = new ArrayList<>();
+        if (!KernelMap.check(Repo.read(KernelMap.PATH), Repo.moduleSources()).isEmpty()) stale.add(KernelMap.PATH);
+        if (!ModulesDoc.check(Repo.read(ModulesDoc.PATH), Repo.read(ModulesDoc.SOURCE)).isEmpty()) stale.add(ModulesDoc.PATH);
+        return stale.isEmpty() ? "0" : stale.size() + " (" + String.join(", ", stale) + ")";
     }
 
     /** One `gradle test` from scratch, in seconds; the first of a session pays for starting the daemon. */

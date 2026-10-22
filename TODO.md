@@ -37,9 +37,10 @@ that holds every label to its fields; the set spans at least five domains.
 
 ### 2.2 Judge harness
 
-Check: a repo summary (inventory, README, sampled files, commit log) to a judging prompt, structured
-output back; agreement with the calibration set measured and recorded with the prompt's hash; no
-prompt scores live under 80 % agreement.
+Check: a repo summary (inventory, README, sampled files, commit log) and the kernel's facts to a judging
+prompt, structured output back (enforced by the API's schema); three Haiku runs averaged, Opus on a
+metric they split on by more than 15 (E-055); agreement with the calibration set measured and recorded
+with the prompt's hash; no prompt scores live under 80 % agreement.
 
 ### 2.3 Ambition judge
 

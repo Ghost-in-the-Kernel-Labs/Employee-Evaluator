@@ -894,3 +894,24 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** architecture
 - **See also:** E-010, E-018, E-037, E-043, E-045
+
+## Judges
+
+### E-055: The judge is Haiku three times, averaged, given the kernel's facts; Opus when the three disagree
+- **Decision:** A judgment (phase 2: Ambition, Quality's review, Complexity's assessment, which test files are
+  fixture data) is made by Claude Haiku 5.5 three times on the same brief, and the score is the mean of the
+  three; a category (a tier, a folder's kind) is their vote. Each run is given the kernel's own facts (sizes,
+  counts, the history's measures) to judge, never to count, and answers in a schema the API enforces
+  (structured output), never free JSON. Where the three runs are more than 15 points apart on a metric, Claude
+  Opus 5.5 judges that metric and its answer stands. Each fact carries the runs and the model behind it.
+- **Why:** Judge trials 1 and 2 (`docs/judges/`, J-040, J-041): on three repositories, Haiku's mean of three
+  came within 2.1–4.0 points of the mean of three Opus runs (Opus agrees with itself within about 2) for
+  about a fourteenth of one Opus run; every model ranked the repositories as Opus did and told fixture data
+  from tests. Haiku's worst error, Provenance, came from miscounting history the kernel counts exactly. Free
+  JSON failed on 7 of 9 Opus answers. Opus's deeper read finds what averaging cannot, so it takes the cases
+  the cheap runs disagree on. To be confirmed on the calibration set (TODO.md 2.1) before it scores live.
+- **Held by:** TODO.md 2.2 (the harness, its check); `agent-runner/` once built.
+- **Source:** Claude's recommendation, Ghost's choice ("go with the haiku x3 recommendation"), 2026-10-22.
+- **Status:** in force
+- **subject:** judges
+- **See also:** E-003, E-017

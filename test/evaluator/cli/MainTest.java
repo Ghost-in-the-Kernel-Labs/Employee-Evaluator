@@ -1,25 +1,64 @@
 package evaluator.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class MainTest {
+    private static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
+
     @Test
     void noArgumentsPrintsUsageAndRefuses() {
         ByteArrayOutputStream err = new ByteArrayOutputStream();
         assertEquals(1, Main.run(List.of(), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err)));
-        assertTrue(err.toString().startsWith("usage: evaluator score"));
+        assertTrue(err.toString().contains("usage: evaluator score"));
     }
 
     @Test
-    void scoreIsNotBuiltYet() {
+    void whatWasTypedIsRead() {
+        Main.Command c = Main.parse(List.of("score", "repo", "--markdown", "--no-run", "--github", "ghost/app", "--applicant", "ghost", "--date", "2026-10-22"));
+        assertEquals(Path.of("repo"), c.path());
+        assertTrue(c.markdown());
+        assertNull(c.options().sandbox(), "--no-run: no sandbox");
+        assertEquals("ghost/app", c.options().github());
+        assertEquals("2026-10-22", c.date());
+        assertTrue(Main.parse(List.of("score", "repo")).options().sandbox() != null, "tests run unless told not to");
+    }
+
+    @Test
+    void whatCannotBeReadIsRefused() {
+        for (List<String> args : List.of(List.of("score"), List.of("grade", "repo"), List.of("score", "a", "b"), List.of("score", "repo", "--github", "ghost/app"),
+                List.of("score", "repo", "--github", "../x", "--applicant", "g"), List.of("score", "repo", "--github", "ghost/..", "--applicant", "g"), List.of("score", "repo", "--date"), List.of("score", "repo", "--frobnicate"))) {
+            assertThrows(IllegalArgumentException.class, () -> Main.parse(args), args.toString());
+        }
+        assertThrows(RuntimeException.class, () -> Main.parse(List.of("score", "repo", "--date", "yesterday")));
+    }
+
+    @Test
+    void aPathThatIsNoFolderIsRefused() {
         ByteArrayOutputStream err = new ByteArrayOutputStream();
-        assertEquals(2, Main.run(List.of("score", "/tmp/repo"), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err)));
-        assertTrue(err.toString().contains("not built yet"));
+        assertEquals(1, Main.run(List.of("score", ROOT.resolve("no-such-folder").toString(), "--no-run"), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err)));
+        assertTrue(err.toString().contains("not a folder"));
+    }
+
+    /** The whole pipeline on this repository, tests unrun: every metric but Ambition and Quality's run scores. */
+    @Test
+    void thisRepositorysCard() {
+        ByteArrayOutputStream out = new ByteArrayOutputStream(), err = new ByteArrayOutputStream();
+        assertEquals(0, Main.run(List.of("score", ROOT.toString(), "--no-run", "--markdown"), new PrintStream(out), new PrintStream(err)));
+        String card = out.toString(StandardCharsets.UTF_8);
+        for (String scored : List.of("| Complexity | ", "| Size | ", "| AI navigability | ", "| Maintainability | ", "| Provenance | ")) {
+            assertTrue(card.contains(scored) && !card.contains(scored + "not measured"), scored + "\n" + card);
+        }
+        assertTrue(card.contains("| Ambition | not measured"), card);
+        assertTrue(card.contains("- Tooling bucket: Claude"), card);
     }
 }

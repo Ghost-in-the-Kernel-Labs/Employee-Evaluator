@@ -14,7 +14,24 @@ import java.util.Map;
  */
 // Decision: E-045
 public final class Formulas {
+    /**
+     * The rubric's name and version: every formula and its decision. A card carries its hash, so two cards
+     * scored by different rubrics are told apart; a formula changed gives it a new version.
+     */
+    static final String RUBRIC = "phase-1 rubric 1: navigability E-044, provenance E-046, ratios E-047, size E-048, complexity E-050, "
+            + "maintainability E-051, quality E-052, bucket E-053";
+
     private Formulas() {}
+
+    /** The rubric's hash, the first 12 hex digits of its SHA-256. */
+    public static String rubricHash() {
+        try {
+            byte[] digest = java.security.MessageDigest.getInstance("SHA-256").digest(RUBRIC.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            return java.util.HexFormat.of().formatHex(digest).substring(0, 12);
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new IllegalStateException("every JDK has SHA-256", e);
+        }
+    }
 
     /** The kinds of commit GitHub's own record backs as the applicant's (E-043): signed, or pushed by them. */
     static final List<String> VERIFIED = List.of("signed", "pushed");

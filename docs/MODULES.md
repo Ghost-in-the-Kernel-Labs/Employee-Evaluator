@@ -50,3 +50,4 @@ the card → `cli` names the work. `rubric` is the vocabulary all of them speak.
 ### `cli/`
 - **Purpose:** `evaluator score <path>`, and nothing the other modules do not already do (MOD-04).
 - **May import:** every module. **Imported by:** nothing.
+- **Start at:** `cli/evaluator/cli/Main.java` (`Main.run()`, `Main.parse()`), the order of the modules `Pipeline.java` (E-054).

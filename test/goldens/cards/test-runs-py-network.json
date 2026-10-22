@@ -1,0 +1,16 @@
+{
+  "scores": {
+    "complexity": {"value": 0, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:tests/test_rates.py:test_offline", "COMPLEXITY.cognitive function:tests/test_rates.py:test_fetches_rates"]},
+    "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
+    "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]},
+    "maintainability": {"value": 100, "facts": ["MAINTAINABILITY.fan_out file:tests/test_rates.py", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:tests/test_rates.py:test_offline", "COMPLEXITY.cognitive function:tests/test_rates.py:test_fetches_rates", "MAINTAINABILITY.unused_imports file:tests/test_rates.py"]}
+  },
+  "ratios": {"qualityPerThousandLines": null, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 0.0},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["quality", "ambition", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "b8043f1115a0"}
+}

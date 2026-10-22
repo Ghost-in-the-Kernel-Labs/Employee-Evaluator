@@ -91,7 +91,7 @@
       "mayImport": ["rubric", "ingest", "analyze", "history", "github", "score"],
       "mustNotImport": [],
       "phase": 1,
-      "entryPoints": ["cli/evaluator/cli/Main.java → Main.run()"]
+      "entryPoints": ["cli/evaluator/cli/Main.java → Main.run()", "cli/evaluator/cli/Pipeline.java → Pipeline.facts() (every module, in order, E-054)"]
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "quality": {"value": 0, "facts": ["MAINTAINABILITY.test_to_code_ratio repository:."]},
+    "complexity": {"value": 0, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:shapes.py:sum_of_primes", "COMPLEXITY.cognitive function:shapes.py:get_words", "COMPLEXITY.cognitive function:shapes.py:grade", "COMPLEXITY.cognitive function:shapes.py:logic", "COMPLEXITY.cognitive function:shapes.py:nested", "COMPLEXITY.cognitive function:shapes.py:try_it", "COMPLEXITY.cognitive function:shapes.py:run", "COMPLEXITY.cognitive function:shapes.py:later", "COMPLEXITY.cognitive function:shapes.py:fact", "COMPLEXITY.cognitive function:shapes.py:evens", "COMPLEXITY.cognitive function:shapes.py:outer", "COMPLEXITY.cognitive function:shapes.py:outer.inner", "COMPLEXITY.cognitive function:shapes.py:Shape.area", "COMPLEXITY.cognitive function:shapes.py:Shape.area#2"]},
+    "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
+    "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]},
+    "maintainability": {"value": 75, "facts": ["MAINTAINABILITY.duplication repository:.", "MAINTAINABILITY.test_to_code_ratio repository:.", "MAINTAINABILITY.fan_out file:shapes.py", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:shapes.py:sum_of_primes", "COMPLEXITY.cognitive function:shapes.py:get_words", "COMPLEXITY.cognitive function:shapes.py:grade", "COMPLEXITY.cognitive function:shapes.py:logic", "COMPLEXITY.cognitive function:shapes.py:nested", "COMPLEXITY.cognitive function:shapes.py:try_it", "COMPLEXITY.cognitive function:shapes.py:run", "COMPLEXITY.cognitive function:shapes.py:later", "COMPLEXITY.cognitive function:shapes.py:fact", "COMPLEXITY.cognitive function:shapes.py:evens", "COMPLEXITY.cognitive function:shapes.py:outer", "COMPLEXITY.cognitive function:shapes.py:outer.inner", "COMPLEXITY.cognitive function:shapes.py:Shape.area", "COMPLEXITY.cognitive function:shapes.py:Shape.area#2", "MAINTAINABILITY.unused_imports file:shapes.py"]}
+  },
+  "ratios": {"qualityPerThousandLines": 0.0, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 0.0},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["ambition", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "b8043f1115a0"}
+}

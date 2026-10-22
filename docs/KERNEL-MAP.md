@@ -412,3 +412,11 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | history | `history/evaluator/history/AgentTools.java:AgentTools.fileTool` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Buckets.java:Buckets.Buckets` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Buckets.java:Buckets.of` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.score` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.parse` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.value` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.Pipeline` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.facts` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.code` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.github` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.rubricHash` |  | 2026-10-22 |  |

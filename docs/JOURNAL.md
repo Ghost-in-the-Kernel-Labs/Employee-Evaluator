@@ -552,3 +552,20 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-053. Next in 1.9, the third slice: `evaluator score <path>`, the fixtures' goldens, the corpus.
 - **Touched:** `history/` (`AgentTools`, `Shape`); `score/` (`Buckets`, `Cards`); their tests; E-053;
   docs/SCORE-CARD.md, docs/modules.json, docs/MODULES.md, docs/HANDOFF.md.
+
+### J-039 `evaluator score` runs end to end; every fixture's card is a golden; two gaps in the test runs
+- **Who:** Claude. **Class:** finding.
+- **Intent:** TODO.md 1.9's third slice, first half (Ghost: "yes, start on the command and goldens").
+- **Found:** The command scores this repository in 28 s with its tests run in the sandbox. Ten fixtures'
+  cards, JSON and Markdown, are goldens; the recorded runs give Quality 100, 73 and 92 as worked by hand,
+  and the network run "not measured". A test caught `--github ../x` passing as owner/repo; the form is now
+  GitHub's own. Two gaps: this repository's Quality read 0, because pytest ran the Python fixture
+  repositories under `test/fixtures/` as its tests (the failing and network ones among them, and colliding
+  module names, every case an error); and its real tests, a Gradle build, are not run by any plan, with no
+  TODO item for it.
+- **Options:** for Ghost: a fixture folder's tests are data, not tests; a run where no test body ran is "not
+  measured", not 0; a Gradle plan.
+- **Resolved:** E-054; the two gaps put to Ghost. The corpus (the slice's second half) waits on them.
+- **Touched:** `cli/` (`Main`, `Pipeline`); `score/evaluator/score/Formulas.java`; `test/evaluator/cli/`,
+  `test/evaluator/analyze/RecordedSandbox.java`, `TestRunnerFixturesTest`; `test/goldens/cards/`; E-054;
+  CLAUDE.md, docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.

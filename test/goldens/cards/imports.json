@@ -1,0 +1,17 @@
+{
+  "scores": {
+    "quality": {"value": 0, "facts": ["MAINTAINABILITY.test_to_code_ratio repository:."]},
+    "complexity": {"value": 3, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:java/src/main/java/shop/Cart.java:Cart.total", "COMPLEXITY.cognitive function:java/src/main/java/shop/Checkout.java:Checkout.lines", "COMPLEXITY.cognitive function:py/app/main.py:main", "COMPLEXITY.cognitive function:py/app/util.py:total", "COMPLEXITY.cognitive function:py/app/util.py:unused_helper", "COMPLEXITY.cognitive function:ts/src/lib.ts:helper", "COMPLEXITY.cognitive function:ts/src/view.tsx:render"]},
+    "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
+    "navigability": {"value": 39, "facts": ["NAVIGABILITY.checklist repository:."]},
+    "maintainability": {"value": 71, "facts": ["MAINTAINABILITY.duplication repository:.", "MAINTAINABILITY.test_to_code_ratio repository:.", "MAINTAINABILITY.fan_out file:java/src/main/java/shop/Cart.java", "MAINTAINABILITY.fan_out file:java/src/main/java/shop/Checkout.java", "MAINTAINABILITY.fan_out file:java/src/main/java/shop/money/Price.java", "MAINTAINABILITY.fan_out file:py/app/__init__.py", "MAINTAINABILITY.fan_out file:py/app/config.py", "MAINTAINABILITY.fan_out file:py/app/main.py", "MAINTAINABILITY.fan_out file:py/app/util.py", "MAINTAINABILITY.fan_out file:ts/src/index.ts", "MAINTAINABILITY.fan_out file:ts/src/lib.ts", "MAINTAINABILITY.fan_out file:ts/src/polyfill.ts", "MAINTAINABILITY.fan_out file:ts/src/types.ts", "MAINTAINABILITY.fan_out file:ts/src/view.tsx", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:java/src/main/java/shop/Cart.java:Cart.total", "COMPLEXITY.cognitive function:java/src/main/java/shop/Checkout.java:Checkout.lines", "COMPLEXITY.cognitive function:py/app/main.py:main", "COMPLEXITY.cognitive function:py/app/util.py:total", "COMPLEXITY.cognitive function:py/app/util.py:unused_helper", "COMPLEXITY.cognitive function:ts/src/lib.ts:helper", "COMPLEXITY.cognitive function:ts/src/view.tsx:render", "MAINTAINABILITY.unused_imports file:java/src/main/java/shop/Cart.java", "MAINTAINABILITY.unused_imports file:java/src/main/java/shop/Checkout.java", "MAINTAINABILITY.unused_imports file:java/src/main/java/shop/money/Price.java", "MAINTAINABILITY.unused_imports file:py/app/__init__.py", "MAINTAINABILITY.unused_imports file:py/app/config.py", "MAINTAINABILITY.unused_imports file:py/app/main.py", "MAINTAINABILITY.unused_imports file:py/app/util.py", "MAINTAINABILITY.unused_imports file:ts/src/index.ts", "MAINTAINABILITY.unused_imports file:ts/src/lib.ts", "MAINTAINABILITY.unused_imports file:ts/src/polyfill.ts", "MAINTAINABILITY.unused_imports file:ts/src/types.ts", "MAINTAINABILITY.unused_imports file:ts/src/view.tsx"]}
+  },
+  "ratios": {"qualityPerThousandLines": 0.0, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 2.13},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["ambition", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "b8043f1115a0"}
+}

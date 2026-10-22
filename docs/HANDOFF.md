@@ -31,8 +31,10 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 2. Each metric's formula, one decision at a time with Ghost: done. AI navigability (E-044), Provenance
    (E-046), Size (E-048), Complexity (E-050, after Java's depth, E-049), Maintainability (E-051), Quality
    (E-052); the ratios (E-047); the tooling bucket (E-053). Ambition waits on its judge (phase 2).
-3. Next: `evaluator score <path>`, the fixtures' cards as goldens, and the cards of Suite Builder, Katana
-   and Flight Recorder under `corpus/`.
+3. `evaluator score <path>` and the fixtures' cards as goldens: done (J-039, E-054). Next: the cards of
+   Suite Builder, Katana and Flight Recorder under `corpus/`, waiting on Ghost's word on two gaps J-039
+   found: a repository's fixture folders run as its tests (this one's Quality read 0), and no plan runs a
+   Gradle build.
 
 **1.7 is open, out of order by Ghost's leave (2026-10-21):** `github/` is built (J-028, E-043) and tested
 on recorded answers; its check waits on a fine-grained, read-only token for

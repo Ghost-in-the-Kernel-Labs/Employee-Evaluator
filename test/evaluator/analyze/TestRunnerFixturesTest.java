@@ -38,29 +38,6 @@ class TestRunnerFixturesTest {
         EXPECTED.put("node-pass", Map.of("QUALITY.tests.pass_rate", 1.0, "QUALITY.tests.coverage", 0.8));
     }
 
-    /** Writes the recorded reports where the real run wrote them, as the sandbox would. */
-    static final class Recorded implements Sandbox {
-        private final Path reports;
-
-        Recorded(Path reports) {
-            this.reports = reports;
-        }
-
-        @Override
-        public Run run(Phase phase, Path work, Path out, String script, Duration timeout) {
-            try (Stream<Path> files = Files.walk(reports)) {
-                for (Path f : files.filter(Files::isRegularFile).toList()) {
-                    Path target = out.resolve(reports.relativize(f).toString());
-                    Files.createDirectories(target.getParent());
-                    Files.copy(f, target);
-                }
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-            return new Run(0, false, "");
-        }
-    }
-
     private static Map<String, Object> facts(String fixture, Sandbox sandbox) {
         Path repo = ROOT.resolve("test/fixtures/test-runs/" + fixture);
         TestRunner.Result result = TestRunner.run(repo, Ingest.read(repo), sandbox);
@@ -72,13 +49,13 @@ class TestRunnerFixturesTest {
 
     @Test
     void theRecordedRunsGiveTheFactsWorkedByHand() {
-        EXPECTED.forEach((fixture, expected) -> assertEquals(expected, facts(fixture, new Recorded(ROOT.resolve("test/goldens/test-runs/" + fixture))), fixture));
+        EXPECTED.forEach((fixture, expected) -> assertEquals(expected, facts(fixture, new RecordedSandbox(ROOT.resolve("test/goldens/test-runs/" + fixture))), fixture));
     }
 
     @Test
     void theNetworkAttemptIsNamed() {
         Path repo = ROOT.resolve("test/fixtures/test-runs/py-network");
-        Fact fact = TestRunner.run(repo, Ingest.read(repo), new Recorded(ROOT.resolve("test/goldens/test-runs/py-network"))).facts().get(0);
+        Fact fact = TestRunner.run(repo, Ingest.read(repo), new RecordedSandbox(ROOT.resolve("test/goldens/test-runs/py-network"))).facts().get(0);
         assertEquals(List.of("tests.test_rates.test_fetches_rates"), fact.evidence().sources());
     }
 

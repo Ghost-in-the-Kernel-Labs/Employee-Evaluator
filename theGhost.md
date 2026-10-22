@@ -874,3 +874,23 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-042, E-045
+
+### E-054: `evaluator score <path>`: every module's facts, one card, as JSON or Markdown
+- **Decision:** `evaluator score <path> [--markdown] [--no-run] [--github <owner/repo> --applicant <login>]
+  [--date <yyyy-mm-dd>]` reads, in this order, what the repository holds (`ingest/`), its code (`analyze/`),
+  its own tests in the Docker sandbox unless `--no-run`, its history when it has a `.git` (`history/`), and
+  what GitHub verifies when a repository and an applicant are named (`github/`, the token from
+  `EVALUATOR_GITHUB_TOKEN`); then prints the card, JSON by default. What kept a part unread goes to stderr.
+  `owner/repo` must be GitHub's own form (an owner of letters, digits and hyphens; a repository not starting
+  with a dot), since it is built into an API path. The card's rubric hash is the SHA-256 of the formulas'
+  named version (`Formulas.RUBRIC`), raised when a formula changes. Every fixture repository's card, JSON and
+  Markdown, is a golden (SC-09), the test-run fixtures run in the recorded sandbox.
+- **Why:** TODO.md 1.9's third slice. The command names the work and does none (E-010); `--date` and the
+  recorded sandbox make a card the same bytes on every machine, which SC-09 needs; `--no-run` scores without
+  Docker. Scoring this repository end to end showed two gaps, for Ghost (J-039).
+- **Held by:** `cli/evaluator/cli/Main.java`, `Pipeline.java`; `score/evaluator/score/Formulas.java` (`rubricHash`);
+  `test/evaluator/cli/MainTest.java`, `CardGoldensTest.java` and `test/goldens/cards/`.
+- **Source:** Claude, building TODO.md 1.9's third slice on Ghost's go ("yes, start on the command and goldens"), 2026-10-22.
+- **Status:** in force
+- **subject:** architecture
+- **See also:** E-010, E-018, E-037, E-043, E-045

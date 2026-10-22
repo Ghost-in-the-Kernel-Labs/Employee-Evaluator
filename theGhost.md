@@ -786,3 +786,19 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-026, E-045, E-047
+
+### E-049: A Java class used from its own package is a dependency, though no import line names it
+- **Decision:** Each Java file carries one more import, written by no line: its own package, `a.b.*`, with
+  the type-like names its code uses (a name starting with a capital), at its package line. It resolves to
+  the named classes beside the file (`dir/Name.java`), so the default package works alike. An
+  `import a.b.*` as written carries no names and resolves as before (E-032).
+- **Why:** Java needs no import for a class of its own package, so E-032's graph missed every such edge
+  and Java's dependency depth read low beside TypeScript's and Python's, where every edge is a line: this
+  repository read 2 and now reads 8 (`Coupling` → `Dependencies` → `Complexity` → … → `Import`). Ghost: "fix
+  java depth first", before Complexity's formula leans on depth.
+- **Held by:** `analyze/evaluator/analyze/JavaImports.java` (`ownPackage`, `siblings`), `JavaAdapter.java`
+  (`resolve`); `test/evaluator/analyze/DependenciesTest.java`, the imports fixture's `shop/Checkout.java` and golden.
+- **Source:** Claude, on Ghost's direction, 2026-10-22.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-032, E-034

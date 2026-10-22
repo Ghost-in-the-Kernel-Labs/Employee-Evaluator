@@ -27,9 +27,9 @@ class CouplingTest {
         Path fixture = ROOT.resolve("test/fixtures/imports");
         Inventory inventory = Ingest.read(fixture);
         List<Fact> facts = Coupling.facts(Dependencies.graph(Complexity.measure(fixture, inventory), inventory));
-        assertEquals(Map.of("java/src/main/java/shop/Cart.java", 1, "py/app/__init__.py", 1, "py/app/main.py", 2,
+        assertEquals(Map.of("java/src/main/java/shop/Cart.java", 1, "java/src/main/java/shop/Checkout.java", 1, "py/app/__init__.py", 1, "py/app/main.py", 2,
                 "ts/src/index.ts", 4, "ts/src/view.tsx", 1), values(facts, "MAINTAINABILITY.fan_out"));
-        assertEquals(Map.of("java/src/main/java/shop/money/Price.java", 1, "py/app/util.py", 2, "py/app/config.py", 1,
+        assertEquals(Map.of("java/src/main/java/shop/Cart.java", 1, "java/src/main/java/shop/money/Price.java", 1, "py/app/util.py", 2, "py/app/config.py", 1,
                 "ts/src/view.tsx", 1, "ts/src/types.ts", 2, "ts/src/polyfill.ts", 1, "ts/src/lib.ts", 1), values(facts, "MAINTAINABILITY.fan_in"));
         Fact cycles = facts.get(facts.size() - 1);
         assertEquals(0, cycles.value());

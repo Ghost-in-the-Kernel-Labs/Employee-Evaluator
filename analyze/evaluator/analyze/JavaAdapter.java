@@ -40,10 +40,15 @@ public final class JavaAdapter implements Adapter {
         return "evaluator analyze java 1 (JDK " + Runtime.version().feature() + " parser)";
     }
 
-    /** A class in this repository: `a.b.C` is a file ending `a/b/C.java`; a static import's member, or a nested class, drops a segment at a time. */
+    /**
+     * A class in this repository: `a.b.C` is a file ending `a/b/C.java`; a static import's member, or a
+     * nested class, drops a segment at a time. A package import with names is the file's own package (an
+     * `import a.b.*` carries none): the named classes beside the file (E-049).
+     */
     @Override
     public List<String> resolve(Import imported, String from, Set<String> files) {
         String module = imported.module();
+        if (module.endsWith("*") && !imported.names().isEmpty()) return JavaImports.siblings(imported.names(), from, files);
         if (module.endsWith(".*")) return JavaImports.packageFiles(module.substring(0, module.length() - 2), files);
         for (String name = module; name.contains("."); name = name.substring(0, name.lastIndexOf('.'))) {
             List<String> found = Adapter.endingWith(name.replace('.', '/') + ".java", files);
@@ -70,6 +75,8 @@ public final class JavaAdapter implements Adapter {
             for (CompilationUnitTree unit : task.parse()) {
                 new Methods(unit, positions, found, text).scan(unit, null);
                 imports.addAll(JavaImports.of(unit, positions));
+                Import own = JavaImports.ownPackage(unit, positions);
+                if (own != null) imports.add(own);
             }
             for (Diagnostic<? extends JavaFileObject> d : diagnostics.getDiagnostics()) {
                 if (d.getKind() == Diagnostic.Kind.ERROR) return Parsed.unread("does not parse: line " + d.getLineNumber());

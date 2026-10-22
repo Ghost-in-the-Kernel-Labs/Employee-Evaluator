@@ -32,6 +32,7 @@ class DependenciesTest {
     void eachImportLeadsWhereItSays() {
         Map<String, Set<String>> expected = new LinkedHashMap<>();
         expected.put("java/src/main/java/shop/Cart.java", Set.of("java/src/main/java/shop/money/Price.java"));
+        expected.put("java/src/main/java/shop/Checkout.java", Set.of("java/src/main/java/shop/Cart.java"));
         expected.put("java/src/main/java/shop/money/Price.java", Set.of());
         expected.put("py/app/__init__.py", Set.of("py/app/util.py"));
         expected.put("py/app/config.py", Set.of());
@@ -46,9 +47,21 @@ class DependenciesTest {
         assertEquals(expected, edges.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> Set.copyOf(e.getValue()))));
     }
 
+    /** E-049: Checkout names Cart, its own package's, with no import line; List and String are not beside it. */
     @Test
-    void theLongestChainIsTheTypeScriptOne() {
-        assertEquals(List.of("ts/src/index.ts", "ts/src/view.tsx", "ts/src/types.ts"), Dependencies.graph(report(), inventory()).longest());
+    void aJavaClassUsedFromItsOwnPackageIsAnEdge() {
+        Import own = report().imports().get("java/src/main/java/shop/Checkout.java").stream().filter(i -> !i.names().isEmpty()).findFirst().orElseThrow();
+        assertEquals(new Import("shop.*", List.of("Cart", "List", "String"), 1, List.of()), own);
+        assertEquals(List.of("java/src/main/java/shop/Cart.java"), JavaImports.siblings(own.names(), "java/src/main/java/shop/Checkout.java",
+                Set.of("java/src/main/java/shop/Cart.java", "java/src/main/java/shop/money/Price.java", "java/src/main/java/other/List.java")));
+        assertEquals(List.of("Cart.java"), JavaImports.siblings(List.of("Cart"), "Main.java", Set.of("Cart.java", "a/Cart.java")), "the default package: the root's own");
+    }
+
+    /** Two chains of two links, Java's (through its own package, E-049) and TypeScript's; the first in path order is cited. */
+    @Test
+    void theLongestChainIsTheFirstOfTheTwoLongest() {
+        assertEquals(List.of("java/src/main/java/shop/Checkout.java", "java/src/main/java/shop/Cart.java", "java/src/main/java/shop/money/Price.java"),
+                Dependencies.graph(report(), inventory()).longest());
     }
 
     /** Unused: Java's Map; Python's json and unused_helper (not in __init__.py, which re-exports); TypeScript's fs and Default. */

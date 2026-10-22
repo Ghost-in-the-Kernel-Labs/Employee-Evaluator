@@ -1,6 +1,7 @@
 {
   "imports": [
     {"path": "java/src/main/java/shop/Cart.java", "to": ["java/src/main/java/shop/money/Price.java"], "unused": ["Map"]},
+    {"path": "java/src/main/java/shop/Checkout.java", "to": ["java/src/main/java/shop/Cart.java"], "unused": []},
     {"path": "java/src/main/java/shop/money/Price.java", "to": [], "unused": []},
     {"path": "py/app/__init__.py", "to": ["py/app/util.py"], "unused": []},
     {"path": "py/app/config.py", "to": [], "unused": []},
@@ -12,5 +13,5 @@
     {"path": "ts/src/types.ts", "to": [], "unused": []},
     {"path": "ts/src/view.tsx", "to": ["ts/src/types.ts"], "unused": []}
   ],
-  "longest": ["ts/src/index.ts", "ts/src/view.tsx", "ts/src/types.ts"]
+  "longest": ["java/src/main/java/shop/Checkout.java", "java/src/main/java/shop/Cart.java", "java/src/main/java/shop/money/Price.java"]
 }

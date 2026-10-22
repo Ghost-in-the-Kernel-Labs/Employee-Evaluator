@@ -499,3 +499,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-048. AI navigability, Provenance and Size now score; Complexity, Maintainability and
   Quality's measured half are next, then the tooling bucket's rule.
 - **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-048; docs/HANDOFF.md.
+
+### J-034 Java's same-package classes are dependencies; this repository's depth reads 8, not 2
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Measuring Complexity's parts for its formula showed Java's dependency depth reading low
+  (this repository 2, Suite Builder's TypeScript 27); Ghost: "go with the proposal, fix java depth first".
+- **Found:** Java needs no import for its own package, so no edge was drawn; a class of `analyze/` naming
+  another reached it by no line. With the package as one more import, this repository reads 8.
+- **Options:** resolve every capitalised name against the whole repository; only against the file's own folder.
+- **Resolved:** E-049, the file's own folder: a same-package class is always beside it. Next: Complexity's formula.
+- **Touched:** `analyze/` (`JavaImports`, `JavaAdapter`, `Import`); the imports fixture, its README, its golden;
+  `DependenciesTest`, `CouplingTest`; E-049.

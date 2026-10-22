@@ -100,3 +100,14 @@ migration's 1,352 lines of JavaScript register no function.
 Done 2026-10-22 (J-051): `JavaScriptAdapter` (E-058) reads JavaScript with the vendored TSX grammar and
 `require` as an import; the fixture worked by hand and its golden; no new dependency. The Jensen migration
 now registers 121 functions (17 before) and a dependency depth of 3 (0 before).
+
+### 1.11 Tithe pass: the phase-1 boundary
+
+Check: `gradle metrics` arms every metric of `docs/AGENT.md` and the test holds them; a generator
+writes `docs/MODULES.md` from `docs/modules.json`; the tithe gate refuses a push past sixteen commits
+without a tithe; the mutation tool is vendored and `docs/MUTATION.md` has its first run (E-019
+moves to in force or is refused).
+Done 2026-10-22 (J-052 to J-055): `test/MetricsTest.java` holds every metric with a target; `gradle modulesDoc`
+writes docs/MODULES.md and ModulesTest refuses it stale; `scripts/prepush.sh` refuses a push past sixteen
+commits without a tithe; PIT vendored (E-059), E-019 in force, and docs/MUTATION.md's run 1: 86 % of 1,714
+mutants killed, its 243 others the baseline for a later pass.

@@ -57,6 +57,26 @@ test {
     outputs.upToDateWhen { false }
 }
 
+// `gradle mutate` runs PIT over the kernel's module tests (E-019): `-Ptarget=evaluator.score.*` narrows it to one
+// module, its tests the same package. The doc tests (default package) hold docs, not code, and are not mutated.
+// Its report goes to build/mutation/; what survives gets a test or a line in docs/MUTATION.md.
+tasks.register('mutate', JavaExec) {
+    description = 'Mutation testing with the vendored PIT (E-019); -Ptarget=evaluator.<module>.* narrows it.'
+    dependsOn 'testClasses'
+    def target = project.findProperty('target') ?: 'evaluator.*'
+    // The tests share the kernel's packages: every class compiled from test/ is left unmutated.
+    def ours = fileTree(dir: 'test', include: 'evaluator/**/*.java').collect {
+        file('test').toPath().relativize(it.toPath()).toString().replace('.java', '').replace('/', '.') + '*'
+    }
+    classpath = sourceSets.test.runtimeClasspath + files(fileTree(dir: 'third_party/pitest', include: '*.jar'))
+    mainClass = 'org.pitest.mutationtest.commandline.MutationCoverageReport'
+    args '--reportDir', layout.buildDirectory.dir('mutation').get().asFile.path, '--timestampedReports=false',
+            '--targetClasses', target, '--targetTests', target, '--excludedClasses', ours.join(','), '--outputFormats', 'CSV,XML,HTML',
+            '--sourceDirs', 'rubric,ingest,analyze,history,github,score,cli', '--threads', '4',
+            '--jvmArgs', "-Devaluator.root=${rootDir.absolutePath}"
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
 tasks.register('metrics', JavaExec) {
     description = 'Prints the metrics of docs/AGENT.md and the warnings: long or branching functions, Unsure lines, the tithe cadence.'
     classpath = sourceSets.scripts.runtimeClasspath

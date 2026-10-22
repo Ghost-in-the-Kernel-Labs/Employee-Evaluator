@@ -762,3 +762,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   Slice 4 (the mutation tool) waits on Ghost's approval of PIT as a dependency.
 - **Touched:** scripts/TitheGate.java, scripts/Metrics.java, scripts/prepush.sh, build.gradle,
   test/MetricsTest.java, CLAUDE.md, docs/HANDOFF.md.
+
+### J-055 TODO 1.11 done: PIT vendored, the first mutation run, phase 1 closed but for 1.7
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.11, slice 4 (Ghost: "yes, vendor PIT and run slice 4").
+- **Found:** PIT 1.30.1 needs eleven jars; its command-line jar bundles StringTemplate, ANTLR 2 and jopt-simple.
+  Every jar matched Maven Central's SHA-1; all Apache-2.0, BSD or MIT. The first run mutated the tests too
+  (they share the kernel's packages): 72 % of 2,316. With every class from `test/` excluded, 86 % of 1,714.
+- **Options:** work all 243 survivors now; record the run as the baseline and work them as a pass of their own.
+- **Resolved:** the baseline, in docs/MUTATION.md; E-059 records the dependency, E-019 is in force; 1.11 to
+  docs/DONE.md. The survivors' pass is put to Ghost (docs/HANDOFF.md).
+- **Touched:** third_party/pitest/, third_party/MANIFEST.md, build.gradle (`mutate`), docs/MUTATION.md, E-019,
+  E-059, TODO.md, docs/DONE.md, docs/HANDOFF.md.

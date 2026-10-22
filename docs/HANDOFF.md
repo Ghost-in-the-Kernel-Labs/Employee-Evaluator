@@ -2,8 +2,9 @@
 
 ## What to work on next
 
-`TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. Phase 1 steps 1.1 (the
-scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analysis adapters) is next.
+`TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. Phase 1 is done but for 1.7,
+whose live check waits on Ghost's `EVALUATOR_GITHUB_TOKEN`; phase 2 starts at 2.1, which waits on Ghost's
+labels.
 
 ## For Ghost
 
@@ -19,20 +20,18 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
   first repository and has not had its session yet.
 - **Calibration set.** Phase 2 cannot start until 30 repositories are hand-labeled on Ambition and
   Quality (TODO.md 2.1). Only Ghost can label; the fixture format comes from Opus first.
-- **Mutation tool.** E-019 is proposed until a Java mutation tool is vendored (PIT, Apache-2.0, is the
-  candidate; its jar and license go under `third_party/` with a MANIFEST.md row). Decide at 1.11.
+- **Mutation survivors.** PIT is vendored (E-059) and E-019 is in force. Run 1 (docs/MUTATION.md) left 243
+  mutants alive of 1,714. Working them is a pass of its own, module by module, `rubric/Json.java` first: when,
+  and whether it goes in TODO.md as an item, is Ghost's call.
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.11, the tithe pass at the phase-1 boundary
+## Now: phase 1 closed (1.7's live check aside)
 
-1.10 is done (J-051, E-058): JavaScript is measured as TypeScript is. 1.11 closes phase 1 in four slices; three
-are done: docs/AGENT.md's metrics held by test/MetricsTest.java (J-052), docs/MODULES.md written by `gradle
-modulesDoc` (J-053), the tithe gate in `scripts/prepush.sh` (J-054). The fourth, the mutation tool's first run,
-waits on Ghost: vendoring PIT is a new dependency (see "Mutation tool" above). The corpus
-cards (1.9) are phase-1 readings, made again once the judge classifies folders (E-057). The judge trials
-(`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056, E-057. A Gradle test plan
-is still unplanned.
+1.11 is done (J-052 to J-055): the metrics held by a test, docs/MODULES.md generated, the tithe gate, PIT and
+its first run. The corpus cards (1.9) are phase-1 readings, made again once the judge classifies folders
+(E-057). The judge trials (`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056,
+E-057. A Gradle test plan is still unplanned.
 
 **For Ghost, from judge trial 2 (J-041):**
 - The judge: Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus where they

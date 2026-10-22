@@ -14,13 +14,6 @@ Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on
 of Ghost's through the API, with the token read from the environment and never logged; the module
 is the only one that reaches the network (`docs/modules.json`).
 
-### 1.11 Tithe pass: the phase-1 boundary
-
-Check: `gradle metrics` arms every metric of `docs/AGENT.md` and the test holds them; a generator
-writes `docs/MODULES.md` from `docs/modules.json`; the tithe gate refuses a push past sixteen commits
-without a tithe; the mutation tool is vendored and `docs/MUTATION.md` has its first run (E-019
-moves to in force or is refused).
-
 ## Phase 2: the evaluation engine with agents
 
 ### 2.1 Calibration set

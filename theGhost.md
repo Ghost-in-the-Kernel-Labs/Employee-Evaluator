@@ -273,8 +273,9 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Why:** Suite Builder's G-239: the first mutation run found tests that caught 53% of mutants in a
   core file; after it, 97%. Tests that test nothing are worse than none, because they are trusted.
 - **Held by:** proposed: `docs/MUTATION.md` and the vendored tool once TODO.md 1.11 lands; until then review.
+  Now: PIT, vendored by E-059, run by `gradle mutate`; `docs/MUTATION.md` records each run and each survivor.
 - **Source:** Ghost, 2026-10-18, from Suite Builder (G-239).
-- **Status:** proposed
+- **Status:** in force (E-059 vendored the tool, TODO.md 1.11)
 - **subject:** tests
 
 ### E-020: The maintainer is Ghost; one branch, main
@@ -985,3 +986,19 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-030, E-031, E-032, E-057
+
+### E-059: PIT is the mutation tool, vendored with what its poms declare
+- **Decision:** PIT 1.30.1 with its JUnit 5 plugin 1.2.3 is vendored under `third_party/pitest/`, with the runtime
+  dependencies its poms declare (ASM 9.11, commons-text 1.14.0, commons-lang3 3.18.0): eleven jars, each in
+  `third_party/MANIFEST.md` with its SHA-256 and license. It is on no classpath of the build or the tests; only
+  `gradle mutate` reads it. A run's numbers and its survivors are written in `docs/MUTATION.md`.
+- **Why:** Dependency reason (E-033): PIT measures whether the tests catch a changed line, which coverage cannot,
+  and it is the standard Java mutation tool. Apache-2.0; ASM BSD-3-Clause; the libraries the command-line jar
+  bundles (StringTemplate, ANTLR 2, jopt-simple) BSD and MIT. ASM's extra modules and the commons jars were
+  tried without: the commons jars are needed; the ASM modules are declared, so they stay rather than fail on
+  a path the trial did not reach.
+- **Held by:** `third_party/MANIFEST.md` and `test/SupplyChainTest.java`; `build.gradle` (`mutate`); `docs/MUTATION.md`.
+- **Source:** Ghost, 2026-10-22 ("yes, vendor PIT and run slice 4"), on Claude's proposal at TODO.md 1.11.
+- **Status:** in force
+- **subject:** tests
+- **See also:** E-019, E-021, E-033

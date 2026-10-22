@@ -39,7 +39,7 @@ class CardsTest {
     void phaseOneScoresNavigabilityAndSaysTheRestWereNotMeasured() {
         ScoreCard card = Cards.card(List.of(fact("NAVIGABILITY.checklist", 99), fact("SIZE.source_lines", 6000)), List.of(), Formulas.phaseOne(), PRODUCED);
         assertEquals(Map.of(Metric.NAVIGABILITY, new Score(99, List.of("NAVIGABILITY.checklist repository:."))), card.scores());
-        assertEquals(EnumSet.complementOf(EnumSet.of(Metric.NAVIGABILITY)), card.notMeasured());
+        assertEquals(EnumSet.complementOf(EnumSet.of(Metric.NAVIGABILITY)), card.notMeasured(), "no history read: Provenance not measured");
         assertNull(card.provenanceTier());
         assertNull(card.ratios().qualityPerThousandLines());
     }
@@ -54,6 +54,30 @@ class CardsTest {
         assertEquals(1.0, mess.ratios().qualityPerThousandLines());
         assertNull(mess.ratios().maintainabilityPerComplexity(), "no Maintainability, no Complexity: no ratio");
         assertNull(Cards.card(List.of(fact("MAINTAINABILITY.score", 75), fact("COMPLEXITY.score", 0)), List.of(), plain(), PRODUCED).ratios().maintainabilityPerComplexity());
+    }
+
+    /** E-046 worked by hand: shape 70; 6 signed, 2 pushed, 1 claimed, 1 foreign of 10: 0.6 × 70 + 0.4 × 80 = 74. */
+    @Test
+    void provenanceIsTheShapeAndWhatGitHubBacks() {
+        List<Fact> facts = List.of(fact("PROVENANCE.history.shape", 70), fact("PROVENANCE.authorship.signed", 6), fact("PROVENANCE.authorship.pushed", 2),
+                fact("PROVENANCE.authorship.claimed", 1), fact("PROVENANCE.authorship.foreign", 1), fact("PROVENANCE.authorship.unmatched", 0));
+        ScoreCard card = Cards.card(facts, List.of(), Formulas.phaseOne(), PRODUCED);
+        assertEquals(74, card.scores().get(Metric.PROVENANCE).value());
+        assertEquals(6, card.scores().get(Metric.PROVENANCE).facts().size(), "the shape and the five counts");
+        assertEquals(ProvenanceTier.PARTIAL, card.provenanceTier());
+        List<Fact> allSigned = List.of(fact("PROVENANCE.history.shape", 70), fact("PROVENANCE.authorship.signed", 10));
+        assertEquals(82, Cards.card(allSigned, List.of(), Formulas.phaseOne(), PRODUCED).scores().get(Metric.PROVENANCE).value());
+    }
+
+    /** With nothing from GitHub, the shape alone, never Verified: a history can be written by anyone. */
+    @Test
+    void provenanceFromTheHistoryAloneIsCappedBelowVerified() {
+        ScoreCard high = Cards.card(List.of(fact("PROVENANCE.history.shape", 95)), List.of(), Formulas.phaseOne(), PRODUCED);
+        assertEquals(new Score(79, List.of("PROVENANCE.history.shape repository:.")), high.scores().get(Metric.PROVENANCE));
+        assertEquals(ProvenanceTier.PARTIAL, high.provenanceTier());
+        assertEquals(40, Cards.card(List.of(fact("PROVENANCE.history.shape", 40), fact("PROVENANCE.authorship.signed", 0)), List.of(), Formulas.phaseOne(), PRODUCED)
+                .scores().get(Metric.PROVENANCE).value(), "no commit read on GitHub reads as no authorship");
+        assertNull(Formulas.provenance(List.of(fact("PROVENANCE.authorship.signed", 5))), "no shape, no score");
     }
 
     @Test

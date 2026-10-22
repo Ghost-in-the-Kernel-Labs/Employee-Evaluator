@@ -470,3 +470,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-045: only AI navigability scores; the rest is "not measured" until its formula is decided.
 - **Touched:** `score/` (`Cards`, `Formula`, `Formulas`, `CardJson`, `CardMarkdown`); E-045; docs/modules.json,
   docs/MODULES.md, docs/HANDOFF.md.
+
+### J-031 TODO 1.9, second slice: Provenance's formula
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The first formula after navigability (Ghost: "lets go with the provenance algo, then settle the ratios").
+- **Found:** On history alone (no token in this session), this repository reads 67 and Suite Builder 73: both
+  Partial, as the cap means. A worked card (shape 70, 8 of 10 commits backed) reads 74.
+- **Options:** the shape alone; GitHub's share alone; the two blended, the shape capped without GitHub.
+- **Resolved:** E-046. Next: the ratios' question (E-045), then the other metrics' formulas.
+- **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-046; docs/HANDOFF.md.

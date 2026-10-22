@@ -739,3 +739,18 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-011, E-017, E-044
+
+### E-046: Provenance is 0.6 × the history's shape + 0.4 × what GitHub backs; the shape alone is capped at 79
+- **Decision:** Provenance = round(0.6 × `PROVENANCE.history.shape` + 0.4 × 100 × the share of commits
+  GitHub backs as the applicant's: signed, or pushed by them (E-043), over all five kinds counted). With
+  no authorship read (no token, or no commit read), the shape alone, capped at 79: Partial at best, never
+  Verified. No shape, no score: Provenance is not measured.
+- **Why:** The history's shape can be written by anyone with `git commit --date`; GitHub's record of who
+  signed and who pushed cannot. So the shape alone may reach Partial, and Verified (80) needs GitHub's word.
+  Ghost chose it over the alternatives, 2026-10-22. On history alone this repository reads 67 (two days
+  old), Suite Builder 73: both Partial.
+- **Held by:** `score/evaluator/score/Formulas.java` (`provenance`); `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("lets go with the provenance algo"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-012, E-042, E-043, E-045

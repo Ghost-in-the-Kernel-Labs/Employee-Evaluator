@@ -66,7 +66,8 @@ public final class Cards {
      */
     // Decision: E-047
     static Ratios ratios(Map<Metric, Score> scores, List<Fact> live) {
-        Double lines = live.stream().filter(f -> f.kind().equals("SIZE.source_lines")).map(f -> ((Number) f.value()).doubleValue()).findFirst().orElse(null);
+        Fact linesFact = Formulas.find(live, "SIZE.source_lines");
+        Double lines = linesFact == null ? null : ((Number) linesFact.value()).doubleValue();
         Score quality = scores.get(Metric.QUALITY), maintainability = scores.get(Metric.MAINTAINABILITY), complexity = scores.get(Metric.COMPLEXITY);
         Double perLines = quality == null || lines == null || lines == 0 ? null : round(quality.value() / (lines / 1000));
         Double atComplexity = maintainability == null || complexity == null ? null : round(maintainability.value() * complexity.value() / 100.0);

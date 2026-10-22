@@ -36,10 +36,13 @@ final class DocPaths {
             Path file = root.resolve(doc);
             if (Files.size(file) > MAX_DOC) continue;
             String text = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
-            Matcher code = CODE.matcher(text);
-            while (code.find()) if (path(code.group(1)) != null) paths.add(path(code.group(1)));
-            Matcher link = LINK.matcher(text);
-            while (link.find()) if (path(link.group(1)) != null) paths.add(path(link.group(1)));
+            for (Pattern pattern : List.of(CODE, LINK)) {
+                Matcher m = pattern.matcher(text);
+                while (m.find()) {
+                    String path = path(m.group(1));
+                    if (path != null) paths.add(path);
+                }
+            }
         }
         return new ArrayList<>(paths);
     }

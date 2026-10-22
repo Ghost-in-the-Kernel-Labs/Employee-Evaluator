@@ -3,6 +3,7 @@ package evaluator.score;
 import evaluator.rubric.Fact;
 import evaluator.rubric.Metric;
 import evaluator.rubric.Score;
+import evaluator.rubric.Subject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public final class Formulas {
 
     /** The repository-wide fact of this kind, or null. */
     static Fact find(List<Fact> facts, String kind) {
-        for (Fact f : facts) if (f.kind().equals(kind) && f.subject().kind() == evaluator.rubric.Subject.Kind.REPOSITORY) return f;
+        for (Fact f : facts) if (f.kind().equals(kind) && f.subject().kind() == Subject.Kind.REPOSITORY) return f;
         return null;
     }
 

@@ -7,6 +7,7 @@ import evaluator.rubric.Subject;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +64,8 @@ public final class Navigability {
         String[] parts = path.split("/");
         int i = 0;
         while (i < parts.length - 1 && CONTAINERS.contains(parts[i])) i++;
-        if (i >= parts.length - 1) return i == 0 ? "." : String.join("/", java.util.Arrays.copyOf(parts, i));
-        return String.join("/", java.util.Arrays.copyOf(parts, i + 1));
+        if (i >= parts.length - 1) return i == 0 ? "." : String.join("/", Arrays.copyOf(parts, i));
+        return String.join("/", Arrays.copyOf(parts, i + 1));
     }
 
     /** The modules of the repository's source. */

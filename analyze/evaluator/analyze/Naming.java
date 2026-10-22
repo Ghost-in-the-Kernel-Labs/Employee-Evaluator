@@ -1,6 +1,7 @@
 package evaluator.analyze;
 
 import evaluator.ingest.Inventory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +44,14 @@ final class Naming {
         for (Inventory.Source f : inventory.source()) {
             languages.put(f.path(), f.language());
             String name = f.path().substring(f.path().lastIndexOf('/') + 1);
-            files.computeIfAbsent(f.language(), k -> new java.util.ArrayList<>()).add(name.contains(".") ? name.substring(0, name.indexOf('.')) : name);
+            files.computeIfAbsent(f.language(), k -> new ArrayList<>()).add(name.contains(".") ? name.substring(0, name.indexOf('.')) : name);
         }
         report.functions().forEach((path, measures) -> {
             for (Measure m : measures) {
                 String[] parts = m.function().replaceAll("#\\d+$", "").split("\\.");
                 String name = parts[parts.length - 1];
                 boolean constructor = parts.length > 1 && name.equals(parts[parts.length - 2]);
-                if (!constructor && !name.startsWith("<")) functions.computeIfAbsent(languages.get(path), k -> new java.util.ArrayList<>()).add(name);
+                if (!constructor && !name.startsWith("<")) functions.computeIfAbsent(languages.get(path), k -> new ArrayList<>()).add(name);
             }
         });
         int fitting = 0, all = 0;

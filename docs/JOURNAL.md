@@ -676,3 +676,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** pick a set now; replicate a shortlist; move Size to the kernel counting the judge's own folders.
 - **Resolved:** round 2 to replicate the shortlist with the folder classification in the output.
 - **Touched:** docs/judges/ (trial-4-haiku-round1.md, trial-4-round1-cards.json).
+
+### J-048 Haiku round 2: the judge classifies folders, the kernel counts them, within 17% of Fable
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Ghost: "yes, run round 2": the shortlist three times, with the folder classification.
+- **Found:** docs/judges/trial-4-haiku-round2.md. Averaged over three runs the sets sit 3.6 (archetype anchors)
+  to 5.9 (code first) from Fable on the built repositories, baseline 4.7. Counting only the folders Haiku
+  calls own code puts own code within 0.07 decades of Fable's, nearly identical run to run, where the kernel
+  alone is 0.24–0.45 off on built repositories and counts 24.7k lines for a generated one. My first counter
+  credited a parent folder's subfolders called reference (Katana 40k); counting each file under its most
+  specific listed folder fixed it. The kernel has no JavaScript adapter.
+- **Options:** for Ghost: the division of labour (judge classifies and judges, kernel counts and applies card
+  rules); the instruction set (v22 + v08, v17 once the corpus holds cards).
+- **Resolved:** proposed to Ghost; nothing built.
+- **Touched:** docs/judges/ (trial-4-haiku-round2.md, trial-4-round2-cards.json).

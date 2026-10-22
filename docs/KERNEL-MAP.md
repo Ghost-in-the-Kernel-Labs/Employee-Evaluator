@@ -420,3 +420,4 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | cli | `cli/evaluator/cli/Pipeline.java:Pipeline.code` |  | 2026-10-22 |  |
 | cli | `cli/evaluator/cli/Pipeline.java:Pipeline.github` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.rubricHash` |  | 2026-10-22 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.date` |  | 2026-10-22 |  |

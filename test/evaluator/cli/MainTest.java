@@ -39,7 +39,14 @@ class MainTest {
                 List.of("score", "repo", "--github", "../x", "--applicant", "g"), List.of("score", "repo", "--github", "ghost/..", "--applicant", "g"), List.of("score", "repo", "--date"), List.of("score", "repo", "--frobnicate"))) {
             assertThrows(IllegalArgumentException.class, () -> Main.parse(args), args.toString());
         }
-        assertThrows(RuntimeException.class, () -> Main.parse(List.of("score", "repo", "--date", "yesterday")));
+    }
+
+    /** A bad date is refused with the usage, exit 1, never a crash (an Opus judge found it, docs/judges/trial-2.md). */
+    @Test
+    void aBadDateIsRefusedNotACrash() {
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+        assertEquals(1, Main.run(List.of("score", "repo", "--date", "yesterday"), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err)));
+        assertTrue(err.toString().contains("--date takes yyyy-mm-dd, not yesterday") && err.toString().contains("usage:"), err.toString());
     }
 
     @Test

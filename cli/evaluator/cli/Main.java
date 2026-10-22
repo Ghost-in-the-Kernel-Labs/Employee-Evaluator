@@ -84,7 +84,7 @@ public final class Main {
                 case "--no-run" -> run = false;
                 case "--github" -> github = value(args, ++i, a);
                 case "--applicant" -> applicant = value(args, ++i, a);
-                case "--date" -> date = LocalDate.parse(value(args, ++i, a)).toString();
+                case "--date" -> date = date(value(args, ++i, a));
                 default -> {
                     if (a.startsWith("--") || path != null) throw new IllegalArgumentException("not understood: " + a);
                     path = Path.of(a);
@@ -95,6 +95,15 @@ public final class Main {
         if ((github == null) != (applicant == null)) throw new IllegalArgumentException("--github and --applicant go together");
         if (github != null && !github.matches(GITHUB_NAME)) throw new IllegalArgumentException("--github takes owner/repo, not " + github);
         return new Command(path, markdown, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant), date);
+    }
+
+    /** A date as yyyy-mm-dd; anything else refused as what was typed, never a parser's exception. */
+    private static String date(String typed) {
+        try {
+            return LocalDate.parse(typed).toString();
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new IllegalArgumentException("--date takes yyyy-mm-dd, not " + typed);
+        }
     }
 
     private static String value(List<String> args, int i, String option) {

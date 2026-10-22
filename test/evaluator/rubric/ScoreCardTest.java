@@ -14,7 +14,7 @@ class ScoreCardTest {
     private static final Produced PRODUCED = new Produced("0.1", "2026-10-19", "rubric-hash");
 
     private static ScoreCard card(Map<Metric, Score> scores, Set<Metric> notMeasured, ProvenanceTier tier, Map<Metric, Integer> rank) {
-        return new ScoreCard(scores, new Ratios(null, null), tier, "unknown", rank, notMeasured, List.of(), Map.of(), PRODUCED);
+        return new ScoreCard(scores, new Ratios(null, null, null), tier, "unknown", rank, notMeasured, List.of(), Map.of(), PRODUCED);
     }
 
     private static Map<Metric, Score> sizeOnly() {

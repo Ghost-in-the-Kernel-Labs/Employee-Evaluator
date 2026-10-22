@@ -94,7 +94,7 @@ Seven metrics, each 0–100, each ranked separately; there is no single composit
 | Maintainability | How safely the code can be changed | Coupling, duplication, test-to-code ratio, refactor history in commits | Tools + agent |
 | Provenance | Confidence the applicant built it | See Provenance section | Tools |
 
-**Normalization against bloat.** Size and Complexity are raw measures and reward padding on their own. The score card therefore shows them raw but ranks on *efficiency ratios*: Quality per thousand lines and Maintainability per unit of Complexity. A 40,000-line mess loses to a 6,000-line clean solution to the same problem.
+**Normalization against bloat.** Size and Complexity are raw measures and reward padding on their own. The score card therefore shows them raw but ranks on *efficiency ratios*: Quality per thousand lines, ranked only among repositories of a similar size, and Maintainability at Complexity (their product over 100: high only when the code is both hard and maintainable). A 40,000-line mess loses to a 6,000-line clean solution to the same problem, and a 200-line toy never ranks beside either (E-047).
 
 **Peer corpus.** Quality is relative: a repo built with Claude Code is compared with other repos built with Claude Code. The corpus starts empty. Cold-start plan: seed it with public agent-built repositories and our own (Suite Builder, Katana, Flight Recorder), and publish absolute scores until the corpus is large enough for percentile ranks (target: 200 repos per tooling bucket).
 
@@ -102,7 +102,7 @@ Seven metrics, each 0–100, each ranked separately; there is no single composit
 
 **AI navigability as a task, not a checklist.** The most honest measure is to hand the repo to a fresh agent with a small, realistic change request and measure how many tool calls and how much context it needs to make the change correctly. That is the metric; the checklist items are the cheap proxy for phase 1.
 
-**Score card.** One row per submission: seven scores, the three efficiency ratios, the provenance tier, the tooling bucket, and the date. The anonymized card is what employers browse.
+**Score card.** One row per submission: seven scores, the two efficiency ratios, the provenance tier, the tooling bucket, and the date. The anonymized card is what employers browse.
 
 ## Anonymity and IP protection
 

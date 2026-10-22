@@ -390,3 +390,4 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Formulas.java:Formulas.repositoryFact` |  | 2026-10-21 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.provenance` | E-046 | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.find` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Cards.java:Cards.band` |  | 2026-10-22 |  |

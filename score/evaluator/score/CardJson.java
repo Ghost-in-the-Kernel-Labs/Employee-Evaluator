@@ -24,7 +24,8 @@ public final class CardJson {
                 .map(e -> "\n    " + quote(name(e.getKey())) + ": " + score(e.getValue())).collect(Collectors.joining(","));
         out.append(scores.isEmpty() ? "}" : scores + "\n  }").append(",\n");
         out.append("  \"ratios\": {\"qualityPerThousandLines\": ").append(card.ratios().qualityPerThousandLines())
-                .append(", \"maintainabilityPerComplexity\": ").append(card.ratios().maintainabilityPerComplexity()).append("},\n");
+                .append(", \"sizeBand\": ").append(card.ratios().sizeBand() == null ? "null" : quote(card.ratios().sizeBand()))
+                .append(", \"maintainabilityAtComplexity\": ").append(card.ratios().maintainabilityAtComplexity()).append("},\n");
         out.append("  \"provenanceTier\": ").append(card.provenanceTier() == null ? "null" : quote(card.provenanceTier().title)).append(",\n");
         out.append("  \"toolingBucket\": ").append(quote(card.toolingBucket())).append(",\n");
         out.append("  \"corpusRank\": ").append(object(card.corpusRank(), String::valueOf)).append(",\n");

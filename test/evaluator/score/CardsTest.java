@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import evaluator.rubric.Evidence;
 import evaluator.rubric.Fact;
@@ -44,16 +45,41 @@ class CardsTest {
         assertNull(card.ratios().qualityPerThousandLines());
     }
 
-    /** DESIGN.md's example: a 6,000-line clean solution beats a 40,000-line mess on Quality per thousand lines. */
+    /** DESIGN.md's example, E-047: a 6,000-line clean solution beats a 40,000-line mess; each carries its size band. */
     @Test
     void theRatiosAreComputedFromTheScores() {
         ScoreCard clean = Cards.card(List.of(fact("QUALITY.score", 80), fact("SIZE.source_lines", 6000), fact("MAINTAINABILITY.score", 75), fact("COMPLEXITY.score", 50)), List.of(), plain(), PRODUCED);
         ScoreCard mess = Cards.card(List.of(fact("QUALITY.score", 40), fact("SIZE.source_lines", 40000)), List.of(), plain(), PRODUCED);
         assertEquals(13.33, clean.ratios().qualityPerThousandLines());
-        assertEquals(1.5, clean.ratios().maintainabilityPerComplexity());
+        assertEquals("2k to 10k lines", clean.ratios().sizeBand());
+        assertTrue(CardMarkdown.render(clean).contains("- Quality per thousand lines: 13.33 (ranked among 2k to 10k lines)\n"));
+        assertEquals(37.5, clean.ratios().maintainabilityAtComplexity(), "75 × 50 / 100");
         assertEquals(1.0, mess.ratios().qualityPerThousandLines());
-        assertNull(mess.ratios().maintainabilityPerComplexity(), "no Maintainability, no Complexity: no ratio");
-        assertNull(Cards.card(List.of(fact("MAINTAINABILITY.score", 75), fact("COMPLEXITY.score", 0)), List.of(), plain(), PRODUCED).ratios().maintainabilityPerComplexity());
+        assertEquals("10k to 50k lines", mess.ratios().sizeBand());
+        assertNull(mess.ratios().maintainabilityAtComplexity(), "no Maintainability, no Complexity: no ratio");
+        assertEquals(0.0, Cards.card(List.of(fact("MAINTAINABILITY.score", 75), fact("COMPLEXITY.score", 0)), List.of(), plain(), PRODUCED).ratios().maintainabilityAtComplexity());
+    }
+
+    /** E-047: hard and maintainable beats easy and maintainable, and hard and tangled. */
+    @Test
+    void maintainabilityAtComplexityRewardsOnlyBoth() {
+        double hardClean = ratio(80, 80), easyClean = ratio(90, 20), hardTangled = ratio(20, 90);
+        assertTrue(hardClean > easyClean && hardClean > hardTangled, hardClean + " " + easyClean + " " + hardTangled);
+    }
+
+    private static double ratio(int maintainability, int complexity) {
+        return Cards.card(List.of(fact("MAINTAINABILITY.score", maintainability), fact("COMPLEXITY.score", complexity)), List.of(), plain(), PRODUCED).ratios().maintainabilityAtComplexity();
+    }
+
+    /** SC-10: the bands' edges; a toy never ranks beside a 6,000-line project. */
+    @Test
+    void sizeBands() {
+        assertEquals("under 2k lines", Cards.band(0));
+        assertEquals("under 2k lines", Cards.band(1999));
+        assertEquals("2k to 10k lines", Cards.band(2000));
+        assertEquals("10k to 50k lines", Cards.band(10000));
+        assertEquals("50k lines and over", Cards.band(50000));
+        assertNull(Cards.card(List.of(fact("QUALITY.score", 80)), List.of(), plain(), PRODUCED).ratios().sizeBand(), "no line count, no band");
     }
 
     /** E-046 worked by hand: shape 70; 6 signed, 2 pushed, 1 claimed, 1 foreign of 10: 0.6 × 70 + 0.4 × 80 = 74. */
@@ -114,7 +140,7 @@ class CardsTest {
                   "scores": {
                     "navigability": {"value": 70, "facts": ["NAVIGABILITY.checklist repository:."]}
                   },
-                  "ratios": {"qualityPerThousandLines": null, "maintainabilityPerComplexity": null},
+                  "ratios": {"qualityPerThousandLines": null, "sizeBand": null, "maintainabilityAtComplexity": null},
                   "provenanceTier": null,
                   "toolingBucket": "unknown",
                   "corpusRank": {},
@@ -145,7 +171,7 @@ class CardsTest {
                 | Provenance | not measured |  |
 
                 - Quality per thousand lines: not measured
-                - Maintainability per point of Complexity: not measured
+                - Maintainability at Complexity: not measured
                 - Provenance tier: not measured
                 - Tooling bucket: unknown
                 - Refuted: `SIZE.x file:a\\|'b'` by Gh\\*st

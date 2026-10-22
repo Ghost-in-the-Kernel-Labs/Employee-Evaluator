@@ -25,8 +25,9 @@ public final class CardMarkdown {
                     .append(" | ").append(facts).append(" |\n");
         }
         Ratios r = card.ratios();
-        out.append("\n- Quality per thousand lines: ").append(ratio(r.qualityPerThousandLines())).append('\n');
-        out.append("- Maintainability per point of Complexity: ").append(ratio(r.maintainabilityPerComplexity())).append('\n');
+        out.append("\n- Quality per thousand lines: ").append(ratio(r.qualityPerThousandLines()))
+                .append(r.sizeBand() == null ? "" : " (ranked among " + r.sizeBand() + ")").append('\n');
+        out.append("- Maintainability at Complexity: ").append(ratio(r.maintainabilityAtComplexity())).append('\n');
         out.append("- Provenance tier: ").append(card.provenanceTier() == null ? "not measured" : card.provenanceTier().title).append('\n');
         out.append("- Tooling bucket: ").append(escape(card.toolingBucket())).append('\n');
         out.append("- Refuted: ").append(card.refuted().isEmpty() ? "none" : card.refuted().stream().map(CardMarkdown::refutation).collect(Collectors.joining("; "))).append('\n');

@@ -14,7 +14,7 @@ file and `docs/research/`. An alias without backticks is a review guide.
 | **set aside** | a source file not counted as the applicant's: vendored or generated, with the rule that said so (E-025) | excluded, ignored, filtered |
 | **fact** | one thing measured or judged, with evidence, confidence and state | finding, signal, feature |
 | **metric** | one of the seven: Quality, Complexity, Size, Ambition, AI navigability, Maintainability, Provenance | score (that is the metric's number), dimension, category |
-| **ratio** | Quality per thousand lines, or Maintainability per unit of Complexity | normalized score |
+| **ratio** | Quality per thousand lines (ranked within its size band), or Maintainability at Complexity (E-047) | normalized score |
 | **provenance** | the confidence that the applicant built the submission; the metric and its three layers | authorship (that is layer 2 alone), `authenticity` |
 | **history shape** | layer 3 of provenance: the pattern of a git history over time | `commit-shape`, commit pattern |
 | **tooling bucket** | which agent tooling built a submission, read from its fingerprints; the peer group a Quality rank is taken in | cohort, `peer-group` |

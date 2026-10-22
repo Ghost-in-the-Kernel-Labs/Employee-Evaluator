@@ -60,14 +60,29 @@ public final class Cards {
         return live;
     }
 
-    /** Quality per thousand source lines, and Maintainability per point of Complexity; each null when a part is missing or zero. */
-    // Invariant: SC-04
+    /**
+     * Quality per thousand source lines, with the size band it ranks in; and Maintainability at Complexity,
+     * their product over 100. Each null when a part is missing (Quality per lines also with no line).
+     */
+    // Decision: E-047
     static Ratios ratios(Map<Metric, Score> scores, List<Fact> live) {
         Double lines = live.stream().filter(f -> f.kind().equals("SIZE.source_lines")).map(f -> ((Number) f.value()).doubleValue()).findFirst().orElse(null);
         Score quality = scores.get(Metric.QUALITY), maintainability = scores.get(Metric.MAINTAINABILITY), complexity = scores.get(Metric.COMPLEXITY);
         Double perLines = quality == null || lines == null || lines == 0 ? null : round(quality.value() / (lines / 1000));
-        Double perComplexity = maintainability == null || complexity == null || complexity.value() == 0 ? null : round((double) maintainability.value() / complexity.value());
-        return new Ratios(perLines, perComplexity);
+        Double atComplexity = maintainability == null || complexity == null ? null : round(maintainability.value() * complexity.value() / 100.0);
+        return new Ratios(perLines, lines == null ? null : band(lines), atComplexity);
+    }
+
+    /** The size bands Quality per thousand lines ranks within (SC-10): a card ranks only among its own band's. */
+    static final double[] BAND_FLOORS = {0, 2_000, 10_000, 50_000};
+    static final String[] BANDS = {"under 2k lines", "2k to 10k lines", "10k to 50k lines", "50k lines and over"};
+
+    /** The band a line count falls in. */
+    // Invariant: SC-10
+    static String band(double lines) {
+        int i = BAND_FLOORS.length - 1;
+        while (lines < BAND_FLOORS[i]) i--;
+        return BANDS[i];
     }
 
     static double round(double value) {

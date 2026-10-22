@@ -177,7 +177,7 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
   Complexity reward padding; the ratios make a 6,000-line clean solution beat a 40,000-line mess.
 - **Held by:** `docs/SCORE-CARD.md` (SC-01, SC-04); `rubric/` once built.
 - **Source:** Ghost, with Fable, 2026-10-18.
-- **Status:** in force
+- **Status:** in force (seven metrics, no composite); superseded by E-047 (how the two ratios are made)
 - **subject:** scoring
 
 ### E-012: Provenance is a score, not a gate
@@ -736,7 +736,7 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Held by:** `score/evaluator/score/Cards.java`, `Formulas.java`, `CardJson.java`, `CardMarkdown.java`;
   `test/evaluator/score/CardsTest.java`.
 - **Source:** Claude, building TODO.md 1.9's first slice, 2026-10-21; the ratios' question for Ghost.
-- **Status:** in force
+- **Status:** in force (the card from facts, a formula per metric); superseded by E-047 (the ratios)
 - **subject:** scoring
 - **See also:** E-011, E-017, E-044
 
@@ -754,3 +754,22 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-012, E-042, E-043, E-045
+
+### E-047: The ratios: Quality per thousand lines within a size band; Maintainability at Complexity
+- **Decision:** Quality per thousand lines stays Quality ÷ (source lines ÷ 1,000), and a card is ranked on
+  it only among cards in its size band: under 2k lines, 2k to 10k, 10k to 50k, 50k and over (SC-10); the
+  card carries its band. Maintainability per unit of Complexity becomes Maintainability at Complexity:
+  Maintainability × Complexity ÷ 100, to two decimals.
+- **Why:** A score per line ranks the smallest first, since Quality stops at 100 and lines do not: a
+  200-line toy at Quality 90 reads 450 to a clean 6,000-line project's 13, and a floor on lines only
+  narrows it. DESIGN.md's own example compares solutions "to the same problem"; a size band is the nearest
+  the kernel can say that, until the Ambition judge (TODO.md 2.3) can say "the same kind of project". A
+  quotient over Complexity rewards easy problems; the product is high only when the code is hard and
+  maintainable both, and padding Complexity tends to lower Maintainability, so it does not pay.
+- **Held by:** `score/evaluator/score/Cards.java` (`ratios`, `band`); `rubric/evaluator/rubric/Ratios.java`;
+  `docs/SCORE-CARD.md` (SC-04, SC-10); `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with both recommendations"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **Supersedes:** E-011 (the ratios), E-045 (the ratios)
+- **See also:** E-011, E-045

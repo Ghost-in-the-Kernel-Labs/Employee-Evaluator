@@ -479,3 +479,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the shape alone; GitHub's share alone; the two blended, the shape capped without GitHub.
 - **Resolved:** E-046. Next: the ratios' question (E-045), then the other metrics' formulas.
 - **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-046; docs/HANDOFF.md.
+
+### J-032 The ratios settled: a size band for Quality per lines; Maintainability at Complexity
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The ratios' question E-045 raised (Ghost: "go with both recommendations").
+- **Found:** A floor on lines does not stop a per-line ratio ranking toys first (a 200-line toy at Quality 90
+  still reads 45 to a clean 6,000-line project's 13 with a 2,000-line floor); only ranking within a band does.
+- **Options:** keep both as worded; a floor on lines; a size band; the product in place of the quotient.
+- **Resolved:** E-047, superseding E-011's and E-045's ratios in part; SC-10, held from TODO.md 2.6; DESIGN.md's
+  "three efficiency ratios" made two.
+- **Touched:** `rubric/` (`Ratios`); `score/` (`Cards`, `CardJson`, `CardMarkdown`); E-011, E-045, E-047;
+  docs/SCORE-CARD.md, docs/DESIGN.md, docs/GLOSSARY.md, TODO.md, docs/HANDOFF.md.

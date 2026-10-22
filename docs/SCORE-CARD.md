@@ -24,7 +24,10 @@ Invariants are numbered SC-01 onward, in this document only, and a number is nev
 - **SC-01 Seven scores, each 0–100, each ranked on its own; there is no composite.** The card never
   carries a single overall number, and no renderer computes one.
 - **SC-04 Size and Complexity rank through ratios.** The card shows them raw and ranks on Quality per
-  thousand lines and Maintainability per unit of Complexity.
+  thousand lines and Maintainability at Complexity (their product over 100, high only when both are; E-047).
+- **SC-10 Quality per thousand lines ranks only within its size band.** Any score per line ranks the
+  smallest first, so a card is ranked only among cards of its own band (under 2k lines, 2k to 10k, 10k to
+  50k, 50k and over; E-047); the card carries its band. Held from TODO.md 2.6, the corpus store.
 
 ## A fact
 
@@ -55,7 +58,7 @@ One card per submission:
 | Field | Holds |
 | --- | --- |
 | `scores` | the seven, each 0–100, with the facts behind it listed by key |
-| `ratios` | Quality per thousand lines; Maintainability per unit of Complexity |
+| `ratios` | Quality per thousand lines and the size band it ranks in; Maintainability at Complexity |
 | `provenanceTier` | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
 | `toolingBucket` | which agent tooling built the repository, read from its fingerprints |
 | `corpusRank` | per metric, the percentile within the tooling bucket, once the bucket holds enough cards (200 to start); absent before that |

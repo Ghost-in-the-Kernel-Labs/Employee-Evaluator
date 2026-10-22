@@ -57,7 +57,8 @@ and whether the repo's tests pass become the Navigability facts; the checklist o
 
 ### 2.6 Peer corpus store
 
-Check: cards keyed by tooling bucket in SQLite; percentiles appear only once a bucket holds 200.
+Check: cards keyed by tooling bucket in SQLite; percentiles appear only once a bucket holds 200;
+Quality per thousand lines ranked only within its size band (SC-10).
 
 ### 2.7 Job queue and sandbox fleet
 

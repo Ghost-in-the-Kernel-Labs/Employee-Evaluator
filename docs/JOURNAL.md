@@ -663,3 +663,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** out everywhere, the glossary's alias list included; the rule stays CLAUDE.md's "Ghost" in every
   file. Earlier commits still hold it in history; rewriting `main` is Ghost's call, not done here.
 - **Touched:** docs/DESIGN.md, docs/GLOSSARY.md, docs/HANDOFF.md; J-045's typo.
+
+### J-047 Haiku round 1: the kind of repository decides more than the instructions
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Ghost: find the context that makes Haiku sane across codebases, weighing the seventh Fable.
+- **Found:** docs/judges/trial-4-haiku-round1.md. 150 runs, 25 sets. Haiku tells generated and plan-only
+  repositories every time but scores the generated code anyway (+55 navigability on the atos suite); under
+  E-056 such a repository is declined, so the score is never asked. The seventh Fable's insights, as
+  instructions, over-discount a plan; as card rules (withhold what a plan cannot have) they would not. On
+  built repositories the sets sit 4.2–8.3 from Fable, mostly within one run's noise. Size errs most, from
+  counting reference code as the author's.
+- **Options:** pick a set now; replicate a shortlist; move Size to the kernel counting the judge's own folders.
+- **Resolved:** round 2 to replicate the shortlist with the folder classification in the output.
+- **Touched:** docs/judges/ (trial-4-haiku-round1.md, trial-4-round1-cards.json).

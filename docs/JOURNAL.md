@@ -597,3 +597,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** none yet: the judge's design is for Ghost (docs/HANDOFF.md). The tithe (30591ab) came a commit
   late; the cadence is back.
 - **Touched:** docs/judges/ (trial-2.md, both trials' score tables), TODO.md, docs/DESIGN.md, docs/HANDOFF.md.
+
+### J-042 The seed corpus: three cards, and what Katana's says about what is one's own code
+- **Who:** Claude. **Class:** finding.
+- **Intent:** TODO.md 1.9's last part (Ghost: "go with the haiku x3 recommendation, then the corpus"); E-055
+  recorded first.
+- **Found:** `corpus/`: this repository, Suite Builder and Katana, scored with `--no-run` (no test run is
+  possible in this container: npm needs the unreachable registries, the two Java ones are Gradle builds).
+  Suite Builder's card sits near its judges'. Katana's does not: about 19k lines of another tool's generated
+  reference Java and 8.7k lines of COBOL test programs count as its source (Size 92, duplication 24%,
+  Maintainability 56), and its real `sir/build/` package is set aside as a `build/` folder.
+- **Options:** new set-aside rules for prototypes and fixture languages; leave it to the judges (E-055).
+- **Resolved:** the cards as the kernel reads them, the differences written beside them for Ghost's sanity
+  read (`corpus/README.md`); no rule fitted to Katana. 1.9 waits on that read.
+- **Touched:** `corpus/` (three cards, JSON and Markdown, and its README); docs/HANDOFF.md.

@@ -31,15 +31,15 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 2. Each metric's formula, one decision at a time with Ghost: done. AI navigability (E-044), Provenance
    (E-046), Size (E-048), Complexity (E-050, after Java's depth, E-049), Maintainability (E-051), Quality
    (E-052); the ratios (E-047); the tooling bucket (E-053). Ambition waits on its judge (phase 2).
-3. `evaluator score <path>` and the fixtures' cards as goldens: done (J-039, E-054). Next: the cards of
-   Suite Builder, Katana and this repository under `corpus/` (Flight Recorder is not started). J-039's two
+3. `evaluator score <path>` and the fixtures' cards as goldens: done (J-039, E-054). The cards of
+   Suite Builder, Katana and this repository are in `corpus/` (J-042); **1.9 waits on Ghost's sanity read**
+   of them (`corpus/README.md` sets the kernel's scores beside the judges' and says where they differ). J-039's two
    gaps go to the judges, not to rules (Ghost, 2026-10-22): which test files are fixture data is a judgment,
    and every model made it right in trials 1 and 2 (`docs/judges/`). A Gradle plan is still unplanned.
 
 **For Ghost, from judge trial 2 (J-041):**
-- The judge: Haiku three times, averaged, schema-enforced output, given the kernel's facts to judge rather
-  than count; Opus when the three disagree by more than 15. Opus's deep read found real defects no cheaper
-  model did. A decision for Ghost before 2.2.
+- The judge: Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus where they
+  split (E-055, Ghost's choice, in TODO.md 2.2's check).
 - `docs/DESIGN.md` names a labeller by a first name (calibration set, open questions); CLAUDE.md's rule
   names only the maintainer. An Opus judge flagged it; left as it is until Ghost says.
 - Found in other repositories, reported, not touched (read only): Suite Builder's

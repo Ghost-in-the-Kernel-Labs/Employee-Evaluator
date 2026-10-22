@@ -569,3 +569,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Touched:** `cli/` (`Main`, `Pipeline`); `score/evaluator/score/Formulas.java`; `test/evaluator/cli/`,
   `test/evaluator/analyze/RecordedSandbox.java`, `TestRunnerFixturesTest`; `test/goldens/cards/`; E-054;
   CLAUDE.md, docs/MODULES.md, docs/modules.json, docs/HANDOFF.md.
+
+### J-040 Judge trial 1: Haiku ×3 averaged tracks Opus closest on this repository; Sonnet steady but offset
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Ghost: rules for which test files are data fit the data curve to Suite Builder; rely on agents for
+  judgment, and find the cheapest model that does Opus's job of code evaluation reliably. Three Haiku, three
+  Sonnet and one Opus judged this repository blind to the kernel's scores.
+- **Found:** docs/judges/trial-1.md. Every model told the fixture folders from the real tests. Haiku's mean of
+  three came within 2.9 points of Opus (Sonnet's 5.9); Sonnet's runs agreed within 3 points but read Ambition,
+  Provenance and Complexity about 10 higher than Opus. One Haiku answer was not valid JSON. One Opus run cannot
+  separate Opus's own noise, and one repository cannot separate a model's bias from the repository's.
+- **Options:** Haiku ×3 averaged, flagging spreads over 15 to Opus; Sonnet once, its offset calibrated; Opus.
+- **Resolved:** none yet: for Ghost. The fixture question (J-039) goes to the judges, not to a rule.
+- **Touched:** docs/judges/trial-1.md.

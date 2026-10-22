@@ -12,7 +12,7 @@ Employee Evaluator ranks developers by the AI-assisted codebase they actually bu
 
 **What the platform does.**
 
-1. Applicants sign in with GitHub and submit one repository they built with AI assistance.
+1. Applicants sign in with GitHub and submit one repository they built with AI assistance. Only AI-assisted work is ranked (E-056): a repository with evidence of it is admitted; one without is asked for the applicant's tooling and judged; one clearly written by hand, or generated wholesale by a tool, is declined with a note that a traditional code review would serve its author better.
 2. The evaluation engine scores the repository on seven metrics (see Scoring rubric) and verifies that the applicant built it (see Provenance).
 3. Applicants are ranked per metric. Employers browse anonymized score cards and pay to unlock the identities and repositories of the candidates they want.
 4. Employers who unlock a candidate agree to a response guarantee: every unlocked candidate gets a decision within a fixed window, or the employer loses access. This is the no-ghosting rule, and it is the price of admission.

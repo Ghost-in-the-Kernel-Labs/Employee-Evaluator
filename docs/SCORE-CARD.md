@@ -69,6 +69,11 @@ One card per submission:
 
 - **SC-07 A metric with no fact is "not measured", never 0.** A zero is a measurement; an absence is
   an absence, and the employer sees which.
+- **SC-11 A card is made only for AI-assisted work** (E-056). Evidence of AI assistance admits a
+  submission; no evidence asks the applicant to declare and show their tooling, and a judge decides;
+  work clearly written by hand, or generated wholesale by a tool, is declined with no card. What is
+  ranked is the applicant's proficiency at structuring AI-built code. Held from TODO.md 3.3, the
+  submission flow.
 - **SC-08 The anonymized card is the card minus identity.** The public board shows the scores, the
   ratios, the tier, the bucket, the language and a coarse category; never the review, the README, a
   path or any fact's evidence, since evidence identifies. Held from TODO.md 3.5, the board.

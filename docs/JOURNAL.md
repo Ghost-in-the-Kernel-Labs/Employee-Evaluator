@@ -627,3 +627,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** the six reports and their pitfalls kept as the Haiku experiment's reference
   (`docs/judges/fable-pitfalls.md`); the scale's doubts put to Ghost.
 - **Touched:** docs/judges/ (trial-3-fable.md, fable-pitfalls.md, trial-3-fable-scores.tsv).
+
+### J-044 E-056: only AI-assisted work is ranked, with three outcomes
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: purely human code is rejected, since the candidate is ranked on AI code structuring
+  proficiency and traditional review suits a non-AI developer better.
+- **Found:** Proving the absence of AI is unreliable (trailers are stripped, inline completion leaves no
+  trace), so a two-way gate would decline real AI-assisted developers; a tool's wholesale output (the atos
+  suite, trial 3) is AI-made but not the applicant's structuring.
+- **Options:** two outcomes (evidence admits, none declines); three (none asks, then a judge decides).
+- **Resolved:** E-056, three outcomes (Ghost: "record it with the three outcomes"); SC-11 held from TODO.md 3.3;
+  DESIGN.md's pitch says it. E-012 stands: who built it remains a score.
+- **Touched:** theGhost.md, docs/SCORE-CARD.md, docs/DESIGN.md, TODO.md.

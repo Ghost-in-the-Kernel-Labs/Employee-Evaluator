@@ -915,3 +915,29 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** judges
 - **See also:** E-003, E-017
+
+## Admission
+
+### E-056: Only AI-assisted work is ranked: evidence admits, its absence asks, hand-written or generated wholesale is declined
+- **Decision:** The platform ranks AI-augmented developers on how well they structure AI-built code; a
+  repository built without AI assistance is outside what it measures. Each submission takes one of three
+  outcomes. (1) Evidence of AI assistance (agent co-author trailers, agent instruction files kept up over the
+  history, the judges' reading, E-055): admitted and scored. (2) No evidence: not declined; the applicant is
+  asked to declare their tooling and show something (an agent instruction file, session links, an account of
+  the workflow), and a judge decides. (3) Clearly hand-written (no evidence, and the history and the judges
+  agree), or generated wholesale by a tool with little of the applicant's own work (Fable's "generated",
+  trial 3): declined, with a respectful message that this platform assesses AI-augmented development and a
+  traditional code review would serve the applicant better. No card is made for a declined submission.
+- **Why:** Ghost, 2026-10-22: purely human code "should be rejected on the grounds that the candidate is not
+  an ai augmented developer, and thus traditional methods of inspecting the candidates coding ability are
+  better suited", and the candidate "is being ranked on ai code structuring proficiency". Three outcomes, not
+  two, because the absence of evidence is not evidence of absence: trailers are stripped in a minute and
+  inline completion (Cursor, Copilot) leaves no trace, so a two-way gate would decline the very developers the
+  platform is for. A tool's wholesale output shows the tool's structuring, not the applicant's. This is a gate
+  on how the work was built; E-012 stays in force for who built it (provenance is still a score).
+- **Held by:** docs/SCORE-CARD.md (SC-11), held from TODO.md 3.3 (the submission flow); the evidence today is
+  `PROVENANCE.history.agent_tool.*` (E-053) and the bucket's "none detected"; the judgment is the judges' (E-055).
+- **Source:** Ghost, 2026-10-22, on Claude's proposal of the three outcomes ("record it with the three outcomes").
+- **Status:** in force
+- **subject:** admission
+- **See also:** E-012, E-023, E-053, E-055

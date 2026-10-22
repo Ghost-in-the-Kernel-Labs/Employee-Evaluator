@@ -86,7 +86,9 @@ Check: applicant and employer roles; an employer verified by company email domai
 
 ### 3.3 Submission flow
 
-Check: pick a repository the account owns, grant read access, enqueue, see status.
+Check: pick a repository the account owns, grant read access, enqueue, see status; the admission gate
+(E-056, SC-11): evidence of AI assistance admits, none asks the applicant for their tooling and a judge
+decides, hand-written or generated wholesale is declined with its message and no card.
 
 ### 3.4 Applicant's card page
 

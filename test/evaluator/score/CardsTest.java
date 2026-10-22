@@ -37,10 +37,10 @@ class CardsTest {
     }
 
     @Test
-    void phaseOneScoresNavigabilityAndSaysTheRestWereNotMeasured() {
-        ScoreCard card = Cards.card(List.of(fact("NAVIGABILITY.checklist", 99), fact("SIZE.source_lines", 6000)), List.of(), Formulas.phaseOne(), PRODUCED);
+    void aMetricWhoseFactsAreAbsentIsNotMeasured() {
+        ScoreCard card = Cards.card(List.of(fact("NAVIGABILITY.checklist", 99), fact("SIZE.source_files", 60)), List.of(), Formulas.phaseOne(), PRODUCED);
         assertEquals(Map.of(Metric.NAVIGABILITY, new Score(99, List.of("NAVIGABILITY.checklist repository:."))), card.scores());
-        assertEquals(EnumSet.complementOf(EnumSet.of(Metric.NAVIGABILITY)), card.notMeasured(), "no history read: Provenance not measured");
+        assertEquals(EnumSet.complementOf(EnumSet.of(Metric.NAVIGABILITY)), card.notMeasured(), "no history read, no line count: Provenance and Size not measured");
         assertNull(card.provenanceTier());
         assertNull(card.ratios().qualityPerThousandLines());
     }
@@ -93,6 +93,14 @@ class CardsTest {
         assertEquals(ProvenanceTier.PARTIAL, card.provenanceTier());
         List<Fact> allSigned = List.of(fact("PROVENANCE.history.shape", 70), fact("PROVENANCE.authorship.signed", 10));
         assertEquals(82, Cards.card(allSigned, List.of(), Formulas.phaseOne(), PRODUCED).scores().get(Metric.PROVENANCE).value());
+    }
+
+    /** E-048: each tenfold step in lines is a third of the scale, from 100 lines to 100,000. */
+    @Test
+    void sizeIsLinesOnALogScale() {
+        int[][] cases = {{0, 0}, {100, 0}, {1_000, 33}, {6_000, 59}, {10_000, 67}, {40_000, 87}, {100_000, 100}, {2_000_000, 100}};
+        for (int[] c : cases) assertEquals(new Score(c[1], List.of("SIZE.source_lines repository:.")), Formulas.size(List.of(fact("SIZE.source_lines", c[0]))), c[0] + " lines");
+        assertNull(Formulas.size(List.of(fact("SIZE.source_files", 12))), "no line count, no score");
     }
 
     /** With nothing from GitHub, the shape alone, never Verified: a history can be written by anyone. */

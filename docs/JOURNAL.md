@@ -490,3 +490,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   "three efficiency ratios" made two.
 - **Touched:** `rubric/` (`Ratios`); `score/` (`Cards`, `CardJson`, `CardMarkdown`); E-011, E-045, E-047;
   docs/SCORE-CARD.md, docs/DESIGN.md, docs/GLOSSARY.md, TODO.md, docs/HANDOFF.md.
+
+### J-033 TODO 1.9, second slice: Size's formula
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The next formula (Ghost: "go with the size log scale").
+- **Found:** This repository reads 64 (8,160 lines, the 2k to 10k band), Suite Builder 96 (74,802 lines, 50k and over).
+- **Options:** lines on a linear scale with a cap; on a log scale; files or folders in place of lines.
+- **Resolved:** E-048. AI navigability, Provenance and Size now score; Complexity, Maintainability and
+  Quality's measured half are next, then the tooling bucket's rule.
+- **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-048; docs/HANDOFF.md.

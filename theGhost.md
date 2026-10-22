@@ -773,3 +773,16 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **subject:** scoring
 - **Supersedes:** E-011 (the ratios), E-045 (the ratios)
 - **See also:** E-011, E-045
+
+### E-048: Size is source lines on a log scale: 100 lines read 0, 100,000 read 100
+- **Decision:** Size = round(100 × (log10(source lines) − 2) ÷ 3), held to 0–100: 100 lines and under
+  read 0, 1,000 read 33, 10,000 read 67, 100,000 and over read 100. The lines are `SIZE.source_lines`,
+  vendored and generated code already set aside (E-026). No line count, no score.
+- **Why:** Each tenfold step in working software is a like step in effort, so the scale is even per
+  tenfold, not per line. A padded repository gains a few points at most, and the ratios (E-047) are what
+  it ranks on. This repository reads 64 (8,160 lines), Suite Builder 96 (74,802).
+- **Held by:** `score/evaluator/score/Formulas.java` (`size`); `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with the size log scale"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-026, E-045, E-047

@@ -22,9 +22,23 @@ public final class Formulas {
     /** The highest Provenance the history's shape earns alone: Partial, never Verified, with nothing GitHub backs. */
     static final int HISTORY_ALONE_CAP = 79;
 
-    /** Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046). */
+    /** Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046); Size (E-048). */
     public static Map<Metric, Formula> phaseOne() {
-        return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance);
+        return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
+                Metric.SIZE, Formulas::size);
+    }
+
+    /**
+     * Size: source lines on a log scale, vendored and generated code already set aside (E-026): 100 lines
+     * and under read 0, 1,000 read 33, 10,000 read 67, 100,000 and over read 100. Each tenfold step counts alike.
+     */
+    // Decision: E-048
+    static Score size(List<Fact> facts) {
+        Fact lines = find(facts, "SIZE.source_lines");
+        if (lines == null) return null;
+        double n = ((Number) lines.value()).doubleValue();
+        long value = n <= 100 ? 0 : Math.round(100 * (Math.log10(n) - 2) / 3);
+        return new Score((int) Math.min(100, value), List.of(lines.key()));
     }
 
     /**

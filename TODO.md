@@ -14,16 +14,6 @@ Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on
 of Ghost's through the API, with the token read from the environment and never logged; the module
 is the only one that reaches the network (`docs/modules.json`).
 
-### 1.10 JavaScript adapter
-
-Check: `.js`, `.mjs`, `.cjs` and `.jsx` files measured as TypeScript's are: every function (declarations,
-methods, arrow and function expressions, `export async function`), cyclomatic and cognitive complexity,
-imports (`import` and `require`) resolved to the repository's own files, unused imports; a small fixture
-worked by hand and its golden. Parsed with the vendored TypeScript and TSX grammars first (JavaScript is
-nearly a subset); a separate tree-sitter JavaScript grammar only if they fail, with its own reason in the
-decision log and Ghost's approval (the supply-chain rules). Found in judge trial 4 (J-048): the Jensen
-migration's 1,352 lines of JavaScript register no function.
-
 ### 1.11 Tithe pass: the phase-1 boundary
 
 Check: `gradle metrics` arms every metric of `docs/AGENT.md` and the test holds them; a generator

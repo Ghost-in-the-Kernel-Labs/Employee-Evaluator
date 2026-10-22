@@ -87,3 +87,16 @@ Done 2026-10-22 (J-050): `score/` (E-045), every phase-1 formula (E-044, E-046 t
 `corpus/`. Ghost's read: Katana is harder than its card says, since the kernel counts its reference and
 fixture code as its own; closed as phase-1 readings beside Fable's reference scores (trial 3), to be made
 again once the judge classifies folders (E-057).
+
+### 1.10 JavaScript adapter
+
+Check: `.js`, `.mjs`, `.cjs` and `.jsx` files measured as TypeScript's are: every function (declarations,
+methods, arrow and function expressions, `export async function`), cyclomatic and cognitive complexity,
+imports (`import` and `require`) resolved to the repository's own files, unused imports; a small fixture
+worked by hand and its golden. Parsed with the vendored TypeScript and TSX grammars first (JavaScript is
+nearly a subset); a separate tree-sitter JavaScript grammar only if they fail, with its own reason in the
+decision log and Ghost's approval (the supply-chain rules). Found in judge trial 4 (J-048): the Jensen
+migration's 1,352 lines of JavaScript register no function.
+Done 2026-10-22 (J-051): `JavaScriptAdapter` (E-058) reads JavaScript with the vendored TSX grammar and
+`require` as an import; the fixture worked by hand and its golden; no new dependency. The Jensen migration
+now registers 121 functions (17 before) and a dependency depth of 3 (0 before).

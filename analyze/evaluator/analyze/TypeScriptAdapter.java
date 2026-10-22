@@ -14,7 +14,7 @@ import org.treesitter.TreeSitterTypescript;
  * field); an unnamed one, a callback, counts in its function one level deeper, as a Java lambda does.
  * Decisions: if, loops, a case that is not default, catch, `?:`, `&&` and `||`.
  */
-public final class TypeScriptAdapter extends TreeSitterAdapter {
+public class TypeScriptAdapter extends TreeSitterAdapter {
     private static final Set<String> BRACKETS = Set.of("parenthesized_expression");
     private static final Set<String> CALLABLES = Set.of("arrow_function", "function_expression", "generator_function");
     private static final Set<String> LOOPS = Set.of("for_statement", "for_in_statement", "while_statement", "do_statement");

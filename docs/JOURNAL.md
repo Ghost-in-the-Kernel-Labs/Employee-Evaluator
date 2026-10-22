@@ -714,3 +714,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Touched:** TODO.md, docs/DONE.md, docs/HANDOFF.md, corpus/README.md; SC-09, held from 1.9, now names what
   holds it (`score/`'s CardJson, CardGoldensTest), and ScoreCardDocTest reads citations in `score/` as in `rubric/`,
   since `score/` builds and renders the card.
+
+### J-051 TODO 1.10 done: JavaScript is measured, the Jensen migration's 17 functions become 121
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.10 (Ghost: "close 1.9 and start the javascript adapter").
+- **Found:** The vendored TSX grammar reads JavaScript, JSX included, so no grammar was added. Every value worked
+  by hand held on the first run: TypeScript's examples without types give TypeScript's numbers; a Pages Functions
+  handler 4 and 3; `require` bindings used and unused. One existing card changed as it should: node-pass's
+  JavaScript now counts (Complexity 0 to 2).
+- **Options:** a tree-sitter JavaScript grammar (a new dependency); the TypeScript grammar (no JSX); TSX.
+- **Resolved:** E-058, TSX; 1.10 to docs/DONE.md; next 1.11.
+- **Touched:** `analyze/` (`JavaScriptAdapter`, `JavaScriptImports`, `TypeScriptAdapter`, `TypeScriptImports`,
+  `Complexity`); the fixture, its README and golden; node-pass's card goldens; E-058; TODO.md, DONE.md, HANDOFF.md.

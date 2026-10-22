@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-/** The Python and TypeScript adapters on their fixtures: each function's values worked by hand, as the Java fixture's are. */
+/** The Python, TypeScript and JavaScript adapters on their fixtures: each function's values worked by hand, as the Java fixture's are. */
 class TreeSitterAdaptersTest {
     private static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
 
@@ -71,6 +71,35 @@ class TreeSitterAdaptersTest {
         assertEquals(Map.of("Badge", List.of(2, 1)), measured(report("typescript-complexity"), "src/view.tsx"));
     }
 
+    /**
+     * E-058: TypeScript's examples without their types give TypeScript's values. onRequest: if, catch and ||
+     * (?? is no decision) make cyclomatic 4; if, catch and the || run make cognitive 3. total: one ternary.
+     */
+    @Test
+    void javascriptAsWorkedByHand() {
+        Complexity.Report report = report("javascript-complexity");
+        assertEquals(measured(report("typescript-complexity"), "src/examples.ts"), measured(report, "src/examples.js"));
+        assertEquals(Map.of("onRequest", List.of(4, 3)), measured(report, "src/handler.mjs"));
+        assertEquals(Map.of("total", List.of(2, 1)), measured(report, "src/legacy.cjs"));
+        assertEquals(Map.of("Badge", List.of(2, 1)), measured(report, "src/view.jsx"));
+        assertEquals(Map.of("src/broken.js", "does not parse: line 1"), report.unread());
+    }
+
+    /** ESM imports and requires, their unused names, and where they lead with JavaScript's endings. */
+    @Test
+    void javascriptImportsAndRequires() {
+        Complexity.Report report = report("javascript-complexity");
+        assertEquals(List.of(new Import("./examples.js", List.of(), 1, List.of()), new Import("./examples.js", List.of(), 2, List.of("neverUsed"))),
+                report.imports().get("src/handler.mjs"));
+        assertEquals(List.of(new Import("./examples", List.of(), 1, List.of()), new Import("path", List.of(), 2, List.of("path")), new Import("./view", List.of(), 3, List.of())),
+                report.imports().get("src/legacy.cjs"));
+        java.util.Set<String> files = java.util.Set.of("src/examples.js", "src/view.jsx", "src/legacy.cjs");
+        JavaScriptAdapter js = new JavaScriptAdapter();
+        assertEquals(List.of("src/examples.js"), js.resolve(new Import("./examples", List.of(), 1, List.of()), "src/legacy.cjs", files));
+        assertEquals(List.of("src/view.jsx"), js.resolve(new Import("./view", List.of(), 3, List.of()), "src/legacy.cjs", files));
+        assertEquals(List.of(), js.resolve(new Import("path", List.of(), 2, List.of()), "src/legacy.cjs", files));
+    }
+
     @Test
     void aFileThatDoesNotParseIsSaidNotGuessed() {
         assertEquals(Map.of("broken.py", "does not parse: line 1"), report("python-complexity").unread());
@@ -81,6 +110,7 @@ class TreeSitterAdaptersTest {
     void theFixturesComplexityIsItsGolden() throws IOException {
         golden("python-complexity", report("python-complexity"));
         golden("typescript-complexity", report("typescript-complexity"));
+        golden("javascript-complexity", report("javascript-complexity"));
     }
 
     @Test

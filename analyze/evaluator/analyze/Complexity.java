@@ -21,7 +21,7 @@ import java.util.TreeMap;
  */
 public final class Complexity {
     /** The adapters, one per language they read. */
-    static final List<Adapter> ADAPTERS = List.of(new JavaAdapter(), new TypeScriptAdapter(), new PythonAdapter());
+    static final List<Adapter> ADAPTERS = List.of(new JavaAdapter(), new TypeScriptAdapter(), new JavaScriptAdapter(), new PythonAdapter());
 
     /** Every function measured and every import read, by file in path order, and the files an adapter could not read. */
     public record Report(Map<String, List<Measure>> functions, Map<String, List<Import>> imports, Map<String, String> unread) {

@@ -967,3 +967,21 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** judges
 - **See also:** E-017, E-025, E-055, E-056
+
+### E-058: JavaScript is read as TypeScript is, with the vendored TSX grammar, and `require` counts as an import
+- **Decision:** `.js`, `.mjs`, `.cjs` and `.jsx` files are measured by `JavaScriptAdapter`, which is the
+  TypeScript adapter (E-030, E-031) reading every JavaScript file with the vendored TSX grammar: functions,
+  cyclomatic and cognitive complexity as TypeScript's. Its imports are TypeScript's `import` statements and
+  each top-level `require("m")`, binding the declared name or the object pattern's names (a bare require binds
+  nothing); a require's names are used when they appear outside its own declaration. A relative import
+  resolves with JavaScript's endings (`.js`, `.mjs`, `.cjs`, `.jsx`) and folder index files.
+- **Why:** Judge trial 4 found the Jensen migration's 1,352 lines of JavaScript registering 17 functions and no
+  dependency (J-048); now 121 functions and depth 3. TSX rather than the TypeScript grammar, because plain
+  `.js` often holds JSX, and TSX's one difference (no `<T>x` casts) is TypeScript-only syntax JavaScript never
+  has. No new grammar, so no new dependency (E-033); a JavaScript grammar would come with its own approval.
+- **Held by:** `analyze/evaluator/analyze/JavaScriptAdapter.java`, `JavaScriptImports.java`;
+  `test/evaluator/analyze/TreeSitterAdaptersTest.java` and `test/fixtures/javascript-complexity/` with its golden.
+- **Source:** Claude, building TODO.md 1.10 on Ghost's go ("close 1.9 and start the javascript adapter"), 2026-10-22.
+- **Status:** in force
+- **subject:** analysis
+- **See also:** E-030, E-031, E-032, E-057

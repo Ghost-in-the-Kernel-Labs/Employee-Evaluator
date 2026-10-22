@@ -24,14 +24,13 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.10, the JavaScript adapter
+## Now: 1.11, the tithe pass at the phase-1 boundary
 
-1.9 is done (J-050): the card from facts, every phase-1 formula, `evaluator score`, the fixtures' goldens and
-the seed corpus, closed as phase-1 readings: the corpus cards are made again once the judge classifies
-folders (E-057), since the kernel alone counts reference and fixture code as the author's (Katana's card).
-1.10 measures JavaScript as TypeScript is measured; 1.11 is the phase-1 boundary's tithe pass. The judge
-trials (`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056, E-057. A Gradle
-test plan is still unplanned.
+1.10 is done (J-051, E-058): JavaScript is measured as TypeScript is. 1.11 closes phase 1: `gradle metrics`
+armed as a test, a generator for docs/MODULES.md, the tithe gate, the mutation tool's first run. The corpus
+cards (1.9) are phase-1 readings, made again once the judge classifies folders (E-057). The judge trials
+(`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056, E-057. A Gradle test plan
+is still unplanned.
 
 **For Ghost, from judge trial 2 (J-041):**
 - The judge: Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus where they

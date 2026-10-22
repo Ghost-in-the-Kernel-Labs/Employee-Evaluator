@@ -3,15 +3,15 @@
 | Metric | Score | Facts behind it |
 | --- | --- | --- |
 | Quality | 92 | `QUALITY.tests.pass_rate repository:.`, `QUALITY.tests.coverage repository:.` |
-| Complexity | 0 | `COMPLEXITY.dependency_depth repository:.` |
+| Complexity | 2 | `COMPLEXITY.dependency_depth repository:.` |
 | Size | 0 | `SIZE.source_lines repository:.` |
 | Ambition | not measured |  |
 | AI navigability | 40 | `NAVIGABILITY.checklist repository:.` |
-| Maintainability | 100 | `MAINTAINABILITY.test_to_code_ratio repository:.`, `MAINTAINABILITY.import_cycle_files repository:.` |
+| Maintainability | 100 | `MAINTAINABILITY.test_to_code_ratio repository:.`, `MAINTAINABILITY.fan_out file:src/sum.js`, `MAINTAINABILITY.fan_out file:src/sum.test.js` and 3 more (the JSON lists all) |
 | Provenance | not measured |  |
 
 - Quality per thousand lines: 10222.22 (ranked among under 2k lines)
-- Maintainability at Complexity: 0.0
+- Maintainability at Complexity: 2.0
 - Provenance tier: not measured
 - Tooling bucket: unknown
 - Refuted: none

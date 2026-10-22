@@ -421,3 +421,15 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | cli | `cli/evaluator/cli/Pipeline.java:Pipeline.github` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.rubricHash` |  | 2026-10-22 |  |
 | cli | `cli/evaluator/cli/Main.java:Main.date` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptAdapter.java:JavaScriptAdapter.reads` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptAdapter.java:JavaScriptAdapter.tool` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptAdapter.java:JavaScriptAdapter.grammar` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptAdapter.java:JavaScriptAdapter.imports` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptAdapter.java:JavaScriptAdapter.resolve` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.JavaScriptImports` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.of` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.requires` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.required` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.bound` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.uses` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/TypeScriptImports.java:TypeScriptImports.resolve#2` |  | 2026-10-22 |  |

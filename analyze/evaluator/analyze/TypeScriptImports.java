@@ -63,11 +63,16 @@ final class TypeScriptImports {
 
     /** A relative module's file: the path as written, or with a TypeScript ending, or its folder's index. */
     static List<String> resolve(Import imported, String from, Set<String> files) {
+        return resolve(imported, from, files, ENDINGS);
+    }
+
+    /** A relative module's file, trying each ending in turn (a language's own endings and index files). */
+    static List<String> resolve(Import imported, String from, Set<String> files, List<String> endings) {
         String module = imported.module();
         if (!module.startsWith("./") && !module.startsWith("../")) return List.of();
         String path = TreeSitterAdapter.normalize(TreeSitterAdapter.folder(from) + "/" + module);
         if (path == null) return List.of();
-        for (String ending : ENDINGS) if (files.contains(path + ending)) return List.of(path + ending);
+        for (String ending : endings) if (files.contains(path + ending)) return List.of(path + ending);
         return List.of();
     }
 }

@@ -532,3 +532,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   come from the sandbox's run), then the tooling bucket, then the CLI and the corpus.
 - **Touched:** `score/` (`Maintainability`, `Cards`, `Formula`, `Formulas`); `test/evaluator/score/MaintainabilityTest.java`;
   E-051; docs/MODULES.md, docs/modules.json, CLAUDE.md, docs/HANDOFF.md.
+
+### J-037 TODO 1.9, second slice: Quality's formula, and no test at all reads 0
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Quality's tools' half (Ghost: "go with the formula and the no-tests rule").
+- **Found:** As the facts stood, a repository with no tests was "not measured" on Quality while failing
+  tests read low: having none paid. The test-to-code ratio of 0 is the fact that closes it.
+- **Options:** pass rate alone; pass rate and coverage; no tests not measured, or 0.
+- **Resolved:** E-052. Every phase-1 metric has its formula (Ambition waits on its judge, phase 2). Next in
+  1.9: the tooling bucket's rule, then `evaluator score <path>`, the fixtures' goldens and the corpus.
+- **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-052; docs/HANDOFF.md.

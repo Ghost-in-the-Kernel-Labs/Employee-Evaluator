@@ -28,7 +28,7 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 1.8 is done (J-029). 1.9 is sliced in three: (1) the card's machinery, `score/`, done (J-030, E-045);
 (2) each metric's formula, facts to 0–100, one decision at a time with Ghost (AI navigability,
-Provenance, E-046, Size, E-048, Complexity, E-050, and Maintainability, E-051, score so far; Quality's measured half next), with the tooling bucket's rule still open (E-045; the ratios settled, E-047); (3) `evaluator score <path>`,
+Provenance, E-046, Size, E-048, Complexity, E-050, Maintainability, E-051, and Quality, E-052: every phase-1 metric; the tooling bucket's rule next), with the tooling bucket's rule still open (E-045; the ratios settled, E-047); (3) `evaluator score <path>`,
 the fixtures' cards as goldens, and the cards of Suite Builder, Katana and Flight Recorder under `corpus/`.
 
 **1.7 is open, out of order by Ghost's leave (2026-10-21):** `github/` is built (J-028, E-043) and tested

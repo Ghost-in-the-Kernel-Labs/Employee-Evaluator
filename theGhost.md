@@ -838,3 +838,20 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-034, E-035, E-036, E-045, E-050
+
+### E-052: Quality is the pass rate and coverage of the submission's own tests; no test at all reads 0
+- **Decision:** Quality (the tools' half) = round(100 × (0.6 × `QUALITY.tests.pass_rate` + 0.4 ×
+  `QUALITY.tests.coverage`)), from the sandbox's run (E-037); one alone when only it was read. A repository
+  with code and no test file (`MAINTAINABILITY.test_to_code_ratio` 0) reads 0, resting on that fact. Tests
+  there but not run (no lockfile; a run that reached for the network, which gets no pass rate) are not
+  measured (SC-07).
+- **Why:** Without the rule a repository with no tests was "not measured" while one with failing tests read
+  low, so having none paid. No test file is a measurement, looked for and found; a run that could not
+  happen is an absence. Passing weighs more than covering: a covered line proves it ran, not that it was
+  checked. Lint (`QUALITY.lint`) is not built and the agent's review (`QUALITY.agent_review`) is phase 2;
+  each is weighed when it exists.
+- **Held by:** `score/evaluator/score/Formulas.java` (`quality`); `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with the formula and the no-tests rule"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-034, E-037, E-045, E-047

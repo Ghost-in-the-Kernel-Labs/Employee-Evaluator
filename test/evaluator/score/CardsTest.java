@@ -125,6 +125,24 @@ class CardsTest {
         return Fact.measured("COMPLEXITY.cognitive", new Subject(Subject.Kind.FUNCTION, name), cognitive, TOOL);
     }
 
+    /** E-052: 0.6 × 0.9 + 0.4 × 0.5 = 0.74; one alone when only it was read. */
+    @Test
+    void qualityIsPassRateAndCoverage() {
+        Fact pass = fact("QUALITY.tests.pass_rate", 0.9), coverage = fact("QUALITY.tests.coverage", 0.5);
+        assertEquals(new Score(74, List.of(pass.key(), coverage.key())), Formulas.quality(List.of(pass, coverage)));
+        assertEquals(90, Formulas.quality(List.of(pass)).value());
+        assertEquals(50, Formulas.quality(List.of(coverage, fact("MAINTAINABILITY.test_to_code_ratio", 0.4))).value());
+    }
+
+    /** No test file is a measurement, 0; tests that could not be run are not. */
+    @Test
+    void noTestsReadZeroButUnrunTestsAreNotMeasured() {
+        Fact none = fact("MAINTAINABILITY.test_to_code_ratio", 0);
+        assertEquals(new Score(0, List.of(none.key())), Formulas.quality(List.of(none)));
+        assertNull(Formulas.quality(List.of(fact("MAINTAINABILITY.test_to_code_ratio", 0.6), fact("QUALITY.tests.network_attempts", 2))), "tests there, no run read");
+        assertNull(Formulas.quality(List.of()), "no code, no ratio: nothing to say");
+    }
+
     /** With nothing from GitHub, the shape alone, never Verified: a history can be written by anyone. */
     @Test
     void provenanceFromTheHistoryAloneIsCappedBelowVerified() {

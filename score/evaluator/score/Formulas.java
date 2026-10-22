@@ -28,11 +28,31 @@ public final class Formulas {
 
     /**
      * Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046);
-     * Size (E-048); Complexity (E-050); Maintainability (E-051).
+     * Size (E-048); Complexity (E-050); Maintainability (E-051); Quality (E-052).
      */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
-                Metric.SIZE, Formulas::size, Metric.COMPLEXITY, Formulas::complexity, Metric.MAINTAINABILITY, Maintainability::score);
+                Metric.SIZE, Formulas::size, Metric.COMPLEXITY, Formulas::complexity, Metric.MAINTAINABILITY, Maintainability::score,
+                Metric.QUALITY, Formulas::quality);
+    }
+
+    /**
+     * Quality, the tools' half: 0.6 × the pass rate + 0.4 × the coverage of the submission's own tests, run
+     * in the sandbox (E-037); one alone when only it was read. No test file at all reads 0: that was looked
+     * for and found. Tests there but not run (no lockfile, a run that reached for the network) are not measured.
+     */
+    // Decision: E-052
+    static Score quality(List<Fact> facts) {
+        Fact pass = find(facts, "QUALITY.tests.pass_rate"), coverage = find(facts, "QUALITY.tests.coverage");
+        if (pass != null && coverage != null) return new Score((int) Math.round(100 * (0.6 * share(pass) + 0.4 * share(coverage))), List.of(pass.key(), coverage.key()));
+        Fact one = pass != null ? pass : coverage;
+        if (one != null) return new Score((int) Math.round(100 * share(one)), List.of(one.key()));
+        Fact tests = find(facts, "MAINTAINABILITY.test_to_code_ratio");
+        return tests != null && share(tests) == 0 ? new Score(0, List.of(tests.key())) : null;
+    }
+
+    private static double share(Fact f) {
+        return ((Number) f.value()).doubleValue();
     }
 
     /**

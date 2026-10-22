@@ -404,3 +404,5 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Maintainability.java:Maintainability.read` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Maintainability.java:Maintainability.all` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Maintainability.java:Maintainability.number` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.quality` | E-052 | 2026-10-22 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.share` |  | 2026-10-22 |  |

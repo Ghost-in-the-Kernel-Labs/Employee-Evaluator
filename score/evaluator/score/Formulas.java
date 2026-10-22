@@ -26,10 +26,13 @@ public final class Formulas {
     /** The dependency depth that reads 100 on Complexity's depth part: a chain of 25 links and over. */
     static final int FULL_DEPTH = 25;
 
-    /** Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046); Size (E-048); Complexity (E-050). */
+    /**
+     * Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046);
+     * Size (E-048); Complexity (E-050); Maintainability (E-051).
+     */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
-                Metric.SIZE, Formulas::size, Metric.COMPLEXITY, Formulas::complexity);
+                Metric.SIZE, Formulas::size, Metric.COMPLEXITY, Formulas::complexity, Metric.MAINTAINABILITY, Maintainability::score);
     }
 
     /**

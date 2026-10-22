@@ -34,7 +34,7 @@ public final class Cards {
         Set<Metric> notMeasured = EnumSet.noneOf(Metric.class);
         for (Metric metric : Metric.values()) {
             Formula formula = formulas.get(metric);
-            Score score = formula == null ? null : formula.score(live.stream().filter(f -> f.metric() == metric).toList());
+            Score score = formula == null ? null : formula.score(live);
             if (score == null) notMeasured.add(metric);
             else scores.put(metric, score);
         }

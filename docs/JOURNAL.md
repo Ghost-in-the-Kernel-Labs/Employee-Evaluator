@@ -521,3 +521,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-050. AI navigability, Provenance, Size and Complexity score; Maintainability and Quality's
   measured half are next, then the tooling bucket.
 - **Touched:** `score/` (`Formulas`, `CardMarkdown`); `test/evaluator/score/CardsTest.java`; E-050; docs/HANDOFF.md.
+
+### J-036 TODO 1.9, second slice: Maintainability's formula
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Maintainability's formula (Ghost: "go with those weights").
+- **Found:** This repository reads 84, Suite Builder 88, as estimated; Maintainability at Complexity reads
+  31.08 and 71.28. The functions part reads Complexity's facts, so a formula now sees the whole card.
+- **Options:** the six parts as proposed; tests weighed heavier.
+- **Resolved:** E-051. Five of the seven score in phase 1's way; Quality's measured half is next (its facts
+  come from the sandbox's run), then the tooling bucket, then the CLI and the corpus.
+- **Touched:** `score/` (`Maintainability`, `Cards`, `Formula`, `Formulas`); `test/evaluator/score/MaintainabilityTest.java`;
+  E-051; docs/MODULES.md, docs/modules.json, CLAUDE.md, docs/HANDOFF.md.

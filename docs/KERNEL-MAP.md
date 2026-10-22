@@ -397,3 +397,10 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Formulas.java:Formulas.complexity` | E-050 | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.logScale` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/CardMarkdown.java:CardMarkdown.facts` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.Maintainability` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.score` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.parts` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.shareAtMost` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.read` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.all` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Maintainability.java:Maintainability.number` |  | 2026-10-22 |  |

@@ -819,3 +819,22 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-030, E-031, E-032, E-048, E-049
+
+### E-051: Maintainability is six parts weighed: duplication, tests, cycles, complex functions, coupling, unused imports
+- **Decision:** Maintainability (the tools' half) = 100 × the weighted sum of six parts, each 0–1 with 1
+  good: duplication (0.25; 1 less the duplicated share over 10%, held at 0), tests (0.25; the test-to-code
+  ratio, held at 1), import cycles (0.15; 1 less the share of files in one), functions (0.15; the share at
+  most cognitive 15, SonarSource's usual limit), coupling (0.10; the share of files importing at most 10 of
+  the repository's), unused imports (0.10; 1 less their count per file, held at 0). A part with no facts is
+  left out and the others' weights scaled to fill it; no part, no score. A formula is now given every fact
+  on the card, not only its own metric's, since the functions part reads Complexity's facts.
+- **Why:** Each part is something an agent changing the code trips on; duplication and missing tests the
+  most, so they weigh most. Refactor history (DESIGN.md) is not measured yet and is left out, not guessed.
+  This repository reads 84, Suite Builder 88 (its 81 files in cycles cost it, its tests make it up).
+  Two repositories cannot calibrate it: the seed corpus is its first test.
+- **Held by:** `score/evaluator/score/Maintainability.java`; `Cards.java` (every fact to every formula);
+  `test/evaluator/score/MaintainabilityTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with those weights"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-034, E-035, E-036, E-045, E-050

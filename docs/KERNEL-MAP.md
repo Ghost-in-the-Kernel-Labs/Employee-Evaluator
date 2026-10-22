@@ -406,3 +406,9 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Maintainability.java:Maintainability.number` |  | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.quality` | E-052 | 2026-10-22 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.share` |  | 2026-10-22 |  |
+| history | `history/evaluator/history/AgentTools.java:AgentTools.AgentTools` |  | 2026-10-22 |  |
+| history | `history/evaluator/history/AgentTools.java:AgentTools.found` |  | 2026-10-22 |  |
+| history | `history/evaluator/history/AgentTools.java:AgentTools.named` |  | 2026-10-22 |  |
+| history | `history/evaluator/history/AgentTools.java:AgentTools.fileTool` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Buckets.java:Buckets.Buckets` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Buckets.java:Buckets.of` |  | 2026-10-22 |  |

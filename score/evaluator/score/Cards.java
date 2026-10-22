@@ -22,7 +22,7 @@ import java.util.Set;
  * its formula, the ratios from the scores, the tier from Provenance. It reads no code and makes no fact.
  */
 public final class Cards {
-    /** The tooling bucket until its rule is decided (TODO.md 1.9). */
+    /** The tooling bucket when no history was read (E-053). */
     static final String NO_BUCKET = "unknown";
 
     private Cards() {}
@@ -40,7 +40,7 @@ public final class Cards {
         }
         Score provenance = scores.get(Metric.PROVENANCE);
         return new ScoreCard(scores, ratios(scores, live), provenance == null ? null : ProvenanceTier.of(provenance.value()),
-                NO_BUCKET, Map.of(), notMeasured, refutations, Map.of(), produced);
+                Buckets.of(live), Map.of(), notMeasured, refutations, Map.of(), produced);
     }
 
     /**

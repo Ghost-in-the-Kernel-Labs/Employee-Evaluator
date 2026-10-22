@@ -82,7 +82,7 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["ingest", "analyze", "history", "github", "cli"],
       "phase": 1,
-      "entryPoints": ["score/evaluator/score/Cards.java → Cards.card()", "score/evaluator/score/Formulas.java → Formulas.phaseOne() (E-045)", "score/evaluator/score/Maintainability.java → Maintainability.score() (E-051)", "score/evaluator/score/CardJson.java → CardJson.render()", "score/evaluator/score/CardMarkdown.java → CardMarkdown.render()"]
+      "entryPoints": ["score/evaluator/score/Cards.java → Cards.card()", "score/evaluator/score/Formulas.java → Formulas.phaseOne() (E-045)", "score/evaluator/score/Maintainability.java → Maintainability.score() (E-051)", "score/evaluator/score/Buckets.java → Buckets.of() (E-053)", "score/evaluator/score/CardJson.java → CardJson.render()", "score/evaluator/score/CardMarkdown.java → CardMarkdown.render()"]
     },
     "cli": {
       "purpose": "The command line: `evaluator score <path>` and nothing the other modules do not already do.",

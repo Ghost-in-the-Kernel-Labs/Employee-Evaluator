@@ -542,3 +542,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-052. Every phase-1 metric has its formula (Ambition waits on its judge, phase 2). Next in
   1.9: the tooling bucket's rule, then `evaluator score <path>`, the fixtures' goldens and the corpus.
 - **Touched:** `score/evaluator/score/Formulas.java`; `test/evaluator/score/CardsTest.java`; E-052; docs/HANDOFF.md.
+
+### J-038 TODO 1.9, second slice done: the tooling bucket
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The bucket's rule (Ghost: "go with the bucket rule"), the last of the second slice.
+- **Found:** The history's facts said an agent had a hand, not which: `history/` now names each tool, and
+  `Shape`'s own list of agent names gave way to the new one so the two cannot drift. Both repositories read Claude.
+- **Options:** the most evidence wins; more than half wins, else mixed; small tools merged into "other".
+- **Resolved:** E-053. Next in 1.9, the third slice: `evaluator score <path>`, the fixtures' goldens, the corpus.
+- **Touched:** `history/` (`AgentTools`, `Shape`); `score/` (`Buckets`, `Cards`); their tests; E-053;
+  docs/SCORE-CARD.md, docs/modules.json, docs/MODULES.md, docs/HANDOFF.md.

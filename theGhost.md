@@ -855,3 +855,22 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** scoring
 - **See also:** E-034, E-037, E-045, E-047
+
+### E-053: The tooling bucket is the agent tool with more than half the evidence; else mixed
+- **Decision:** `history/` names each agent tool a history shows, one fact each
+  (`PROVENANCE.history.agent_tool.claude` = its evidence counted): each commit whose Co-Authored-By trailer
+  names it, once per commit, and each instruction file only it reads (CLAUDE.md Claude, GEMINI.md Gemini,
+  `.cursorrules` and `.cursor/rules/` Cursor, `copilot-instructions.md` Copilot; AGENTS.md, read by several,
+  names none). Anthropic counts as Claude; OpenAI and ChatGPT as Codex. The bucket is the tool with more
+  than half the evidence; "mixed" when none has; "none detected" when the history was read and named none;
+  "unknown" when no history was read.
+- **Why:** The bucket is what a card is ranked within (TODO.md 2.6, percentiles at 200 cards a bucket), so it
+  must be read from the repository itself and not be split finer than the evidence can carry. `score/` reads
+  no repository (MOD-03), so the names come as facts from `history/`. This repository and Suite Builder
+  both read Claude.
+- **Held by:** `history/evaluator/history/AgentTools.java`; `score/evaluator/score/Buckets.java`;
+  `test/evaluator/history/AgentToolsTest.java`, `ShapeTest`, `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with the bucket rule"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-042, E-045

@@ -35,7 +35,7 @@ class ShapeTest {
     /**
      * Five commits worked by hand: sizes 13, 11, 2, 4, 2 (mean 6.4, deviation 4.673, variation 0.730);
      * days 0, 2 and 5 (3 active, 5 apart); one fix; of two commits touching tests one touches code;
-     * one Claude trailer; CLAUDE.md kept in two commits. Parts: spread 3/14, cadence 1, variation 0.730,
+     * one Claude trailer; CLAUDE.md kept in two commits (Claude's evidence: the trailer and the file). Parts: spread 3/14, cadence 1, variation 0.730,
      * messy 1, colocation 0.5, fingerprints 1; shape 100 × (0.054 + 0.2 + 0.146 + 0.15 + 0.05 + 0.1) = 70.
      */
     @Test
@@ -56,6 +56,7 @@ class ShapeTest {
         expected.put("test_colocation", 0.5);
         expected.put("agent_trailers", 1);
         expected.put("agent_files", 1);
+        expected.put("agent_tool.claude", 2);
         expected.put("shape", 70);
         assertEquals(expected, values(h.write(dir)));
     }

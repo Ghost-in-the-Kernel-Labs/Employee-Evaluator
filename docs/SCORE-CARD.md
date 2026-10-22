@@ -60,7 +60,7 @@ One card per submission:
 | `scores` | the seven, each 0–100, with the facts behind it listed by key |
 | `ratios` | Quality per thousand lines and the size band it ranks in; Maintainability at Complexity |
 | `provenanceTier` | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
-| `toolingBucket` | which agent tooling built the repository, read from its fingerprints |
+| `toolingBucket` | which agent tooling built the repository, read from its fingerprints: the tool with more than half the evidence, else mixed (E-053) |
 | `corpusRank` | per metric, the percentile within the tooling bucket, once the bucket holds enough cards (200 to start); absent before that |
 | `notMeasured` | metrics no fact fed (the judgment metrics, when no agent ran, E-003) |
 | `refuted` | the facts a person refuted and by whom |

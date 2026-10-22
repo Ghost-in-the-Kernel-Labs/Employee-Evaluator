@@ -143,6 +143,17 @@ class CardsTest {
         assertNull(Formulas.quality(List.of()), "no code, no ratio: nothing to say");
     }
 
+    /** E-053: more than half the evidence names the bucket; no majority is mixed; read and none is none detected. */
+    @Test
+    void theToolingBucket() {
+        Fact shape = fact("PROVENANCE.history.shape", 60);
+        assertEquals("Claude", Buckets.of(List.of(shape, fact("PROVENANCE.history.agent_tool.claude", 3), fact("PROVENANCE.history.agent_tool.cursor", 2))));
+        assertEquals("mixed", Buckets.of(List.of(shape, fact("PROVENANCE.history.agent_tool.claude", 2), fact("PROVENANCE.history.agent_tool.cursor", 2))));
+        assertEquals("none detected", Buckets.of(List.of(shape)));
+        assertEquals("unknown", Buckets.of(List.of(fact("PROVENANCE.history.agent_tool.claude", 3))), "no history read");
+        assertEquals("Claude", Cards.card(List.of(shape, fact("PROVENANCE.history.agent_tool.claude", 1)), List.of(), Formulas.phaseOne(), PRODUCED).toolingBucket());
+    }
+
     /** With nothing from GitHub, the shape alone, never Verified: a history can be written by anyone. */
     @Test
     void provenanceFromTheHistoryAloneIsCappedBelowVerified() {

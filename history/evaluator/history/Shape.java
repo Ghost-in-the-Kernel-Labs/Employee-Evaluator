@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -28,8 +27,6 @@ public final class Shape {
     /** The tool every history fact names as its evidence. */
     public static final String TOOL = "evaluator history 1 (git log)";
     private static final Pattern MESSY = Pattern.compile("(?i)^(revert\\b|fix(es|ed)?\\b|fixup!|squash!|typo|oops|wip\\b)");
-    private static final Pattern TRAILER = Pattern.compile("(?im)^co-authored-by:(.*)$");
-    private static final Pattern AGENT = Pattern.compile("(?i)\\b(claude|copilot|cursor|codex|gemini|devin|aider|windsurf|chatgpt|openai|anthropic)\\b");
     private static final List<String> AGENT_FILES = List.of("claude.md", "agents.md", "gemini.md", ".cursorrules", "copilot-instructions.md");
     /** The shape's parts and their weights, summing to 1. */
     static final Map<String, Double> WEIGHTS = Map.of("spread", 0.25, "cadence", 0.20, "variation", 0.20, "messy", 0.15, "colocation", 0.10, "fingerprints", 0.10);
@@ -61,6 +58,7 @@ public final class Shape {
         facts.add(fact("test_colocation", r.colocation(), ends));
         facts.add(fact("agent_trailers", r.trailers().size(), r.trailers().isEmpty() ? List.of("(none)") : r.trailers()));
         facts.add(fact("agent_files", r.agentFiles().size(), r.agentFiles().isEmpty() ? List.of("(none)") : r.agentFiles()));
+        AgentTools.found(commits, pathsAtHead).forEach((tool, evidence) -> facts.add(fact("agent_tool." + tool, evidence.size(), evidence)));
         List<String> parts = new ArrayList<>();
         r.parts().forEach((name, value) -> parts.add(name + " " + round(value)));
         facts.add(fact("shape", r.shape(), parts));
@@ -118,9 +116,7 @@ public final class Shape {
 
     /** Whether a message carries a Co-Authored-By trailer naming an agent. */
     static boolean agentTrailer(String message) {
-        Matcher trailer = TRAILER.matcher(message);
-        while (trailer.find()) if (AGENT.matcher(trailer.group(1)).find()) return true;
-        return false;
+        return !AgentTools.named(message).isEmpty();
     }
 
     private static boolean agentFile(String path) {

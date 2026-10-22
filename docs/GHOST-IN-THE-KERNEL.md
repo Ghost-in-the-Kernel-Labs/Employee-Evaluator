@@ -85,7 +85,7 @@ In [theGhost.md](../theGhost.md), at the repository's root; its opening says wha
 | E-005 | `theGhost.md`: ids consecutive, fields present, supersession named on both sides | `test/GhostTest.java` |
 | E-007 | No document writes an enforced alias | `test/GlossaryTest.java` |
 | E-008 | Journal entries ordered, each with who and class | `test/JournalTest.java` |
-| E-015 | The metrics of `docs/AGENT.md` do not regress | `gradle metrics` (a test once the first pass arms them, TODO.md 1.10) |
+| E-015 | The metrics of `docs/AGENT.md` do not regress | `gradle metrics` (a test once the first pass arms them, TODO.md 1.11) |
 | E-018 | A refactor changes no golden | the goldens, from TODO.md 1.2 |
 
 ## The disciplines

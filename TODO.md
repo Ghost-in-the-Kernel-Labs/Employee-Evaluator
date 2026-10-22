@@ -21,7 +21,17 @@ golden, its two efficiency ratios (SC-04: Quality per thousand lines, Maintainab
 Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and this repository (Flight Recorder is not started; Ghost, 2026-10-22) are committed under `corpus/` and
 survive Ghost's sanity read.
 
-### 1.10 Tithe pass: the phase-1 boundary
+### 1.10 JavaScript adapter
+
+Check: `.js`, `.mjs`, `.cjs` and `.jsx` files measured as TypeScript's are: every function (declarations,
+methods, arrow and function expressions, `export async function`), cyclomatic and cognitive complexity,
+imports (`import` and `require`) resolved to the repository's own files, unused imports; a small fixture
+worked by hand and its golden. Parsed with the vendored TypeScript and TSX grammars first (JavaScript is
+nearly a subset); a separate tree-sitter JavaScript grammar only if they fail, with its own reason in the
+decision log and Ghost's approval (the supply-chain rules). Found in judge trial 4 (J-048): the Jensen
+migration's 1,352 lines of JavaScript register no function.
+
+### 1.11 Tithe pass: the phase-1 boundary
 
 Check: `gradle metrics` arms every metric of `docs/AGENT.md` and the test holds them; a generator
 writes `docs/MODULES.md` from `docs/modules.json`; the tithe gate refuses a push past sixteen commits
@@ -39,7 +49,8 @@ that holds every label to its fields; the set spans at least five domains.
 
 Check: a repo summary (inventory, README, sampled files, commit log) and the kernel's facts to a judging
 prompt, structured output back (enforced by the API's schema); three Haiku runs averaged, Opus on a
-metric they split on by more than 15 (E-055); agreement with the calibration set measured and recorded
+metric they split on by more than 15 (E-055); the judge names the repository's kind and classifies its
+folders, and the kernel measures only the folders judged own code (E-057); agreement with the calibration set measured and recorded
 with the prompt's hash; no prompt scores live under 80 % agreement.
 
 ### 2.3 Ambition judge

@@ -223,7 +223,7 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
   read and change code with little context was treated as work, about a tenth of effort; Katana
   made it a rule (R-008) and its tithe gate. This project has three languages in the tree, so the
   share rises.
-- **Held by:** `docs/AGENT.md`; `scripts/Metrics.java` (the cadence warning); the tithe gate once built (TODO.md 1.10).
+- **Held by:** `docs/AGENT.md`; `scripts/Metrics.java` (the cadence warning); the tithe gate once built (TODO.md 1.11).
 - **Source:** Ghost, 2026-10-18, from Suite Builder and Katana (R-008).
 - **Status:** in force
 - **subject:** process
@@ -272,7 +272,7 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
   test or is written up as harmless in `docs/MUTATION.md`. A test is never weakened to make code pass.
 - **Why:** Suite Builder's G-239: the first mutation run found tests that caught 53% of mutants in a
   core file; after it, 97%. Tests that test nothing are worse than none, because they are trusted.
-- **Held by:** proposed: `docs/MUTATION.md` and the vendored tool once TODO.md 1.10 lands; until then review.
+- **Held by:** proposed: `docs/MUTATION.md` and the vendored tool once TODO.md 1.11 lands; until then review.
 - **Source:** Ghost, 2026-10-18, from Suite Builder (G-239).
 - **Status:** proposed
 - **subject:** tests
@@ -941,3 +941,29 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** admission
 - **See also:** E-012, E-023, E-053, E-055
+
+### E-057: The judge classifies and judges; the kernel counts what the judge calls the author's own, and applies the card's rules
+- **Decision:** Work is divided by what each does reliably. The judge (Haiku three times, E-055) says what kind
+  of repository it is (built, plan only, generated or mixed), classifies its folders (own code, own tests, own
+  tooling, docs, generated, vendored, reference, fixture data), and scores only what needs judgment: Ambition,
+  Quality's review, Complexity's assessment of the problem. The kernel then measures only the files whose most
+  specific classified folder is own code: Size, Complexity's total and depth, Maintainability's parts. The
+  card's rules are the kernel's: a generated repository is declined (E-056); a plan carries no Size,
+  Complexity or Maintainability and its Ambition reads unverified. The judge's instructions anchor the scale
+  with archetypes and judge navigability by its mechanisms (round 2's v22 and v08), adding scored corpus cards
+  as anchors once the corpus holds them (v17). Fable's scoring stays the reference judge prompts are measured
+  against, beside the labelled calibration set (TODO.md 2.1).
+- **Why:** Judge trial 4 (J-047, J-048, docs/judges/): Haiku named the kind of every repository in all but two
+  of 276 runs, and its folders, counted by the kernel, put own code within 17% of Fable's on every repository
+  and run after run alike, where the kernel alone counted 1.7–2.8 times the author's code on built repositories
+  and 24.7k lines for a generated one with 3 of its owner's. Haiku told the generated suite apart yet still
+  scored its code (navigability +55), and given the seventh Fable's insights as instructions over-discounted
+  a plan: so the judge is not asked what a rule settles. The wording of the instructions moved the mean of
+  three by about a point; what the judge is asked moved it far more.
+- **Held by:** TODO.md 2.2 (the harness) and the kernel's reading of the judge's folders once built;
+  docs/judges/trial-4-haiku-round2.md for the measurements.
+- **Source:** Claude's proposal from trials 3 and 4, Ghost's choice ("record E-057 and add the javascript
+  adapter"), 2026-10-22.
+- **Status:** in force
+- **subject:** judges
+- **See also:** E-017, E-025, E-055, E-056

@@ -690,3 +690,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   rules); the instruction set (v22 + v08, v17 once the corpus holds cards).
 - **Resolved:** proposed to Ghost; nothing built.
 - **Touched:** docs/judges/ (trial-4-haiku-round2.md, trial-4-round2-cards.json).
+
+### J-049 E-057 recorded; the JavaScript adapter is TODO.md 1.10
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "record E-057 and add the javascript adapter".
+- **Found:** TODO.md must stay in numeric order and the phase-1 boundary tithe must stay last, so the adapter is
+  1.10 and the tithe 1.11; its references in AGENT.md, GHOST-IN-THE-KERNEL.md, HANDOFF.md, MODULES.md,
+  modules.json and two decisions' Held-by lines follow it. A JavaScript grammar would be a new dependency, so
+  the item tries the vendored TypeScript and TSX grammars first.
+- **Options:** the adapter in phase 2; 1.10 with the tithe renumbered.
+- **Resolved:** E-057 in force, in TODO.md 2.2's check; 1.10 the JavaScript adapter, 1.11 the tithe pass.
+- **Touched:** theGhost.md, TODO.md and the references to 1.10.

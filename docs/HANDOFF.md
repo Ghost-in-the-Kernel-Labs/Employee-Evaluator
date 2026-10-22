@@ -20,7 +20,7 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Calibration set.** Phase 2 cannot start until 30 repositories are hand-labeled on Ambition and
   Quality (TODO.md 2.1). Only Ghost can label; the fixture format comes from Opus first.
 - **Mutation tool.** E-019 is proposed until a Java mutation tool is vendored (PIT, Apache-2.0, is the
-  candidate; its jar and license go under `third_party/` with a MANIFEST.md row). Decide at 1.10.
+  candidate; its jar and license go under `third_party/` with a MANIFEST.md row). Decide at 1.11.
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 

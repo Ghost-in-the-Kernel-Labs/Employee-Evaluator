@@ -6,7 +6,7 @@ and where to start reading. For a task, `CLAUDE.md` says which modules to open a
 change.
 
 The source of truth is `docs/modules.json`; `test/ModulesTest.java` holds every import in the source
-to it. This file is written by hand until a generator exists (TODO.md 1.10); when the two disagree,
+to it. This file is written by hand until a generator exists (TODO.md 1.11); when the two disagree,
 the JSON is right.
 
 The pipeline: `ingest` reads → `analyze`, `history` and `github` measure → `score` combines facts into

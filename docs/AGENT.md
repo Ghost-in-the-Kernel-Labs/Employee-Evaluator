@@ -4,7 +4,7 @@ What an agent working in Employee Evaluator can count on, each line a measurable
 the navigation tithe ratchets (E-015). A metric may improve; it never regresses without a decision in
 `theGhost.md`. A metric is **armed** the first time it is measured within its target; until then it
 is "not armed" and not compared. A test holding the table arrives at the phase-1 boundary (TODO.md
-1.10); until then `gradle metrics` prints it and the agent compares by eye.
+1.11); until then `gradle metrics` prints it and the agent compares by eye.
 
 ## The contract
 
@@ -42,4 +42,4 @@ Measured by `gradle metrics` in the image at every tithe pass.
 | Commits since the last tithe | ≤ 8 | 2 | 0 (this tithe; it was 9) | E-015 |
 
 Pass 0's numbers are the scaffold's: almost no product code, so most are trivially met. The first
-pass that means anything is 1.10.
+pass that means anything is 1.11.

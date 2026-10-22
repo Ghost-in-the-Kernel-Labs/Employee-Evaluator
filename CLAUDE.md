@@ -41,7 +41,7 @@ Everything runs in the pinned image (`Dockerfile`, built once): `docker run --rm
 "$(id -u)" -v "$PWD":/evaluator evaluator gradle test --offline` is the fast loop (doc and unit
 tests). `gradle metrics` prints `docs/AGENT.md`'s numbers and warnings; `gradle kernelMap` adds new
 functions to the kernel map; `gradle modulesDoc` writes `docs/MODULES.md` from `docs/modules.json`. `scripts/prepush.sh` is the check before a push: it fetches `main`,
-runs the fast loop in the image, and refuses a stale kernel map. GitHub's workflow runs only by hand, started by the agent within the month's minutes (E-040): never count on it. Without Docker, `gradle test
+runs the fast loop in the image, and refuses a stale kernel map or a push past sixteen commits without a tithe. GitHub's workflow runs only by hand, started by the agent within the month's minutes (E-040): never count on it. Without Docker, `gradle test
 --offline` on JDK 21 with Gradle 8.14.3 is the same loop.
 
 ## Before calling work done
@@ -51,7 +51,7 @@ function that holds a decision cites it, `// Decision: E-011`. `gradle kernelMap
 a function removed or renamed gets a closing row by hand. A finished step of `TODO.md` is moved to
 `docs/DONE.md`, its journal entry written, `docs/HANDOFF.md` updated and pushed; then the next step
 starts, in order (E-029). Every eighth
-commit is a tithe (E-015). A doubt left in the code goes on a line of its own above it,
+commit is a tithe (E-015); the pre-push refuses past sixteen. A doubt left in the code goes on a line of its own above it,
 `// Unsure: <why>`; `gradle metrics` lists them and nothing fails on one.
 
 ## Three rules

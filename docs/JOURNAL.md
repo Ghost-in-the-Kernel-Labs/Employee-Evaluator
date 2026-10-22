@@ -750,3 +750,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   listed; ModulesTest fails on a stale or hand-edited file, and `gradle metrics` counts it as stale.
 - **Touched:** scripts/ModulesDoc.java, scripts/Metrics.java, build.gradle, docs/modules.json, docs/MODULES.md,
   test/ModulesTest.java, CLAUDE.md.
+
+### J-054 TODO 1.11, slice 3: the tithe gate refuses a push past sixteen commits
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.11 in slices (Ghost: "start 1.11 with slices 1-3"); the last of the three.
+- **Found:** The cadence was the one rule held by habit, and it slipped twice (J-045 at 9, J-051 at 13).
+- **Options:** a warning only (what `gradle metrics` already gives); refuse at eight; refuse at sixteen.
+- **Resolved:** sixteen, as TODO.md 1.11 says: eight stays the target and the warning, sixteen the hard stop.
+  scripts/TitheGate.java counts subjects since the last "Tithe"; `gradle titheGate` runs it in the pre-push, on
+  the fresh clone in the image; Metrics.cadence reads the same count; MetricsTest proves it on four histories.
+  Slice 4 (the mutation tool) waits on Ghost's approval of PIT as a dependency.
+- **Touched:** scripts/TitheGate.java, scripts/Metrics.java, scripts/prepush.sh, build.gradle,
+  test/MetricsTest.java, CLAUDE.md, docs/HANDOFF.md.

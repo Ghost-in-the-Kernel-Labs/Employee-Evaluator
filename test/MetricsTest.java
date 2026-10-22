@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,19 @@ final class MetricsTest {
                 .rejects("a metric at a strict target", () -> check(agent, with(m, "Mandatory context (words)", "1500 (CLAUDE.md)")))
                 .rejects("a metric the script does not measure", () -> check(agent.replace("| Functions over 20 paths |", "| Functions over 21 paths |"), m))
                 .rejects("a target nobody can read", () -> check(agent.replace("| Stale generated artifacts | 0 |", "| Stale generated artifacts | few |"), m))
-                .accepts("a metric reported, not held", () -> check(agent, with(m, "Docs lines per source line", "9.99 (1 / 1)")));
+                .accepts("a metric reported, not held", () -> check(agent, with(m, "Docs lines per source line", "9.99 (1 / 1)")))
+                .rejects("seventeen commits since the last tithe", () -> TitheGate.check(history(17)))
+                .rejects("seventeen commits and never a tithe", () -> TitheGate.check(history(17).subList(0, 17)))
+                .accepts("sixteen commits since the last tithe", () -> TitheGate.check(history(16)))
+                .accepts("a young history with no tithe yet", () -> TitheGate.check(history(5).subList(0, 5)));
+    }
+
+    /** Subjects newest first: n ordinary commits, then a tithe, then one more. */
+    private static List<String> history(int n) {
+        List<String> subjects = new ArrayList<>(Collections.nCopies(n, "Add a thing"));
+        subjects.add("Tithe: the metrics");
+        subjects.add("Start");
+        return subjects;
     }
 
     /** What the measured values break of the table's targets. */

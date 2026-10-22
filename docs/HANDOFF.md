@@ -26,8 +26,10 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 
 ## Now: 1.11, the tithe pass at the phase-1 boundary
 
-1.10 is done (J-051, E-058): JavaScript is measured as TypeScript is. 1.11 closes phase 1: `gradle metrics`
-armed as a test, a generator for docs/MODULES.md, the tithe gate, the mutation tool's first run. The corpus
+1.10 is done (J-051, E-058): JavaScript is measured as TypeScript is. 1.11 closes phase 1 in four slices; three
+are done: docs/AGENT.md's metrics held by test/MetricsTest.java (J-052), docs/MODULES.md written by `gradle
+modulesDoc` (J-053), the tithe gate in `scripts/prepush.sh` (J-054). The fourth, the mutation tool's first run,
+waits on Ghost: vendoring PIT is a new dependency (see "Mutation tool" above). The corpus
 cards (1.9) are phase-1 readings, made again once the judge classifies folders (E-057). The judge trials
 (`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056, E-057. A Gradle test plan
 is still unplanned.

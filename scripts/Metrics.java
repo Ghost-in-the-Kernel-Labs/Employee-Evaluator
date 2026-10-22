@@ -125,15 +125,11 @@ final class Metrics {
         return Math.round((System.nanoTime() - started) / 1e9) + (status == 0 ? "" : " (failed)");
     }
 
-    /** Commits since the last whose subject starts "Tithe", a warning past eight (J-070: the one rule held by habit). */
+    /** Commits since the last whose subject starts "Tithe", a warning past eight; the push is refused past sixteen (TitheGate). */
     static String cadence() {
         try {
-            Process git = new ProcessBuilder("git", "log", "--format=%s", "-n", "200").directory(Repo.ROOT.toFile()).redirectErrorStream(true).start();
-            List<String> subjects = new String(git.getInputStream().readAllBytes()).lines().toList();
-            if (git.waitFor() != 0) return "not counted (no git history here)";
-            int since = 0;
-            while (since < subjects.size() && !subjects.get(since).startsWith("Tithe")) since++;
-            return since + " commits since the last tithe" + (since > 8 ? ": one is due" : "");
+            int since = TitheGate.since(TitheGate.subjects());
+            return since + " commits since the last tithe" + (since > TitheGate.WARN ? ": one is due" : "");
         } catch (Exception e) {
             return "not counted (" + e.getMessage() + ")";
         }

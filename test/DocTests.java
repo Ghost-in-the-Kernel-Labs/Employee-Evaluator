@@ -46,6 +46,11 @@ class DocTests {
     }
 
     @Test
+    void metrics() {
+        assertEquals(List.of(), MetricsTest.run().problems());
+    }
+
+    @Test
     void kernelMap() {
         assertEquals(List.of(), KernelMapTest.run().problems());
     }

@@ -726,3 +726,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-058, TSX; 1.10 to docs/DONE.md; next 1.11.
 - **Touched:** `analyze/` (`JavaScriptAdapter`, `JavaScriptImports`, `TypeScriptAdapter`, `TypeScriptImports`,
   `Complexity`); the fixture, its README and golden; node-pass's card goldens; E-058; TODO.md, DONE.md, HANDOFF.md.
+
+### J-052 TODO 1.11, slice 1: docs/AGENT.md's metrics held by a test; pass 2 recorded
+- **Who:** Claude. **Class:** decision.
+- **Intent:** TODO.md 1.11 in slices (Ghost: "start 1.11 with slices 1-3"); this one a tithe.
+- **Found:** Every target held at pass 2 (context 1,067 words, largest file 280 lines, routing row 5 files,
+  no function over 20 paths, no duplicate helper, nothing stale); the fast loop 18 s with every test rerun.
+  The cadence was 13 commits: the second slip (J-045's habit, J-051).
+- **Options:** hold the fast loop and the cadence in the test too; hold them where they can be measured.
+- **Resolved:** test/MetricsTest.java holds every target in the table and that each named metric is measured,
+  proving itself on four broken copies; the fast loop is timed at tithe passes, the cadence at push (slice 3).
+- **Touched:** test/MetricsTest.java, test/DocTests.java, docs/AGENT.md.

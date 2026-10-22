@@ -61,9 +61,18 @@ exactly 0 or 1 (allowed, never tried); `Metric.ofKind(".lines")`, refused, but b
 the wrong message until a test named the message; and the card's "not both" and "and is neither", whose
 words nothing read. Tests added in FactTest and ScoreCardTest; no code changed. `rubric/` is done.
 
+### Run 4: 2026-10-22, `score/`, which closes it (TODO.md 1.12, J-058)
+
+`gradle mutate -Ptarget=evaluator.score.*`: 155 mutants, 154 killed; the one left is below. Three were tests
+missing at an edge: a cognitive complexity of exactly 15 and a fan-out of exactly 10, on Maintainability's
+"at most" limits (MaintainabilityTest); a card with a corpus rank and a review, which phase 1 never fills, so
+their JSON had never been rendered; and the rubric's hash, held only by `cli/`'s goldens until CardsTest
+named it. No code changed. `score/` is done.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
 | --- | --- | --- |
 | `rubric/Json.java`, `object()`, the empty-object return | returns `Collections.emptyMap()` for the new empty map | Equal to what it replaces: an empty map is an empty map. The only difference is that the mutant's map refuses writes, and no caller writes to a parsed value. |
 | `rubric/Json.java`, `array()`, the empty-array return | returns `Collections.emptyList()` for the new empty list | The same, for a list. |
+| `score/Formulas.java`, `logScale`, `n <= 100` | `n < 100` | The two differ only at 100, where the formula gives 100 · (log10 100 − 2) / 3 = 0, which the guard returns anyway. |

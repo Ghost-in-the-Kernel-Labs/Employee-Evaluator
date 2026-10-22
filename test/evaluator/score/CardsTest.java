@@ -10,6 +10,7 @@ import evaluator.rubric.Evidence;
 import evaluator.rubric.Fact;
 import evaluator.rubric.Metric;
 import evaluator.rubric.Produced;
+import evaluator.rubric.Ratios;
 import evaluator.rubric.ProvenanceTier;
 import evaluator.rubric.Refutation;
 import evaluator.rubric.Score;
@@ -210,6 +211,24 @@ class CardsTest {
                 }
                 """, CardJson.render(card));
         assertEquals(CardJson.render(card), CardJson.render(Cards.card(List.of(nav), card.refuted(), Formulas.phaseOne(), PRODUCED)));
+    }
+
+    /** A rank and a review render as objects in the metrics' order, the review's text escaped (phase 2 fills them; 2.6, 2.8). */
+    @Test
+    void aRankAndAReviewInTheJson() {
+        ScoreCard card = new ScoreCard(Map.of(Metric.NAVIGABILITY, new Score(70, List.of("n")), Metric.SIZE, new Score(40, List.of("s"))),
+                new Ratios(null, null, null), null, "unknown", Map.of(Metric.NAVIGABILITY, 12, Metric.SIZE, 3),
+                EnumSet.complementOf(EnumSet.of(Metric.NAVIGABILITY, Metric.SIZE)), List.of(),
+                Map.of(Metric.NAVIGABILITY, "A \"clear\" map", Metric.SIZE, "Small"), PRODUCED);
+        String json = CardJson.render(card);
+        assertTrue(json.contains("\n  \"corpusRank\": {\"size\": 3, \"navigability\": 12},\n"), json);
+        assertTrue(json.contains("\n  \"review\": {\"size\": \"Small\", \"navigability\": \"A \\\"clear\\\" map\"},\n"), json);
+    }
+
+    /** The rubric's hash is the first 12 hex digits of its SHA-256; it changes with the rubric, as every card's golden does. */
+    @Test
+    void theRubricsHash() {
+        assertEquals("b8043f1115a0", Formulas.rubricHash());
     }
 
     /** The Markdown, worked by hand: "not measured" where no fact fed, a refuter's name and a fact's key escaped. */

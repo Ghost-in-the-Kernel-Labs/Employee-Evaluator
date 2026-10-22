@@ -798,3 +798,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** tests in test/evaluator/rubric/FactTest.java and ScoreCardTest.java; 130 of 132 killed, the two
   left Json's harmless pair (run 3). Next in 1.12: score/.
 - **Touched:** test/evaluator/rubric/FactTest.java, ScoreCardTest.java, docs/MUTATION.md, docs/HANDOFF.md.
+
+### J-058 TODO 1.12: score/ closed, three edges given tests
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "go on with score".
+- **Found:** Four left of 155: values on Maintainability's two "at most" limits never tried; a rank and a review
+  never rendered (phase 1 fills neither); the rubric's hash held only from `cli/`; and `logScale`'s guard at
+  100, an equivalent mutant (both sides give 0).
+- **Options:** for the hash, compute SHA-256 again in the test (the code twice) or name the value (a rubric
+  change rewrites it, as it does every golden): the value.
+- **Resolved:** tests in MaintainabilityTest and CardsTest; 154 of 155 killed, the guard judged harmless (run 4).
+  Next in 1.12: history/.
+- **Touched:** test/evaluator/score/MaintainabilityTest.java, CardsTest.java, docs/MUTATION.md, docs/HANDOFF.md.

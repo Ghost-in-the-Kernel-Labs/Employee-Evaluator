@@ -22,7 +22,7 @@ labels.
   Quality (TODO.md 2.1). Only Ghost can label; the fixture format comes from Opus first.
 - **Mutation survivors.** PIT is vendored (E-059) and E-019 is in force. Run 1 (docs/MUTATION.md) left 243
   mutants alive of 1,714. Working them is TODO.md 1.12 (Ghost's go, 2026-10-22), module by module;
-  `rubric/` is done (runs 2 and 3); `score/` is next, then `history/`, `cli/`, `github/`, `analyze/`.
+  `rubric/` and `score/` are done (runs 2 to 4); `history/` is next, then `cli/`, `github/`, `analyze/`.
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 

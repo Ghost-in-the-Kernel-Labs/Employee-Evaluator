@@ -44,6 +44,16 @@ class MaintainabilityTest {
         assertEquals(facts.size(), Maintainability.score(facts).facts().size(), "every fact read is behind the score");
     }
 
+    /** The limits are "at most": a function of cognitive 15 and a file of fan-out 10 are within them, 16 and 11 are not. */
+    @Test
+    void aValueOnTheLimitIsWithinIt() {
+        List<Fact> facts = List.of(of("COMPLEXITY.cognitive", Subject.Kind.FUNCTION, "a.py:f", 15), of("COMPLEXITY.cognitive", Subject.Kind.FUNCTION, "a.py:g", 16),
+                of("MAINTAINABILITY.fan_out", Subject.Kind.FILE, "a.py", 10), of("MAINTAINABILITY.fan_out", Subject.Kind.FILE, "b.py", 11));
+        Map<String, Double> parts = Maintainability.parts(facts, new ArrayList<>());
+        assertEquals(0.5, parts.get("functions"));
+        assertEquals(0.5, parts.get("coupling"));
+    }
+
     /** Past the limits each part reads 0, never below; tests past 1 read 1, never above. */
     @Test
     void eachPartIsHeldToZeroAndOne() {

@@ -510,3 +510,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-049, the file's own folder: a same-package class is always beside it. Next: Complexity's formula.
 - **Touched:** `analyze/` (`JavaImports`, `JavaAdapter`, `Import`); the imports fixture, its README, its golden;
   `DependenciesTest`, `CouplingTest`; E-049.
+
+### J-035 TODO 1.9, second slice: Complexity's formula
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Complexity's formula, after E-049 (Ghost: "go with the proposal, fix java depth first").
+- **Found:** This repository reads 37 (depth 8, cognitive about 1,700), Suite Builder 81 (depth 27, about
+  11,000). A score behind thousands of function facts buried the Markdown table, so it names three and counts
+  the rest; the JSON keeps all. "Not measured (ranked among …)" read wrong: the band shows only beside a ratio.
+- **Options:** per-function mean; total; total and depth.
+- **Resolved:** E-050. AI navigability, Provenance, Size and Complexity score; Maintainability and Quality's
+  measured half are next, then the tooling bucket.
+- **Touched:** `score/` (`Formulas`, `CardMarkdown`); `test/evaluator/score/CardsTest.java`; E-050; docs/HANDOFF.md.

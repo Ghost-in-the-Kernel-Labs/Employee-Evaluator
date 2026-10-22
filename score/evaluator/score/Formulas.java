@@ -23,10 +23,38 @@ public final class Formulas {
     /** The highest Provenance the history's shape earns alone: Partial, never Verified, with nothing GitHub backs. */
     static final int HISTORY_ALONE_CAP = 79;
 
-    /** Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046); Size (E-048). */
+    /** The dependency depth that reads 100 on Complexity's depth part: a chain of 25 links and over. */
+    static final int FULL_DEPTH = 25;
+
+    /** Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046); Size (E-048); Complexity (E-050). */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
-                Metric.SIZE, Formulas::size);
+                Metric.SIZE, Formulas::size, Metric.COMPLEXITY, Formulas::complexity);
+    }
+
+    /**
+     * Complexity, the tools' half: 0.6 × the total cognitive complexity of every function on Size's log
+     * scale (100 and under read 0, 100,000 and over 100) + 0.4 × the dependency depth over 25 links. Per
+     * function averages are left out: they say more of style than of the problem. No depth read, no score.
+     */
+    // Decision: E-050
+    static Score complexity(List<Fact> facts) {
+        Fact depth = find(facts, "COMPLEXITY.dependency_depth");
+        if (depth == null) return null;
+        List<String> keys = new ArrayList<>(List.of(depth.key()));
+        double cognitive = 0;
+        for (Fact f : facts) {
+            if (!f.kind().equals("COMPLEXITY.cognitive")) continue;
+            cognitive += ((Number) f.value()).doubleValue();
+            keys.add(f.key());
+        }
+        double depthPart = 100.0 * Math.min(((Number) depth.value()).intValue(), FULL_DEPTH) / FULL_DEPTH;
+        return new Score((int) Math.round(0.6 * logScale(cognitive) + 0.4 * depthPart), keys);
+    }
+
+    /** A count on a log scale: 100 and under read 0, each tenfold step a third, 100,000 and over read 100. */
+    static double logScale(double n) {
+        return n <= 100 ? 0 : Math.min(100, 100 * (Math.log10(n) - 2) / 3);
     }
 
     /**
@@ -37,9 +65,7 @@ public final class Formulas {
     static Score size(List<Fact> facts) {
         Fact lines = find(facts, "SIZE.source_lines");
         if (lines == null) return null;
-        double n = ((Number) lines.value()).doubleValue();
-        long value = n <= 100 ? 0 : Math.round(100 * (Math.log10(n) - 2) / 3);
-        return new Score((int) Math.min(100, value), List.of(lines.key()));
+        return new Score((int) Math.round(logScale(((Number) lines.value()).doubleValue())), List.of(lines.key()));
     }
 
     /**

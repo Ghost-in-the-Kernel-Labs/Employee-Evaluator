@@ -394,3 +394,6 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Formulas.java:Formulas.size` | E-048 | 2026-10-22 |  |
 | analyze | `analyze/evaluator/analyze/JavaImports.java:JavaImports.ownPackage` | E-049 | 2026-10-22 |  |
 | analyze | `analyze/evaluator/analyze/JavaImports.java:JavaImports.siblings` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.complexity` | E-050 | 2026-10-22 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.logScale` |  | 2026-10-22 |  |
+| score | `score/evaluator/score/CardMarkdown.java:CardMarkdown.facts` |  | 2026-10-22 |  |

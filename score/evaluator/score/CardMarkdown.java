@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  * (SC-01). Every text from a submission is escaped, so it renders as text and never as markup.
  */
 public final class CardMarkdown {
+    /** How many of a score's facts the table names before it counts the rest. */
+    static final int SHOWN = 3;
+
     private CardMarkdown() {}
 
     /** The card's Markdown rendering. */
@@ -20,13 +23,13 @@ public final class CardMarkdown {
         StringBuilder out = new StringBuilder("# Score card\n\n| Metric | Score | Facts behind it |\n| --- | --- | --- |\n");
         for (Metric metric : Metric.values()) {
             Score s = card.scores().get(metric);
-            String facts = s == null ? "" : s.facts().stream().map(CardMarkdown::code).collect(Collectors.joining(", "));
+            String facts = s == null ? "" : facts(s);
             out.append("| ").append(metric.title).append(" | ").append(s == null ? "not measured" : String.valueOf(s.value()))
                     .append(" | ").append(facts).append(" |\n");
         }
         Ratios r = card.ratios();
         out.append("\n- Quality per thousand lines: ").append(ratio(r.qualityPerThousandLines()))
-                .append(r.sizeBand() == null ? "" : " (ranked among " + r.sizeBand() + ")").append('\n');
+                .append(r.qualityPerThousandLines() == null ? "" : " (ranked among " + r.sizeBand() + ")").append('\n');
         out.append("- Maintainability at Complexity: ").append(ratio(r.maintainabilityAtComplexity())).append('\n');
         out.append("- Provenance tier: ").append(card.provenanceTier() == null ? "not measured" : card.provenanceTier().title).append('\n');
         out.append("- Tooling bucket: ").append(escape(card.toolingBucket())).append('\n');
@@ -34,6 +37,13 @@ public final class CardMarkdown {
         out.append("- Produced: kernel ").append(escape(card.produced().kernelVersion())).append(", ").append(escape(card.produced().date()))
                 .append(", rubric ").append(code(card.produced().rubricHash())).append('\n');
         return out.toString();
+    }
+
+    /** The facts behind a score, by key; past the first few, how many more the JSON lists. */
+    static String facts(Score s) {
+        String shown = s.facts().stream().limit(SHOWN).map(CardMarkdown::code).collect(Collectors.joining(", "));
+        int more = s.facts().size() - SHOWN;
+        return more > 0 ? shown + " and " + more + " more (the JSON lists all)" : shown;
     }
 
     private static String ratio(Double value) {

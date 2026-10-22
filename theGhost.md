@@ -802,3 +802,20 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** analysis
 - **See also:** E-032, E-034
+
+### E-050: Complexity is the total cognitive complexity on a log scale and the dependency depth
+- **Decision:** Complexity (the tools' half) = round(0.6 × the total cognitive complexity of every function
+  on Size's log scale, 100 and under reading 0 and 100,000 and over 100, + 0.4 × 100 × the dependency
+  depth over 25 links, held at 25). Every function's cognitive fact is listed behind the score; the card's
+  Markdown names three and counts the rest. No depth read, no score. Per-function averages are left out.
+- **Why:** Measured on two repositories, the mean per function barely moved (2.7 and 3.1 cyclomatic): it
+  says more of style than of the problem, and a high one belongs to Maintainability. The total is the
+  decision logic the repository holds; depth is how far a change can travel (E-032), once Java's own
+  package counts (E-049). This repository reads 37, Suite Builder 81. The agent's assessment
+  (`COMPLEXITY.agent_assessment`, phase 2) is the other half, weighed when it exists.
+- **Held by:** `score/evaluator/score/Formulas.java` (`complexity`, `logScale`); `CardMarkdown.java` (`facts`);
+  `test/evaluator/score/CardsTest.java`.
+- **Source:** Claude's proposal, Ghost's choice ("go with the proposal, fix java depth first"), 2026-10-22.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-030, E-031, E-032, E-048, E-049

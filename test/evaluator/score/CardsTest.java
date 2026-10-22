@@ -53,6 +53,8 @@ class CardsTest {
         assertEquals(13.33, clean.ratios().qualityPerThousandLines());
         assertEquals("2k to 10k lines", clean.ratios().sizeBand());
         assertTrue(CardMarkdown.render(clean).contains("- Quality per thousand lines: 13.33 (ranked among 2k to 10k lines)\n"));
+        ScoreCard noQuality = Cards.card(List.of(fact("SIZE.source_lines", 6000)), List.of(), plain(), PRODUCED);
+        assertTrue(CardMarkdown.render(noQuality).contains("- Quality per thousand lines: not measured\n"), "no ratio, so no band to rank in");
         assertEquals(37.5, clean.ratios().maintainabilityAtComplexity(), "75 × 50 / 100");
         assertEquals(1.0, mess.ratios().qualityPerThousandLines());
         assertEquals("10k to 50k lines", mess.ratios().sizeBand());
@@ -101,6 +103,26 @@ class CardsTest {
         int[][] cases = {{0, 0}, {100, 0}, {1_000, 33}, {6_000, 59}, {10_000, 67}, {40_000, 87}, {100_000, 100}, {2_000_000, 100}};
         for (int[] c : cases) assertEquals(new Score(c[1], List.of("SIZE.source_lines repository:.")), Formulas.size(List.of(fact("SIZE.source_lines", c[0]))), c[0] + " lines");
         assertNull(Formulas.size(List.of(fact("SIZE.source_files", 12))), "no line count, no score");
+    }
+
+    /**
+     * E-050 worked by hand: functions of cognitive 400, 500 and 100 (1,000 in all: 33.3 on the log scale)
+     * and a depth of 10 (40): 0.6 × 33.3 + 0.4 × 40 = 36. Each function's fact is listed behind the score.
+     */
+    @Test
+    void complexityIsTotalCognitiveAndDepth() {
+        List<Fact> facts = List.of(fact("COMPLEXITY.dependency_depth", 10), function("a", 400), function("b", 500), function("c", 100),
+                Fact.measured("COMPLEXITY.cyclomatic", new Subject(Subject.Kind.FUNCTION, "a"), 99, TOOL));
+        Score score = Formulas.complexity(facts);
+        assertEquals(36, score.value());
+        assertEquals(List.of("COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:a", "COMPLEXITY.cognitive function:b", "COMPLEXITY.cognitive function:c"), score.facts());
+        assertEquals(40, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 40))).value(), "no function, depth over 25: 0 + 0.4 × 100");
+        assertEquals(100, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 25), function("big", 100_000))).value());
+        assertNull(Formulas.complexity(List.of(function("a", 400))), "no depth read, no score");
+    }
+
+    private static Fact function(String name, int cognitive) {
+        return Fact.measured("COMPLEXITY.cognitive", new Subject(Subject.Kind.FUNCTION, name), cognitive, TOOL);
     }
 
     /** With nothing from GitHub, the shape alone, never Verified: a history can be written by anyone. */
@@ -185,6 +207,13 @@ class CardsTest {
                 - Refuted: `SIZE.x file:a\\|'b'` by Gh\\*st
                 - Produced: kernel 0.1, 2026-10-21, rubric `abc123`
                 """, CardMarkdown.render(card));
+    }
+
+    /** A score behind thousands of functions names three in the table and counts the rest. */
+    @Test
+    void theMarkdownCountsTheFactsPastThree() {
+        assertEquals("`a`, `b`, `c` and 2 more (the JSON lists all)", CardMarkdown.facts(new Score(50, List.of("a", "b", "c", "d", "e"))));
+        assertEquals("`a`, `b`, `c`", CardMarkdown.facts(new Score(50, List.of("a", "b", "c"))));
     }
 
     /** SC-01: no rendering adds the seven up. */

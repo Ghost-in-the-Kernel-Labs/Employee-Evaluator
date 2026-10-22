@@ -646,9 +646,20 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Found:** SC-11 broke ScoreCardDocTest's own self-check (its "accepts" sample hard-coded the open steps the
   document then cited, 1.9, 2.6 and 3.5; 3.3 was new). Two process faults let it out: `gradle test` reported a
   pass without running, since a docs-only change touches none of the task's inputs; and the push was chained
-  after `scripts/prepush.sh` with `;`, so it went though the check failed. Main carried a red commit for
+  after `scripts/prepush.sh` with `;`, so it went through though the check failed. Main carried a red commit for
   minutes.
 - **Options:** declare docs, fixtures and goldens as the test task's inputs; never count the task up to date.
 - **Resolved:** the sample now adds its step to the real open steps; the test task always runs (the loop is
   seconds); the agent pushes only on `scripts/prepush.sh && git push`.
 - **Touched:** test/ScoreCardDocTest.java, build.gradle.
+
+### J-046 The maintainer is Ghost everywhere, the byline included
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: the repositories are all authored under the pen name Ghost in the Kernel (Ghost in
+  sessions); a real name goes in no file.
+- **Found:** `docs/DESIGN.md`'s byline and two calibration lines carried a real name, and the glossary listed
+  it as the alias to avoid, which put it in a fourth place.
+- **Options:** keep the name as a forbidden alias so a test catches it; take it out everywhere.
+- **Resolved:** out everywhere, the glossary's alias list included; the rule stays CLAUDE.md's "Ghost" in every
+  file. Earlier commits still hold it in history; rewriting `main` is Ghost's call, not done here.
+- **Touched:** docs/DESIGN.md, docs/GLOSSARY.md, docs/HANDOFF.md; J-045's typo.

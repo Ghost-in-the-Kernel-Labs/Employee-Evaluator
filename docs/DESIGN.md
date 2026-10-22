@@ -1,6 +1,6 @@
 # Employee Evaluator — Design Doc
 
-As of 2026-10-18 · Paul Jensen (Ghost in the Kernel Labs)
+As of 2026-10-18 · Ghost (Ghost in the Kernel Labs)
 
 Living copy: https://claude.ai/code/artifact/cf29d855-202b-4e79-97c3-324d0434e08a
 
@@ -149,7 +149,7 @@ Phase 2 adds the judgment metrics (Ambition, the agent half of Quality, Complexi
 
 **Steps, each one Opus session:**
 
-1. Calibration set: hand-label 30 repos on Ambition (toy / utility / product / research) and Quality (1–5). Store as fixtures. This is Paul's work, not Opus's; Opus builds the fixture format and the scoring harness.
+1. Calibration set: hand-label 30 repos on Ambition (toy / utility / product / research) and Quality (1–5). Store as fixtures. This is Ghost's work, not Opus's; Opus builds the fixture format and the scoring harness.
 2. Judge harness: a runner that feeds a repo summary (inventory, README, sampled files, commit log) to a judging prompt and parses structured output. Measure agreement with the calibration set; iterate the prompt until agreement is above an agreed floor (start: 80 %).
 3. Ambition judge: prompt plus harness run. Output the Ambition metric.
 4. Quality judge: reviews sampled core modules for correctness, error handling and idiom; combines with the phase 1 test and lint results. Output the final Quality metric.
@@ -188,7 +188,7 @@ Phase 3 is one web application: GitHub OAuth for applicants, an employer board, 
 ## Open questions and risks
 
 - [x] Language: Java for the engine and API, TypeScript for the frontend, Python for the agent runner. The scale question is API cost and the sandbox fleet, not the language.
-- [ ] Who labels the 30-repo calibration set, and when? It gates phase 2 and only Paul can do it.
+- [ ] Who labels the 30-repo calibration set, and when? It gates phase 2 and only Ghost can do it.
 - [ ] Cost per evaluation: the phase 2 job queue measures it; the unlock price cannot be set until it is known.
 - [ ] Response-guarantee window: 10 business days is a guess. Too short and employers refuse to sign; too long and the guarantee means nothing.
 - [ ] Gaming the metrics: once rankings have value, applicants will optimize for them. Size and Complexity are the obvious targets; the efficiency ratios are the first defense, and the metric definitions should be reviewed each quarter.

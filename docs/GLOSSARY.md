@@ -28,4 +28,4 @@ file and `docs/research/`. An alias without backticks is a review guide.
 | **tithe** | a commit or pass that changes no behaviour and improves navigability (E-015) | cleanup, refactor sprint |
 | **golden** | a file a test holds the code to byte for byte (E-018) | snapshot, fixture (that is the input) |
 | **fixture** | a small repository under `test/` a metric is proven on | `sample repo`, example |
-| **Ghost** | the maintainer, in every file and commit (E-020) | Paul, the user, the author |
+| **Ghost** | the maintainer, in every file and commit (E-020) | the user, the author |

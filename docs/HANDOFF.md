@@ -40,8 +40,6 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 **For Ghost, from judge trial 2 (J-041):**
 - The judge: Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus where they
   split (E-055, Ghost's choice, in TODO.md 2.2's check).
-- `docs/DESIGN.md` names a labeller by a first name (calibration set, open questions); CLAUDE.md's rule
-  names only the maintainer. An Opus judge flagged it; left as it is until Ghost says.
 - Found in other repositories, reported, not touched (read only): Suite Builder's
   `docs/HOSTILE-REVIEW-2026-10-20.md` records a critical bypass of the crawler's address guard
   (IPv6-mapped IPv4), whether fixed unchecked; Suite Builder keeps saved third-party crawls in `test/data`

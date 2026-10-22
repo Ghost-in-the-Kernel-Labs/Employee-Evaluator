@@ -639,3 +639,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-056, three outcomes (Ghost: "record it with the three outcomes"); SC-11 held from TODO.md 3.3;
   DESIGN.md's pitch says it. E-012 stands: who built it remains a score.
 - **Touched:** theGhost.md, docs/SCORE-CARD.md, docs/DESIGN.md, TODO.md.
+
+### J-045 A pre-push failure pushed anyway, and a fast loop that skipped the doc tests
+- **Who:** Claude. **Class:** finding.
+- **Intent:** E-056's commit (9d22e80).
+- **Found:** SC-11 broke ScoreCardDocTest's own self-check (its "accepts" sample hard-coded the open steps the
+  document then cited, 1.9, 2.6 and 3.5; 3.3 was new). Two process faults let it out: `gradle test` reported a
+  pass without running, since a docs-only change touches none of the task's inputs; and the push was chained
+  after `scripts/prepush.sh` with `;`, so it went though the check failed. Main carried a red commit for
+  minutes.
+- **Options:** declare docs, fixtures and goldens as the test task's inputs; never count the task up to date.
+- **Resolved:** the sample now adds its step to the real open steps; the test task always runs (the loop is
+  seconds); the agent pushes only on `scripts/prepush.sh && git push`.
+- **Touched:** test/ScoreCardDocTest.java, build.gradle.

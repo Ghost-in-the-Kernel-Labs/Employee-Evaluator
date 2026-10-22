@@ -49,7 +49,14 @@ final class ScoreCardDocTest {
                 .rejects("an invariant nobody holds", () -> check(doc + "\n- **SC-99 A new rule.** Nothing cites it.\n", code, open))
                 .rejects("an invariant whose step is done", () -> check(doc, code, Set.of("3.5")))
                 .rejects("a citation of an invariant not in the document", () -> check(doc, withCited(code, "SC-98"), open))
-                .accepts("an invariant held from an open step", () -> check(doc + "\n- **SC-99 A rule.** Held from TODO.md 2.6.\n", code, Set.of("1.9", "2.6", "3.5")));
+                .accepts("an invariant held from an open step", () -> check(doc + "\n- **SC-99 A rule.** Held from TODO.md 2.6.\n", code, with(open, "2.6")));
+    }
+
+    /** The open steps and one more, so a sample invariant held from it is accepted whatever the document cites. */
+    private static Set<String> with(Set<String> open, String step) {
+        Set<String> steps = new java.util.HashSet<>(open);
+        steps.add(step);
+        return steps;
     }
 
     /** What the document gets wrong against the code. */

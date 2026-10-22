@@ -52,6 +52,9 @@ test {
     // `gradle test -Pdocker` also runs the run fixtures in the real sandbox (sandbox/setup.sh first, E-037).
     systemProperty 'evaluator.docker', project.hasProperty('docker')
     testLogging { events 'failed'; exceptionFormat = 'full' }
+    // The doc tests read docs, fixtures, goldens and the repository itself, none of them the task's inputs: a
+    // docs-only change would pass unrun (J-045). The loop takes seconds, so it always runs.
+    outputs.upToDateWhen { false }
 }
 
 tasks.register('metrics', JavaExec) {

@@ -701,3 +701,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the adapter in phase 2; 1.10 with the tithe renumbered.
 - **Resolved:** E-057 in force, in TODO.md 2.2's check; 1.10 the JavaScript adapter, 1.11 the tithe pass.
 - **Touched:** theGhost.md, TODO.md and the references to 1.10.
+
+### J-050 TODO 1.9 done: the card, the formulas, the command and the seed corpus, closed as phase-1 readings
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "close 1.9 and start the javascript adapter".
+- **Found:** The corpus cards did not fully survive Ghost's sanity read (Katana is harder than its card), and
+  the cause is phase 1's limit, not a formula's: the kernel cannot tell the author's code from reference or
+  fixture code. E-057 settles it once the judge classifies folders.
+- **Options:** keep 1.9 open until phase 2 can make the cards; close it with the cards marked as phase-1 readings.
+- **Resolved:** closed; the cards stay as phase-1 readings beside Fable's reference, to be made again under E-057.
+  Next: 1.10.
+- **Touched:** TODO.md, docs/DONE.md, docs/HANDOFF.md, corpus/README.md; SC-09, held from 1.9, now names what
+  holds it (`score/`'s CardJson, CardGoldensTest), and ScoreCardDocTest reads citations in `score/` as in `rubric/`,
+  since `score/` builds and renders the card.

@@ -1,5 +1,10 @@
 # The seed corpus
 
+**Phase-1 readings.** These cards are the kernel alone; it counts every source file as the author's, so
+Katana's carries its reference and fixture code (below). They are made again once the judge classifies
+the folders and the kernel counts only the author's own (E-057); trial 3's Fable scores
+(`docs/judges/trial-3-fable.md`) are the reference meanwhile. TODO.md 1.9 closed on Ghost's read, 2026-10-22.
+
 The first cards (TODO.md 1.9, DESIGN.md "Peer corpus"): Ghost's own repositories, scored by the phase-1
 kernel. Each is a card as JSON (`<name>.json`, every fact behind each score by key) and as Markdown
 (`<name>.md`). Made with `evaluator score <path> --no-run --date 2026-10-22`, rubric `b8043f1115a0`:

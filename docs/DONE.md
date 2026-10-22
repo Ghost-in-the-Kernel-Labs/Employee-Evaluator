@@ -75,3 +75,15 @@ boundary consistency and naming consistency on the fixtures; this repository sco
 Done 2026-10-21 (J-029): the checklist (E-044) of agent docs, their paths' freshness, module cycles and
 naming, each a fact; a repository worked by hand to 70; this one at 99, its two missing paths the planned
 `score/` and `agent-runner/`.
+
+### 1.9 Score card and the seed corpus
+
+Check: `evaluator score <path>` prints the card as JSON and as Markdown for every fixture, each a
+golden, its two efficiency ratios (SC-04: Quality per thousand lines, Maintainability per unit of
+Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and this repository (Flight Recorder is not started; Ghost, 2026-10-22) are committed under `corpus/` and
+survive Ghost's sanity read.
+Done 2026-10-22 (J-050): `score/` (E-045), every phase-1 formula (E-044, E-046 to E-053), `evaluator score`
+(E-054) and the fixtures' cards as goldens; the cards of Suite Builder, Katana and this repository in
+`corpus/`. Ghost's read: Katana is harder than its card says, since the kernel counts its reference and
+fixture code as its own; closed as phase-1 readings beside Fable's reference scores (trial 3), to be made
+again once the judge classifies folders (E-057).

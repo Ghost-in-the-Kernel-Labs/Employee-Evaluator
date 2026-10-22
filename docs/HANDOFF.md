@@ -24,18 +24,14 @@ scaffold) and 1.2 (the rubric's types and ingestion) are done; 1.3 (static analy
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 
-## Now: 1.9, the score card and the seed corpus
+## Now: 1.10, the JavaScript adapter
 
-1.8 is done (J-029). 1.9 is sliced in three:
-1. The card's machinery, `score/`: done (J-030, E-045).
-2. Each metric's formula, one decision at a time with Ghost: done. AI navigability (E-044), Provenance
-   (E-046), Size (E-048), Complexity (E-050, after Java's depth, E-049), Maintainability (E-051), Quality
-   (E-052); the ratios (E-047); the tooling bucket (E-053). Ambition waits on its judge (phase 2).
-3. `evaluator score <path>` and the fixtures' cards as goldens: done (J-039, E-054). The cards of
-   Suite Builder, Katana and this repository are in `corpus/` (J-042); **1.9 waits on Ghost's sanity read**
-   of them (`corpus/README.md` sets the kernel's scores beside the judges' and says where they differ). J-039's two
-   gaps go to the judges, not to rules (Ghost, 2026-10-22): which test files are fixture data is a judgment,
-   and every model made it right in trials 1 and 2 (`docs/judges/`). A Gradle plan is still unplanned.
+1.9 is done (J-050): the card from facts, every phase-1 formula, `evaluator score`, the fixtures' goldens and
+the seed corpus, closed as phase-1 readings: the corpus cards are made again once the judge classifies
+folders (E-057), since the kernel alone counts reference and fixture code as the author's (Katana's card).
+1.10 measures JavaScript as TypeScript is measured; 1.11 is the phase-1 boundary's tithe pass. The judge
+trials (`docs/judges/`, J-040 to J-048) settled phase 2's design ahead of it: E-055, E-056, E-057. A Gradle
+test plan is still unplanned.
 
 **For Ghost, from judge trial 2 (J-041):**
 - The judge: Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus where they

@@ -5,7 +5,7 @@ built entirely from **facts**, each with its evidence, its confidence and its st
 Intent IR holds what a program means (E-017). A score nobody can trace to a fact is refused. This
 document is the contract `rubric/` implements; `test/ScoreCardDocTest.java` holds this document to
 its types: the metrics, a fact's fields, its states, the card's fields and the tiers are the code's,
-and every invariant is cited in `rubric/` (`// Invariant: SC-02`) or names the open step that will hold it.
+and every invariant is cited in `rubric/` or `score/` (`// Invariant: SC-02`) or names the open step that will hold it.
 
 Invariants are numbered SC-01 onward, in this document only, and a number is never reused.
 
@@ -78,7 +78,7 @@ One card per submission:
   ratios, the tier, the bucket, the language and a coarse category; never the review, the README, a
   path or any fact's evidence, since evidence identifies. Held from TODO.md 3.5, the board.
 - **SC-09 A card for a fixture repository is a golden** (E-018). Its JSON rendering is compared byte
-  for byte; a refactor changes none. Held from TODO.md 1.9, the first cards.
+  for byte; a refactor changes none. Held by `score/` (`CardJson`) and `test/evaluator/cli/CardGoldensTest.java`.
 
 ## Where the facts come from
 

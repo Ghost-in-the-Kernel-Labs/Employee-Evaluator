@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Holds docs/SCORE-CARD.md to rubric/ (E-017, TODO.md 1.2): the seven metrics, a fact's fields and
  * states, the card's fields and the provenance tiers are the same words in both, in the same order;
- * every invariant SC-nn is cited in rubric/ (`// Invariant: SC-02`) or names the open TODO step that
+ * every invariant SC-nn is cited in rubric/ or score/ (`// Invariant: SC-02`) or names the open TODO step that
  * will hold it, and no citation names an invariant the document lacks.
  */
 // Decision: E-006
@@ -81,10 +81,10 @@ final class ScoreCardDocTest {
             int end = doc.indexOf("\n- ", m.end());
             Matcher step = STEP.matcher(doc.substring(m.start(), end < 0 ? doc.length() : end));
             if (!step.find() || !openSteps.contains(step.group(1))) {
-                failures.add(m.group(1) + " is cited nowhere in rubric/ (`// Invariant: " + m.group(1) + "`) and names no open TODO step that will hold it");
+                failures.add(m.group(1) + " is cited nowhere in rubric/ or score/ (`// Invariant: " + m.group(1) + "`) and names no open TODO step that will hold it");
             }
         }
-        for (String id : cited) if (!documented.contains(id)) failures.add("rubric/ cites " + id + ", which docs/SCORE-CARD.md does not have");
+        for (String id : cited) if (!documented.contains(id)) failures.add("the code cites " + id + ", which docs/SCORE-CARD.md does not have");
     }
 
     private static void same(String what, List<String> documented, List<String> coded, List<String> failures) {
@@ -134,11 +134,11 @@ final class ScoreCardDocTest {
         return names;
     }
 
-    /** The code's words, read from rubric/'s types and the citations in its source. */
+    /** The code's words, read from rubric/'s types and the citations in rubric/ and score/, which builds and renders the card. */
     static Code code(Map<String, String> sources) {
         Set<String> cited = new TreeSet<>();
         sources.forEach((path, text) -> {
-            if (!path.startsWith("rubric/")) return;
+            if (!path.startsWith("rubric/") && !path.startsWith("score/")) return;
             Matcher m = CITED.matcher(text);
             while (m.find()) cited.add(m.group(1));
         });

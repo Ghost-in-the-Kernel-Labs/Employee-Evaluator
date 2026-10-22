@@ -14,13 +14,6 @@ Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on
 of Ghost's through the API, with the token read from the environment and never logged; the module
 is the only one that reaches the network (`docs/modules.json`).
 
-### 1.9 Score card and the seed corpus
-
-Check: `evaluator score <path>` prints the card as JSON and as Markdown for every fixture, each a
-golden, its two efficiency ratios (SC-04: Quality per thousand lines, Maintainability per unit of
-Complexity) computed by `score/` from the scores (moved here from 1.4, J-017); the cards for Suite Builder, Katana and this repository (Flight Recorder is not started; Ghost, 2026-10-22) are committed under `corpus/` and
-survive Ghost's sanity read.
-
 ### 1.10 JavaScript adapter
 
 Check: `.js`, `.mjs`, `.cjs` and `.jsx` files measured as TypeScript's are: every function (declarations,

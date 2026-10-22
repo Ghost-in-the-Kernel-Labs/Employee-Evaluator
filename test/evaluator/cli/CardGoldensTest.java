@@ -33,6 +33,7 @@ class CardGoldensTest {
         return out.toString(StandardCharsets.UTF_8);
     }
 
+    /** Each fixture's two renderings against their goldens, every difference named at once; with -PwriteGoldens, written. */
     @Test
     void everyFixturesCardIsItsGolden() throws IOException {
         List<String> changed = new ArrayList<>();

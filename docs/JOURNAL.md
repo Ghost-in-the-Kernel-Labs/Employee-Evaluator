@@ -611,3 +611,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** the cards as the kernel reads them, the differences written beside them for Ghost's sanity
   read (`corpus/README.md`); no rule fitted to Katana. 1.9 waits on that read.
 - **Touched:** `corpus/` (three cards, JSON and Markdown, and its README); docs/HANDOFF.md.
+
+### J-043 Judge trial 3: Fable's reference scores for six repositories, and where the scale breaks
+- **Who:** Claude. **Class:** finding.
+- **Intent:** Ghost: Katana is in theory harder than Suite Builder; the kernel's Katana card shows the Haiku
+  judges need other instructions; first an authoritative scoring by Fable of six repositories, three new
+  (Neon Rain, the Jensen migration, a suite Suite Builder generated).
+- **Found:** docs/judges/trial-3-fable.md. Fable ranks Katana first (complexity 92, ambition 92), Suite Builder
+  second, as Ghost read it. Its folder classification sets aside what the kernel counts: Katana's 20k lines of
+  GPL reference output, Suite Builder's 195k lines of goldens and saved crawls, the atos suite's 84k generated
+  lines (its author's own work: 3 lines). The earlier judges sat within 1–4 points of Fable on the three easy
+  repositories; the generated suite and the plan-only Neon Rain are where a quick reader and the kernel fail.
+- **Options:** for Ghost: the seventh Fable's five doubts about the scale (generated and plan-only repositories
+  printed with no scores; ambition posed vs attempted; navigability above a size floor; one provenance rule).
+- **Resolved:** the six reports and their pitfalls kept as the Haiku experiment's reference
+  (`docs/judges/fable-pitfalls.md`); the scale's doubts put to Ghost.
+- **Touched:** docs/judges/ (trial-3-fable.md, fable-pitfalls.md, trial-3-fable-scores.tsv).

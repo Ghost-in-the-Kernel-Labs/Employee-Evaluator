@@ -788,3 +788,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   65 of 67 killed, two judged harmless in docs/MUTATION.md (run 2). TODO.md 1.12 added after 1.7.
 - **Touched:** rubric/evaluator/rubric/Json.java, test/evaluator/rubric/JsonTest.java, docs/MUTATION.md,
   TODO.md, docs/HANDOFF.md.
+
+### J-057 TODO 1.12: rubric/ closed, four edges given tests
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "go on with the rest of rubric".
+- **Found:** Four survivors outside Json, none dead code: two boundaries of a calibration's precision never
+  tried, a kind starting with a dot refused only by the later check, and SC-07's two messages never read.
+- **Options:** none worth weighing: each wanted one assertion.
+- **Resolved:** tests in test/evaluator/rubric/FactTest.java and ScoreCardTest.java; 130 of 132 killed, the two
+  left Json's harmless pair (run 3). Next in 1.12: score/.
+- **Touched:** test/evaluator/rubric/FactTest.java, ScoreCardTest.java, docs/MUTATION.md, docs/HANDOFF.md.

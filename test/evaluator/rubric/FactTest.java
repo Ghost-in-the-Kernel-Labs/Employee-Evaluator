@@ -32,6 +32,10 @@ class FactTest {
         assertThrows(IllegalArgumentException.class, () -> Fact.measured("SIZE", Subject.repository(), 1, READ));
         assertThrows(IllegalArgumentException.class, () -> Fact.measured("SIZE.", Subject.repository(), 1, READ));
         assertEquals(Metric.NAVIGABILITY, Metric.ofKind("NAVIGABILITY.checklist"));
+        assertEquals("a fact's kind is METRIC.what, not .lines",
+                assertThrows(IllegalArgumentException.class, () -> Metric.ofKind(".lines")).getMessage());
+        assertEquals("a fact's kind names no metric: VIBES.score",
+                assertThrows(IllegalArgumentException.class, () -> Metric.ofKind("VIBES.score")).getMessage());
     }
 
     @Test
@@ -84,6 +88,9 @@ class FactTest {
         assertThrows(IllegalArgumentException.class, () -> new Calibration("", 0.8, 30));
         assertThrows(IllegalArgumentException.class, () -> new Calibration("abc", 1.2, 30));
         assertThrows(IllegalArgumentException.class, () -> new Calibration("abc", 0.8, 0));
+        assertThrows(IllegalArgumentException.class, () -> new Calibration("abc", -0.01, 30));
+        assertEquals(0.0, new Calibration("abc", 0.0, 1).precision());
+        assertEquals(1.0, new Calibration("abc", 1.0, 1).precision());
     }
 
     @Test

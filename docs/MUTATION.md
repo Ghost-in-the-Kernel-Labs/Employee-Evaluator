@@ -53,6 +53,14 @@ What the pass found besides: `\r`, `\b` and `\f` were read as the letters `r`, `
 `space()` calls before `take(',')` did nothing, since `take` skips space itself (removed, which made
 `take`'s own call the one a test now checks).
 
+### Run 3: 2026-10-22, the rest of `rubric/`, which closes it (TODO.md 1.12, J-057)
+
+`gradle mutate -Ptarget=evaluator.rubric.*`: 132 mutants, 130 killed; the two left are Json's, below. The
+four the rubric's own tests missed were each a check with no test of its edge: a calibration's precision of
+exactly 0 or 1 (allowed, never tried); `Metric.ofKind(".lines")`, refused, but by the wrong check and with
+the wrong message until a test named the message; and the card's "not both" and "and is neither", whose
+words nothing read. Tests added in FactTest and ScoreCardTest; no code changed. `rubric/` is done.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

@@ -31,8 +31,10 @@ class ScoreCardTest {
     void everyMetricIsScoredOrNotMeasured() {
         ScoreCard card = card(sizeOnly(), allBut(Metric.SIZE), null, Map.of());
         assertEquals(6, card.notMeasured().size());
-        assertThrows(IllegalArgumentException.class, () -> card(sizeOnly(), allBut(Metric.SIZE, Metric.AMBITION), null, Map.of()));
-        assertThrows(IllegalArgumentException.class, () -> card(sizeOnly(), EnumSet.allOf(Metric.class), null, Map.of()));
+        assertEquals("AMBITION must be scored or not measured, and is neither",
+                assertThrows(IllegalArgumentException.class, () -> card(sizeOnly(), allBut(Metric.SIZE, Metric.AMBITION), null, Map.of())).getMessage());
+        assertEquals("SIZE must be scored or not measured, not both",
+                assertThrows(IllegalArgumentException.class, () -> card(sizeOnly(), EnumSet.allOf(Metric.class), null, Map.of())).getMessage());
     }
 
     @Test

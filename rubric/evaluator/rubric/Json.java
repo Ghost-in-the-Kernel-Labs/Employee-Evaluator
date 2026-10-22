@@ -68,7 +68,6 @@ public final class Json {
             space();
             expect(':');
             map.put(key, value());
-            space();
         } while (take(','));
         expect('}');
         depth--;
@@ -87,7 +86,6 @@ public final class Json {
         }
         do {
             list.add(value());
-            space();
         } while (take(','));
         expect(']');
         depth--;
@@ -108,6 +106,9 @@ public final class Json {
             switch (e) {
                 case 'n' -> out.append('\n');
                 case 't' -> out.append('\t');
+                case 'r' -> out.append('\r');
+                case 'b' -> out.append('\b');
+                case 'f' -> out.append('\f');
                 case 'u' -> {
                     out.append((char) Integer.parseInt(text.substring(at, at + 4), 16));
                     at += 4;

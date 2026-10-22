@@ -21,8 +21,8 @@ labels.
 - **Calibration set.** Phase 2 cannot start until 30 repositories are hand-labeled on Ambition and
   Quality (TODO.md 2.1). Only Ghost can label; the fixture format comes from Opus first.
 - **Mutation survivors.** PIT is vendored (E-059) and E-019 is in force. Run 1 (docs/MUTATION.md) left 243
-  mutants alive of 1,714. Working them is a pass of its own, module by module, `rubric/Json.java` first: when,
-  and whether it goes in TODO.md as an item, is Ghost's call.
+  mutants alive of 1,714. Working them is TODO.md 1.12 (Ghost's go, 2026-10-22), module by module;
+  `rubric/Json.java` is done (run 2), the rest of `rubric/` is next.
 - **Naming.** "Employee Evaluator" may read as surveillance to applicants (docs/DESIGN.md, open
   questions). No decision needed before phase 3.
 

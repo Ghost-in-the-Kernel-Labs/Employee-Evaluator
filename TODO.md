@@ -14,6 +14,12 @@ Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on
 of Ghost's through the API, with the token read from the environment and never logged; the module
 is the only one that reaches the network (`docs/modules.json`).
 
+### 1.12 Mutation survivors: run 1's 243, module by module
+
+Check: each mutant run 1 left alive (`docs/MUTATION.md`) is killed by a new test or has a row under
+"Survivors judged harmless" saying why; module by module, `rubric/Json.java` first, each module's run
+recorded as it closes; no test weakened (E-019). Ghost's go, 2026-10-22.
+
 ## Phase 2: the evaluation engine with agents
 
 ### 2.1 Calibration set

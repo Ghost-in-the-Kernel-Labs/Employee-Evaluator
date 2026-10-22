@@ -774,3 +774,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   docs/DONE.md. The survivors' pass is put to Ghost (docs/HANDOFF.md).
 - **Touched:** third_party/pitest/, third_party/MANIFEST.md, build.gradle (`mutate`), docs/MUTATION.md, E-019,
   E-059, TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-056 TODO 1.12 started: rubric/Json.java's mutants, and three escapes read wrong
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "add the survivor pass to TODO and start with Json.java".
+- **Found:** `rubric/` had no test of its own JSON reader; the other modules' tests reached it only through what
+  they read. Working the values by hand found `\r`, `\b` and `\f` undone as letters: a report holding them
+  would have been read wrong. Two of my own hand values were off (an offset, one nesting level), caught by the
+  first run and corrected before the code was blamed.
+- **Options:** for the two empty-container returns, a test that writes to a parsed value (no caller does);
+  judge them harmless.
+- **Resolved:** test/evaluator/rubric/JsonTest.java; the escapes fixed; two redundant `space()` calls removed;
+  65 of 67 killed, two judged harmless in docs/MUTATION.md (run 2). TODO.md 1.12 added after 1.7.
+- **Touched:** rubric/evaluator/rubric/Json.java, test/evaluator/rubric/JsonTest.java, docs/MUTATION.md,
+  TODO.md, docs/HANDOFF.md.

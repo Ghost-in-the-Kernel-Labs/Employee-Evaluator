@@ -810,3 +810,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** tests in MaintainabilityTest and CardsTest; 154 of 155 killed, the guard judged harmless (run 4).
   Next in 1.12: history/.
 - **Touched:** test/evaluator/score/MaintainabilityTest.java, CardsTest.java, docs/MUTATION.md, docs/HANDOFF.md.
+
+### J-059 A Sonnet agent escalates once to Opus (E-060)
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: a Sonnet agent tries a hard fix once and then invokes Opus, so Sonnet can work here.
+- **Found:** CLAUDE.md is the one file every agent reads, so the rule goes there; 88 words, CLAUDE.md at 1,218 of
+  AGT-03's 1,500.
+- **Options:** a rule in CLAUDE.md; a skill the agent loads; a rule in docs/AGENT.md (read only when routed).
+- **Resolved:** CLAUDE.md, "A Sonnet agent escalates once"; E-060. "Once" is read as: a plain fix is made; a
+  failure that does not say why gets one more try at most, then Opus; if Opus fails too, Ghost.
+- **Touched:** CLAUDE.md, theGhost.md.

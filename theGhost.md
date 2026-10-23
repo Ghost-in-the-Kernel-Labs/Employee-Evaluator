@@ -1002,3 +1002,17 @@ The block above is Ghost's Supply-Chain Security Baseline (2026-10-19), pasted w
 - **Status:** in force
 - **subject:** tests
 - **See also:** E-019, E-021, E-033
+
+### E-060: A Sonnet agent tries a hard fix once, then asks Opus
+- **Decision:** A Claude Sonnet agent working here fixes what it spots plainly without asking anyone. When
+  a fix fails and the failure does not plainly say why, it tries once more at most, then spawns a Claude Opus
+  agent with the task, the failing output, its diff and the files it read, and applies the answer. If that
+  fails too, it stops and tells Ghost. The step's journal entry notes the escalation.
+- **Why:** So a Sonnet agent can work on the codebase: cheaper for the plain work, which is most of it,
+  without guessing in circles on the hard part. Opus is spent only where a failure resists. The journal's
+  escalations show where the repository is hard to work in, which the navigability passes then fix.
+- **Held by:** `CLAUDE.md` ("A Sonnet agent escalates once"); review of the journal.
+- **Source:** Ghost, 2026-10-23.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-015, E-055

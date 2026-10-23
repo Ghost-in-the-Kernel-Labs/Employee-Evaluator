@@ -1234,3 +1234,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   `Metric.counted` (Size only), `ScoreCard` refusing a score over 100 for the rest, `Score` keeping only a floor; SC-01 reworded and
   held by `ScoreCardDocTest`; E-048 superseded for its formula, E-070 and E-071 in force for Size.
 - **Touched:** E-048, E-070, E-071, TODO.md 1.13, docs/SCORE-CARD.md, docs/HANDOFF.md, docs/MUTATION.md (run 15), the ten card goldens (hash only).
+
+### J-092 Complexity against the baseline: 13,361 cognitive and depth 28 are 100
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The second slice of TODO.md 1.13: Complexity as 0.6 × (100 × cognitive ÷ the baseline's) + 0.4 × (100 × depth ÷ the baseline's), E-050's weights and inputs on E-070's scale.
+- **Found:** Suite Builder at 32762a6, read on a clean clone by a scratch program calling the modules `evaluator score --no-run` calls (`Ingest`, `Complexity`,
+  `Dependencies`; none of its code run): total cognitive complexity 13,361 over 4,410 functions, dependency depth 28, 84,971 lines again (Size's figure), one file unread
+  by its adapter. E-050 defines the inputs as the lead described them, so none changed; its depth cap of 25 and log scale go. The old formula read the baseline 81
+  and capped its depth (28) at 25. The goldens were read before they were written: a scratch program rendered the ten fixtures' new cards, each
+  Complexity was worked by hand from the fixtures' cognitive total and depth (small-app, py-pass, py-fail 1 and 1 → 1.43, 1; node-pass 0 and 1 → 1.43, 1; imports 0 and 2 → 2.86, 3, unmoved;
+  the rest cognitive 21 to 32, depth 0 → under 0.2, 0, unmoved), then `-PwriteGoldens` wrote files byte for byte equal to them. Maintainability at Complexity, a product with Complexity, moved with it on the same four cards.
+- **Options:** keeping `logScale` for nothing (removed, with its harmless row), a cap on depth (the lead's formula has none).
+- **Resolved:** `Formulas.BASELINE_COGNITIVE`, `BASELINE_DEPTH`, `complexity`, the rubric (version 3, hash 4d7287ec37e6), `Metric.counted` for Complexity, SC-01 naming both, E-074 superseding E-050's formula.
+- **Touched:** E-050, E-070, E-071, E-074, TODO.md 1.13, docs/SCORE-CARD.md, docs/HANDOFF.md, docs/MUTATION.md (run 16), docs/KERNEL-MAP.md, the ten card goldens.

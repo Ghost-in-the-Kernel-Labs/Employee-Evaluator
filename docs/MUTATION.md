@@ -251,13 +251,19 @@ left are `Json.java`'s empty-map and empty-list returns, already judged harmless
 left is `logScale`'s `n <= 100`, already judged harmless below (Complexity still uses it). Nothing in `size`, `counted`, the
 ceiling check or the floor survived; no new row, no change to a test beyond the new ones.
 
+### Run 16: 2026-10-23, `rubric/` and `score/`, Complexity against the baseline (TODO.md 1.13, E-074)
+
+`gradle mutate -Ptarget=evaluator.score.*` then `evaluator.rubric.*`, in a plain clone of the committed change (`Formulas.complexity`,
+`BASELINE_COGNITIVE`, `BASELINE_DEPTH`, `Metric.counted` for Complexity). `score/`: 148 mutants, 148 killed. `rubric/`: 141 mutants, 139
+killed (a TIMED_OUT counts as killed); the two left are `Json.java`'s empty-map and empty-list returns, already judged harmless below.
+Nothing in `complexity` survived. `logScale` is gone with the log scale, so its harmless row is removed. No new row.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
 | --- | --- | --- |
 | `rubric/Json.java`, `object()`, the empty-object return | returns `Collections.emptyMap()` for the new empty map | Equal to what it replaces: an empty map is an empty map. The only difference is that the mutant's map refuses writes, and no caller writes to a parsed value. |
 | `rubric/Json.java`, `array()`, the empty-array return | returns `Collections.emptyList()` for the new empty list | The same, for a list. |
-| `score/Formulas.java`, `logScale`, `n <= 100` | `n < 100` | The two differ only at 100, where the formula gives 100 · (log10 100 − 2) / 3 = 0, which the guard returns anyway. |
 | `history/Shape.java`, `variation`, the two `-` in `(s - mean) * (s - mean)` | `(s + mean) * (s - mean)`, `(s - mean) * (s + mean)` | Equal to what they replace: (s + m)(s - m) = s² - m², and the sum of that over n values is Σs² - n·m², which is Σ(s - m)² when m is their mean. Only floating-point rounding, far below the three decimals the fact is rounded to, differs. |
 | `history/Commits.java`, `parse`, `close < 0` | `close <= 0` | Equal in result: a record whose close is at index 0 has an empty header, which splits into one part, and `head.length < 3` skips it on the next line. |
 | `cli/Main.java`, `main`, `System.exit(...)` | the call removed | `main` is the JVM's entry and exit; a test that called it would end the test JVM, so the work is in `run`, which returns the status and is tested for each status (0, 1). The only difference is the status the shell sees, which `run`'s return value is. |

@@ -243,6 +243,14 @@ is nobody; past the timeout `docker kill <the container's name>` is asked and th
 interrupted run says so and keeps the interrupt. No bug and no hole found (the proxy's refusals and the container's flags were
 already held; what was missing was their limits, their cap and the run itself), no golden moved.
 
+### Run 15: 2026-10-23, `rubric/` and `score/`, Size against the baseline (TODO.md 1.13, E-070, E-071)
+
+`gradle mutate -Ptarget=evaluator.rubric.*` then `evaluator.score.*`, in a plain clone, for the change that moved Size to the
+baseline (`Formulas.size`, `Metric.counted`, `ScoreCard`'s ceiling, `Score`'s floor). `rubric/`: 141 mutants, 139 killed; the two
+left are `Json.java`'s empty-map and empty-list returns, already judged harmless below. `score/`: 152 mutants, 151 killed; the one
+left is `logScale`'s `n <= 100`, already judged harmless below (Complexity still uses it). Nothing in `size`, `counted`, the
+ceiling check or the floor survived; no new row, no change to a test beyond the new ones.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

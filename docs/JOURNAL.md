@@ -1220,3 +1220,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** counting the agent's commands, without reading its transcript into context.
 - **Touched:** CLAUDE.md, theGhost.md, test/SupplyChainTest.java, scripts/Metrics.java,
   docs/how/add-a-language-adapter.md, docs/how/sandbox-test-runs.md, docs/DECISIONS.md.
+
+### J-091 Size against the baseline: the first counted metric, 84,971 lines is 100
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The first slice of TODO.md 1.13: Size as 100 × lines ÷ the baseline's (E-070), and the ceiling lifted for it (E-071).
+- **Found:** Suite Builder at 32762a6, read by this kernel without the sandbox on a clean clone (`evaluator score --no-run`; the card
+  carries only the score, so the line count came from `Size.facts` on the same inventory): 84,971 source lines, 916 files, 119 folders,
+  122 set aside. The old log scale read it 98. No card golden's Size moved: every fixture is under 425 lines (the largest 103), which
+  reads 0 on both scales, so the goldens do not exercise the new formula and the unit test carries it. The seed corpus cards in
+  `corpus/` (dated 2026-10-22, rubric b8043f1115a0) were not regenerated: no test holds them to the current rubric.
+- **Options:** the ceiling in `Score` per metric (it knows none), a flag on `Metric` checked by `ScoreCard`; the second taken.
+- **Resolved:** `Formulas.BASELINE_SOURCE_LINES` and `BASELINE_COMMIT`, the rubric string naming them (version 2, hash 15affbf5ee9e);
+  `Metric.counted` (Size only), `ScoreCard` refusing a score over 100 for the rest, `Score` keeping only a floor; SC-01 reworded and
+  held by `ScoreCardDocTest`; E-048 superseded for its formula, E-070 and E-071 in force for Size.
+- **Touched:** E-048, E-070, E-071, TODO.md 1.13, docs/SCORE-CARD.md, docs/HANDOFF.md, docs/MUTATION.md (run 15), the ten card goldens (hash only).

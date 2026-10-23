@@ -47,7 +47,9 @@ runs it in the pinned image (`Dockerfile`, AGT-01) before a push, and refuses a 
 push past sixteen commits without a tithe. `gradle mutate -Ptarget=evaluator.<module>.*` runs PIT over one
 module (minutes; the whole kernel takes long; E-019, `docs/MUTATION.md`). `gradle metrics` prints
 `docs/AGENT.md`'s numbers; `gradle kernelMap` and `gradle modulesDoc` rewrite the kernel map and
-`docs/MODULES.md`. GitHub's workflow runs only by hand (E-040): never count on it.
+`docs/MODULES.md`. GitHub's workflow runs only by hand (E-040): never count on it. A long run's output
+(`gradle mutate`, `scripts/prepush.sh`, `gradle test`) always goes to a file (> build/run.log 2>&1); you, or a sub-agent you hand it to, grep it for failures first, and read nothing more
+when there are none.
 
 ## Before calling work done
 

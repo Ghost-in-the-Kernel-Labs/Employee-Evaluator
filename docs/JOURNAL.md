@@ -891,3 +891,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   share one row. The routing metric follows a pointer; the sandbox's and the card's start lists lost one file
   each to their steps. CLAUDE.md 836 words; mandatory context 1,036.
 - **Touched:** CLAUDE.md, docs/how/, scripts/Metrics.java, theGhost.md (E-063, E-065), docs/DECISIONS.md.
+
+### J-065 Long runs to a file, their summaries read
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: long outputs (named for Suite Builder's `npm run check` and Stryker) go to a file, and
+  sub-agents read only the summary or failures.
+- **Found:** Here the long runs are `gradle mutate` (minutes to ten), `scripts/prepush.sh` and a failing
+  `gradle test`; PIT's console runs to thousands of lines.
+- **Resolved:** CLAUDE.md's Commands and docs/how/agent-environment.md: a long run always goes to a file,
+  grepped for failures before anything is read, and nothing more read when there are none (Ghost's
+  refinement). Suite Builder not touched (Ghost: "that is ok"). The first wording named build-output paths
+  in backticks; DocsTest refused them on the pre-push's clean clone, where build/ does not exist.
+- **Touched:** CLAUDE.md, docs/how/agent-environment.md.

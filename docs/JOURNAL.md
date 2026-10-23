@@ -1336,3 +1336,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Caught by:** Ghost.
 - **Touched:** docs/HANDOFF.md.
 
+### J-102 The live test's first real run: a path guard refused GitHub's own compare path; and a pass that proves nothing about the token
+- **Who:** Claude (Sonnet 5.5), with Ghost. **Class:** failure-caught.
+- **Intent:** Run 1.7's live check (docs/HANDOFF.md) now that `EVALUATOR_GITHUB_TOKEN` is set.
+- **Found:** (1) `HttpGitHub.get` refused any path containing `..`, and a compare path is `<sha>...<sha>`: the
+  live test failed with "not an API path" on its first compare, a bug no loopback test could show because no
+  test sent a real compare range. (2) After the fix the live test passes, but it is no proof of the token: from
+  this cloud session `api.github.com` answers the private repository 200 with an invalid token, with the
+  environment's token and with none (J-101's proxy caveat, checked directly).
+- **Options:** close 1.7 on the pass; keep 1.7 open until a run that does not go through the session's proxy.
+- **Resolved:** the guard now refuses a `..` path segment only, with a test for both; 1.7 stays open. The live
+  check needs a run outside a session whose proxy carries GitHub access, or Ghost's decision that this pass
+  is enough.
+- **Caught by:** the live test; the proxy by a request with a bad token.
+- **Touched:** github/HttpGitHub.java, test/evaluator/github/HttpGitHubTest.java; TODO.md 1.7 (open); docs/HANDOFF.md.

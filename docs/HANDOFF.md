@@ -1,25 +1,14 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 1.7's live check (2026-10-23)
+## Start here: 1.7's live check, half done (2026-10-23, J-102)
 
-Ghost has made a GitHub token and is adding it to the environment as `EVALUATOR_GITHUB_TOKEN`: a
-fine-grained token with read-only access to public repositories and no permissions. **It cannot read the
-live test's repository:** Ghost-in-the-Kernel-Labs/suite-builder is private (Ghost, 2026-10-23). A request
-that seems to read it unauthenticated from a cloud session goes through the session's proxy, which carries
-the session's own GitHub access: no proof of what is public. Before step 2, ask Ghost which way 1.7 goes:
-(a) a token scoped to that repository (owner Ghost-in-the-Kernel-Labs, only suite-builder, Contents
-read-only), or (b) the public token, with the live test pointed at a public repository of Ghost's with signed
-and unsigned commits, which changes 1.7's check and is Ghost's call. With the public token alone, the live
-test's 404 is expected, not a bug.
-
-1. Check the session has it, without printing it: `test -n "$EVALUATOR_GITHUB_TOKEN" && echo set`.
-   Not set: the session started before Ghost saved it; say so and stop.
-2. Run the live test alone, its output to a file: `gradle test --offline --tests
-   'evaluator.github.AuthorshipLiveTest' > build/run.log 2>&1` (`mkdir -p build` first), then grep it for
-   failures. `--offline` is Gradle's; the test itself reaches GitHub (MOD-05).
-3. It passes: 1.7's check holds (TODO.md 1.7). Close 1.7 as `docs/how/do-a-todo-step.md` says, the facts it
-   read recorded in the journal by kind and count, never the token. It fails: read the failure, fix what is
-   ours, and if GitHub refuses (401, 403, a rate limit) say so to Ghost rather than retry in a loop.
+The first real run of `AuthorshipLiveTest` found a bug in ours, fixed: `HttpGitHub.get` refused `..` anywhere
+in a path, and GitHub's compare path is `<sha>...<sha>`; it now refuses a `..` segment only. The test then
+passes. **It does not close 1.7:** from a cloud session `api.github.com` answers the private suite-builder 200
+with an invalid token and with none, so the pass shows the adapter's reading and parsing, not the token's
+access. 1.7 closes on a run outside such a session (Ghost's machine or a runner with only the token), or on
+Ghost's word that this pass is enough. Then close it as `docs/how/do-a-todo-step.md` says, the facts it read
+recorded in the journal by kind and count, never the token.
 
 Never log, print or write the token, nor paste it into a commit, the journal or a report.
 

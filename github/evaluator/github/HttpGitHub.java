@@ -9,6 +9,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.List;
 
 /**
  * GitHub's API over HTTPS (E-043): GET only, to `api.github.com` only, with a read-only token taken from
@@ -51,7 +52,7 @@ public final class HttpGitHub implements GitHubApi {
     /** One GET of an API path (never a URL of its own), its answer capped, refused unless 200, parsed. */
     @Override
     public Object get(String path) throws IOException {
-        if (!path.startsWith("/") || path.contains("..") || path.contains("://")) throw new IOException("not an API path: " + path);
+        if (!path.startsWith("/") || List.of(path.split("/", -1)).contains("..") || path.contains("://")) throw new IOException("not an API path: " + path);
         HttpRequest request = HttpRequest.newBuilder(URI.create(host + path)).timeout(Duration.ofSeconds(30)).GET()
                 .header("Accept", "application/vnd.github+json").header("X-GitHub-Api-Version", "2022-11-28")
                 .header("Authorization", "Bearer " + token).build();

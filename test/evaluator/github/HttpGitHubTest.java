@@ -100,6 +100,20 @@ class HttpGitHubTest {
     }
 
     @Test
+    void aCompareRangeOfThreeDotsIsAnApiPathButADotDotSegmentIsNot() throws IOException {
+        HttpGitHub api = HttpGitHub.at(host, "t");
+        for (String bad : List.of("/a/..", "/../ok", "/a/../ok")) {
+            assertThrows(IOException.class, () -> api.get(bad), bad);
+        }
+        assertEquals(null, seen.get(), "nothing reached the server");
+        try {
+            api.get("/repos/o/r/compare/abc...def");
+        } catch (IOException e) {
+            assertFalse(e.getMessage().startsWith("not an API path"), e.getMessage());
+        }
+    }
+
+    @Test
     void anythingButA200IsRefusedWithItsStatusAndARedirectIsNotFollowed() {
         HttpGitHub api = HttpGitHub.at(host, "t");
         assertEquals("GitHub answered 404 for /missing", assertThrows(IOException.class, () -> api.get("/missing")).getMessage());

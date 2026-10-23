@@ -13,6 +13,15 @@ import org.junit.jupiter.api.Test;
 
 /** The kernel's own JSON reader, every value worked by hand (TODO.md 1.12: its mutants, run 1). */
 class JsonTest {
+    /** A hostile name stays text: quote, backslash and every control character (DEL too) escaped; the edges of the range plain. */
+    @Test
+    void quoteEscapesWhatCouldBreakOut() {
+        assertEquals("\"a\\\"b\\\\c\\u000ad\"", Json.quote("a\"b\\c\nd"));
+        assertEquals("\"\\u0000\\u001f \\u007f~\"", Json.quote("\u0000\u001f \u007f~"));
+        assertEquals("\"\"", Json.quote(""));
+        assertEquals("a\"\\\n\u007f\u0001", Json.parse(Json.quote("a\"\\\n\u007f\u0001")));
+    }
+
     @Test
     void everyKindOfValue() {
         assertEquals("a", Json.parse("\"a\""));

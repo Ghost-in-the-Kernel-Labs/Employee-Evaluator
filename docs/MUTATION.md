@@ -69,6 +69,13 @@ missing at an edge: a cognitive complexity of exactly 15 and a fan-out of exactl
 their JSON had never been rendered; and the rubric's hash, held only by `cli/`'s goldens until CardsTest
 named it. No code changed. `score/` is done.
 
+### Run 5: 2026-10-23, the three navigability refactors (Json.quote, TestRunner split, CardsTest split)
+
+`gradle mutate` over `score/`, `ingest/`, `rubric/` and `analyze/`. `Json.quote` had no test in `rubric/` (its
+only test sat in `ingest/`, which a per-module run does not see): `JsonTest.quoteEscapesWhatCouldBreakOut` now
+kills all six of its mutants. In `analyze/` the survivors in `Workspace`, `ReportFiles` and `TestRunner` are the
+lines `TestRunner` held before, moved with no change of text (the same ones run 2 counted); none is new.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

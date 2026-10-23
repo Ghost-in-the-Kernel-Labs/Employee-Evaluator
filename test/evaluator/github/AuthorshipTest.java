@@ -145,6 +145,7 @@ class AuthorshipTest {
         assertTrue(asked.contains("/repos/" + OWNER + "/" + REPO + "/events?per_page=100&page=3"));
     }
 
+    /** A commit with no date counts as claimed; the push window is 0 with no push, and never negative with one. */
     @Test
     void aCommitWithoutADateStillCountsAndTheWindowSaysItsPushOrNone() throws IOException {
         Map<String, Object> undated = Map.of("sha", "c", "author", Map.of("login", APPLICANT), "commit", Map.of());

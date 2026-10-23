@@ -21,3 +21,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/AGENT.md`, `build.gradle`, then the slow tests and `scripts/Metrics.java`; `docs/how/finish-work.md`, `commit-and-push.md` and this file's debrief page at the end.
 - **Complaints:** `agent-environment.md` says to work in a plain clone but not that `git clone` of the worktree's folder is enough (it was); no word on `/usr/bin/time` missing, so I timed with `date`. Which doc holds the number: AGT-02 has no column for a non-tithe measurement.
 - **Suggestions:** a line in `agent-environment.md`: "to time the loop, `gradle test --offline --rerun-tasks` in a plain clone, several runs; a parallel run that fails once in ten is a race in a test, not noise". A rule test for the shared-state list in E-072 if tests grow.
+
+### 2026-10-23 · the tithe due after eight commits · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, then `git grep -i tithe` (docs/how/commit-and-push.md, E-015 in theGhost.md, docs/AGENT.md), `docs/how/agent-environment.md`, `docs/how/commands.md`, the last tithe commit as a model. About five minutes to learn what a tithe is.
+- **Complaints:** no one file says what a tithe pass does; it is spread over agent-environment.md ("records a column"), commit-and-push.md (the subject) and E-015. The fast-loop number in a worktree reads "failed", so a pass needs a plain clone; only agent-environment.md hints at it.
+- **Suggestions:** a "Tithe" section in `docs/how/agent-environment.md`: run `gradle metrics --args=--time` in a plain clone, add the column, comment what the metrics list, journal, commit with subject "Tithe".

@@ -90,6 +90,7 @@ class TestRunnerTest {
         assertEquals(List.of("shop.CartTest.fetchesExchangeRates"), facts.get(0).evidence().sources());
     }
 
+    /** Each way a run can fail says so in notMeasured, and a failed or stuck install runs no tests after it. */
     @Test
     void aFailedInstallATimeoutOrNoReportIsNotMeasured(@TempDir Path repo) throws IOException {
         pythonRepo(repo);

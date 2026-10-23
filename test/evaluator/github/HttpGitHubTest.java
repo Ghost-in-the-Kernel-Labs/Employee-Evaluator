@@ -28,6 +28,7 @@ class HttpGitHubTest {
     private String host;
     private final AtomicReference<Map<String, List<String>>> seen = new AtomicReference<>();
 
+    /** A loopback server with one path per answer HttpGitHub must handle: ok, 404, a redirect, HTML, and a body at and past the cap. */
     @BeforeEach
     void start() throws IOException {
         server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);

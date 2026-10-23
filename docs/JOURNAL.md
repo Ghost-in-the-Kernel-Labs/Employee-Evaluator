@@ -1198,3 +1198,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Touched:** theGhost.md (E-072), docs/DECISIONS.md, build.gradle, test/evaluator/history/GitTest.java, test/evaluator/analyze/DockerSandboxTest.java, docs/AGENT.md.
 - **Caught by:** repeated runs of the whole suite.
 - **Cost:** about 50 full runs.
+
+### J-089 Tithe: Pass 5 recorded, three long tests given their comments
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The tithe `gradle metrics` called due (8 commits since 4313875): change no behaviour, improve navigability, record the pass (E-015).
+- **Found:** Every held metric within target. The fast loop reads 10 to 13 s in a plain clone (all green); in a git worktree `gradle metrics --args=--time` reads 21 and "failed" only because `MainTest.thisRepositorysCard` fails on Provenance there, so a pass is measured in a plain clone. Three tests were over 15 lines with no comment saying what they are for. Larger, left: the two debriefs in NAVIGATION-NOTES.md each suggest an edit to agent-environment.md (`grep -v TIMED_OUT` on the survivors line; how to time the loop); one agent each, so not acted on before a review.
+- **Options:** only record the column (the minimum); also comment the three tests (taken, no code moves); act on the single-agent suggestions (no).
+- **Resolved:** Pass 5 column in docs/AGENT.md; a one-line comment on each of the three tests. No golden, no function added or moved, so no kernel map change.
+- **Touched:** docs/AGENT.md, test/evaluator/analyze/TestRunnerTest.java, test/evaluator/github/AuthorshipTest.java, test/evaluator/github/HttpGitHubTest.java.
+- **Caught by:** `gradle metrics` (the cadence line and the comment listing).

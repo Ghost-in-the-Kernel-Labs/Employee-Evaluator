@@ -34,12 +34,16 @@ class GitTest {
         assertEquals(0, Git.readCapped(new ByteArrayInputStream(new byte[0])).length);
     }
 
-    /** A thread interrupted while git runs gets an IOException and stays interrupted, for whoever called it. */
+    /**
+     * A thread interrupted while git runs gets an IOException and stays interrupted, for whoever called it. The git
+     * here waits on its standard input, which stays open: a fast one (--version) could finish before the interrupt
+     * is looked at, and the test failed on a busy machine (J-088).
+     */
     @Test
     void anInterruptedRunFailsAndKeepsTheInterrupt() {
         Thread.currentThread().interrupt();
         try {
-            IOException e = assertThrows(IOException.class, () -> Git.run(Path.of("."), List.of("--version")));
+            IOException e = assertThrows(IOException.class, () -> Git.run(Path.of("."), List.of("hash-object", "--stdin")));
             assertEquals("interrupted", e.getMessage());
             assertTrue(Thread.currentThread().isInterrupted(), "the interrupt is passed on");
         } finally {

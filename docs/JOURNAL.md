@@ -1188,3 +1188,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** run 14 (1,105 mutants, 1,072 killed); RegistriesProxyTest and DockerSandboxTest extended; one harmless row. 1.12 moved to DONE.md; 1.13 is next. No golden moved.
 - **Touched:** analyze/evaluator/analyze/ (`RegistriesProxy`, `DockerSandbox`), test/evaluator/analyze/, docs/MUTATION.md, docs/KERNEL-MAP.md, TODO.md, docs/DONE.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
 - **Caught by:** mutation (E-019).
+\n
+### J-088 The fast loop back under its target: classes in parallel, two racy interrupt tests made certain
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** AGT-02 (20 s) read 23 s on Ghost's machine; make room without dropping, skipping or weakening a test.
+- **Found:** The tests were 12 s of the run, one class at a time; here the loop read 15 s, 16, 15 (`gradle test --offline --rerun-tasks`) and 15, 16, 15 by `gradle metrics --args=--time`. With classes in parallel it read 8 to 9 s; 5 runs of 34 failed on `GitTest.anInterruptedRunFailsAndKeepsTheInterrupt` and `DockerSandboxTest.anInterruptedRunKeepsTheInterrupt` interrupted the thread, then ran a program (`git --version`, a fake docker that exits) that could already be finished when the interrupt was looked at, so no interrupt was seen. They were racy before (load only made it likely).
+- **Options:** parallel classes in one JVM (taken: the code shares nothing, checked); `maxParallelForks` (a JVM start per fork, no gain over this); a 1 s timeout in `aRunPastItsTimeoutIsKilledByName` (tried: no change in the total, and more risk under load, backed out); a junit-platform.properties (test/ holds only Java sources, so the same settings sit in build.gradle beside the other test properties).
+- **Resolved:** E-072. The two tests above run a program that waits for its standard input or sleeps, so the interrupt always lands on a running one; their assertions are unchanged. Serial under -PwriteGoldens and -Pdocker. 25 clean runs after the fixes, and the final 10 below.
+- **Touched:** theGhost.md (E-072), docs/DECISIONS.md, build.gradle, test/evaluator/history/GitTest.java, test/evaluator/analyze/DockerSandboxTest.java, docs/AGENT.md.
+- **Caught by:** repeated runs of the whole suite.
+- **Cost:** about 50 full runs.

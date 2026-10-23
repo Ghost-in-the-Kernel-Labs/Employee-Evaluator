@@ -51,6 +51,13 @@ test {
     systemProperty 'evaluator.writeGoldens', project.hasProperty('writeGoldens')
     // `gradle test -Pdocker` also runs the run fixtures in the real sandbox (sandbox/setup.sh first, E-037).
     systemProperty 'evaluator.docker', project.hasProperty('docker')
+    // Test classes run side by side, the tests inside a class one after another (J-088). Every test works in its own
+    // temporary folders, ports and objects; a run that writes the goldens in place, or runs the real sandbox, stays serial.
+    if (!project.hasProperty('writeGoldens') && !project.hasProperty('docker')) {
+        systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
+        systemProperty 'junit.jupiter.execution.parallel.mode.default', 'same_thread'
+        systemProperty 'junit.jupiter.execution.parallel.mode.classes.default', 'concurrent'
+    }
     testLogging { events 'failed'; exceptionFormat = 'full' }
     // The doc tests read docs, fixtures, goldens and the repository itself, none of them the task's inputs: a
     // docs-only change would pass unrun (J-045). The loop takes seconds, so it always runs.

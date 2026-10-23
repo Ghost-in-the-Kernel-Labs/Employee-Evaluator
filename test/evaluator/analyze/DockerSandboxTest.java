@@ -151,10 +151,13 @@ class DockerSandboxTest {
         assertEquals(List.of(got.get(got.indexOf("--name") + 1)), lines(killed));
     }
 
-    /** An interrupted run says so, and keeps the interrupt for whoever called. */
+    /**
+     * An interrupted run says so, and keeps the interrupt for whoever called. The container is still running when the
+     * interrupt is looked at: one that had already exited could be answered as finished, as it was on a busy machine (J-088).
+     */
     @Test
     void anInterruptedRunKeepsTheInterrupt(@TempDir Path tools, @TempDir Path work, @TempDir Path out) throws IOException {
-        DockerSandbox sandbox = new DockerSandbox(fakeDocker(tools, "exit 0\n"));
+        DockerSandbox sandbox = new DockerSandbox(fakeDocker(tools, "exec sleep 5\n"));
         Thread.currentThread().interrupt();
         Sandbox.Run run;
         boolean kept;

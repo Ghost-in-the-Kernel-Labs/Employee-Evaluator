@@ -16,3 +16,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/how/do-a-todo-step.md`, `docs/MUTATION.md`, then the two classes and their tests; `docs/how/commands.md` and `finish-work.md` when closing.
 - **Complaints:** the survivor list had to be rebuilt by hand: the CSV's TIMED_OUT rows count as killed but print among the non-KILLED ones, so `grep -v KILLED` overcounts (I filtered `TIMED_OUT` out too). `do-a-todo-step.md` says "push (`scripts/prepush.sh` first)" while the task forbade it: no conflict, but a closing step "commit only" has no home.
 - **Suggestions:** in `agent-environment.md`'s survivors line, `grep -v KILLED build/mutation/mutations.csv | grep -v TIMED_OUT`. A recipe line for "a class that starts a program: take the program's name as a package-private constructor argument and test with a script".
+
+### 2026-10-23 · the fast loop back under 20 s · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/AGENT.md`, `build.gradle`, then the slow tests and `scripts/Metrics.java`; `docs/how/finish-work.md`, `commit-and-push.md` and this file's debrief page at the end.
+- **Complaints:** `agent-environment.md` says to work in a plain clone but not that `git clone` of the worktree's folder is enough (it was); no word on `/usr/bin/time` missing, so I timed with `date`. Which doc holds the number: AGT-02 has no column for a non-tithe measurement.
+- **Suggestions:** a line in `agent-environment.md`: "to time the loop, `gradle test --offline --rerun-tasks` in a plain clone, several runs; a parallel run that fails once in ten is a race in a test, not noise". A rule test for the shared-state list in E-072 if tests grow.

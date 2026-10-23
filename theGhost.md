@@ -1215,3 +1215,21 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** proposed
 - **subject:** scoring
 - **See also:** E-070
+
+### E-072: The fast loop runs test classes side by side, the tests of a class one after another
+- **Decision:** `gradle test` runs JUnit 5's classes concurrently (`build.gradle`: `junit.jupiter.execution.parallel.*`,
+  classes concurrent, tests in a class on one thread). A run with `-PwriteGoldens` (goldens written in place) or `-Pdocker`
+  (the real sandbox) stays serial. A new test class keeps to what the others do: its own `@TempDir`, port 0, no system
+  property set, no static field changed, no working directory assumed.
+- **Why:** AGT-02's 20 s was passed (23 s read on Ghost's machine; 15 to 16 s here, `gradle metrics --args=--time`). Compiling and
+  Gradle are fixed costs; the tests were 12 s, one class at a time. Side by side they read 8 to 9 s. The tests were
+  checked for shared state (none sets a property or a static, every file written is in a temporary folder, every
+  server binds port 0, goldens are one class each) and run many times. Two tests that interrupt their own thread passed a
+  git or a fake docker that could finish before the interrupt was looked at, and failed on a busy machine; they now run a
+  program that waits (`git hash-object --stdin`, `sleep`), which holds what they claim more strictly (J-088).
+  A shorter wait in `aRunPastItsTimeoutIsKilledByName` (2 s to 1 s) gained nothing measurable, so it stays 2 s.
+- **Held by:** `build.gradle`; `test/MetricsTest.java` (AGT-02's 20 s); `docs/AGENT.md`.
+- **Source:** Ghost's directive to make room in the fast loop, 2026-10-23; Claude Sonnet 5.5.
+- **Status:** in force
+- **subject:** tests
+- **See also:** E-018, E-019

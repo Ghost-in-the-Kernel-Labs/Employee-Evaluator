@@ -1124,3 +1124,18 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** run 13 (1,104 mutants, 1,047 killed); ReportFilesTest (new), ReportsTest, TestPlansTest and TestRunnerTest extended; seven harmless rows.
 - **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
 - **Caught by:** mutation (E-019).
+
+### J-083 analyze/ part 5 reviewed: the XML hardening proved by a test, not only argued
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Reviewing part 5 (48e9c7b, run 13, by a Sonnet agent): eight of its nine harmless rows are
+  Reports.parse's hardening, and a submission's reports are hostile (E-013).
+- **Found:** An external DTD reference (`<!DOCTYPE x SYSTEM "file:...">`) has no `<!ENTITY`, so the text check
+  passes it and the parser's features are the only defence. The rows' reasoning held (each call a second lock
+  behind `load-external-dtd`, which an existing test kills), but no test showed a hostile DTD is never read. By
+  hand: without `load-external-dtd` the new test fails; without `ACCESS_EXTERNAL_DTD` alone it passes (a
+  redundant layer); without both, the file is read.
+- **Options:** call the layers harmless; prove the defence and say the layers back each other up.
+- **Resolved:** `ReportsTest.anExternalDtdIsNeverRead`; the access-list row says defence in depth, kept on
+  purpose, and names the test. No production code changed.
+- **Caught by:** review.
+- **Touched:** test/evaluator/analyze/ReportsTest.java, docs/MUTATION.md.

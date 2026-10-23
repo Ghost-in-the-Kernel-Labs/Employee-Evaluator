@@ -118,4 +118,21 @@ class ReportsTest {
         List<Fact> facts = TestRuns.facts(new Reports.Outcome(5, 2, 1, 2, List.of()), Optional.of(new Reports.Lines(1, 3)), "t", List.of("r"));
         assertEquals(List.of(0.667, 0.333), facts.stream().map(Fact::value).toList());
     }
+
+    /**
+     * A hostile report's DOCTYPE names an external DTD: no `<!ENTITY` in it, so the text check passes it, and only the
+     * parser's own hardening keeps the file from being read. The DTD here would add a `marker` attribute; the report
+     * must parse with no such attribute, so the file was never opened (E-013).
+     */
+    @Test
+    void anExternalDtdIsNeverRead() throws Exception {
+        Path dtd = Files.createTempFile("hostile", ".dtd");
+        try {
+            Files.writeString(dtd, "<!ATTLIST testsuite marker CDATA \"read\">");
+            String report = "<?xml version=\"1.0\"?><!DOCTYPE testsuite SYSTEM \"" + dtd.toUri() + "\"><testsuite/>";
+            assertEquals("", Reports.parse(report).getDocumentElement().getAttribute("marker"));
+        } finally {
+            Files.delete(dtd);
+        }
+    }
 }

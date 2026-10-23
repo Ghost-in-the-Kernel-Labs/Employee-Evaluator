@@ -1,7 +1,7 @@
 # A submission's own tests: the sandbox, the plans, the reports
 
 **Start here:**
-- `analyze/evaluator/analyze/TestRunner.java`
+- `analyze/evaluator/analyze/TestRunner.java` (the orchestration; its quarantined copy and cleanup are Workspace.java, the report files found and read under the size cap ReportFiles.java, same folder)
 - `analyze/evaluator/analyze/TestPlans.java`
 - `analyze/evaluator/analyze/DockerSandbox.java`
 - `analyze/evaluator/analyze/Reports.java`

@@ -449,3 +449,27 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | rubric | `rubric/evaluator/rubric/Json.java:Json.quote` |  | 2026-10-23 |  |
 | ingest | `ingest/evaluator/ingest/Inventory.java:Inventory.quote` |  | 2026-10-23 | removed: 2026-10-23 |
 | score | `score/evaluator/score/CardJson.java:CardJson.quote` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.ReportFiles` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.outcome` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.coverage` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.files` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.text` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/ReportFiles.java:ReportFiles.add` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace.Workspace` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace.copy` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace..preVisitDirectory` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace..visitFile` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace.delete` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace..visitFile#2` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Workspace.java:Workspace..postVisitDirectory` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.outcome` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.coverage` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.files` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.text` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.add` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.copy` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..preVisitDirectory` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..visitFile` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.delete` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..visitFile#2` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..postVisitDirectory` |  | 2026-10-23 | removed: 2026-10-23 |

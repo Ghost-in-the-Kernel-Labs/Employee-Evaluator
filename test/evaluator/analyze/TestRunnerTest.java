@@ -125,7 +125,7 @@ class TestRunnerTest {
         write(repo.resolve("a.py"), "x = 1\n");
         write(repo.resolve(".git/config"), "[core]\n");
         Files.createSymbolicLink(repo.resolve("link.py"), outside);
-        TestRunner.copy(repo, work);
+        Workspace.copy(repo, work);
         assertTrue(Files.exists(work.resolve("a.py")));
         assertFalse(Files.exists(work.resolve(".git")));
         assertFalse(Files.exists(work.resolve("link.py")));

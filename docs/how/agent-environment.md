@@ -34,3 +34,7 @@
 ## Always
 
 The fast loop before and after; `gradle kernelMap` before the commit; a changed unit test run by `gradle mutate -Ptarget=evaluator.<module>.*` (E-019); the journal entry. Read further only where the code points.
+- A cloud session's checkout may be a shallow clone (`git rev-parse --is-shallow-repository` says `true`): its
+  history stops at a cut-off commit, and a clone made from it can lose the cut-off and make `git log` fail
+  (`MainTest.thisRepositorysCard` then fails on Provenance). Nothing is missing on GitHub: run
+  `git fetch --unshallow origin main` first.

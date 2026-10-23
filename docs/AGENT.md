@@ -33,7 +33,7 @@ Measured by `gradle metrics` in the image at every tithe pass.
 | Metric | Phase 1 target | Pass 0 (2026-10-18, scaffold) | Pass 1 (2026-10-19, TODO 1.5 begun) | Pass 2 (2026-10-22, TODO 1.11) | Pass 3 (2026-10-23, TODO 1.12) | Why it matters to the agent |
 | --- | --- | --- | --- | --- | --- | --- |
 | Mandatory context (words) | < 1,500 | 747 | 976 | 1,067 | 847 | every task pays it |
-| Fast loop (s) | ≤ 20 | not timed yet | 7 (warm) | 18 (all tests rerun) | not timed (no Docker here) | the agent runs it after every edit |
+| Fast loop (s) | ≤ 20 | not timed yet | 7 (warm) | 18 (all tests rerun) | 18 (all tests rerun; `gradle metrics --args=--time`, no Docker needed) | the agent runs it after every edit |
 | Largest source file (lines) | ≤ 400 | 214 (test/GhostTest.java) | 233 (JavaComplexity.java) | 280 (test/SupplyChainTest.java) | 289 (test/SupplyChainTest.java) | a file over it does not fit a routing row |
 | Files a routing row opens | ≤ 5 | 4 | 5 | 5 | 5 | the context one task costs |
 | Functions over 20 paths | 0 | 0 | 0 | 0 | 0 | a function nobody can hold in mind |

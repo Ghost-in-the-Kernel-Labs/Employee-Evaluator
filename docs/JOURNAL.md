@@ -1014,3 +1014,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   two helpers Metrics flagged, and records Pass 3 in AGENT.md.
 - **Touched:** cli/, test/evaluator/cli/, docs/MUTATION.md, docs/HANDOFF.md, docs/AGENT.md, docs/how/.
 - **Caught by:** mutation (E-019).
+
+### J-074 A Sonnet agent's "broken history" was a shallow clone
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** Reviewing the cli/ survivors (525a109, J-073, by a Sonnet agent).
+- **Found:** The agent reported commit 2c28030 missing and `git log` failing in a clone. The session's checkout
+  was shallow (cut at 82fd968); a clone made from it lost the cut-off, so git saw a missing parent. GitHub has
+  the commit; `git fetch --unshallow` gave 90 commits and a clean `git fsck`. Its Pass 3 column also left the fast
+  loop untimed for want of Docker, which the timing does not need: 18 s.
+- **Options:** none weighed.
+- **Resolved:** the main checkout unshallowed; docs/how/agent-environment.md says how to tell a shallow checkout
+  and fix it; the Pass 3 fast loop timed. The agent's other work held on review: six mutants killed by tests,
+  one harmless (`System.exit` in `main`), `Pipeline.github` taking its API as an argument, no golden moved.
+- **Caught by:** review of the agent's report.
+- **Touched:** docs/how/agent-environment.md, docs/AGENT.md.

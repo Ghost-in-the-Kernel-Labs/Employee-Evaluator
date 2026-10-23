@@ -72,4 +72,5 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-063 | CLAUDE.md's routing rows are pointers; an action's steps live in its instructions file | superseded by E-065 | agents |
 | E-064 | Every escalation replays the route, is logged, and three of a kind go to Ghost | in force | agents |
 | E-065 | Every workpath in CLAUDE.md is a pointer to its instructions | in force | agents |
-| E-066 | When agents' work conflicts, they stop and tell Ghost; none undoes another's | in force | agents |
+| E-066 | When agents' work conflicts, they stop and tell Ghost; none undoes another's | in force (part); superseded by E-067 (part: force-pushing) | agents |
+| E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |

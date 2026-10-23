@@ -945,3 +945,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   raised on its first row, held by EscalationsTest. Never force-push, with no exception (one branch, E-020).
 - **Touched:** CLAUDE.md, docs/how/when-agents-conflict.md, docs/how/escalate-to-opus.md, docs/ESCALATIONS.md,
   test/EscalationsTest.java, theGhost.md, docs/DECISIONS.md.
+
+### J-069 A force-push needs every active agent's agreement
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: no force-push unless all agents actively working on the project agree; check in and wait
+  for the slow ones.
+- **Found:** E-066 said never; Ghost wants it possible, by agreement.
+- **Options:** none weighed: how to check in was the open part.
+- **Resolved:** E-067, superseding E-066 in part: find the active agents (ListAgents, Ghost's sessions), check
+  in with each, wait for all, slow ones included; any no or no answer means no force-push and Ghost is told;
+  alone, allowed and journaled.
+- **Touched:** CLAUDE.md, docs/how/when-agents-conflict.md, theGhost.md, docs/DECISIONS.md.

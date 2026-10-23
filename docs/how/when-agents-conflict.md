@@ -24,7 +24,20 @@ the conflict itself, by undoing the other's work, makes it worse and hides it.
 ## Never
 
 - Kill, stop or restart a process you did not start.
-- Revert, rewrite or delete another agent's commit, or push over it. Never force-push.
+- Revert, rewrite or delete another agent's commit, or push over it.
+- Force-push without every active agent's agreement (below).
 - Edit the escalation log, the decision record or a test to get around a conflict.
+
+## A force-push (E-067)
+
+Only when every agent actively working on the project agrees:
+
+1. **Find them:** the agents and sessions working on this repository now (Claude Code's `ListAgents`, and any
+   session Ghost has running on it).
+2. **Check in with each:** what you would force-push, which commits it drops or rewrites, and why.
+3. **Wait for every one to agree.** A slow agent is checked in on again and waited for, never skipped or
+   taken as agreeing.
+4. Any agent that disagrees or cannot be reached: no force-push; tell Ghost. Working alone, with no other
+   agent active: you may, and the journal entry says so.
 
 `test/EscalationsTest.java` fails while a `conflict` row is unraised or missing from `docs/FOR-GHOST.md`.

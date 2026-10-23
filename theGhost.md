@@ -1119,6 +1119,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   `test/EscalationsTest.java` (a `conflict` row unraised, or not in `docs/FOR-GHOST.md`, fails);
   `scripts/prepush.sh` (refuses a push not on top of `origin/main`).
 - **Source:** Ghost, 2026-10-23 ("Agreed to the escalations handling ruleset").
-- **Status:** in force
+- **Status:** in force (part); superseded by E-067 (part: force-pushing)
 - **subject:** agents
 - **See also:** E-020, E-060, E-064
+
+### E-067: A force-push only when every active agent agrees, the slow ones waited for
+- **Decision:** A Ghost-level directive, replacing E-066's "never force-push". An agent force-pushes only
+  when every agent actively working on the project has agreed: it finds them (Claude Code's `ListAgents`, and
+  any session Ghost runs on the repository), checks in with each (what it would force-push, which commits that
+  drops or rewrites, and why), and waits for every one; a slow agent is checked in on again and waited for,
+  never skipped or taken as agreeing. One that disagrees or cannot be reached means no force-push, and Ghost is
+  told. An agent working alone may, and its journal entry says so.
+- **Why:** Ghost: "not to force push unless all agents actively working on the project agree. Basically
+  check in and wait for others if they are slow." A force-push rewrites what others built on; agreement first
+  keeps it from being one agent settling a conflict alone (E-066's lesson).
+- **Held by:** `CLAUDE.md` ("When agents conflict"); `docs/how/when-agents-conflict.md` ("A force-push").
+- **Source:** Ghost, 2026-10-23.
+- **Status:** in force
+- **subject:** agents
+- **Supersedes:** E-066
+- **See also:** E-020

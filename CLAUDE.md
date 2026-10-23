@@ -74,7 +74,8 @@ it gave you what you needed, and you log the escalation in `docs/ESCALATIONS.md`
 
 If another agent's work conflicts with yours, stop, assume conflicting objectives rather than sabotage,
 and tell Ghost at once (`docs/how/when-agents-conflict.md`). Never kill a process you did not start,
-never revert or push over another agent's commit, never force-push. A Ghost directive.
+never revert or push over another agent's commit. Force-push only when every agent working on the
+project has agreed: check in with each and wait for the slow ones (E-067). A Ghost directive.
 
 ## Three rules
 

@@ -7,6 +7,7 @@ happened while the work was done*. Fixed fields, so entries can be counted and c
 projects (Katana keeps the same journal under its R-046, Suite Builder under G-162). Newest last.
 Written by whoever was there, in the same commit as the event when possible; an agent writes its own
 entries (E-008). `test/JournalTest.java` holds it: ids rise, every entry has its Who and its Class.
+To write one, read only the end (`tail -30 docs/JOURNAL.md`): the next id is one past the last `### J-`.
 
 Field meanings. **Who**: Ghost, or the agent by its model name, or both. **Intent**: what the work
 was trying to do when the event happened. **Found**: the fact the event turned on. **Options**: what
@@ -833,3 +834,21 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   closes a gone function itself, `superseded-by` when it moved. E-033's directive clause superseded in part.
 - **Touched:** theGhost.md, CLAUDE.md, test/SupplyChainTest.java, scripts/Metrics.java, scripts/KernelMap.java,
   test/KernelMapTest.java, docs/KERNEL-MAP.md.
+
+### J-061 Navigability pass, slice 1: the docs that misled
+- **Who:** Claude. **Class:** contradiction.
+- **Intent:** The Fable advisor's pass (Ghost: "the plan is approved for the four slices").
+- **Found:** docs/SCORE-CARD.md gave `HISTORY.spread_days` as a fact kind, which `Metric.ofKind` refuses, and
+  listed `QUALITY.lint` and `MAINTAINABILITY.refactors` under modules that make neither: an agent adding a
+  fact would copy the example and fail. Eight stale lines besides (a closed step cited as open, a doc test
+  named as future). docs/HANDOFF.md, the first file of the first routing row, was 791 words, most of it
+  Ghost's items and one past session's Docker state.
+- **Options:** fix the words only; fix them and hold the kind table to the code.
+- **Resolved:** the table fixed and held: ScoreCardDocTest's `kinds` checks every example kind against
+  `Metric.ofKind` and each module's row against the kinds its source names, proven on three broken copies.
+  Stale lines fixed. HANDOFF.md cut to 226 words, Ghost's items moved to docs/FOR-GHOST.md (no row routes
+  there); the first routing row reads a decision by number. JOURNAL.md says how to find the next id.
+- **Caught by:** the Fable advisor (read only, 2026-10-23).
+- **Touched:** docs/SCORE-CARD.md, test/ScoreCardDocTest.java, docs/HANDOFF.md, docs/FOR-GHOST.md, docs/JOURNAL.md,
+  docs/GHOST-IN-THE-KERNEL.md, CLAUDE.md, analyze/evaluator/analyze/TestPlans.java and its test,
+  history/evaluator/history/Commits.java.

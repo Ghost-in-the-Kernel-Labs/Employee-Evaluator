@@ -111,7 +111,7 @@ public final class TestPlans {
             return new Plan("Java", "mvn -B -q " + repo + " dependency:go-offline", test, null);
         }
         if (Files.isRegularFile(work.resolve("build.gradle")) || Files.isRegularFile(work.resolve("build.gradle.kts"))) {
-            return Plan.not("Java", "Gradle builds are not run yet (TODO.md 1.5)");
+            return Plan.not("Java", "Gradle builds are not run yet (unplanned: docs/HANDOFF.md)");
         }
         return Plan.not("Java", "no build file the sandbox runs (pom.xml)");
     }

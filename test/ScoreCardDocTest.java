@@ -38,9 +38,15 @@ final class ScoreCardDocTest {
     static Check run() {
         String doc = Check.read("docs/SCORE-CARD.md");
         Set<String> open = DocsTest.openSteps(Check.read("TODO.md"));
-        Code code = code(Repo.moduleSources());
+        Map<String, String> sources = Repo.moduleSources();
+        Code code = code(sources);
         return new Check("score card")
                 .repository(check(doc, code, open))
+                .repository(kinds(doc, sources))
+                .rejects("an example kind naming no metric", () -> kinds(doc.replace("`PROVENANCE.history.spread_days`", "`HISTORY.spread_days`"), sources))
+                .rejects("a kind a module's row lists and its source never names", () -> kinds(doc.replace("`QUALITY.tests.*`,", "`QUALITY.tests.*`, `QUALITY.lint`,"), sources))
+                .rejects("a kind a module names that its row lacks", () -> kinds(doc, with(sources, "history/X.java", "Fact.measured(\"MAINTAINABILITY.refactors\", s, 1, e);")))
+                .accepts("a module the table names that has no source yet", () -> kinds(doc, sources))
                 .rejects("a fact field the code lacks", () -> check(doc.replace("| `confidence` |", "| `certainty` |"), code, open))
                 .rejects("a metric renamed", () -> check(doc.replace("| Ambition |", "| Vision |"), code, open))
                 .rejects("a card field missing", () -> check(doc.replace("| `toolingBucket` |", "| bucket |"), code, open))
@@ -57,6 +63,55 @@ final class ScoreCardDocTest {
         Set<String> steps = new java.util.HashSet<>(open);
         steps.add(step);
         return steps;
+    }
+
+    private static final Pattern KIND_LITERAL = Pattern.compile("\"((?:SIZE|COMPLEXITY|MAINTAINABILITY|QUALITY|NAVIGABILITY|PROVENANCE|AMBITION)\\.[a-z_.]*)");
+
+    /**
+     * The fact kinds against the code: each example a kind `Metric.ofKind` takes, and the table "Where the facts
+     * come from" the same as each module's source: every kind a module names is in its row (exactly, or under a
+     * `.*`), and every kind in the row of a module with source is named in it. A kind ending in "." in the source
+     * is built on at run time, so a row lists it as `.*`.
+     */
+    static List<String> kinds(String doc, Map<String, String> sources) {
+        List<String> failures = new ArrayList<>();
+        for (String example : backticked(row(section(doc, "A fact"), "`kind`"))) {
+            try {
+                Metric.ofKind(example);
+            } catch (IllegalArgumentException e) {
+                failures.add("docs/SCORE-CARD.md gives `" + example + "` as a kind, which the code refuses: " + e.getMessage());
+            }
+        }
+        for (String line : section(doc, "Where the facts come from").lines().filter(l -> l.startsWith("| `")).toList()) {
+            String[] cells = line.split("\\|");
+            String module = cells[1].trim().replace("`", "");
+            Set<String> named = new TreeSet<>();
+            sources.forEach((path, text) -> {
+                if (!path.startsWith(module)) return;
+                Matcher m = KIND_LITERAL.matcher(text);
+                while (m.find()) named.add(m.group(1));
+            });
+            List<String> listed = new ArrayList<>();
+            Matcher m = BACKTICKED.matcher(cells[2]);
+            while (m.find()) listed.add(m.group(1));
+            // A module with no source yet, or one that makes no fact (score/ reads kinds, MOD-03), is not held.
+            if (named.isEmpty() || listed.isEmpty()) continue;
+            for (String kind : named) {
+                boolean covered = listed.stream().anyMatch(k -> k.endsWith(".*") ? kind.startsWith(k.substring(0, k.length() - 1)) : k.equals(kind));
+                if (!covered) failures.add(module + " names the kind `" + kind + (kind.endsWith(".") ? "*" : "") + "`, which its row in docs/SCORE-CARD.md lacks");
+            }
+            for (String kind : listed) {
+                boolean found = kind.endsWith(".*") ? named.stream().anyMatch(n -> n.startsWith(kind.substring(0, kind.length() - 1))) : named.contains(kind);
+                if (!found) failures.add("docs/SCORE-CARD.md lists `" + kind + "` under " + module + ", whose source never names it: move it to \"not built\"");
+            }
+        }
+        return failures;
+    }
+
+    private static Map<String, String> with(Map<String, String> sources, String path, String text) {
+        Map<String, String> more = new java.util.HashMap<>(sources);
+        more.put(path, text);
+        return more;
     }
 
     /** What the document gets wrong against the code. */

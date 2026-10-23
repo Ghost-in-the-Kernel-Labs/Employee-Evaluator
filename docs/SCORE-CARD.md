@@ -35,7 +35,7 @@ A `Fact` is one thing measured or judged about the submission:
 
 | Field | Holds |
 | --- | --- |
-| `kind` | which metric it feeds and what it says (`SIZE.source_lines`, `HISTORY.spread_days`, `QUALITY.agent_review`) |
+| `kind` | which metric it feeds and what it says (`SIZE.source_lines`, `PROVENANCE.history.spread_days`, `QUALITY.agent_review`): the metric's name, a dot, then what it says, or it is refused |
 | `subject` | what it is about: the whole repository, a file, a function, a commit, a module |
 | `value` | the measurement or the judgment, typed by the kind |
 | `evidence` | where it was read: paths and lines, commit hashes, the tool and its version, the prompt hash and the sampled files for an agent judgment |
@@ -85,8 +85,12 @@ One card per submission:
 | Module | Facts |
 | --- | --- |
 | `ingest/` | `SIZE.source_lines`, `SIZE.source_files`, `SIZE.source_folders`, `SIZE.set_aside_files` (E-026) |
-| `analyze/` | `COMPLEXITY.*`, `MAINTAINABILITY.*`, `QUALITY.tests`, `QUALITY.lint`, `NAVIGABILITY.checklist` |
-| `history/` | `PROVENANCE.history.*`, `MAINTAINABILITY.refactors` |
+| `analyze/` | `COMPLEXITY.*`, `MAINTAINABILITY.*`, `QUALITY.tests.*`, `NAVIGABILITY.checklist`, `NAVIGABILITY.checklist.*` |
+| `history/` | `PROVENANCE.history.*` |
 | `github/` | `PROVENANCE.authorship.*` |
 | `agent-runner/` (phase 2) | `AMBITION.*`, `QUALITY.agent_review`, `COMPLEXITY.agent_assessment`, `NAVIGABILITY.task` |
 | `score/` | none: it combines facts into the card and makes no fact of its own |
+| not built | `QUALITY.lint` (E-052), `MAINTAINABILITY.refactors` |
+
+`test/ScoreCardDocTest.java` holds this table to the code: every kind a module's source names is in its row
+(exactly, or under a `.*`), and every kind in the row of a module that exists is named in its source.

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A repository's commits as git records them: each one's hash, the time it claims to have been written,
  * its message, and the lines it added and removed per path. No author's name or address is read: who
- * wrote a commit is the GitHub adapter's to establish (TODO.md 1.7), and identity stays out of this
+ * wrote a commit is the GitHub adapter's to establish (`github/`, E-043), and identity stays out of this
  * module (E-014).
  */
 public final class Commits {

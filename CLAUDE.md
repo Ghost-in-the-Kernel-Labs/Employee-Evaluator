@@ -20,7 +20,7 @@ files yet points at the plan.
 
 | Task | Start here | Contract | Tests |
 | --- | --- | --- | --- |
-| What to work on; a decision; a plan | `TODO.md` (its first item), `theGhost.md`, `docs/HANDOFF.md` | `theGhost.md` | `test/TodoTest.java`, `test/GhostTest.java` |
+| What to work on; a decision; a plan | `docs/HANDOFF.md`, `TODO.md` (its first item); a decision by its number in `theGhost.md` | `theGhost.md` | `test/TodoTest.java`, `test/GhostTest.java` |
 | The design: pitch, architecture, provenance, the phases | `docs/DESIGN.md` | | |
 | A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` (written from it) | E-004 | `test/ModulesTest.java` |
 | The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`, `rubric/evaluator/rubric/Fact.java`, `rubric/evaluator/rubric/ScoreCard.java` | `docs/SCORE-CARD.md` (SC-01 onward) | `test/ScoreCardDocTest.java`, `test/evaluator/rubric/` |
@@ -30,7 +30,7 @@ files yet points at the plan.
 | A submission's own tests: the sandbox, the reports | `analyze/evaluator/analyze/TestRunner.java`, `analyze/evaluator/analyze/TestPlans.java`, `analyze/evaluator/analyze/DockerSandbox.java`, `analyze/evaluator/analyze/Reports.java`, `ingest/evaluator/ingest/Quarantine.java` | E-037, E-033; E-013 | `test/evaluator/analyze/TestRunnerTest.java` (a fake sandbox), `TestPlansTest`, `DockerSandboxTest`, `ReportsTest`, `test/fixtures/reports/` |
 | The git history's shape; provenance layer 3 | `history/evaluator/history/Shape.java`, `history/evaluator/history/Commits.java`, `history/evaluator/history/Git.java` | E-042, E-033; docs/DESIGN.md (Provenance) | `test/evaluator/history/ShapeTest.java` (histories built by `GitFixture`) |
 | Commit verification and push attribution; layer 2 | `github/evaluator/github/Authorship.java`, `github/evaluator/github/HttpGitHub.java` | E-043; MOD-05 | `test/evaluator/github/AuthorshipTest.java` (recorded answers), `AuthorshipLiveTest` (with `EVALUATOR_GITHUB_TOKEN`) |
-| Facts into a card; a metric's formula; the ratios; the tier; JSON and Markdown | `score/evaluator/score/Cards.java`, `score/evaluator/score/Formulas.java`, `score/evaluator/score/CardJson.java`, `score/evaluator/score/CardMarkdown.java` | SC-01 to SC-10; MOD-03; E-045 | `test/evaluator/score/CardsTest.java`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/` |
+| Facts into a card; a metric's formula; the ratios; the tier; JSON and Markdown | `score/evaluator/score/Cards.java`, `score/evaluator/score/Formulas.java`, `score/evaluator/score/CardJson.java`, `score/evaluator/score/CardMarkdown.java` | SC-01 to SC-11; MOD-03; E-045 | `test/evaluator/score/CardsTest.java`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/` |
 | The navigability checklist: agent docs, their paths, module cycles, naming | `analyze/evaluator/analyze/Navigability.java`, `analyze/evaluator/analyze/DocPaths.java`, `analyze/evaluator/analyze/Naming.java` | E-044 | `test/evaluator/analyze/NavigabilityTest.java` |
 | The command line: `evaluator score`, every module's facts in order | `cli/evaluator/cli/Main.java`, `cli/evaluator/cli/Pipeline.java` | E-010, E-054 | `test/evaluator/cli/MainTest.java`, `CardGoldensTest` and `test/goldens/cards/` (`gradle test -PwriteGoldens` rewrites them; review the diff) |
 | Which model judges code: the judge trials (phase 2's groundwork) | `docs/judges/` (one file per trial: the brief, every run's scores, the comparisons) | E-017; TODO.md 2.1, 2.2 | |

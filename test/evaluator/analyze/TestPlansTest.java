@@ -101,7 +101,7 @@ class TestPlansTest {
         }
         Files.delete(repo.resolve("pom.xml"));
         write(repo.resolve("build.gradle"), "plugins { id 'java' }");
-        assertEquals("Gradle builds are not run yet (TODO.md 1.5)", plans(repo).get(0).notMeasured());
+        assertEquals("Gradle builds are not run yet (unplanned: docs/HANDOFF.md)", plans(repo).get(0).notMeasured());
     }
 
     @Test

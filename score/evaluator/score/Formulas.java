@@ -103,15 +103,22 @@ public final class Formulas {
         Fact depth = find(facts, "COMPLEXITY.dependency_depth");
         if (depth == null) return null;
         List<String> keys = new ArrayList<>(List.of(depth.key()));
-        double cognitive = 0;
-        for (Fact f : facts) {
-            if (!f.kind().equals("COMPLEXITY.cognitive")) continue;
-            cognitive += ((Number) f.value()).doubleValue();
-            keys.add(f.key());
-        }
+        List<Fact> functions = cognitiveFacts(facts);
+        functions.forEach(f -> keys.add(f.key()));
+        double cognitive = cognitiveTotal(functions);
         double cognitivePart = 100.0 * cognitive / BASELINE_COGNITIVE;
         double depthPart = 100.0 * ((Number) depth.value()).doubleValue() / BASELINE_DEPTH;
         return new Score((int) Math.round(0.6 * cognitivePart + 0.4 * depthPart), keys);
+    }
+
+    /** Every function's cognitive complexity fact. */
+    static List<Fact> cognitiveFacts(List<Fact> facts) {
+        return facts.stream().filter(f -> f.kind().equals("COMPLEXITY.cognitive")).toList();
+    }
+
+    /** The total cognitive complexity of these function facts: Complexity's first input. */
+    static double cognitiveTotal(List<Fact> functions) {
+        return functions.stream().mapToDouble(f -> ((Number) f.value()).doubleValue()).sum();
     }
 
     /**

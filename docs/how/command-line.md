@@ -6,7 +6,7 @@
 
 **Contract:** E-010, E-054; MOD-04: nothing imports `cli/`, and it decides nothing.
 
-**Tests:** `test/evaluator/cli/MainTest.java`, `CardGoldensTest` and `test/goldens/cards/`.
+**Tests:** `test/evaluator/cli/MainTest.java`, `CardGoldensTest` and `test/goldens/cards/`; `--facts`: `test/evaluator/score/FactsTextTest.java`.
 
 ## Steps
 
@@ -15,8 +15,27 @@
 - To run it from a build (there is no application task): `gradle compileJava --offline`, then
   `java -cp "build/classes/java/main:third_party/tree-sitter/*" evaluator.cli.Main score <folder> --no-run`
   (without the tree-sitter jars it dies on a missing class). The card carries each score's fact ids, not the
-  fact values; reading a repository's line count or cognitive total still takes a scratch program on
-  `Ingest`, `Size`, `Complexity` or `Dependencies` (a printing option is a next step in `docs/HANDOFF.md`).
+  fact values: `--facts` prints them (below).
+- **`--facts`** (E-076) prints, instead of the card, the values behind it: one `name value` line each, one space
+  between, sorted by name, a whole number without a decimal point and a fraction in full. The repository-wide facts
+  come by their kinds; what is computed from facts comes from `score/evaluator/score/FactsText.java` (the cognitive
+  total, the parts and the weighted score, over `Formulas` and `Maintainability`), never from arithmetic in `cli/`.
+  It goes with neither `--markdown` nor `--date`; grep a metric with `grep '^SIZE'`. Example, a folder of one
+  4-line file with one `if` and no test:
+
+  ```text
+  COMPLEXITY.cognitive_total 1
+  COMPLEXITY.dependency_depth 0
+  COMPLEXITY.functions 1
+  MAINTAINABILITY.files 1
+  MAINTAINABILITY.part.duplication 1
+  MAINTAINABILITY.part.tests 0
+  MAINTAINABILITY.weighted 0.75
+  SIZE.source_lines 4
+  ```
+
+  (the real output has more lines, one for every repository-wide fact and every maintainability part). A baseline is
+  recorded, or a golden checked by hand, from this and a fixture's folder: no scratch program.
 - The cards' goldens are written from the fixtures by `gradle test -PwriteGoldens`; review the diff.
 
 ## Always

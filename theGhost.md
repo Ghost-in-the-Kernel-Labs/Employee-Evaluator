@@ -1303,3 +1303,21 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** scoring
 - **See also:** E-047, E-051, E-070, E-071, E-074
 - **Supersedes:** E-051 (Maintainability's scale; its parts and weights stay)
+
+### E-076: `evaluator score --facts` prints the values behind a card, one `name value` line each
+- **Decision:** With `--facts` the command prints, instead of the card, the repository-wide facts and the inputs the counted metrics are scored from:
+  one line per value, `name value` with one space, sorted by name, numbers plain (a whole one without a decimal point, a fraction in full and never
+  in exponent form), nothing else on stdout. The names are fact kinds where the value is a fact (`SIZE.source_lines`) and, where it is computed from
+  facts, a name under the metric's own: `COMPLEXITY.cognitive_total` and `COMPLEXITY.functions`, `MAINTAINABILITY.files`, `MAINTAINABILITY.part.<part>` for
+  each of E-051's parts present and `MAINTAINABILITY.weighted`. The computed values come from `score/` (`FactsText`, over `Formulas` and `Maintainability`),
+  the code that scores with them, never from arithmetic in `cli/` (E-010). `--facts` goes with neither `--markdown` nor `--date`, which shape a card. The
+  card printed without `--facts` is unchanged, so no golden moves.
+- **Why:** Three agents recording the baseline (J-091, J-092, J-094) each wrote a scratch program to see these values, and the navigation review (J-093) made
+  the option a next step. One line per value is what a baseline's record, a hand check of a golden and `grep '^SIZE'` all want; sorted by name, so a
+  change in the order the modules run in moves no line.
+- **Held by:** `score/evaluator/score/FactsText.java`; `cli/evaluator/cli/Main.java` (`parse`, `score`); `test/evaluator/score/FactsTextTest.java`;
+  `test/evaluator/cli/MainTest.java`; `docs/how/command-line.md`.
+- **Source:** the navigation review J-093's first next step (Ghost's handoff); Claude Sonnet 5.5 built it.
+- **Status:** in force
+- **subject:** command line
+- **See also:** E-010, E-051, E-054, E-074, E-075

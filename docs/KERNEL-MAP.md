@@ -485,3 +485,8 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | rubric | `rubric/evaluator/rubric/ScoreCard.java:ScoreCard.onlyCountedMayPassAHundred` | E-071 | 2026-10-23 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.logScale` |  | 2026-10-23 | removed: 2026-10-23 |
 | score | `score/evaluator/score/Maintainability.java:Maintainability.weighted` |  | 2026-10-23 |  |
+| score | `score/evaluator/score/FactsText.java:FactsText.FactsText` |  | 2026-10-23 |  |
+| score | `score/evaluator/score/FactsText.java:FactsText.render` |  | 2026-10-23 |  |
+| score | `score/evaluator/score/FactsText.java:FactsText.text` |  | 2026-10-23 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.cognitiveFacts` |  | 2026-10-23 |  |
+| score | `score/evaluator/score/Formulas.java:Formulas.cognitiveTotal` |  | 2026-10-23 |  |

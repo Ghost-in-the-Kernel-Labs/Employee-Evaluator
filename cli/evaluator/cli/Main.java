@@ -1,11 +1,13 @@
 package evaluator.cli;
 
 import evaluator.analyze.DockerSandbox;
+import evaluator.rubric.Fact;
 import evaluator.rubric.Produced;
 import evaluator.rubric.ScoreCard;
 import evaluator.score.CardJson;
 import evaluator.score.CardMarkdown;
 import evaluator.score.Cards;
+import evaluator.score.FactsText;
 import evaluator.score.Formulas;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -25,17 +27,19 @@ public final class Main {
     /** The kernel's version, as a card says what made it. */
     static final String VERSION = "0.1";
     static final String USAGE = """
-            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
+            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--facts] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
               Scores a repository on the seven metrics of docs/SCORE-CARD.md and prints its score card, as JSON
               or with --markdown as Markdown. --no-run leaves its tests unrun (no sandbox); --github with
               --applicant reads what GitHub verifies (needs EVALUATOR_GITHUB_TOKEN); --date fixes the card's date.
+              --facts prints instead the values behind the card, one `name value` line each, and goes with neither
+              --markdown nor --date.
             """;
 
     /** GitHub's own rule for owner/repo: an owner of letters, digits and hyphens; a repository not starting with a dot (so never `..`). */
     static final String GITHUB_NAME = "[A-Za-z0-9-]+/[A-Za-z0-9_-][A-Za-z0-9_.-]*";
 
     /** What was typed, read. */
-    record Command(Path path, boolean markdown, Pipeline.Options options, String date) {}
+    record Command(Path path, boolean markdown, boolean facts, Pipeline.Options options, String date) {}
 
     public static void main(String[] args) {
         System.exit(run(List.of(args), System.out, System.err));
@@ -61,8 +65,12 @@ public final class Main {
             return 1;
         }
         try {
-            ScoreCard card = Cards.card(Pipeline.facts(command.path(), command.options(), err), List.of(), Formulas.phaseOne(),
-                    new Produced(VERSION, command.date(), Formulas.rubricHash()));
+            List<Fact> facts = Pipeline.facts(command.path(), command.options(), err);
+            if (command.facts()) {
+                out.print(FactsText.render(facts));
+                return 0;
+            }
+            ScoreCard card = Cards.card(facts, List.of(), Formulas.phaseOne(), new Produced(VERSION, command.date(), Formulas.rubricHash()));
             out.print(command.markdown() ? CardMarkdown.render(card) : CardJson.render(card));
             return 0;
         } catch (IOException | UncheckedIOException e) {
@@ -75,16 +83,20 @@ public final class Main {
     static Command parse(List<String> args) {
         if (args.size() < 2 || !args.get(0).equals("score")) throw new IllegalArgumentException("the one command is score <path>");
         Path path = null;
-        boolean markdown = false, run = true;
+        boolean markdown = false, run = true, facts = false, dateTyped = false;
         String github = null, applicant = null, date = LocalDate.now(ZoneOffset.UTC).toString();
         for (int i = 1; i < args.size(); i++) {
             String a = args.get(i);
             switch (a) {
                 case "--markdown" -> markdown = true;
                 case "--no-run" -> run = false;
+                case "--facts" -> facts = true;
                 case "--github" -> github = value(args, ++i, a);
                 case "--applicant" -> applicant = value(args, ++i, a);
-                case "--date" -> date = date(value(args, ++i, a));
+                case "--date" -> {
+                    date = date(value(args, ++i, a));
+                    dateTyped = true;
+                }
                 default -> {
                     if (a.startsWith("--") || path != null) throw new IllegalArgumentException("not understood: " + a);
                     path = Path.of(a);
@@ -94,7 +106,8 @@ public final class Main {
         if (path == null) throw new IllegalArgumentException("score needs a path");
         if ((github == null) != (applicant == null)) throw new IllegalArgumentException("--github and --applicant go together");
         if (github != null && !github.matches(GITHUB_NAME)) throw new IllegalArgumentException("--github takes owner/repo, not " + github);
-        return new Command(path, markdown, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant), date);
+        if (facts && (markdown || dateTyped)) throw new IllegalArgumentException("--facts prints no card: it goes with neither --markdown nor --date");
+        return new Command(path, markdown, facts, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant), date);
     }
 
     /** A date as yyyy-mm-dd; anything else refused as what was typed, never a parser's exception. */

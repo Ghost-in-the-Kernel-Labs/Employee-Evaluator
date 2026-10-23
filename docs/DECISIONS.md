@@ -82,3 +82,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-073 | The supply-chain rules are back in CLAUDE.md, their one copy, read on entry | in force | security |
 | E-074 | Complexity is scored against the baseline: 0.6 on cognitive complexity, 0.4 on dependency depth, Suite Builder at 32762a6 is 100 | in force | scoring |
 | E-075 | Maintainability is scored against the baseline: E-051's weighted score over Suite Builder's at 32762a6 is 100 | in force | scoring |
+| E-076 | `evaluator score --facts` prints the values behind a card, one `name value` line each | in force | command line |

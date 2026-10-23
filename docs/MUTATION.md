@@ -265,6 +265,14 @@ Nothing in `complexity` survived. `logScale` is gone with the log scale, so its 
 the two left are `Json.java`'s empty-map and empty-list returns, already judged harmless below. Nothing in the scaling, the weighted score or the
 absent-part rule survived. No new row.
 
+### Run 18: 2026-10-23, `score/` and `cli/`, `evaluator score --facts` (E-076)
+
+`gradle mutate -Ptarget=evaluator.score.*` then `evaluator.cli.*`, in a plain clone of the change (`FactsText`, `Formulas.cognitiveFacts` and
+`cognitiveTotal`, `Main`'s `--facts` flag and its refusals). First pass: `score/` 172 mutants, 171 killed; the one left was `FactsText.text`'s
+`exact.scale() < 0` read as `<= 0`, equal in result because `toPlainString` already writes a negative scale in full, so the condition was removed
+and the code is shorter. `cli/`: 50 mutants, 49 killed, the one left `Main.main`'s `System.exit`, already judged harmless below. The rerun of
+`score/` after the change: 170 mutants, 170 killed. No new row.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

@@ -28,7 +28,7 @@ class CardGoldensTest {
         Path repo = ROOT.resolve("test/fixtures/" + fixture);
         RecordedSandbox sandbox = fixture.startsWith("test-runs/") ? new RecordedSandbox(ROOT.resolve("test/goldens/" + fixture)) : null;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Main.Command command = new Main.Command(repo, markdown, new Pipeline.Options(sandbox, null, null), DATE);
+        Main.Command command = new Main.Command(repo, markdown, false, new Pipeline.Options(sandbox, null, null), DATE);
         assertEquals(0, Main.score(command, new PrintStream(out), new PrintStream(new ByteArrayOutputStream())), fixture);
         return out.toString(StandardCharsets.UTF_8);
     }

@@ -45,8 +45,10 @@ final class Pipeline {
             facts.addAll(run.facts());
             run.notMeasured().forEach(why -> notes.println("tests not measured: " + why));
         }
+        // A .git directory only: a .git file (a worktree, a submodule) names a git directory elsewhere, which a
+        // hostile submission could point anywhere on the machine (E-013). Our own fast loop needs a plain clone.
         if (Files.isDirectory(root.resolve(".git"))) facts.addAll(Shape.facts(Commits.read(root), Commits.paths(root), TestFiles::isTest));
-        else notes.println("history not read: no .git");
+        else notes.println("history not read: no .git directory");
         if (options.github() != null) facts.addAll(github(options));
         return facts;
     }

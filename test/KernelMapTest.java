@@ -24,6 +24,7 @@ final class KernelMapTest {
                 .accepts("a decision cited under a Javadoc", () -> KernelMap.write(HEADER, CITED, "2026-10-04").contains("| E-007 |") ? List.of() : List.of("no E-007"))
                 .accepts("a write closes a function gone as removed", () -> KernelMap.write(held, Map.of(), "2026-10-23").endsWith("| ingest | `ingest/A.java:A.f` |  | 2026-10-23 | removed: 2026-10-23 |\n") ? KernelMap.check(KernelMap.write(held, Map.of(), "2026-10-23"), Map.of()) : List.of("not closed"))
                 .accepts("a write closes a moved function as superseded by its new place", () -> moved(held))
+                .accepts("a nested class moved to its own file is superseded, not removed", () -> unnested())
                 .accepts("a second write, which adds nothing", () -> held.equals(KernelMap.write(held, one, "2026-10-06")) ? List.of() : List.of("changed"));
     }
 
@@ -45,6 +46,15 @@ final class KernelMapTest {
         Map<String, String> after = Map.of("ingest/B.java", "class A { int f() { return 1; } }");
         String map = KernelMap.write(held, after, "2026-10-23");
         if (!map.contains("| ingest | `ingest/A.java:A.f` |  | 2026-10-23 | superseded-by: `ingest/B.java:A.f` |\n")) return List.of("not superseded: " + map);
+        return KernelMap.check(map, after);
+    }
+
+    /** Outer.Inner.f moved to Inner.java as Inner.f: superseded by its new key. */
+    private static List<String> unnested() {
+        String before = KernelMap.write(HEADER, Map.of("ingest/Outer.java", "class Outer { static class Inner { int f() { return 1; } } }"), "2026-10-04");
+        Map<String, String> after = Map.of("ingest/Inner.java", "class Inner { int f() { return 1; } }", "ingest/Outer.java", "class Outer { }");
+        String map = KernelMap.write(before, after, "2026-10-23");
+        if (!map.contains("| ingest | `ingest/Outer.java:Outer.Inner.f` |  | 2026-10-23 | superseded-by: `ingest/Inner.java:Inner.f` |")) return List.of("not superseded: " + map);
         return KernelMap.check(map, after);
     }
 }

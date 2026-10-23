@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
  * docs/KERNEL-MAP.md, the tool's own function ledger (docs/AGENT.md): `gradle kernelMap`
  * appends a row for every function in a module the map does not yet hold, and never changes a row.
  * A function that goes away is closed by a later row it appends too (E-062): `superseded-by: <key>`
- * when its name appears exactly once among the functions new in this run (it moved), else `removed:
+ * when its name appears exactly once among the functions new in this run (it moved, or its nested class
+ * moved to its own file), else `removed:
  * <date>`. A rename reads as removed and new; the two rows still say what happened.
  */
 final class KernelMap {
@@ -88,7 +89,7 @@ final class KernelMap {
         }
         for (String gone : open) {
             if (current.contains(gone)) continue;
-            List<String> moved = added.stream().filter(key -> name(key).equals(name(gone))).toList();
+            List<String> moved = added.stream().filter(key -> sameFunction(name(key), name(gone))).toList();
             String closed = moved.size() == 1 ? "superseded-by: `" + moved.get(0) + "`" : "removed: " + today;
             out.append("| ").append(module(gone)).append(" | `").append(gone).append("` |  | ").append(today).append(" | ").append(closed).append(" |\n");
         }
@@ -97,6 +98,11 @@ final class KernelMap {
 
     private static String module(String key) {
         return key.split("/")[0];
+    }
+
+    /** One function under two names: the same, or a nested class moved to its own file (`Outer.Inner.f`, `Inner.f`). */
+    static boolean sameFunction(String a, String b) {
+        return a.equals(b) || a.endsWith("." + b) || b.endsWith("." + a);
     }
 
     /** A function's name without its file: `Json.parse` of `rubric/.../Json.java:Json.parse`. */

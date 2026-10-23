@@ -13,7 +13,11 @@
 ## Steps
 
 - `gradle metrics` prints every metric; `test/MetricsTest.java` fails on one past its target. A limit is never raised to pass: make room.
-- `gradle kernelMap` appends new functions and closes gone ones (E-062); never edit the map by hand.
+- `gradle kernelMap` appends new functions and closes gone ones (E-062); never edit the map by hand. Run it
+  as soon as a function is added, moved or removed: the doc tests fail until it has.
+- The fast loop needs a plain clone. In a git worktree `.git` is a file, which the scorer deliberately does
+  not follow (`cli/evaluator/cli/Pipeline.java`), so `MainTest.thisRepositorysCard` fails there on Provenance.
+- Search with `git grep`, not a bare grep: the judges' JSON and the kernel map flood a bare one.
 - A tithe pass records a column in `docs/AGENT.md`'s table.
 - A mutation run over a module is recorded in `docs/MUTATION.md`; each survivor gets a test or a harmless row.
 - Long output never enters the context whole: it always goes to a file, which is grepped for failures

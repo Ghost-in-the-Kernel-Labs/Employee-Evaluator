@@ -916,3 +916,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   in this worktree (Provenance reads "not measured"); not touched.
 - **Touched:** history/Shape.java, analyze/ (Adapters, Tarjan, Complexity, Dependencies, Coupling, Navigability),
   cli/Pipeline.java, docs/how/add-a-language-adapter.md, docs/KERNEL-MAP.md.
+
+### J-067 A Sonnet agent's first refactor: slice 3 done unaided; what it found missing
+- **Who:** Claude. **Class:** trial.
+- **Intent:** Ghost: "spin up a sonnet model, and see if it can handle the refactor for item 3".
+- **Found:** Sonnet, entering from CLAUDE.md with a plain brief in its own worktree, made the four refactors
+  in one commit (5aaaff1, J-066) in under two minutes and 13 tool calls, no escalation, no golden changed,
+  and found two callers of the nested Tarjan the brief did not name. Review found it right. It reported four
+  gaps: the fast loop red in a worktree (`.git` is a file there, deliberately not followed); `gradle
+  kernelMap` needed before the tests go green, not only before the commit; bare grep flooded; modules.json's
+  start points not naming the new classes. Review found one more, mine: E-062 closed the moved Tarjan's
+  methods as removed, since their names changed from `Dependencies.Tarjan.f` to `Tarjan.f`.
+- **Options:** none weighed: each gap a line where the agent would look.
+- **Resolved:** the four gaps written into docs/how/agent-environment.md, Pipeline's comment, docs/modules.json
+  (and MODULES.md); KernelMap.sameFunction takes a nested class moved to its own file as a move, with a test.
+- **Touched:** scripts/KernelMap.java, test/KernelMapTest.java, cli/evaluator/cli/Pipeline.java,
+  docs/how/agent-environment.md, docs/modules.json, docs/MODULES.md.

@@ -16,3 +16,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, agent-environment.md, finish-work.md, commit-and-push.md, MUTATION.md, HANDOFF.md, then github/ and its two test files.
 - **Complaints:** MUTATION.md's run 1 says the network classes "run only against the real thing"; that sent me to look for a hook before I saw `get` only needs a host. `docs/how/` has no file for the github/ module's work (the table's nearest row is github-authorship.md, about commit verification). `Pipeline.github` (J-073) was the one precedent for injecting the API; nothing says a loopback server is allowed in tests.
 - **Suggestions:** one line in agent-environment.md's mutation step: "a network class is tested against a JDK `HttpServer` on loopback (HttpGitHubTest), not marked harmless". Also the shallow/worktree clone steps worked as written; nothing to add there.
+
+### 2026-10-23 · analyze/ part 1, the Java classes' mutants · Claude Sonnet 5.5 (written from its report by the reviewing agent: it did not append it)
+- **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/how/do-a-todo-step.md`, `docs/MUTATION.md` (runs 6 to 8).
+- **Complaints:** a scratch clone folder another agent left (`plain`) made its first clone fail. The mutation CSV's line numbers point at the line the mutated code sits on, not always the construct it names (the "nesting + 1" mutants are on the scan lines).
+- **Suggestions:** name a scratch clone after the branch; read the numbered source before a survivor.

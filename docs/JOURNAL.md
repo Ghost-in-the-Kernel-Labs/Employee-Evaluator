@@ -1058,3 +1058,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   No bug.
 - **Touched:** github/, test/evaluator/github/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
 - **Caught by:** mutation (E-019).
+
+### J-077 analyze/ part 1 of 6 (Java) reviewed; a debrief written into its report, not the file
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** TODO.md 1.12's analyze/, split by concern across six Sonnet agents, one at a time (Ghost).
+- **Found:** Part 1 (0f2624e, run 9) killed 24 of the Java classes' 31 survivors with JavaComplexityTest; the 7
+  harmless (six visitor methods returning Void, one boundary giving the same directory) hold on review; no bug,
+  no golden moved. It wrote no journal entry, reading 1.12 as unfinished, and gave its debrief only in its
+  report: docs/NAVIGATION-NOTES.md had no entry.
+- **Options:** leave the gap; write the debrief in from its report and watch whether another agent misses it.
+- **Resolved:** the debrief appended, marked as written by the reviewer; a second miss makes it a check.
+  The scratch clones finished agents left (jclone, plain, mclone) removed.
+- **Caught by:** review (counting the notes' entries).
+- **Touched:** docs/NAVIGATION-NOTES.md.

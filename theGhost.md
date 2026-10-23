@@ -1068,3 +1068,21 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-015, E-060
+
+### E-064: Every escalation replays the route, is logged, and three of a kind go to Ghost
+- **Decision:** A Ghost-level directive. When a Sonnet agent escalates to Opus (E-060), Opus first asks it
+  to replay the instructions it followed from the task's start, and validates that the instructions it needed
+  reached it then: in the routing row and instructions file it started from. The Sonnet agent replays if it
+  can recall, briefly; if it cannot, that is fine. Either way the escalation is logged in
+  `docs/ESCALATIONS.md` with one of five types (`missing-step`, `not-reached`, `wrong-step`, `hard-problem`,
+  `no-replay`). Three rows of one type not yet reviewed are raised to Ghost, for review and a possible pass
+  updating the routes.
+- **Why:** An escalation is the clearest sign a route failed an agent. Replaying the route says whether the
+  instructions were missing, not reached, wrong, or fine, so a route is fixed where it fails rather than where
+  someone guesses; three of a kind is a pattern, not chance.
+- **Held by:** `docs/how/escalate-to-opus.md`; `test/EscalationsTest.java` (the types; a third row of a type
+  not raised, or raised and not in `docs/FOR-GHOST.md`, fails); `CLAUDE.md` ("A Sonnet agent escalates once").
+- **Source:** Ghost, 2026-10-23 ("This is a ghost level directive").
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-060, E-063

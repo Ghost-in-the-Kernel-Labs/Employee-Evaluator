@@ -63,13 +63,12 @@ changed gets a test or a row in `docs/MUTATION.md` (E-019). Every eighth
 commit is a tithe (E-015); the pre-push refuses past sixteen. A doubt left in the code goes on a line of its own above it,
 `// Unsure: <why>`; `gradle metrics` lists them and nothing fails on one.
 
-## A Sonnet agent escalates once (E-060)
+## A Sonnet agent escalates once (E-060, E-064)
 
 If you are a Claude Sonnet model: what you spot and fix plainly, fix. A fix that fails, where the
-failure does not plainly say why, gets one more try of your own at most; then spawn a Claude Opus
-agent (the Agent tool, model `opus`) with the task, the failing output, your diff and the files you
-read, and apply its answer. If that fails too, stop and say so to Ghost. Note an escalation in the
-step's journal entry.
+failure does not plainly say why, gets one more try of your own at most; then escalate to a Claude
+Opus agent as `docs/how/escalate-to-opus.md` says: Opus has you replay the route you followed, checks
+it gave you what you needed, and you log the escalation in `docs/ESCALATIONS.md`. A Ghost directive.
 
 ## Three rules
 

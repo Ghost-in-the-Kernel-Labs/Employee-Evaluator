@@ -867,3 +867,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   moved to AGT-01, a duplicated line cut; the history row names AgentTools.java in place of Git.java.
 - **Touched:** CLAUDE.md, docs/how/, docs/DECISIONS.md, scripts/DecisionsDoc.java, scripts/Metrics.java,
   build.gradle, test/DocsTest.java, test/GhostTest.java, docs/AGENT.md, .gitattributes, theGhost.md (E-063).
+
+### J-063 Ghost's directive: an escalation replays its route, is logged, and three of a type go to Ghost
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: Opus asks the Sonnet agent to replay the instructions it followed and validates they
+  reached it at the start; the issue is logged; three of a type are raised for review and route updates.
+- **Found:** "Three of the same type" needs types an agent names alike every time, and a raise nobody forgets.
+- **Options:** free-text issues counted by eye; five fixed types with a test that refuses an unraised third.
+- **Resolved:** E-064. docs/how/escalate-to-opus.md (both sides' steps, the five types), docs/ESCALATIONS.md
+  (the log), test/EscalationsTest.java (a type outside the five, an unraised third, a raise not named in
+  docs/FOR-GHOST.md all fail; Ghost's `reviewed:` resets the count). CLAUDE.md's rule points to the file.
+- **Touched:** CLAUDE.md, docs/how/escalate-to-opus.md, docs/ESCALATIONS.md, test/EscalationsTest.java,
+  test/DocTests.java, theGhost.md, docs/DECISIONS.md.

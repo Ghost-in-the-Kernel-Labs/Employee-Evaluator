@@ -70,3 +70,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-061 | The supply-chain directive has one copy, theGhost.md's first section, read before any task | in force | security |
 | E-062 | `gradle kernelMap` closes a function that is gone | in force | intent |
 | E-063 | CLAUDE.md's routing rows are pointers; an action's steps live in its instructions file | in force | agents |
+| E-064 | Every escalation replays the route, is logged, and three of a kind go to Ghost | in force | agents |

@@ -446,3 +446,6 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.visit` |  | 2026-10-23 | removed: 2026-10-23 |
 | analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.enter` |  | 2026-10-23 | removed: 2026-10-23 |
 | analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.order` |  | 2026-10-23 | removed: 2026-10-23 |
+| rubric | `rubric/evaluator/rubric/Json.java:Json.quote` |  | 2026-10-23 |  |
+| ingest | `ingest/evaluator/ingest/Inventory.java:Inventory.quote` |  | 2026-10-23 | removed: 2026-10-23 |
+| score | `score/evaluator/score/CardJson.java:CardJson.quote` |  | 2026-10-23 | removed: 2026-10-23 |

@@ -36,6 +36,17 @@ public final class Json {
         }
     }
 
+    /** A JSON string: a hostile file name or path is data, so quotes, backslashes and every control character (DEL too) are escaped. */
+    public static String quote(String text) {
+        StringBuilder q = new StringBuilder("\"");
+        for (char c : text.toCharArray()) {
+            if (c == '"' || c == '\\') q.append('\\').append(c);
+            else if (c < 0x20 || c == 0x7f) q.append("\\u%04x".formatted((int) c));
+            else q.append(c);
+        }
+        return q.append('"').toString();
+    }
+
     /** The next JSON value: an object, an array, a string, a number, true, false or null. */
     private Object value() {
         space();

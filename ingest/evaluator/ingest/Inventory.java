@@ -1,5 +1,6 @@
 package evaluator.ingest;
 
+import evaluator.rubric.Json;
 import java.util.List;
 
 /**
@@ -23,26 +24,15 @@ public record Inventory(List<Source> source, List<Aside> setAside) {
         StringBuilder json = new StringBuilder("{\n  \"source\": [");
         for (int i = 0; i < source.size(); i++) {
             Source s = source.get(i);
-            json.append(i == 0 ? "\n" : ",\n").append("    {\"path\": ").append(quote(s.path())).append(", \"language\": ")
-                    .append(quote(s.language())).append(", \"lines\": ").append(s.lines()).append('}');
+            json.append(i == 0 ? "\n" : ",\n").append("    {\"path\": ").append(Json.quote(s.path())).append(", \"language\": ")
+                    .append(Json.quote(s.language())).append(", \"lines\": ").append(s.lines()).append('}');
         }
         json.append(source.isEmpty() ? "],\n" : "\n  ],\n").append("  \"setAside\": [");
         for (int i = 0; i < setAside.size(); i++) {
             Aside a = setAside.get(i);
-            json.append(i == 0 ? "\n" : ",\n").append("    {\"path\": ").append(quote(a.path())).append(", \"language\": ")
-                    .append(quote(a.language())).append(", \"reason\": ").append(quote(a.reason())).append('}');
+            json.append(i == 0 ? "\n" : ",\n").append("    {\"path\": ").append(Json.quote(a.path())).append(", \"language\": ")
+                    .append(Json.quote(a.language())).append(", \"reason\": ").append(Json.quote(a.reason())).append('}');
         }
         return json.append(setAside.isEmpty() ? "]\n}\n" : "\n  ]\n}\n").toString();
-    }
-
-    /** A JSON string: a hostile file name is data, so every control character is escaped. */
-    public static String quote(String text) {
-        StringBuilder q = new StringBuilder("\"");
-        for (char c : text.toCharArray()) {
-            if (c == '"' || c == '\\') q.append('\\').append(c);
-            else if (c < 0x20 || c == 0x7f) q.append("\\u%04x".formatted((int) c));
-            else q.append(c);
-        }
-        return q.append('"').toString();
     }
 }

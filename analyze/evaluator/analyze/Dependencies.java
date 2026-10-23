@@ -3,6 +3,7 @@ package evaluator.analyze;
 import evaluator.ingest.Inventory;
 import evaluator.rubric.Evidence;
 import evaluator.rubric.Fact;
+import evaluator.rubric.Json;
 import evaluator.rubric.Subject;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,7 +115,7 @@ public final class Dependencies {
         for (var file : report.imports().entrySet()) {
             List<String> unused = new ArrayList<>();
             for (Import imported : file.getValue()) unused.addAll(imported.unused());
-            json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Inventory.quote(file.getKey()))
+            json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Json.quote(file.getKey()))
                     .append(", \"to\": ").append(list(graph.edges().get(file.getKey()))).append(", \"unused\": ").append(list(unused)).append('}');
             first = false;
         }
@@ -123,7 +124,7 @@ public final class Dependencies {
 
     private static String list(java.util.Collection<String> items) {
         List<String> quoted = new ArrayList<>();
-        for (String item : items) quoted.add(Inventory.quote(item));
+        for (String item : items) quoted.add(Json.quote(item));
         return "[" + String.join(", ", quoted) + "]";
     }
 }

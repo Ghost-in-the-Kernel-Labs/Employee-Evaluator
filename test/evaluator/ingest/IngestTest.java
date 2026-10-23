@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import evaluator.rubric.Fact;
+import evaluator.rubric.Json;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -83,6 +84,6 @@ class IngestTest {
 
     @Test
     void aHostileFileNameIsEscapedInTheJson() {
-        assertEquals("\"a\\\"b\\\\c\\u000ad\"", Inventory.quote("a\"b\\c\nd"));
+        assertEquals("\"a\\\"b\\\\c\\u000ad\"", Json.quote("a\"b\\c\nd"));
     }
 }

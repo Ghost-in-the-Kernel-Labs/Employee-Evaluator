@@ -3,6 +3,7 @@ package evaluator.analyze;
 import evaluator.ingest.Inventory;
 import evaluator.rubric.Evidence;
 import evaluator.rubric.Fact;
+import evaluator.rubric.Json;
 import evaluator.rubric.Subject;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -71,8 +72,8 @@ public final class Complexity {
         boolean first = true;
         for (var file : report.functions().entrySet()) {
             for (Measure m : file.getValue()) {
-                json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Inventory.quote(file.getKey()))
-                        .append(", \"function\": ").append(Inventory.quote(m.function())).append(", \"line\": ").append(m.line())
+                json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Json.quote(file.getKey()))
+                        .append(", \"function\": ").append(Json.quote(m.function())).append(", \"line\": ").append(m.line())
                         .append(", \"cyclomatic\": ").append(m.cyclomatic()).append(", \"cognitive\": ").append(m.cognitive()).append('}');
                 first = false;
             }
@@ -80,8 +81,8 @@ public final class Complexity {
         json.append(first ? "],\n" : "\n  ],\n").append("  \"unread\": [");
         first = true;
         for (var file : report.unread().entrySet()) {
-            json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Inventory.quote(file.getKey()))
-                    .append(", \"why\": ").append(Inventory.quote(file.getValue())).append('}');
+            json.append(first ? "\n" : ",\n").append("    {\"path\": ").append(Json.quote(file.getKey()))
+                    .append(", \"why\": ").append(Json.quote(file.getValue())).append('}');
             first = false;
         }
         return json.append(first ? "]\n}\n" : "\n  ]\n}\n").toString();

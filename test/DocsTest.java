@@ -62,7 +62,7 @@ final class DocsTest {
                 if (path == null || exists.test(path)) continue;
                 Integer phase = modulePhases.get(path.split("/")[0]);
                 String named = phase == null ? unit : unit + " phase " + phase;
-                if (!planned(named, openSteps)) failures.add("names `" + path + "`, which does not exist");
+                if (!planned(named, openSteps)) failures.add("names `" + path + "`, which does not exist (build output is not in a clean clone: name it without backticks)");
             }
         }
         return failures;

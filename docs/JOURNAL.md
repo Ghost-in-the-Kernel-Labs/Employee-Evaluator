@@ -1101,3 +1101,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** run 12 (1,104 mutants, 1,024 killed); MeasureTest, TokensTest and TarjanTest (new), DependenciesTest, DuplicationTest and TestFilesTest extended; five harmless rows. The tithe puts the five points the debriefs agreed on into agent-environment.md (reading a survivor, `-Ptarget`, source held in a test, a network class on loopback, a scratch clone's name) and records Pass 4 in AGENT.md.
 - **Touched:** analyze/ (`Duplication.apart`), test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/AGENT.md, docs/how/agent-environment.md, docs/NAVIGATION-NOTES.md.
 - **Caught by:** mutation (E-019).
+
+### J-081 analyze/ part 4 reviewed: a build path in backticks, caught before the push
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** Reviewing part 4 (4313875, run 12, a tithe, by a Sonnet agent).
+- **Found:** Its tithe wrote the points three debriefs converged on (reading a survivor) into
+  docs/how/agent-environment.md, ahead of the navigation review; right in content, kept. One line named
+  mutations.xml under build/ in backticks: fine in a worktree, where build/ exists, refused by DocsTest on the
+  pre-push's clean clone, as J-065's first wording was. Its one unproved harmless row (Dependencies.chain, a
+  negated equals) says so plainly, with the search that failed to break it.
+- **Options:** none weighed.
+- **Resolved:** the line reworded; DocsTest's message now says build output is not in a clean clone, so the
+  next agent learns why from the failure itself. The review will record the converged points as already fixed.
+- **Caught by:** review, and a test run on a clean clone before the push.
+- **Touched:** docs/how/agent-environment.md, test/DocsTest.java.

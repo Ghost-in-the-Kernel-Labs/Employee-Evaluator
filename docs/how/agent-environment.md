@@ -26,7 +26,7 @@
   `grep -v KILLED build/mutation/mutations.csv | cut -d, -f1,3,4,5,6` (the line numbers move as you add lines, so re-read after a rerun).
   A TIMED_OUT mutant counts as killed.
 - Reading a survivor (J-074 to J-079): `cat -n` one source file at a time (the CSV's line numbers are that file's own);
-  the CSV names a mutator only, and `build/mutation/mutations.xml` says what each mutant changed (its `lineNumber`,
+  the CSV names a mutator only, and mutations.xml beside it (build output, so not in backticks: a path check holds every backticked path) says what each mutant changed (its `lineNumber`,
   `mutatedMethod` and `description`). `-Ptarget` takes a package glob (`evaluator.analyze.*`), not one class, so a rerun of
   `analyze/` is four minutes: batch the tests first. A survivor that needs a shape the fixture lacks is tried with source
   held in a new test, never by growing the fixture (its golden would move, E-018). A network class is tried against a JDK

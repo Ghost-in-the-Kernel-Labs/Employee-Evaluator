@@ -2,6 +2,7 @@ package evaluator.score;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import evaluator.rubric.Evidence;
 import evaluator.rubric.Fact;
@@ -36,12 +37,26 @@ class FormulasTest {
         assertEquals(82, Cards.card(allSigned, List.of(), Formulas.phaseOne(), PRODUCED).scores().get(Metric.PROVENANCE).value());
     }
 
-    /** E-048: each tenfold step in lines is a third of the scale, from 100 lines to 100,000. */
+    /**
+     * E-070 worked by hand against the baseline, Suite Builder at 32762a6 with 84,971 source lines: Size = 100 × lines ÷ 84,971,
+     * rounded. 21,243 lines: 100 × 21,243 ÷ 84,971 = 25.0003, so 25. 42,486: 50.0006, 50. 100,000: 117.69, 118. Twice the baseline,
+     * 169,942: exactly 200 (E-071: no ceiling). 424 lines: 0.499, 0; 425: 0.5002, 1. An empty project reads 0.
+     */
     @Test
-    void sizeIsLinesOnALogScale() {
-        int[][] cases = {{0, 0}, {100, 0}, {1_000, 33}, {6_000, 59}, {10_000, 67}, {40_000, 87}, {100_000, 100}, {2_000_000, 100}};
+    void sizeIsLinesAgainstTheBaseline() {
+        int[][] cases = {{0, 0}, {424, 0}, {425, 1}, {21_243, 25}, {42_486, 50}, {84_971, 100}, {100_000, 118}, {169_942, 200}, {849_710, 1000}};
         for (int[] c : cases) assertEquals(new Score(c[1], List.of("SIZE.source_lines repository:.")), Formulas.size(List.of(fact("SIZE.source_lines", c[0]))), c[0] + " lines");
         assertNull(Formulas.size(List.of(fact("SIZE.source_files", 12))), "no line count, no score");
+        assertEquals(84_971, Formulas.BASELINE_SOURCE_LINES, "Suite Builder's measure at the baseline commit");
+        assertEquals("32762a6110ebd73246ca2413b1d54db947aee179", Formulas.BASELINE_COMMIT);
+    }
+
+    /** The rubric names what Size is counted against, so a card's hash changes with the baseline (E-070). */
+    @Test
+    void theRubricNamesTheBaseline() {
+        assertTrue(Formulas.RUBRIC.contains("size E-070 against 32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines)"));
+        assertTrue(Formulas.RUBRIC.contains(Formulas.BASELINE_COMMIT) && Formulas.RUBRIC.contains("(" + Formulas.BASELINE_SOURCE_LINES + " source lines)"));
+        assertTrue(Formulas.RUBRIC.startsWith("phase-1 rubric 2:"));
     }
 
     /**
@@ -96,6 +111,6 @@ class FormulasTest {
     /** The rubric's hash is the first 12 hex digits of its SHA-256; it changes with the rubric, as every card's golden does. */
     @Test
     void theRubricsHash() {
-        assertEquals("b8043f1115a0", Formulas.rubricHash());
+        assertEquals("15affbf5ee9e", Formulas.rubricHash());
     }
 }

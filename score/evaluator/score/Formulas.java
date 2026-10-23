@@ -18,8 +18,16 @@ public final class Formulas {
      * The rubric's name and version: every formula and its decision. A card carries its hash, so two cards
      * scored by different rubrics are told apart; a formula changed gives it a new version.
      */
-    static final String RUBRIC = "phase-1 rubric 1: navigability E-044, provenance E-046, ratios E-047, size E-048, complexity E-050, "
-            + "maintainability E-051, quality E-052, bucket E-053";
+    static final String RUBRIC = "phase-1 rubric 2: navigability E-044, provenance E-046, ratios E-047, size E-070 against "
+            + "32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines), complexity E-050, maintainability E-051, quality E-052, bucket E-053";
+
+    /**
+     * The baseline Size is counted against (E-070): Suite Builder at this commit (main, 2026-10-23), read by this kernel
+     * (`evaluator score --no-run`, nothing of its own run) as 84,971 source lines in 916 files, 122 more set aside (E-026).
+     */
+    static final String BASELINE_COMMIT = "32762a6110ebd73246ca2413b1d54db947aee179";
+    /** `SIZE.source_lines` of the baseline commit: the repository that reads Size 100. */
+    static final long BASELINE_SOURCE_LINES = 84_971;
 
     private Formulas() {}
 
@@ -45,7 +53,7 @@ public final class Formulas {
 
     /**
      * Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046);
-     * Size (E-048); Complexity (E-050); Maintainability (E-051); Quality (E-052).
+     * Size (E-070, against the baseline); Complexity (E-050); Maintainability (E-051); Quality (E-052).
      */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
@@ -98,14 +106,15 @@ public final class Formulas {
     }
 
     /**
-     * Size: source lines on a log scale, vendored and generated code already set aside (E-026): 100 lines
-     * and under read 0, 1,000 read 33, 10,000 read 67, 100,000 and over read 100. Each tenfold step counts alike.
+     * Size: 100 × the repository's source lines ÷ the baseline's 84,971 (Suite Builder at 32762a6), rounded, vendored and
+     * generated code already set aside (E-026). Linear: an empty project reads 0, the baseline 100, twice its lines 200;
+     * there is no ceiling (E-071). No line count, no score.
      */
-    // Decision: E-048
+    // Decision: E-070
     static Score size(List<Fact> facts) {
         Fact lines = find(facts, "SIZE.source_lines");
         if (lines == null) return null;
-        return new Score((int) Math.round(logScale(((Number) lines.value()).doubleValue())), List.of(lines.key()));
+        return new Score((int) Math.round(100.0 * ((Number) lines.value()).doubleValue() / BASELINE_SOURCE_LINES), List.of(lines.key()));
     }
 
     /**

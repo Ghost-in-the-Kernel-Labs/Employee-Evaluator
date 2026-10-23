@@ -30,6 +30,7 @@ public record ScoreCard(
         refuted = List.copyOf(refuted);
         review = Map.copyOf(review);
         everyMetricAccountedFor(scores, notMeasured);
+        onlyCountedMayPassAHundred(scores);
         tierAgrees(scores.get(Metric.PROVENANCE), provenanceTier);
         for (Metric ranked : corpusRank.keySet()) {
             if (!scores.containsKey(ranked)) throw new IllegalArgumentException(ranked + " is ranked but has no score");
@@ -43,6 +44,14 @@ public record ScoreCard(
             boolean scored = scores.containsKey(metric), absent = notMeasured.contains(metric);
             if (scored == absent) throw new IllegalArgumentException(metric + " must be scored or not measured, " + (scored ? "not both" : "and is neither"));
         }
+    }
+
+    /** Each score is 0–100, but a counted metric's (scored against the baseline, E-070) has no ceiling (E-071). */
+    // Decision: E-071
+    private static void onlyCountedMayPassAHundred(Map<Metric, Score> scores) {
+        scores.forEach((metric, score) -> {
+            if (score.value() > 100 && !metric.counted) throw new IllegalArgumentException(metric + " is scored " + score.value() + ", but only a counted metric may pass 100 (E-071)");
+        });
     }
 
     /** The tier is the provenance score's, and there is none when provenance was not measured. */

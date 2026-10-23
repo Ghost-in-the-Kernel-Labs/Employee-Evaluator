@@ -23,6 +23,10 @@ the baseline; every moved card golden reviewed. With the first metric, a baselin
 upper bound and SC-01's "each 0–100" go for counted metrics, while Provenance, Quality and Navigability keep
 0–100. E-070 and E-071 move to in force.
 
+Status: Size is built (first slice): 100 × source lines ÷ 84,971, the baseline's measure at 32762a6 (`Formulas.BASELINE_SOURCE_LINES`),
+and `Metric.counted` lifts the ceiling for it. Next: Complexity, then Maintainability's parts, one commit each; E-070 and E-071 read "in force" for Size
+only until then.
+
 ## Phase 2: the evaluation engine with agents
 
 ### 2.1 Calibration set

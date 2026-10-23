@@ -21,8 +21,10 @@ Invariants are numbered SC-01 onward, in this document only, and a number is nev
 | Maintainability | how safely the code can be changed | coupling, duplication, test-to-code ratio, refactor history | tools + agent |
 | Provenance | confidence the applicant built it | identity (sign-in), authorship (signed or pushed commits), history shape | tools |
 
-- **SC-01 Seven scores, each 0–100, each ranked on its own; there is no composite.** The card never
-  carries a single overall number, and no renderer computes one.
+- **SC-01 Seven scores, each ranked on its own and each 0–100 except the counted metrics (Size); there is no composite.** A
+  counted metric is scored against the baseline repository (E-070) and has no ceiling (E-071): twice the baseline's lines
+  reads 200. Provenance, Quality and Navigability keep 0–100, and the card refuses a score above 100 for any metric not
+  counted. The card never carries a single overall number, and no renderer computes one.
 - **SC-04 Size and Complexity rank through ratios.** The card shows them raw and ranks on Quality per
   thousand lines and Maintainability at Complexity (their product over 100, high only when both are; E-047).
 - **SC-10 Quality per thousand lines ranks only within its size band.** Any score per line ranks the
@@ -57,7 +59,7 @@ One card per submission:
 
 | Field | Holds |
 | --- | --- |
-| `scores` | the seven, each 0–100, with the facts behind it listed by key |
+| `scores` | the seven, each 0–100 (a counted metric may pass 100, SC-01), with the facts behind it listed by key |
 | `ratios` | Quality per thousand lines and the size band it ranks in; Maintainability at Complexity |
 | `provenanceTier` | Verified (≥ 80), Partial (50–79), Unverified (< 50) |
 | `toolingBucket` | which agent tooling built the repository, read from its fingerprints: the tool with more than half the evidence, else mixed (E-053) |

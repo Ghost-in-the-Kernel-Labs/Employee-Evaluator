@@ -28,7 +28,7 @@ final class ScoreCardDocTest {
     private static final Pattern TIER = Pattern.compile("(\\w+) \\(");
 
     /** The words of rubric/ the document must use: what the code says. */
-    record Code(List<String> metrics, List<String> factFields, List<String> states, List<String> cardFields, List<String> tiers, Set<String> cited) {}
+    record Code(List<String> metrics, List<String> counted, List<String> factFields, List<String> states, List<String> cardFields, List<String> tiers, Set<String> cited) {}
 
     public static void main(String[] args) {
         run().exit();
@@ -47,6 +47,9 @@ final class ScoreCardDocTest {
                 .rejects("a kind a module's row lists and its source never names", () -> kinds(doc.replace("`QUALITY.tests.*`,", "`QUALITY.tests.*`, `QUALITY.lint`,"), sources))
                 .rejects("a kind a module names that its row lacks", () -> kinds(doc, with(sources, "history/X.java", "Fact.measured(\"MAINTAINABILITY.refactors\", s, 1, e);")))
                 .accepts("a module the table names that has no source yet", () -> kinds(doc, sources))
+                .rejects("a counted metric the code lacks", () -> check(doc.replace("counted metrics (Size)", "counted metrics (Size, Complexity)"), code, open))
+                .rejects("a counted metric the document lacks", () -> check(doc.replace("counted metrics (Size)", "counted metrics ()"), code, open))
+                .rejects("no word of the counted metrics", () -> check(doc.replace("counted metrics", "metrics"), code, open))
                 .rejects("a fact field the code lacks", () -> check(doc.replace("| `confidence` |", "| `certainty` |"), code, open))
                 .rejects("a metric renamed", () -> check(doc.replace("| Ambition |", "| Vision |"), code, open))
                 .rejects("a card field missing", () -> check(doc.replace("| `toolingBucket` |", "| bucket |"), code, open))
@@ -118,6 +121,7 @@ final class ScoreCardDocTest {
     static List<String> check(String doc, Code code, Set<String> openSteps) {
         List<String> failures = new ArrayList<>();
         same("the metrics", firstCells(section(doc, "The seven metrics"), false), code.metrics(), failures);
+        same("the counted metrics, which may pass 100 (SC-01, E-071)", counted(doc), code.counted(), failures);
         same("a fact's fields", firstCells(section(doc, "A fact"), true), code.factFields(), failures);
         same("a fact's states", backticked(row(section(doc, "A fact"), "`state`")), code.states(), failures);
         same("the card's fields", firstCells(section(doc, "The card"), true), code.cardFields(), failures);
@@ -166,6 +170,14 @@ final class ScoreCardDocTest {
         return cells;
     }
 
+    /** The metrics SC-01 names as counted ("counted metrics (Size)"): scored against the baseline, with no ceiling. */
+    private static List<String> counted(String doc) {
+        int at = doc.indexOf("- **SC-01 "), end = doc.indexOf("\n- **SC-02 ", at);
+        Matcher m = Pattern.compile("counted metrics \\(([^)]*)\\)").matcher(at < 0 || end < 0 ? "" : doc.substring(at, end));
+        if (!m.find() || m.group(1).isBlank()) return List.of();
+        return Arrays.stream(m.group(1).split(",\\s*")).toList();
+    }
+
     private static String row(String section, String first) {
         return section.lines().filter(l -> l.startsWith("| " + first + " |")).findFirst().orElse("");
     }
@@ -199,6 +211,7 @@ final class ScoreCardDocTest {
         });
         return new Code(
                 Arrays.stream(Metric.values()).map(metric -> metric.title).toList(),
+                Arrays.stream(Metric.values()).filter(metric -> metric.counted).map(metric -> metric.title).toList(),
                 components(Fact.class),
                 Arrays.stream(State.values()).map(state -> state.name().toLowerCase()).toList(),
                 components(ScoreCard.class),
@@ -213,6 +226,6 @@ final class ScoreCardDocTest {
     private static Code withCited(Code code, String extra) {
         Set<String> cited = new TreeSet<>(code.cited());
         cited.add(extra);
-        return new Code(code.metrics(), code.factFields(), code.states(), code.cardFields(), code.tiers(), cited);
+        return new Code(code.metrics(), code.counted(), code.factFields(), code.states(), code.cardFields(), code.tiers(), cited);
     }
 }

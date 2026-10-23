@@ -481,3 +481,5 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox.DockerSandbox#2` |  | 2026-10-23 |  |
 | analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.RegistriesProxy#2` |  | 2026-10-23 |  |
 | analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.listenPort` |  | 2026-10-23 |  |
+| rubric | `rubric/evaluator/rubric/Metric.java:Metric.Metric#2` |  | 2026-10-23 |  |
+| rubric | `rubric/evaluator/rubric/ScoreCard.java:ScoreCard.onlyCountedMayPassAHundred` | E-071 | 2026-10-23 |  |

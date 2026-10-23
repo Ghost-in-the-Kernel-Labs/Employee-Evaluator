@@ -3,6 +3,7 @@ package evaluator.rubric;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
@@ -38,12 +39,29 @@ class ScoreCardTest {
     }
 
     @Test
-    void aScoreIsZeroToAHundredAndTracedToAFact() {
+    void aScoreIsNotNegativeAndTracedToAFact() {
         new Score(0, List.of("a"));
         new Score(100, List.of("a"));
-        assertThrows(IllegalArgumentException.class, () -> new Score(101, List.of("a")));
+        new Score(200, List.of("a"));
         assertThrows(IllegalArgumentException.class, () -> new Score(-1, List.of("a")));
         assertThrows(IllegalArgumentException.class, () -> new Score(50, List.of()));
+    }
+
+    /** E-071: a counted metric (Size, scored against the baseline) may pass 100; every other metric keeps 0–100. */
+    @Test
+    void onlyACountedMetricMayPassAHundred() {
+        assertEquals(List.of(Metric.SIZE), Arrays.stream(Metric.values()).filter(m -> m.counted).toList());
+        card(Map.of(Metric.SIZE, new Score(200, List.of("SIZE.source_lines repository:."))), allBut(Metric.SIZE), null, Map.of());
+        card(Map.of(Metric.SIZE, new Score(100, List.of("a"))), allBut(Metric.SIZE), null, Map.of());
+        for (Metric m : Metric.values()) {
+            if (m.counted || m == Metric.PROVENANCE) continue; // Provenance carries a tier, so it is held on its own below
+            assertEquals(m + " is scored 101, but only a counted metric may pass 100 (E-071)",
+                    assertThrows(IllegalArgumentException.class, () -> card(Map.of(m, new Score(101, List.of("a"))), allBut(m), null, Map.of())).getMessage());
+            card(Map.of(m, new Score(100, List.of("a"))), allBut(m), null, Map.of());
+        }
+        assertEquals("PROVENANCE is scored 101, but only a counted metric may pass 100 (E-071)",
+                assertThrows(IllegalArgumentException.class, () -> card(Map.of(Metric.PROVENANCE, new Score(101, List.of("a"))), allBut(Metric.PROVENANCE), ProvenanceTier.VERIFIED, Map.of())).getMessage());
+        card(Map.of(Metric.PROVENANCE, new Score(100, List.of("a"))), allBut(Metric.PROVENANCE), ProvenanceTier.VERIFIED, Map.of());
     }
 
     @Test

@@ -780,7 +780,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   it ranks on. This repository reads 64 (8,160 lines), Suite Builder 96 (74,802).
 - **Held by:** `score/evaluator/score/Formulas.java` (`size`); `test/evaluator/score/CardsTest.java`.
 - **Source:** Claude's proposal, Ghost's choice ("go with the size log scale"), 2026-10-22.
-- **Status:** in force
+- **Status:** in force (Size's facts: source lines, vendored and generated code set aside); superseded by E-070 (Size's formula)
 - **subject:** scoring
 - **See also:** E-026, E-045, E-047
 
@@ -1179,6 +1179,10 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   more is worse (the largest function), the ratio is inverted. The baseline and its commit are part of the
   rubric, so every card names what it was counted against. The formulas move to it one metric at a time
   (TODO.md 1.13), Size first.
+  Built so far, Size: the baseline's measure, read by this kernel without the sandbox (`evaluator score --no-run`, none of
+  its own code run) on a clean clone at that commit, is 84,971 source lines (916 files, 119 folders, 122 files set aside,
+  E-026; the old log scale read it 98). Size = round(100 × lines ÷ 84,971): 21,243 lines read 25, 100,000 read 118,
+  169,942 read 200, an empty project 0.
 - **Why:** Ghost: "If we declare a given repository to be baseline in a specific aspect, then we create a
   measurable method to count that aspect." The anchors so far (Size's 100 and 100,000 lines, E-048) were
   constants picked by hand; a baseline is one that can be pointed at. Suite Builder over Katana: Katana is the
@@ -1186,13 +1190,15 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   mature product, its harness noted for rigour by other models, and a rigorously tested codebase following
   compiler principles is the next best thing to a compiler. Every baseline carries its developer's tendencies;
   that is accepted, not avoided (Ghost).
-- **Held by:** to come with TODO.md 1.13 (`score/evaluator/score/Formulas.java`, the rubric's hash, the cards'
-  goldens); proposed until then.
+- **Held by:** Size, built (TODO.md 1.13, first slice): `score/evaluator/score/Formulas.java` (`size`, `BASELINE_COMMIT`,
+  `BASELINE_SOURCE_LINES`, `RUBRIC`, whose hash every card carries), `test/evaluator/score/FormulasTest.java` (the worked
+  example), the cards' goldens. Complexity's and Maintainability's parts to come with the rest of 1.13.
 - **Source:** Ghost, 2026-10-23 ("ok lets set a commit level for suite builder at its current level ... the
   baseline ... to be 100. A project that is empty scores at 0"; "linear is fine").
-- **Status:** proposed
+- **Status:** in force (Size only, Complexity and Maintainability's parts still proposed, TODO.md 1.13)
 - **subject:** scoring
-- **See also:** E-045, E-048, E-050
+- **See also:** E-045, E-050, E-071
+- **Supersedes:** E-048 (Size's formula; its facts stay)
 
 ### E-071: A baseline-scored metric may pass 100
 - **Decision:** A metric scored against the baseline (E-070) has no ceiling: a repository counted at twice
@@ -1201,10 +1207,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   0–100. SC-01's "each 0–100" and `Score`'s bound change with TODO.md 1.13, when the first metric moves.
 - **Why:** Ghost: "Yes a score can go past 100." A cap at the baseline would make every repository larger
   than Suite Builder look the same, which is what the baseline is there to tell apart.
-- **Held by:** to come with TODO.md 1.13 (`rubric/evaluator/rubric/Score.java`, docs/SCORE-CARD.md SC-01,
-  `test/ScoreCardDocTest.java`); proposed until then.
+- **Held by:** `rubric/evaluator/rubric/Metric.java` (`counted`: Size so far), `rubric/evaluator/rubric/ScoreCard.java`
+  (a score above 100 refused for any other metric), `rubric/evaluator/rubric/Score.java` (a floor of 0 only), docs/SCORE-CARD.md
+  SC-01, `test/evaluator/rubric/ScoreCardTest.java`, `test/ScoreCardDocTest.java`. Complexity and Maintainability become counted
+  as TODO.md 1.13 moves them.
 - **Source:** Ghost, 2026-10-23.
-- **Status:** proposed
+- **Status:** in force (Size, the first counted metric, the others with the rest of TODO.md 1.13)
 - **subject:** scoring
 - **See also:** E-070
 

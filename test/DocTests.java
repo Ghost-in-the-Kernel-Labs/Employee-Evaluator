@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 /** The documents' and the kernel's tests under JUnit (E-009): each must report no problem. */
 class DocTests {
     @Test
+    void corpus() {
+        assertEquals(List.of(), CorpusTest.run().problems());
+    }
+
+    @Test
     void escalations() {
         assertEquals(List.of(), EscalationsTest.run().problems());
     }

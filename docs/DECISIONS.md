@@ -84,3 +84,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-075 | Maintainability is scored against the baseline: E-051's weighted score over Suite Builder's at 32762a6 is 100 | in force | scoring |
 | E-076 | `evaluator score --facts` prints the values behind a card, one `name value` line each | in force | command line |
 | E-077 | `gradle test -PshowGoldens` shows what a golden would change and writes nothing; one helper holds every golden | in force | tests |
+| E-078 | The seed corpus is held to the rubric its README names, not to the current rubric | in force | corpus |

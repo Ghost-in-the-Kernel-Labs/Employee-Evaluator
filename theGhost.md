@@ -1341,3 +1341,18 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** tests
 - **See also:** E-018, E-076
+
+### E-078: The seed corpus is held to the rubric its README names, not to the current rubric
+- **Decision:** `corpus/README.md` names one rubric, in the form "rubric" and the hash in backticks; every card in `corpus/` is a JSON and a Markdown file, listed in
+  the README's table, and both say they were made under that rubric (`produced.rubricHash` and the "Produced" line). The test reads this repository alone. It does not
+  require the cards to carry the current rubric's hash: a card made under an older rubric stays a true record of its day, dated and hashed, until someone makes it
+  again with the steps in the README.
+- **Why:** The cards were made under rubric b8043f1115a0 and the rubric moved to version 4 (E-070 to E-075) with nothing noticing; a hand-edited hash or a Markdown
+  left behind would have read as true. A test of the current hash would fail the pre-push at every rubric change until Suite Builder and Katana (outside this
+  repository, which a clean clone cannot reach) and this repository at a7fea50f were scored again, so the check that can run anywhere is that each card says what the
+  README says. The cards made again at the rubric's change are re-made on purpose, at the same commits and date (J-098).
+- **Held by:** `test/CorpusTest.java` (which also rejects its own bad inputs); `corpus/README.md`.
+- **Source:** the corpus task given to a Claude Sonnet 5.5 agent (HANDOFF's seed corpus); decided by that agent, for Ghost to confirm.
+- **Status:** in force
+- **subject:** corpus
+- **See also:** E-054, E-057, E-070

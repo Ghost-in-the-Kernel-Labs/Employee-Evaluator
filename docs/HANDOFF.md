@@ -6,15 +6,14 @@
 Ghost's token (below), and 2.1 on Ghost's labels, so nothing in TODO.md is open to an agent. 1.13, baseline scoring, is done (E-070, E-071, E-074, E-075): Size, Complexity and Maintainability
 are counted against Suite Builder at 32762a6 and `Metric.counted` holds the three. 1.12, the mutation survivors, is
 done: runs 2 to 14 of docs/MUTATION.md closed `rubric/`, `score/`, `history/`, `cli/`, `github/` and `analyze/` (six passes, the
-last the sandbox's network and Docker). What an agent can do meanwhile is the seed corpus
-in `corpus/` (its cards are dated 2026-10-22, rubric b8043f1115a0, and no test holds them to the current rubric: regenerate them or say why not).
+last the sandbox's network and Docker). The seed corpus in `corpus/` was made again under the current rubric
+(E-078, J-098); `test/CorpusTest.java` holds each card to the rubric its README names, not to the current one (the README says why).
 Phase 2 starts at 2.1, which waits on Ghost's labels.
 
 ## Next steps from the navigation review (J-093)
 
 None left: `evaluator score --facts` (E-076) and `gradle test -PshowGoldens` (E-077) are both done. After them, per `TODO.md` the first open item is 1.7,
-which waits on Ghost's token, then 2.1, which waits on Ghost's labels: nothing in `TODO.md` is open to an agent. Meanwhile there is the seed corpus
-named above.
+which waits on Ghost's token, then 2.1, which waits on Ghost's labels: nothing in `TODO.md` is open to an agent. The seed corpus waits for the judge that classifies folders (E-057).
 
 ## What waits on whom
 

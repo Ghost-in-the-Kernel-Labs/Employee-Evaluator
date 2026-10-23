@@ -45,8 +45,12 @@ public final class Commits {
 
     /** The paths in the repository at HEAD. */
     public static List<String> paths(Path repo) throws IOException {
-        return Git.run(repo, List.of("ls-tree", "-r", "--name-only", "-z", "HEAD")).lines()
-                .flatMap(line -> java.util.Arrays.stream(line.split("\u0000"))).filter(p -> !p.isEmpty()).toList();
+        return splitPaths(Git.run(repo, List.of("ls-tree", "-r", "--name-only", "-z", "HEAD")));
+    }
+
+    /** `ls-tree -z`'s paths, each closed by NUL; a path may hold a newline, so only NUL separates them. */
+    static List<String> splitPaths(String listing) {
+        return java.util.Arrays.stream(listing.split("\u0000")).filter(p -> !p.isEmpty()).toList();
     }
 
     /** `git log`'s output, newest first: a header (hash, time, message) closed by \u0002, then its numstat lines. */

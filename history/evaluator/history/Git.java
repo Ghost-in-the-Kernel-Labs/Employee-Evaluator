@@ -59,7 +59,12 @@ final class Git {
         command.addAll(SAFE);
         command.addAll(args);
         ProcessBuilder builder = new ProcessBuilder(command).redirectError(ProcessBuilder.Redirect.DISCARD);
-        Map<String, String> env = builder.environment();
+        scrub(builder.environment());
+        return builder;
+    }
+
+    /** The environment git runs in: every GIT_ variable of ours dropped, then git's own settings put (no config, no prompt, no locks). */
+    static void scrub(Map<String, String> env) {
         env.keySet().removeIf(key -> key.startsWith("GIT_"));
         env.put("GIT_CONFIG_NOSYSTEM", "1");
         env.put("GIT_CONFIG_GLOBAL", "/dev/null");
@@ -67,11 +72,10 @@ final class Git {
         env.put("GIT_OPTIONAL_LOCKS", "0");
         env.put("HOME", "/nonexistent");
         env.put("LC_ALL", "C");
-        return builder;
     }
 
     /** Everything the stream holds, or null once it passes MAX_OUTPUT. */
-    private static byte[] readCapped(InputStream in) {
+    static byte[] readCapped(InputStream in) {
         try (in) {
             byte[] bytes = in.readNBytes(MAX_OUTPUT + 1);
             return bytes.length > MAX_OUTPUT ? null : bytes;

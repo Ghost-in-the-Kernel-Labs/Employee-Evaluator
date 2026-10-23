@@ -985,3 +985,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   said). The routing table lost the four rows the map now covers. CLAUDE.md 647 words.
 - **Touched:** CLAUDE.md, docs/how/commands.md, docs/how/finish-work.md, docs/how/commit-and-push.md,
   theGhost.md, docs/DECISIONS.md.
+
+### J-072 history/'s mutation survivors closed; a path with a newline was read as two
+- **Who:** Claude Sonnet 5.5. **Class:** failure-caught.
+- **Intent:** TODO.md 1.12, the `history/` module: a test or a reason for each of run 1's 25 survivors.
+- **Found:** A surviving "removed empty-path filter" in `Commits.paths` led to `.lines()` before the NUL split:
+  a file name holding a newline was cut in two. The other survivors were untested edges of Shape's parts and
+  of git's output cap and environment; three mutants are equal to the code (docs/MUTATION.md).
+- **Options:** a harmless row for the filter (wrong: the filter is dead only because of the bug); split on NUL
+  alone, taken.
+- **Resolved:** `Commits.splitPaths`, `aPathWithANewlineIsOnePath` (fails before); the 26 mutants not killed are now 3, by new
+  tests; run 6 recorded; HANDOFF names `cli/` next.
+- **Touched:** history/, test/evaluator/history/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
+- **Caught by:** mutation (E-019).

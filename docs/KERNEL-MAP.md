@@ -473,3 +473,5 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner.delete` |  | 2026-10-23 | removed: 2026-10-23 |
 | analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..visitFile#2` |  | 2026-10-23 | removed: 2026-10-23 |
 | analyze | `analyze/evaluator/analyze/TestRunner.java:TestRunner..postVisitDirectory` |  | 2026-10-23 | removed: 2026-10-23 |
+| history | `history/evaluator/history/Commits.java:Commits.splitPaths` |  | 2026-10-23 |  |
+| history | `history/evaluator/history/Git.java:Git.scrub` |  | 2026-10-23 |  |

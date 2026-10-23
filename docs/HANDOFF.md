@@ -3,8 +3,8 @@
 ## What to work on next
 
 `TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. 1.7's live check waits on
-Ghost's token (below), so the work is 1.12, the mutation survivors: `rubric/` and `score/` are done
-(docs/MUTATION.md, runs 2 to 4); `history/` is next, then `cli/`, `github/`, `analyze/`, one module a
+Ghost's token (below), so the work is 1.12, the mutation survivors: `rubric/`, `score/` and `history/` are done
+(docs/MUTATION.md, runs 2 to 4 and 6); `cli/` is next, then `github/`, `analyze/`, one module a
 commit. Phase 2 starts at 2.1, which waits on Ghost's labels.
 
 ## What waits on whom

@@ -76,6 +76,22 @@ only test sat in `ingest/`, which a per-module run does not see): `JsonTest.quot
 kills all six of its mutants. In `analyze/` the survivors in `Workspace`, `ReportFiles` and `TestRunner` are the
 lines `TestRunner` held before, moved with no change of text (the same ones run 2 counted); none is new.
 
+### Run 6: 2026-10-23, `history/`, which closes it (TODO.md 1.12, J-072)
+
+`gradle mutate -Ptarget=evaluator.history.*`: 107 mutants before, 81 killed, 25 survived, 1 on a line no test
+runs (Shape 19, Commits 3, Git 3). After: 108 mutants (the path split became its own function), 105 killed;
+the three left are below. Tests added in ShapeTest (cadence, messy share, variation with a size-0 commit and
+with exactly two sizes, co-location with two beside and one alone, fingerprints at their edges and read from the
+commits that touch an agent file, the evidence of the facts: hashes or "(none)"), and two new files,
+CommitsTest (`parse` with the numstat right after its close, records that are no record, the path split) and
+GitTest (the environment scrub, the output cap at exactly `MAX_OUTPUT`, an interrupted run).
+
+One real bug, found by the survivor in `Commits.paths`: `ls-tree -z` separates paths by NUL, but the output
+was cut into lines first, so a file whose name holds a newline became two paths (one of them wrong, for
+the agent-file and test-file rules). Fixed (`Commits.splitPaths`), with `aPathWithANewlineIsOnePath`, which
+fails before the fix. Two small changes of shape only, to make the code testable: `Git.scrub` (the
+environment, taken out of `builder`) and `Git.readCapped` no longer private. `history/` is done.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -83,3 +99,5 @@ lines `TestRunner` held before, moved with no change of text (the same ones run 
 | `rubric/Json.java`, `object()`, the empty-object return | returns `Collections.emptyMap()` for the new empty map | Equal to what it replaces: an empty map is an empty map. The only difference is that the mutant's map refuses writes, and no caller writes to a parsed value. |
 | `rubric/Json.java`, `array()`, the empty-array return | returns `Collections.emptyList()` for the new empty list | The same, for a list. |
 | `score/Formulas.java`, `logScale`, `n <= 100` | `n < 100` | The two differ only at 100, where the formula gives 100 · (log10 100 − 2) / 3 = 0, which the guard returns anyway. |
+| `history/Shape.java`, `variation`, the two `-` in `(s - mean) * (s - mean)` | `(s + mean) * (s - mean)`, `(s - mean) * (s + mean)` | Equal to what they replace: (s + m)(s - m) = s² - m², and the sum of that over n values is Σs² - n·m², which is Σ(s - m)² when m is their mean. Only floating-point rounding, far below the three decimals the fact is rounded to, differs. |
+| `history/Commits.java`, `parse`, `close < 0` | `close <= 0` | Equal in result: a record whose close is at index 0 has an empty header, which splits into one part, and `head.length < 3` skips it on the next line. |

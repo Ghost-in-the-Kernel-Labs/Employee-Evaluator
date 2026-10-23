@@ -852,3 +852,18 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Touched:** docs/SCORE-CARD.md, test/ScoreCardDocTest.java, docs/HANDOFF.md, docs/FOR-GHOST.md, docs/JOURNAL.md,
   docs/GHOST-IN-THE-KERNEL.md, CLAUDE.md, analyze/evaluator/analyze/TestPlans.java and its test,
   history/evaluator/history/Commits.java.
+
+### J-062 Navigability pass, slice 2: rows as pointers, instructions in docs/how/, a decision index
+- **Who:** Claude. **Class:** decision.
+- **Intent:** The Fable advisor's pass; Ghost: "lets start thinking about the instructions as pointers".
+- **Found:** Adding a language touched ten files and a row may name five, so `Languages.java` (without it
+  nothing is measured) was named nowhere. Finding a decision meant theGhost.md, about 11,000 words. The new
+  path check caught eight bare file names and placeholder paths in the first instructions file.
+- **Options:** one recipes page; one instructions file per action, its row a pointer (Ghost's).
+- **Resolved:** E-063. docs/how/ holds add-a-language-adapter.md, add-a-fact.md and change-a-formula.md,
+  each row in CLAUDE.md naming its file; DocsTest holds every path in them. docs/DECISIONS.md, one line per
+  decision (1,405 words), written by `gradle decisionsDoc` and held by GhostTest. CLAUDE.md 1,114 words
+  (from 1,218 this morning): Commands rewritten with the one-module `gradle mutate` first, the Docker command
+  moved to AGT-01, a duplicated line cut; the history row names AgentTools.java in place of Git.java.
+- **Touched:** CLAUDE.md, docs/how/, docs/DECISIONS.md, scripts/DecisionsDoc.java, scripts/Metrics.java,
+  build.gradle, test/DocsTest.java, test/GhostTest.java, docs/AGENT.md, .gitattributes, theGhost.md (E-063).

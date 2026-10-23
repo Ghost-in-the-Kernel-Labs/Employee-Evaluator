@@ -1051,3 +1051,20 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** intent
 - **See also:** E-005
+
+### E-063: CLAUDE.md's routing rows are pointers; an action's steps live in its instructions file
+- **Decision:** A row of CLAUDE.md's routing table points; it does not instruct. Where an action has steps
+  (add a language adapter, add a fact, change a formula), its row names one instructions file in
+  `docs/how/`, and the steps, the files they touch and what proves them live there. A new step, a file an
+  action now touches, or more detail goes into that action's file, never into the table; a new action gets
+  one short row and its own file. Every path an instructions file names is held to the repository.
+- **Why:** The table is read by every agent; an action's steps are read only by the agent doing it. Adding
+  a language touched ten files, and AGT-04 allows a row five, so the rest was nowhere and an agent guessed
+  (the Fable advisor's pass, 2026-10-23). Steps in their own file grow without growing what every agent
+  reads.
+- **Held by:** `test/DocsTest.java` (every path in `docs/how/` exists, as CLAUDE.md's do); AGT-03 and
+  AGT-04 (`test/MetricsTest.java`).
+- **Source:** Ghost, 2026-10-23 ("lets start thinking about the instructions as pointers").
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-015, E-060

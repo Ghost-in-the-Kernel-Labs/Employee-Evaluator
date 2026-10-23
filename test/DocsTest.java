@@ -30,11 +30,26 @@ final class DocsTest {
         Map<String, Integer> phases = modulePhases(Check.read("docs/modules.json"));
         return new Check("docs")
                 .repository(check(Check.read("CLAUDE.md"), open, phases, Check::exists))
+                .repository(how(open, phases))
                 .rejects("a path that does not exist", () -> check("Read `docs/NOWHERE.md`.", open, phases, Check::exists))
                 .rejects("a path whose phase is done", () -> check("`x/types` (phase 2)", Set.of("3.1"), Map.of(), p -> false))
                 .accepts("a path whose phase is open", () -> check("`x/types`\nand (phase 2)", Set.of("2.4"), Map.of(), p -> false))
                 .rejects("a module whose phase is done", () -> check("`ingest/`", Set.of("3.1"), Map.of("ingest", 2), p -> false))
                 .accepts("a module whose phase is open", () -> check("`ingest/`", Set.of("2.4"), Map.of("ingest", 2), p -> false));
+    }
+
+    /** Every instructions file under docs/how/ (CLAUDE.md's rows point to them), held as CLAUDE.md is. */
+    private static List<String> how(Set<String> open, Map<String, Integer> phases) {
+        List<String> failures = new ArrayList<>();
+        try (var files = java.nio.file.Files.list(Check.ROOT.resolve("docs/how"))) {
+            for (var file : files.sorted().toList()) {
+                String name = "docs/how/" + file.getFileName();
+                check(Check.read(name), open, phases, Check::exists).forEach(f -> failures.add(name + " " + f));
+            }
+        } catch (java.io.IOException e) {
+            failures.add("docs/how/ cannot be read: " + e.getMessage());
+        }
+        return failures;
     }
 
     /** What a document gets wrong: a code path it names that does not exist, unless a planned step or module says it will. */

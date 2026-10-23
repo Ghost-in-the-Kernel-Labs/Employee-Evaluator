@@ -91,6 +91,13 @@ tasks.register('titheGate', JavaExec) {
     systemProperty 'evaluator.root', rootDir.absolutePath
 }
 
+tasks.register('decisionsDoc', JavaExec) {
+    description = 'Writes docs/DECISIONS.md, one line per decision, from theGhost.md; never edit it by hand.'
+    classpath = sourceSets.scripts.runtimeClasspath
+    mainClass = 'DecisionsDoc'
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
 tasks.register('modulesDoc', JavaExec) {
     description = 'Writes docs/MODULES.md from docs/modules.json; never edit the Markdown by hand.'
     classpath = sourceSets.scripts.runtimeClasspath

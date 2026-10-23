@@ -44,6 +44,9 @@ final class GhostTest {
     static Check run() {
         return new Check("ghost")
                 .repository(check(Check.read("theGhost.md")))
+                .repository(DecisionsDoc.check(Check.read(DecisionsDoc.PATH), Check.read("theGhost.md")))
+                .rejects("docs/DECISIONS.md behind theGhost.md", () -> DecisionsDoc.check(Check.read(DecisionsDoc.PATH), Check.read("theGhost.md") + "\n### E-999: a new one\n- **Status:** in force\n- **subject:** x\n"))
+                .accepts("docs/DECISIONS.md as written from theGhost.md", () -> DecisionsDoc.check(DecisionsDoc.render(Check.read("theGhost.md")), Check.read("theGhost.md")))
                 .rejects("a conflicting pair both in force", () -> check(PAIR_IN_CONFLICT))
                 .accepts("the same pair once one is superseded", () -> check(PAIR_SUPERSEDED))
                 .rejects("supersession named on one side only", () -> check(ONE_SIDED))

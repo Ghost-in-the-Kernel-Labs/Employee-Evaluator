@@ -120,6 +120,7 @@ final class Metrics {
         List<String> stale = new ArrayList<>();
         if (!KernelMap.check(Repo.read(KernelMap.PATH), Repo.moduleSources()).isEmpty()) stale.add(KernelMap.PATH);
         if (!ModulesDoc.check(Repo.read(ModulesDoc.PATH), Repo.read(ModulesDoc.SOURCE)).isEmpty()) stale.add(ModulesDoc.PATH);
+        if (!DecisionsDoc.check(Repo.read(DecisionsDoc.PATH), Repo.read(DecisionsDoc.SOURCE)).isEmpty()) stale.add(DecisionsDoc.PATH);
         return stale.isEmpty() ? "0" : stale.size() + " (" + String.join(", ", stale) + ")";
     }
 

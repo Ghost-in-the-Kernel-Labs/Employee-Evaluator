@@ -10,7 +10,8 @@ push by `scripts/prepush.sh`.
 ## The contract
 
 - **AGT-01 A clean clone builds offline.** `gradle build --offline` in the image with `--network none`,
-  from `third_party/` (E-021).
+  from `third_party/` (E-021): `docker run --rm --network none -u "$(id -u)" -v "$PWD":/evaluator
+  evaluator gradle test --offline` is the fast loop there.
 - **AGT-02 The fast loop runs under 20 s, warm.** Unit and doc tests only. Anything that clones a
   repository, runs its tests or reaches GitHub is an integration test with its own target and budget.
 - **AGT-03 Mandatory context stays under 1,500 words.** `CLAUDE.md` plus whatever an agent must read

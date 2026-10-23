@@ -56,22 +56,32 @@ class FormulasTest {
     void theRubricNamesTheBaseline() {
         assertTrue(Formulas.RUBRIC.contains("size E-070 against 32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines)"));
         assertTrue(Formulas.RUBRIC.contains(Formulas.BASELINE_COMMIT) && Formulas.RUBRIC.contains("(" + Formulas.BASELINE_SOURCE_LINES + " source lines)"));
-        assertTrue(Formulas.RUBRIC.startsWith("phase-1 rubric 2:"));
+        assertTrue(Formulas.RUBRIC.startsWith("phase-1 rubric 3:"));
+        assertTrue(Formulas.RUBRIC.contains("complexity E-074 against 32762a6110ebd73246ca2413b1d54db947aee179 (13361 cognitive, depth 28)"));
     }
 
     /**
-     * E-050 worked by hand: functions of cognitive 400, 500 and 100 (1,000 in all: 33.3 on the log scale)
-     * and a depth of 10 (40): 0.6 × 33.3 + 0.4 × 40 = 36. Each function's fact is listed behind the score.
+     * E-074 worked by hand against the baseline, Suite Builder at 32762a6 with a total cognitive complexity of 13,361 and a dependency
+     * depth of 28: Complexity = 0.6 × (100 × cognitive ÷ 13,361) + 0.4 × (100 × depth ÷ 28), rounded. The baseline itself: 0.6 × 100
+     * + 0.4 × 100 = 100. Twice it (26,722 and 56): 200. Cognitive 6,681 (50.004) and depth 7 (25): 30.002 + 10 = 40.002, 40.
+     * Cognitive 13,361 and depth 0: 60 + 0 = 60. Cognitive 0 and depth 14: 0 + 20 = 20. Cognitive 111: 0.6 × 0.8308 = 0.4985, 0; 112:
+     * 0.5030, 1. Depth 1 alone: 0.4 × 3.5714 = 1.43, 1; depth 28 alone: 40. An empty project (depth 0, no function) reads 0. Each
+     * function's fact is listed behind the score.
      */
     @Test
-    void complexityIsTotalCognitiveAndDepth() {
-        List<Fact> facts = List.of(fact("COMPLEXITY.dependency_depth", 10), function("a", 400), function("b", 500), function("c", 100),
+    void complexityIsTotalCognitiveAndDepthAgainstTheBaseline() {
+        assertEquals(13_361, Formulas.BASELINE_COGNITIVE, "Suite Builder's total cognitive complexity at the baseline commit");
+        assertEquals(28, Formulas.BASELINE_DEPTH, "Suite Builder's dependency depth at the baseline commit");
+        int[][] cases = {{0, 0, 0}, {13_361, 28, 100}, {26_722, 56, 200}, {6_681, 7, 40}, {13_361, 0, 60}, {0, 14, 20}, {111, 0, 0}, {112, 0, 1},
+                {0, 1, 1}, {0, 28, 40}, {133_610, 280, 1000}};
+        for (int[] c : cases) assertEquals(c[2], Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", c[1]), function("f", c[0]))).value(), c[0] + " cognitive, depth " + c[1]);
+        assertEquals(0, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 0))).value(), "an empty project");
+        List<Fact> split = List.of(fact("COMPLEXITY.dependency_depth", 28), function("a", 4_000), function("b", 9_000), function("c", 361),
                 Fact.measured("COMPLEXITY.cyclomatic", new Subject(Subject.Kind.FUNCTION, "a"), 99, TOOL));
-        Score score = Formulas.complexity(facts);
-        assertEquals(36, score.value());
-        assertEquals(List.of("COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:a", "COMPLEXITY.cognitive function:b", "COMPLEXITY.cognitive function:c"), score.facts());
-        assertEquals(40, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 40))).value(), "no function, depth over 25: 0 + 0.4 × 100");
-        assertEquals(100, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 25), function("big", 100_000))).value());
+        Score baseline = Formulas.complexity(split);
+        assertEquals(100, baseline.value(), "functions summed: the baseline reads 100 against itself");
+        assertEquals(List.of("COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:a", "COMPLEXITY.cognitive function:b", "COMPLEXITY.cognitive function:c"), baseline.facts());
+        assertEquals(40, Formulas.complexity(List.of(fact("COMPLEXITY.dependency_depth", 28))).value(), "no function: only the depth part");
         assertNull(Formulas.complexity(List.of(function("a", 400))), "no depth read, no score");
     }
 
@@ -111,6 +121,6 @@ class FormulasTest {
     /** The rubric's hash is the first 12 hex digits of its SHA-256; it changes with the rubric, as every card's golden does. */
     @Test
     void theRubricsHash() {
-        assertEquals("15affbf5ee9e", Formulas.rubricHash());
+        assertEquals("4d7287ec37e6", Formulas.rubricHash());
     }
 }

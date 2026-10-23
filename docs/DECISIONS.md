@@ -56,7 +56,7 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-047 | The ratios: Quality per thousand lines within a size band; Maintainability at Complexity | in force | scoring |
 | E-048 | Size is source lines on a log scale: 100 lines read 0, 100,000 read 100 | in force (Size's facts: source lines, vendored and generated code set aside); superseded by E-070 (Size's formula) | scoring |
 | E-049 | A Java class used from its own package is a dependency, though no import line names it | in force | analysis |
-| E-050 | Complexity is the total cognitive complexity on a log scale and the dependency depth | in force | scoring |
+| E-050 | Complexity is the total cognitive complexity on a log scale and the dependency depth | in force (Complexity's facts: total cognitive complexity and dependency depth); superseded by E-074 (Complexity's formula) | scoring |
 | E-051 | Maintainability is six parts weighed: duplication, tests, cycles, complex functions, coupling, unused imports | in force | scoring |
 | E-052 | Quality is the pass rate and coverage of the submission's own tests; no test at all reads 0 | in force | scoring |
 | E-053 | The tooling bucket is the agent tool with more than half the evidence; else mixed | in force | scoring |
@@ -76,7 +76,8 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |
 | E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force | agents |
 | E-069 | CLAUDE.md is a memory map: what applies only sometimes is a "When X, read Y" pointer | in force | agents |
-| E-070 | Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0 | in force (Size only, Complexity and Maintainability's parts still proposed, TODO.md 1.13) | scoring |
-| E-071 | A baseline-scored metric may pass 100 | in force (Size, the first counted metric, the others with the rest of TODO.md 1.13) | scoring |
+| E-070 | Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0 | in force (Size and Complexity, Maintainability's parts still proposed, TODO.md 1.13) | scoring |
+| E-071 | A baseline-scored metric may pass 100 | in force (Size and Complexity, counted, the others with the rest of TODO.md 1.13) | scoring |
 | E-072 | The fast loop runs test classes side by side, the tests of a class one after another | in force | tests |
 | E-073 | The supply-chain rules are back in CLAUDE.md, their one copy, read on entry | in force | security |
+| E-074 | Complexity is scored against the baseline: 0.6 on cognitive complexity, 0.4 on dependency depth, Suite Builder at 32762a6 is 100 | in force | scoring |

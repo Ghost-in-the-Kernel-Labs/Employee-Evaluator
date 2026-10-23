@@ -21,7 +21,7 @@ Invariants are numbered SC-01 onward, in this document only, and a number is nev
 | Maintainability | how safely the code can be changed | coupling, duplication, test-to-code ratio, refactor history | tools + agent |
 | Provenance | confidence the applicant built it | identity (sign-in), authorship (signed or pushed commits), history shape | tools |
 
-- **SC-01 Seven scores, each ranked on its own and each 0–100 except the counted metrics (Size); there is no composite.** A
+- **SC-01 Seven scores, each ranked on its own and each 0–100 except the counted metrics (Complexity, Size); there is no composite.** A
   counted metric is scored against the baseline repository (E-070) and has no ceiling (E-071): twice the baseline's lines
   reads 200. Provenance, Quality and Navigability keep 0–100, and the card refuses a score above 100 for any metric not
   counted. The card never carries a single overall number, and no renderer computes one.

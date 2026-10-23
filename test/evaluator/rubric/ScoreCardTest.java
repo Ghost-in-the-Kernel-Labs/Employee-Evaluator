@@ -47,12 +47,13 @@ class ScoreCardTest {
         assertThrows(IllegalArgumentException.class, () -> new Score(50, List.of()));
     }
 
-    /** E-071: a counted metric (Size, scored against the baseline) may pass 100; every other metric keeps 0–100. */
+    /** E-071: a counted metric (Size or Complexity, scored against the baseline) may pass 100; every other metric keeps 0–100. */
     @Test
     void onlyACountedMetricMayPassAHundred() {
-        assertEquals(List.of(Metric.SIZE), Arrays.stream(Metric.values()).filter(m -> m.counted).toList());
+        assertEquals(List.of(Metric.COMPLEXITY, Metric.SIZE), Arrays.stream(Metric.values()).filter(m -> m.counted).toList());
         card(Map.of(Metric.SIZE, new Score(200, List.of("SIZE.source_lines repository:."))), allBut(Metric.SIZE), null, Map.of());
         card(Map.of(Metric.SIZE, new Score(100, List.of("a"))), allBut(Metric.SIZE), null, Map.of());
+        card(Map.of(Metric.COMPLEXITY, new Score(200, List.of("COMPLEXITY.dependency_depth repository:."))), allBut(Metric.COMPLEXITY), null, Map.of());
         for (Metric m : Metric.values()) {
             if (m.counted || m == Metric.PROVENANCE) continue; // Provenance carries a tier, so it is held on its own below
             assertEquals(m + " is scored 101, but only a counted metric may pass 100 (E-071)",

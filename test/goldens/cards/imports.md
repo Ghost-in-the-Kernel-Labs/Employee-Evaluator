@@ -15,4 +15,4 @@
 - Provenance tier: not measured
 - Tooling bucket: unknown
 - Refuted: none
-- Produced: kernel 0.1, 2026-10-22, rubric `15affbf5ee9e`
+- Produced: kernel 0.1, 2026-10-22, rubric `4d7287ec37e6`

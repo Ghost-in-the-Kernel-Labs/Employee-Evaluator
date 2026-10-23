@@ -813,7 +813,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `score/evaluator/score/Formulas.java` (`complexity`, `logScale`); `CardMarkdown.java` (`facts`);
   `test/evaluator/score/CardsTest.java`.
 - **Source:** Claude's proposal, Ghost's choice ("go with the proposal, fix java depth first"), 2026-10-22.
-- **Status:** in force
+- **Status:** in force (Complexity's facts: total cognitive complexity and dependency depth); superseded by E-074 (Complexity's formula)
 - **subject:** scoring
 - **See also:** E-030, E-031, E-032, E-048, E-049
 
@@ -1183,6 +1183,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   its own code run) on a clean clone at that commit, is 84,971 source lines (916 files, 119 folders, 122 files set aside,
   E-026; the old log scale read it 98). Size = round(100 × lines ÷ 84,971): 21,243 lines read 25, 100,000 read 118,
   169,942 read 200, an empty project 0.
+  Built next, Complexity (E-074): the baseline's total cognitive complexity is 13,361 and its dependency depth 28.
 - **Why:** Ghost: "If we declare a given repository to be baseline in a specific aspect, then we create a
   measurable method to count that aspect." The anchors so far (Size's 100 and 100,000 lines, E-048) were
   constants picked by hand; a baseline is one that can be pointed at. Suite Builder over Katana: Katana is the
@@ -1192,10 +1193,11 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   that is accepted, not avoided (Ghost).
 - **Held by:** Size, built (TODO.md 1.13, first slice): `score/evaluator/score/Formulas.java` (`size`, `BASELINE_COMMIT`,
   `BASELINE_SOURCE_LINES`, `RUBRIC`, whose hash every card carries), `test/evaluator/score/FormulasTest.java` (the worked
-  example), the cards' goldens. Complexity's and Maintainability's parts to come with the rest of 1.13.
+  example), the cards' goldens. Complexity, built (second slice, E-074): `Formulas.complexity`, `BASELINE_COGNITIVE`, `BASELINE_DEPTH`, the same worked-example
+  test. Maintainability's parts to come with the rest of 1.13.
 - **Source:** Ghost, 2026-10-23 ("ok lets set a commit level for suite builder at its current level ... the
   baseline ... to be 100. A project that is empty scores at 0"; "linear is fine").
-- **Status:** in force (Size only, Complexity and Maintainability's parts still proposed, TODO.md 1.13)
+- **Status:** in force (Size and Complexity, Maintainability's parts still proposed, TODO.md 1.13)
 - **subject:** scoring
 - **See also:** E-045, E-050, E-071
 - **Supersedes:** E-048 (Size's formula; its facts stay)
@@ -1207,12 +1209,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   0–100. SC-01's "each 0–100" and `Score`'s bound change with TODO.md 1.13, when the first metric moves.
 - **Why:** Ghost: "Yes a score can go past 100." A cap at the baseline would make every repository larger
   than Suite Builder look the same, which is what the baseline is there to tell apart.
-- **Held by:** `rubric/evaluator/rubric/Metric.java` (`counted`: Size so far), `rubric/evaluator/rubric/ScoreCard.java`
+- **Held by:** `rubric/evaluator/rubric/Metric.java` (`counted`: Size and Complexity so far), `rubric/evaluator/rubric/ScoreCard.java`
   (a score above 100 refused for any other metric), `rubric/evaluator/rubric/Score.java` (a floor of 0 only), docs/SCORE-CARD.md
-  SC-01, `test/evaluator/rubric/ScoreCardTest.java`, `test/ScoreCardDocTest.java`. Complexity and Maintainability become counted
-  as TODO.md 1.13 moves them.
+  SC-01, `test/evaluator/rubric/ScoreCardTest.java`, `test/ScoreCardDocTest.java`. Maintainability becomes counted
+  as TODO.md 1.13 moves it.
 - **Source:** Ghost, 2026-10-23.
-- **Status:** in force (Size, the first counted metric, the others with the rest of TODO.md 1.13)
+- **Status:** in force (Size and Complexity, counted, the others with the rest of TODO.md 1.13)
 - **subject:** scoring
 - **See also:** E-070
 
@@ -1249,3 +1251,27 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** security
 - **Supersedes:** E-061
 - **See also:** E-033, E-069
+
+### E-074: Complexity is scored against the baseline: 0.6 on cognitive complexity, 0.4 on dependency depth, Suite Builder at 32762a6 is 100
+- **Decision:** Complexity (the tools' half) = round(0.6 × (100 × the total cognitive complexity of every function ÷ 13,361) + 0.4 ×
+  (100 × the dependency depth ÷ 28)), no ceiling (E-071); an empty project (depth 0, no function) reads 0, and no depth read is still no
+  score. The baseline's measures, read by this kernel without the sandbox (the modules `evaluator score --no-run` calls for the code,
+  `Ingest`, `Complexity` and `Dependencies`, on the facts `COMPLEXITY.cognitive` and `COMPLEXITY.dependency_depth`; none of Suite
+  Builder's code run) on a clean clone of Suite Builder at `32762a6110ebd73246ca2413b1d54db947aee179`: total cognitive complexity 13,361 over 4,410 functions,
+  dependency depth 28 (84,971 source lines again, so the reading is the one Size used; one file was unreadable to its adapter and is
+  listed, not guessed at). E-050's weights (0.6, 0.4) and inputs (the total of every function's cognitive complexity, and the
+  dependency depth, E-032, E-049) are kept as they were; what changes is the scale: E-050's log scale and its depth cap of 25 go,
+  each input is the ratio to the baseline's. Worked: the baseline reads 0.6 × 100 + 0.4 × 100 = 100; twice it (26,722 and 56) 200;
+  cognitive 6,681 with depth 7 is 30.002 + 10 = 40; cognitive 13,361 with depth 0 is 60; depth 14 with no function is 20.
+- **Why:** Ghost's lead: keep E-050's weights and inputs and put each on the baseline's scale (E-070). The log scale and the cap at 25
+  were constants picked by hand; Suite Builder's own depth (28) was past the cap, so the old scale could not tell it from a
+  shallower repository, and the old formula read it 81 (this repository 37). Both parts are now counts, linear, so the one rule
+  (E-070) holds for Complexity: the score counts how much there is, as Size does.
+- **Held by:** `score/evaluator/score/Formulas.java` (`complexity`, `BASELINE_COGNITIVE`, `BASELINE_DEPTH`, `RUBRIC`, whose hash every
+  card carries); `rubric/evaluator/rubric/Metric.java` (`counted`); `test/evaluator/score/FormulasTest.java` (the worked example and
+  its edges); the cards' goldens.
+- **Source:** Ghost's lead, 2026-10-23 (second slice of TODO.md 1.13); Claude Sonnet 5.5 measured and built it.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-032, E-049, E-050, E-070, E-071
+- **Supersedes:** E-050 (Complexity's formula; its facts stay)

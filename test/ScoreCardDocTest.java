@@ -47,8 +47,8 @@ final class ScoreCardDocTest {
                 .rejects("a kind a module's row lists and its source never names", () -> kinds(doc.replace("`QUALITY.tests.*`,", "`QUALITY.tests.*`, `QUALITY.lint`,"), sources))
                 .rejects("a kind a module names that its row lacks", () -> kinds(doc, with(sources, "history/X.java", "Fact.measured(\"MAINTAINABILITY.refactors\", s, 1, e);")))
                 .accepts("a module the table names that has no source yet", () -> kinds(doc, sources))
-                .rejects("a counted metric the code lacks", () -> check(doc.replace("counted metrics (Size)", "counted metrics (Size, Complexity)"), code, open))
-                .rejects("a counted metric the document lacks", () -> check(doc.replace("counted metrics (Size)", "counted metrics ()"), code, open))
+                .rejects("a counted metric the code lacks", () -> check(doc.replace("counted metrics (Complexity, Size)", "counted metrics (Complexity, Size, Maintainability)"), code, open))
+                .rejects("a counted metric the document lacks", () -> check(doc.replace("counted metrics (Complexity, Size)", "counted metrics (Size)"), code, open))
                 .rejects("no word of the counted metrics", () -> check(doc.replace("counted metrics", "metrics"), code, open))
                 .rejects("a fact field the code lacks", () -> check(doc.replace("| `confidence` |", "| `certainty` |"), code, open))
                 .rejects("a metric renamed", () -> check(doc.replace("| Ambition |", "| Vision |"), code, open))
@@ -170,7 +170,7 @@ final class ScoreCardDocTest {
         return cells;
     }
 
-    /** The metrics SC-01 names as counted ("counted metrics (Size)"): scored against the baseline, with no ceiling. */
+    /** The metrics SC-01 names as counted ("counted metrics (Complexity, Size)"): scored against the baseline, with no ceiling. */
     private static List<String> counted(String doc) {
         int at = doc.indexOf("- **SC-01 "), end = doc.indexOf("\n- **SC-02 ", at);
         Matcher m = Pattern.compile("counted metrics \\(([^)]*)\\)").matcher(at < 0 || end < 0 ? "" : doc.substring(at, end));

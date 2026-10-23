@@ -24,8 +24,9 @@ upper bound and SC-01's "each 0–100" go for counted metrics, while Provenance,
 0–100. E-070 and E-071 move to in force.
 
 Status: Size is built (first slice): 100 × source lines ÷ 84,971, the baseline's measure at 32762a6 (`Formulas.BASELINE_SOURCE_LINES`),
-and `Metric.counted` lifts the ceiling for it. Next: Complexity, then Maintainability's parts, one commit each; E-070 and E-071 read "in force" for Size
-only until then.
+and `Metric.counted` lifts the ceiling for it. Complexity is built (second slice, E-074): 0.6 × (100 × total cognitive ÷ 13,361) + 0.4 × (100 × depth ÷ 28),
+the baseline's two measures at 32762a6 (`Formulas.BASELINE_COGNITIVE`, `Formulas.BASELINE_DEPTH`), counted too. Next: Maintainability's parts, one commit each; E-070 and E-071 read "in force" for
+Size and Complexity only until then.
 
 ## Phase 2: the evaluation engine with agents
 

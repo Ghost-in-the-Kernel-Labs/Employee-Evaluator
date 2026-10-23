@@ -8,7 +8,7 @@ package evaluator.rubric;
 // Decision: E-011
 public enum Metric {
     QUALITY("Quality"),
-    COMPLEXITY("Complexity"),
+    COMPLEXITY("Complexity", true),
     SIZE("Size", true),
     AMBITION("Ambition"),
     NAVIGABILITY("AI navigability"),
@@ -19,8 +19,8 @@ public enum Metric {
     public final String title;
 
     /**
-     * Whether the score is a count against the baseline, which may pass 100 (E-071). Size is the first; Complexity and
-     * Maintainability's parts join it as TODO.md 1.13 moves them. Provenance, Quality and Navigability stay 0–100.
+     * Whether the score is a count against the baseline, which may pass 100 (E-071). Size and Complexity are counted;
+     * Maintainability's parts join them as TODO.md 1.13 moves them. Provenance, Quality and Navigability stay 0–100.
      */
     public final boolean counted;
 

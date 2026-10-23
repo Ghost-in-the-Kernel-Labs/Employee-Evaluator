@@ -1,16 +1,16 @@
 {
   "scores": {
-    "complexity": {"value": 2, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:lib/Report.java:Report.line", "COMPLEXITY.cognitive function:src/app/main.py:main", "COMPLEXITY.cognitive function:src/app/util.py:total", "COMPLEXITY.cognitive function:src/web/index.ts:render", "COMPLEXITY.cognitive function:tests/test_util.py:test_total"]},
+    "complexity": {"value": 1, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:lib/Report.java:Report.line", "COMPLEXITY.cognitive function:src/app/main.py:main", "COMPLEXITY.cognitive function:src/app/util.py:total", "COMPLEXITY.cognitive function:src/web/index.ts:render", "COMPLEXITY.cognitive function:tests/test_util.py:test_total"]},
     "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
     "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]},
     "maintainability": {"value": 79, "facts": ["MAINTAINABILITY.duplication repository:.", "MAINTAINABILITY.test_to_code_ratio repository:.", "MAINTAINABILITY.fan_out file:lib/Report.java", "MAINTAINABILITY.fan_out file:src/app/main.py", "MAINTAINABILITY.fan_out file:src/app/util.py", "MAINTAINABILITY.fan_out file:src/web/index.ts", "MAINTAINABILITY.fan_out file:tests/test_util.py", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:lib/Report.java:Report.line", "COMPLEXITY.cognitive function:src/app/main.py:main", "COMPLEXITY.cognitive function:src/app/util.py:total", "COMPLEXITY.cognitive function:src/web/index.ts:render", "COMPLEXITY.cognitive function:tests/test_util.py:test_total", "MAINTAINABILITY.unused_imports file:lib/Report.java", "MAINTAINABILITY.unused_imports file:src/app/main.py", "MAINTAINABILITY.unused_imports file:src/app/util.py", "MAINTAINABILITY.unused_imports file:src/web/index.ts", "MAINTAINABILITY.unused_imports file:tests/test_util.py"]}
   },
-  "ratios": {"qualityPerThousandLines": null, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 1.58},
+  "ratios": {"qualityPerThousandLines": null, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 0.79},
   "provenanceTier": null,
   "toolingBucket": "unknown",
   "corpusRank": {},
   "notMeasured": ["quality", "ambition", "provenance"],
   "refuted": [],
   "review": {},
-  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "15affbf5ee9e"}
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "4d7287ec37e6"}
 }

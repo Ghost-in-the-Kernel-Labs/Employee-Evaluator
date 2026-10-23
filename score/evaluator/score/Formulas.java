@@ -18,8 +18,9 @@ public final class Formulas {
      * The rubric's name and version: every formula and its decision. A card carries its hash, so two cards
      * scored by different rubrics are told apart; a formula changed gives it a new version.
      */
-    static final String RUBRIC = "phase-1 rubric 2: navigability E-044, provenance E-046, ratios E-047, size E-070 against "
-            + "32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines), complexity E-050, maintainability E-051, quality E-052, bucket E-053";
+    static final String RUBRIC = "phase-1 rubric 3: navigability E-044, provenance E-046, ratios E-047, size E-070 against "
+            + "32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines), complexity E-074 against "
+            + "32762a6110ebd73246ca2413b1d54db947aee179 (13361 cognitive, depth 28), maintainability E-051, quality E-052, bucket E-053";
 
     /**
      * The baseline Size is counted against (E-070): Suite Builder at this commit (main, 2026-10-23), read by this kernel
@@ -48,12 +49,14 @@ public final class Formulas {
     /** The highest Provenance the history's shape earns alone: Partial, never Verified, with nothing GitHub backs. */
     static final int HISTORY_ALONE_CAP = 79;
 
-    /** The dependency depth that reads 100 on Complexity's depth part: a chain of 25 links and over. */
-    static final int FULL_DEPTH = 25;
+    /** `COMPLEXITY.cognitive` summed over every function of the baseline commit: the total that reads 100 on Complexity's cognitive part. */
+    static final long BASELINE_COGNITIVE = 13_361;
+    /** `COMPLEXITY.dependency_depth` of the baseline commit: the chain of links that reads 100 on Complexity's depth part. */
+    static final int BASELINE_DEPTH = 28;
 
     /**
      * Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046);
-     * Size (E-070, against the baseline); Complexity (E-050); Maintainability (E-051); Quality (E-052).
+     * Size (E-070, against the baseline); Complexity (E-074, against the baseline); Maintainability (E-051); Quality (E-052).
      */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,
@@ -81,11 +84,12 @@ public final class Formulas {
     }
 
     /**
-     * Complexity, the tools' half: 0.6 × the total cognitive complexity of every function on Size's log
-     * scale (100 and under read 0, 100,000 and over 100) + 0.4 × the dependency depth over 25 links. Per
-     * function averages are left out: they say more of style than of the problem. No depth read, no score.
+     * Complexity, the tools' half: 0.6 × (100 × the total cognitive complexity of every function ÷ the baseline's 13,361) + 0.4 × (100 ×
+     * the dependency depth ÷ the baseline's 28), rounded (Suite Builder at 32762a6 reads 100). Linear and with no ceiling (E-071): an
+     * empty project reads 0, twice the baseline's measures 200. Per-function averages are left out: they say more of style than of
+     * the problem. No depth read, no score.
      */
-    // Decision: E-050
+    // Decision: E-074
     static Score complexity(List<Fact> facts) {
         Fact depth = find(facts, "COMPLEXITY.dependency_depth");
         if (depth == null) return null;
@@ -96,13 +100,9 @@ public final class Formulas {
             cognitive += ((Number) f.value()).doubleValue();
             keys.add(f.key());
         }
-        double depthPart = 100.0 * Math.min(((Number) depth.value()).intValue(), FULL_DEPTH) / FULL_DEPTH;
-        return new Score((int) Math.round(0.6 * logScale(cognitive) + 0.4 * depthPart), keys);
-    }
-
-    /** A count on a log scale: 100 and under read 0, each tenfold step a third, 100,000 and over read 100. */
-    static double logScale(double n) {
-        return n <= 100 ? 0 : Math.min(100, 100 * (Math.log10(n) - 2) / 3);
+        double cognitivePart = 100.0 * cognitive / BASELINE_COGNITIVE;
+        double depthPart = 100.0 * ((Number) depth.value()).doubleValue() / BASELINE_DEPTH;
+        return new Score((int) Math.round(0.6 * cognitivePart + 0.4 * depthPart), keys);
     }
 
     /**

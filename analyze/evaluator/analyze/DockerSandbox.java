@@ -31,6 +31,17 @@ public final class DockerSandbox implements Sandbox {
     /** The most of a run's output kept: its end, where the errors are. */
     static final int OUTPUT_TAIL = 64 * 1024;
 
+    private final String docker;
+
+    public DockerSandbox() {
+        this("docker");
+    }
+
+    /** The program to run as `docker`: a test passes a script that records its arguments, so no Docker is started. */
+    DockerSandbox(String docker) {
+        this.docker = docker;
+    }
+
     /** The `docker run` for one script: every isolation flag here, so a test holds them all. */
     static List<String> argv(Phase phase, Path work, Path out, String script, String name, String user) {
         List<String> argv = new ArrayList<>(List.of("docker", "run", "--rm", "--name", name,
@@ -60,15 +71,17 @@ public final class DockerSandbox implements Sandbox {
                 handOver(out);
             }
             Path log = Files.createTempFile("evaluator-run", ".log");
-            Process docker = new ProcessBuilder(argv(phase, work, out, script, name, owner(work))).redirectErrorStream(true).redirectOutput(log.toFile()).start();
-            boolean finished = docker.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
+            List<String> command = argv(phase, work, out, script, name, owner(work));
+            command.set(0, docker);
+            Process container = new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(log.toFile()).start();
+            boolean finished = container.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
             if (!finished) {
-                new ProcessBuilder("docker", "kill", name).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD).start().waitFor(30, TimeUnit.SECONDS);
-                docker.destroyForcibly();
+                new ProcessBuilder(docker, "kill", name).redirectErrorStream(true).redirectOutput(ProcessBuilder.Redirect.DISCARD).start().waitFor(30, TimeUnit.SECONDS);
+                container.destroyForcibly();
             }
             String output = tail(log);
             Files.deleteIfExists(log);
-            return new Run(finished ? docker.exitValue() : -1, !finished, output);
+            return new Run(finished ? container.exitValue() : -1, !finished, output);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         } catch (InterruptedException e) {

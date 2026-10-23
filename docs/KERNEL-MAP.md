@@ -477,3 +477,7 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | history | `history/evaluator/history/Git.java:Git.scrub` |  | 2026-10-23 |  |
 | github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.from` |  | 2026-10-23 |  |
 | github | `github/evaluator/github/HttpGitHub.java:HttpGitHub.at` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox.DockerSandbox` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/DockerSandbox.java:DockerSandbox.DockerSandbox#2` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.RegistriesProxy#2` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/RegistriesProxy.java:RegistriesProxy.listenPort` |  | 2026-10-23 |  |

@@ -27,20 +27,33 @@ public final class RegistriesProxy {
 
     private final Set<String> hosts;
     private final int port;
-    private final Semaphore tunnels = new Semaphore(MAX_TUNNELS);
+    private final int idleMillis;
+    private final Semaphore tunnels;
 
     RegistriesProxy(Set<String> hosts, int port) {
+        this(hosts, port, IDLE_MILLIS, MAX_TUNNELS);
+    }
+
+    /** The idle limit and the tunnel cap as fields, so a test can reach them in milliseconds and at two; production passes the constants. */
+    RegistriesProxy(Set<String> hosts, int port, int idleMillis, int maxTunnels) {
         this.hosts = hosts;
         this.port = port;
+        this.idleMillis = idleMillis;
+        this.tunnels = new Semaphore(maxTunnels);
     }
 
     /** `java -cp ... evaluator.analyze.RegistriesProxy 3128`: serves until the container stops. */
     public static void main(String[] args) throws IOException {
-        int listen = args.length > 0 ? Integer.parseInt(args[0]) : 3128;
+        int listen = listenPort(args);
         try (ServerSocket server = new ServerSocket()) {
             server.bind(new InetSocketAddress(listen));
             new RegistriesProxy(REGISTRIES, 443).serve(server);
         }
+    }
+
+    /** The port to listen on: the first argument, else Squid's usual 3128, which sandbox/setup.sh passes anyway. */
+    static int listenPort(String[] args) {
+        return args.length > 0 ? Integer.parseInt(args[0]) : 3128;
     }
 
     /** Accepts connections until the socket closes, each on its own virtual thread. */
@@ -58,7 +71,7 @@ public final class RegistriesProxy {
     /** One client: its request read, refused or tunnelled; closed either way. */
     void handle(Socket client) {
         try (client) {
-            client.setSoTimeout(IDLE_MILLIS);
+            client.setSoTimeout(idleMillis);
             String request = header(client.getInputStream());
             String verdict = verdict(request);
             if (verdict != null) {
@@ -72,7 +85,7 @@ public final class RegistriesProxy {
             }
             try (Socket upstream = new Socket()) {
                 upstream.connect(new InetSocketAddress(target[0], Integer.parseInt(target[1])), 10_000);
-                upstream.setSoTimeout(IDLE_MILLIS);
+                upstream.setSoTimeout(idleMillis);
                 reply(client.getOutputStream(), "200 Connection established");
                 Thread back = Thread.ofVirtual().start(() -> pipe(upstream, client));
                 pipe(client, upstream);

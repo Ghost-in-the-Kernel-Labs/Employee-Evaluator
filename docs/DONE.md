@@ -111,3 +111,14 @@ Done 2026-10-22 (J-052 to J-055): `test/MetricsTest.java` holds every metric wit
 writes docs/MODULES.md and ModulesTest refuses it stale; `scripts/prepush.sh` refuses a push past sixteen
 commits without a tithe; PIT vendored (E-059), E-019 in force, and docs/MUTATION.md's run 1: 86 % of 1,714
 mutants killed, its 243 others the baseline for a later pass.
+
+### 1.12 Mutation survivors: run 1's 243, module by module
+
+Check: each mutant run 1 left alive (`docs/MUTATION.md`) is killed by a new test or has a row under
+"Survivors judged harmless" saying why; module by module, `rubric/Json.java` first, each module's run
+recorded as it closes; no test weakened (E-019). Ghost's go, 2026-10-22.
+Done 2026-10-23 (J-056 to J-058, J-072 to J-082, J-087): runs 2 to 14 of `docs/MUTATION.md`, `rubric/`, `score/`,
+`history/`, `cli/`, `github/` and `analyze/` in six passes. Two real bugs found and fixed with tests that fail before the fix
+(`Json` read `\r`, `\b` and `\f` as letters; `Commits.paths` split a path holding a newline in two). The network and sandbox
+classes were reached without the real thing: loopback servers for `HttpGitHub` and `RegistriesProxy`, a script in place of `docker`
+for `DockerSandbox.run`. No test weakened, no golden moved by this item.

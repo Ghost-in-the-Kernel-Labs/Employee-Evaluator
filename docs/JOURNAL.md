@@ -1179,3 +1179,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** two one-line edits; no open question, so no Fable agent asked. Notes wiped, this review's debrief starts the next set.
 - **Caught by:** the navigation review.
 - **Touched:** docs/how/commands.md, docs/how/navigation-review.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-087 analyze/ part 6 of 6 (the sandbox's network and Docker): 25 survivors down to 1, 1.12 closed
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, `RegistriesProxy` (15 alive) and `DockerSandbox` (10): the walls a hostile submission is on the other side of (E-013, E-037).
+- **Found:** What was missing was the limits and the run, not the refusals. No test held the proxy's idle limit (client or registry), its tunnel cap (the 503 and the place given back), the header's byte cap at its edge, half-close through a tunnel, an `accept` that fails once, or `main`; none ran `DockerSandbox.run` at all (the owner, the hand-over, the exit, the kill by name, the interrupt). The proxy's idle limit and cap were constants, and `docker` a literal, so a test could not reach them without waiting a minute or starting Docker. No bug, no hole. One survivor is harmless: `out.flush()` on a socket stream that does not buffer.
+- **Options:** test the idle limit by waiting 60 s (no); mark the cap and `run` harmless as "real thing only" (no: a wall's limit is what a hostile run presses on); constructor arguments and a program name, package-private, for tests (taken, as `HttpGitHub.at`).
+- **Resolved:** run 14 (1,105 mutants, 1,072 killed); RegistriesProxyTest and DockerSandboxTest extended; one harmless row. 1.12 moved to DONE.md; 1.13 is next. No golden moved.
+- **Touched:** analyze/evaluator/analyze/ (`RegistriesProxy`, `DockerSandbox`), test/evaluator/analyze/, docs/MUTATION.md, docs/KERNEL-MAP.md, TODO.md, docs/DONE.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
+- **Caught by:** mutation (E-019).

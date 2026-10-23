@@ -11,3 +11,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, `docs/how/navigation-review.md`, `docs/NAVIGATION-NOTES.md`, then agent-environment.md, commands.md, MUTATION.md, HANDOFF.md, J-075 and `git log -S` to find which commit fixed each point.
 - **Complaints:** none worth acting on. Finding a fix's commit took a search per phrase; `git log -S` worked.
 - **Suggestions:** none beyond the clause now in `navigation-review.md` step 4.
+
+### 2026-10-23 · analyze/ part 6, the sandbox's network and Docker · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/how/do-a-todo-step.md`, `docs/MUTATION.md`, then the two classes and their tests; `docs/how/commands.md` and `finish-work.md` when closing.
+- **Complaints:** the survivor list had to be rebuilt by hand: the CSV's TIMED_OUT rows count as killed but print among the non-KILLED ones, so `grep -v KILLED` overcounts (I filtered `TIMED_OUT` out too). `do-a-todo-step.md` says "push (`scripts/prepush.sh` first)" while the task forbade it: no conflict, but a closing step "commit only" has no home.
+- **Suggestions:** in `agent-environment.md`'s survivors line, `grep -v KILLED build/mutation/mutations.csv | grep -v TIMED_OUT`. A recipe line for "a class that starts a program: take the program's name as a package-private constructor argument and test with a script".

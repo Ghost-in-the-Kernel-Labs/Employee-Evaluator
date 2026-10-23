@@ -217,6 +217,32 @@ Node with no `package.json`, one that is not JSON and one that is JSON but not a
 or a folder not read; a manifest of exactly 1 MiB read and one byte over not. `TestRunnerTest`: the output folder removed
 afterwards, and an install that timed out (not "failed"). No bug found, no golden moved.
 
+### Run 14: 2026-10-23, `analyze/`, part 6 of 6: the sandbox's network and Docker, which closes `analyze/` (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). Covers `RegistriesProxy` (15 left alive)
+and `DockerSandbox` (10) only. After: 1,105 mutants (the proxy gained a function), 1,072 killed (the other classes'
+survivors untouched); of these two classes one is left, judged harmless below. `analyze/` is done: every survivor in it has a
+test or a row.
+
+Both were "run only against the real thing", and neither needs it. `RegistriesProxy` is tried on loopback, as `HttpGitHub` is:
+a local registry that echoes, one that never answers, one that answers only after it has read to the end, and the proxy in front
+of each. `DockerSandbox.run` is tried with a script standing in for `docker` (no Docker is started, no daemon touched): it writes
+down its arguments, prints and exits, or sleeps. Three changes of shape only, all package-private and for tests: the proxy's idle
+limit and tunnel cap are constructor arguments (production passes the same constants), `RegistriesProxy.listenPort` is `main`'s
+argument parsing, and `DockerSandbox(String docker)` names the program to run (production: `docker`, as before; `argv` is unchanged).
+
+Tests added, each value worked by hand in its comment: `RegistriesProxyTest`: `header` at the cap (a terminator ending at byte 8192
+read, at 8193 not), a NUL byte inside it, a stream that ends without a blank line; a client that says nothing, and a registry that
+goes quiet after the tunnel opens, each let go at the idle limit (300 ms); a cap of one tunnel (the second gets 503, and once the
+first has closed its place is given back); a client that half-closes still gets the answer of a registry that replies only after
+reading to the end (`shutdownOutput` and `join` both needed); an `accept` that fails once with the socket open does not end the proxy;
+`listenPort`; `main` binds the given port and refuses a host that is not a registry and a registry on port 80 (nothing is dialled).
+`DockerSandboxTest`: a run is exactly `argv` (every flag, the user the working copy's owner), reports the exit and output, and
+exit 0 is not a timeout; as root both folders are handed to nobody before the run; a working copy that is gone throws, and its owner
+is nobody; past the timeout `docker kill <the container's name>` is asked and the run is -1, timed out, with its output; an
+interrupted run says so and keeps the interrupt. No bug and no hole found (the proxy's refusals and the container's flags were
+already held; what was missing was their limits, their cap and the run itself), no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -249,3 +275,4 @@ afterwards, and an install that timed out (not "failed"). No bug found, no golde
 | `analyze/Reports.java`, `parse`, `setExpandEntityReferences(false)` | the call removed | Tried: with the call, an undeclared `&foo;` under an external DOCTYPE stays an entity-reference node and without it is dropped, but the text of the element (`getTextContent`) and its attributes, all this class reads, come out the same, and a declared entity is refused first. |
 | `analyze/Reports.java`, `parse`, `builder.setErrorHandler(null)` | the call removed | `null` is what the builder starts with ("the implementation's own default"); the call sets what is already set. |
 | `analyze/TestRunner.java`, `runPlans`, `valid > 0` | `valid >= 0` | With no lines the mutant makes `Lines(0, 0)` instead of empty, and `TestRuns.facts` filters out a coverage of `valid() > 0` first, so no fact differs. |
+| `analyze/RegistriesProxy.java`, `reply`, `out.flush()` | the call removed | `reply` writes to a socket's own output stream, which does not buffer: every `write` is sent at once, so `flush` has nothing to send. Tried by every test of the proxy that reads a status line (all would hang for the 5 s read limit if the line were held back), none of which can tell the two apart. |

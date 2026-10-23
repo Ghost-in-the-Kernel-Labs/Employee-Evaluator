@@ -971,3 +971,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   This commit is the first review: its one set (J-067) was already acted on.
 - **Touched:** CLAUDE.md, docs/NAVIGATION-NOTES.md, docs/how/, scripts/TitheGate.java, scripts/Metrics.java,
   test/MetricsTest.java, theGhost.md, docs/DECISIONS.md.
+
+### J-071 CLAUDE.md as a memory map: situations point to files
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "If you are a claude sonnet model, and you encounter X situation, look up Y file."
+- **Found:** Of CLAUDE.md's 1,017 words, about 370 applied only sometimes: the commands, the finishing list, the
+  commit rules, the three directives. Six decisions' Held-by lines name those sections; decisions are
+  append-only, so E-069 says where each went rather than editing them.
+- **Options:** pointers for all of it; pointers, with the conflict line keeping its nevers inline (taken: an
+  agent may stop a process before it sees a conflict).
+- **Resolved:** E-069. "When it happens, read this": eight lines. docs/how/commands.md, finish-work.md,
+  commit-and-push.md hold the moved text (with the pre-push's gated form from J-045, which CLAUDE.md never
+  said). The routing table lost the four rows the map now covers. CLAUDE.md 647 words.
+- **Touched:** CLAUDE.md, docs/how/commands.md, docs/how/finish-work.md, docs/how/commit-and-push.md,
+  theGhost.md, docs/DECISIONS.md.

@@ -75,3 +75,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-066 | When agents' work conflicts, they stop and tell Ghost; none undoes another's | in force (part); superseded by E-067 (part: force-pushing) | agents |
 | E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |
 | E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force | agents |
+| E-069 | CLAUDE.md is a memory map: what applies only sometimes is a "When X, read Y" pointer | in force | agents |

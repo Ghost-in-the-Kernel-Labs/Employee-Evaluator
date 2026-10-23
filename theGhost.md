@@ -1158,3 +1158,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-015, E-060, E-064, E-065
+
+### E-069: CLAUDE.md is a memory map: what applies only sometimes is a "When X, read Y" pointer
+- **Decision:** CLAUDE.md holds inline only what every task needs (the supply-chain pointer, the routing
+  table, the three rules). Everything that applies only in a situation is one line in "When it happens, read
+  this": the situation, then the file that holds what to do ("If you are a Claude Sonnet model and a fix fails
+  ..., the escalation policy, `docs/how/escalate-to-opus.md`"). The agent looks it up when it happens. The
+  conflict line keeps its three nevers inline, since an agent may not see the conflict before it acts.
+  CLAUDE.md's former sections now live here: "Commands" in `docs/how/commands.md`; "Before calling work done"
+  (E-029's holder) in `docs/how/finish-work.md`; the commit rules in `docs/how/commit-and-push.md`; "A Sonnet
+  agent escalates once" (E-060, E-064), "When agents conflict" (E-066, E-067) and "Fresh agents, debriefs,
+  navigation reviews" (E-068) as lines of the map, each pointing to its file.
+- **Why:** Ghost: "By splitting out the memory mapping, we can replace large chunks of data that would have
+  been read into context with very cheap one line entries that point to the data the agent needs at the time
+  it needs it." CLAUDE.md went from 1,017 words to 647.
+- **Held by:** `test/DocsTest.java` (every file the map names exists); `test/MetricsTest.java` (AGT-03, the
+  mandatory context); `test/SupplyChainTest.java` (the supply-chain pointer).
+- **Source:** Ghost, 2026-10-23.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-061, E-065

@@ -20,7 +20,7 @@ import java.util.stream.Stream;
  * forbids; no agent or editor config runs anything (a hook, a folder-open task, an MCP server,
  * auto-approve) and no git hook is installed; no file of a known worm is present; every vendored jar
  * is in third_party/MANIFEST.md with the SHA-256 it has; the build declares no repository; and the
- * binding directive is theGhost.md's first section, its one copy, and CLAUDE.md sends every agent there (E-061).
+ * binding directive is in CLAUDE.md, its one copy, read by every agent on entry; theGhost.md keeps none (E-073).
  */
 // Decision: E-033
 final class SupplyChainTest {
@@ -31,8 +31,6 @@ final class SupplyChainTest {
     private static final Set<String> AGENT_FOLDERS = Set.of(".claude", ".vscode", ".cursor", ".gemini");
     private static final Set<String> SKIPPED = Set.of("build", ".gradle", ".git");
     static final String DIRECTIVE_HEADING = "## Supply-chain rules (binding)";
-    /** CLAUDE.md's line that sends every agent to the directive before a task. */
-    static final String POINTER = "Read `theGhost.md`'s first section, \"Supply-chain rules (binding)\"";
 
     public static void main(String[] args) {
         run().exit();
@@ -80,11 +78,10 @@ final class SupplyChainTest {
                 .accepts("a jar as recorded", () -> vendored(MANIFEST_SAMPLE, Map.of("third_party/x/a.jar", "00")))
                 .rejects("a repository in the build", () -> build("repositories {\n    mavenCentral()\n}\n"))
                 .accepts("a comment naming repositories", () -> build("// No repositories are declared.\nplugins { id 'java' }\n"))
-                .rejects("a second copy in CLAUDE.md", () -> directive(POINTER + "\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
-                .rejects("CLAUDE.md not sending agents there", () -> directive("x\n", "# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
-                .rejects("the directive missing", () -> directive(POINTER, "# t\n\nnothing\n"))
-                .rejects("the directive not theGhost.md's first section", () -> directive(POINTER, "# t\n\n## Other\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
-                .accepts("one copy first in theGhost.md, CLAUDE.md pointing to it", () -> directive("x\n" + POINTER + "\n", "# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"));
+                .rejects("the directive missing from CLAUDE.md", () -> directive("# t\n\nnothing\n", "# g\n"))
+                .rejects("the directive with no rules", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\nnothing\n", "# g\n"))
+                .rejects("a second copy in theGhost.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# g\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
+                .accepts("one copy, in CLAUDE.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# g\n\n## Supply-chain rules: in CLAUDE.md\n"));
     }
 
     /** Each workflow: actions pinned to a full SHA with the tag in a comment, read-only permissions, no forbidden trigger or runner. */
@@ -218,15 +215,12 @@ final class SupplyChainTest {
         return failures;
     }
 
-    /** The binding directive: theGhost.md's first section and its one copy; CLAUDE.md sends every agent to it before a task (E-061). */
+    /** The binding directive: its one copy in CLAUDE.md, read by every agent on entry; theGhost.md keeps none (E-073). */
     static List<String> directive(String claude, String ghost) {
         List<String> failures = new ArrayList<>();
-        String rules = block(ghost);
-        int first = ghost.indexOf("\n## ");
-        if (rules == null || rules.lines().noneMatch(l -> l.startsWith("- "))) failures.add("theGhost.md has no supply-chain directive (`" + DIRECTIVE_HEADING + "`) with its rules");
-        else if (first < 0 || !ghost.startsWith(DIRECTIVE_HEADING, first + 1)) failures.add("the supply-chain directive is not theGhost.md's first section, which every agent reads before a task");
-        if (claude.contains(DIRECTIVE_HEADING)) failures.add("CLAUDE.md holds a copy of the supply-chain directive: its one copy is theGhost.md's first section (E-061)");
-        if (!claude.contains(POINTER)) failures.add("CLAUDE.md does not send agents to theGhost.md's supply-chain rules before a task (`" + POINTER + "`)");
+        String rules = block(claude);
+        if (rules == null || rules.lines().noneMatch(l -> l.startsWith("- "))) failures.add("CLAUDE.md has no supply-chain directive (`" + DIRECTIVE_HEADING + "`) with its rules: every agent reads them on entry (E-073)");
+        if (ghost.contains(DIRECTIVE_HEADING)) failures.add("theGhost.md holds a copy of the supply-chain directive: its one copy is in CLAUDE.md (E-073)");
         return failures;
     }
 

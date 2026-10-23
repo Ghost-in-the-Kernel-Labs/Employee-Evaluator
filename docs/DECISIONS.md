@@ -67,7 +67,7 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-058 | JavaScript is read as TypeScript is, with the vendored TSX grammar, and `require` counts as an import | in force | analysis |
 | E-059 | PIT is the mutation tool, vendored with what its poms declare | in force | tests |
 | E-060 | A Sonnet agent tries a hard fix once, then asks Opus | in force | agents |
-| E-061 | The supply-chain directive has one copy, theGhost.md's first section, read before any task | in force | security |
+| E-061 | The supply-chain directive has one copy, theGhost.md's first section, read before any task | superseded by E-073 | security |
 | E-062 | `gradle kernelMap` closes a function that is gone | in force | intent |
 | E-063 | CLAUDE.md's routing rows are pointers; an action's steps live in its instructions file | superseded by E-065 | agents |
 | E-064 | Every escalation replays the route, is logged, and three of a kind go to Ghost | in force | agents |
@@ -79,3 +79,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-070 | Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0 | proposed | scoring |
 | E-071 | A baseline-scored metric may pass 100 | proposed | scoring |
 | E-072 | The fast loop runs test classes side by side, the tests of a class one after another | in force | tests |
+| E-073 | The supply-chain rules are back in CLAUDE.md, their one copy, read on entry | in force | security |

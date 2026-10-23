@@ -1207,3 +1207,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** Pass 5 column in docs/AGENT.md; a one-line comment on each of the three tests. No golden, no function added or moved, so no kernel map change.
 - **Touched:** docs/AGENT.md, test/evaluator/analyze/TestRunnerTest.java, test/evaluator/github/AuthorshipTest.java, test/evaluator/github/HttpGitHubTest.java.
 - **Caught by:** `gradle metrics` (the cadence line and the comment listing).
+
+### J-090 The supply-chain rules back in CLAUDE.md, after an agent skipped the pointer
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** Reviewing the tithe (2c3810a, J-089) and its context use, as Ghost asked.
+- **Found:** The tithe agent read about 5,800 words through 13 calls (82k tokens all told; 2,464 of them in one
+  read, gathering what a tithe is from five files). Its commands never read theGhost.md's first section, the
+  supply-chain rules CLAUDE.md pointed it to before any task. Nothing it did touched a dependency.
+- **Options:** the rules back in CLAUDE.md, read on entry; keep the pointer and have each debrief confirm it.
+- **Resolved:** Ghost: back in CLAUDE.md. E-073 supersedes E-061: one copy in CLAUDE.md, theGhost.md points to
+  it, SupplyChainTest holds both; the mandatory context is CLAUDE.md alone.
+- **Caught by:** counting the agent's commands, without reading its transcript into context.
+- **Touched:** CLAUDE.md, theGhost.md, test/SupplyChainTest.java, scripts/Metrics.java,
+  docs/how/add-a-language-adapter.md, docs/how/sandbox-test-runs.md, docs/DECISIONS.md.

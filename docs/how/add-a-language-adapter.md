@@ -7,7 +7,7 @@ imports, the dependency graph, duplication. JavaScript is the last one added (E-
 ## Before you start
 
 - **A grammar is a dependency.** A tree-sitter grammar not under `third_party/` needs a one-line reason
-  in `theGhost.md` and Ghost's approval before it is vendored (theGhost.md's first section, E-033). First
+  in `theGhost.md` and Ghost's approval before it is vendored (the supply-chain rules in `CLAUDE.md`, E-033). First
   try a grammar already vendored (`third_party/MANIFEST.md`): JavaScript reads with TypeScript's TSX grammar.
 - Read the decisions it stands on: E-030 (what is counted), E-031 (tree-sitter adapters), E-032 (imports).
 

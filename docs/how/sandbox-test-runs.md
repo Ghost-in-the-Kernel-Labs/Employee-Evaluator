@@ -15,7 +15,7 @@
 - Never run a submission's code outside the sandbox, not even to try something. It is stripped of agent and editor configs and git hooks first (`ingest/evaluator/ingest/Quarantine.java`).
 - Unit tests use the fake sandbox (`test/evaluator/analyze/RecordedSandbox.java`); the real one runs with `gradle test -Pdocker` after `sandbox/setup.sh`, with a Docker daemon.
 - A report format: a fixture under `test/fixtures/reports/` and a case in `ReportsTest`; files are read under a size cap (`Reports.MAX_BYTES`), never through a link.
-- The image's pins are held by `test/SupplyChainTest.java`: a new tool in `sandbox/` comes pinned by hash, with Ghost's approval (theGhost.md's first section).
+- The image's pins are held by `test/SupplyChainTest.java`: a new tool in `sandbox/` comes pinned by hash, with Ghost's approval (the supply-chain rules in `CLAUDE.md`).
 
 ## Always
 

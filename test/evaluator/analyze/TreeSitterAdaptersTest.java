@@ -2,6 +2,7 @@ package evaluator.analyze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import evaluator.Goldens;
 import evaluator.ingest.Ingest;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,8 +30,7 @@ class TreeSitterAdaptersTest {
     private static void golden(String fixture, Complexity.Report report) throws IOException {
         Path golden = ROOT.resolve("test/goldens/" + fixture + "/complexity.json");
         String json = Complexity.toJson(report);
-        if (Boolean.getBoolean("evaluator.writeGoldens")) Files.writeString(golden, json);
-        assertEquals(Files.readString(golden), json, "the complexity changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        Goldens.check(golden, json, "the complexity changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 
     /** As the Java fixture, but no labelled continue (sum_of_primes is 6), and a comprehension's if is +1 flat. */

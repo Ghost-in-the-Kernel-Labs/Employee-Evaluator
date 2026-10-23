@@ -1321,3 +1321,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** command line
 - **See also:** E-010, E-051, E-054, E-074, E-075
+
+### E-077: `gradle test -PshowGoldens` shows what a golden would change and writes nothing; one helper holds every golden
+- **Decision:** A test run with `-PshowGoldens` compares the goldens as a plain run does and fails as it does, but each failure message also carries, for every golden
+  that differs, the changed lines: `@@ golden line N, new line M @@`, each golden line gone as `- text`, each new line as `+ text` (no context lines), and, for one
+  line changed alone, the column where the two part. A golden that matches shows nothing; a missing one is said missing and not created. Nothing is written. Every
+  test that holds a golden does it through `test/evaluator/Goldens.java` (`check` for one golden, `Batch` for several in one test), the one place that reads
+  `-PwriteGoldens` and `-PshowGoldens` and the one diff; none keeps a copy. The two properties together are refused (`build.gradle` fails the run before any test
+  starts; `Goldens.mode` refuses them too): a run either writes or shows, so a reviewer shows first, reads, and then writes. Without either property a golden test
+  behaves as before (E-018); its failure message now names `-PshowGoldens` first.
+- **Why:** `docs/how/change-a-formula.md` step 6 asked an agent to read each changed golden before writing the goldens, but the only way to see one was to write it
+  and read `git diff`, or render it with a scratch program (J-091, J-092, J-094), and the navigation review J-093 made it a next step. The diff is in the failure
+  message, not on stdout, because the build shows a failed test's message in full and nothing else (`testLogging`). Both properties together could only mean
+  "write, and also write nothing", so it is refused rather than given a precedence nobody would guess.
+- **Held by:** `test/evaluator/Goldens.java`; `test/evaluator/GoldensTest.java` (a match shows nothing, a difference shows exactly its lines, nothing is written, the
+  properties together are refused); the six golden tests: `CardGoldensTest`, `IngestTest`, `JavaAdapterTest`, `TreeSitterAdaptersTest`, `DependenciesTest`,
+  `DuplicationTest`; `build.gradle`.
+- **Source:** the navigation review J-093's last next step (Ghost's handoff); Claude Sonnet 5.5 built it.
+- **Status:** in force
+- **subject:** tests
+- **See also:** E-018, E-076

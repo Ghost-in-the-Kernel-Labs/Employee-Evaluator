@@ -2,6 +2,7 @@ package evaluator.analyze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import evaluator.Goldens;
 import evaluator.ingest.Ingest;
 import evaluator.ingest.Inventory;
 import evaluator.rubric.Fact;
@@ -73,8 +74,7 @@ class DuplicationTest {
         StringBuilder text = new StringBuilder();
         for (Fact f : facts) text.append(f.key()).append(" = ").append(f.value()).append("  ").append(f.evidence().sources()).append('\n');
         Path golden = ROOT.resolve("test/goldens/duplication/maintainability.txt");
-        if (Boolean.getBoolean("evaluator.writeGoldens")) Files.writeString(golden, text.toString());
-        assertEquals(Files.readString(golden), text.toString(), "the facts changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        Goldens.check(golden, text.toString(), "the facts changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 
     /** The 60 tokens of a block with no token twice: 24 punctuation marks and 36 keywords, each its own token. */

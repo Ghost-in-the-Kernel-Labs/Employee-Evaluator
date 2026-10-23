@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import evaluator.Goldens;
 import evaluator.ingest.Ingest;
 import evaluator.ingest.Inventory;
 import evaluator.rubric.Fact;
@@ -57,8 +58,7 @@ class JavaAdapterTest {
     @Test
     void theFixturesComplexityIsItsGolden() throws IOException {
         String json = Complexity.toJson(report());
-        if (Boolean.getBoolean("evaluator.writeGoldens")) Files.writeString(GOLDEN, json);
-        assertEquals(Files.readString(GOLDEN), json, "the complexity changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        Goldens.check(GOLDEN, json, "the complexity changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 
     @Test

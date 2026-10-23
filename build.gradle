@@ -49,6 +49,12 @@ test {
     systemProperty 'evaluator.root', rootDir.absolutePath
     // `gradle test -PwriteGoldens` rewrites the goldens under test/goldens/ instead of comparing (E-018); review the diff.
     systemProperty 'evaluator.writeGoldens', project.hasProperty('writeGoldens')
+    // `gradle test -PshowGoldens` writes nothing: a golden that differs fails with its changed lines in the message, to be read
+    // before `-PwriteGoldens` (E-077). The two together are refused: one run either writes or shows.
+    systemProperty 'evaluator.showGoldens', project.hasProperty('showGoldens')
+    if (project.hasProperty('writeGoldens') && project.hasProperty('showGoldens')) {
+        throw new GradleException('-PwriteGoldens and -PshowGoldens together: show first, read the diff, then write (E-077)')
+    }
     // `gradle test -Pdocker` also runs the run fixtures in the real sandbox (sandbox/setup.sh first, E-037).
     systemProperty 'evaluator.docker', project.hasProperty('docker')
     // Test classes run side by side, the tests inside a class one after another (J-088). Every test works in its own

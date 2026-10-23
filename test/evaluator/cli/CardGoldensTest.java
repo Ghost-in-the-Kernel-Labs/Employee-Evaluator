@@ -2,14 +2,13 @@ package evaluator.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import evaluator.Goldens;
 import evaluator.analyze.RecordedSandbox;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -33,22 +32,16 @@ class CardGoldensTest {
         return out.toString(StandardCharsets.UTF_8);
     }
 
-    /** Each fixture's two renderings against their goldens, every difference named at once; with -PwriteGoldens, written. */
+    /** Each fixture's two renderings against their goldens, every difference named at once; with -PshowGoldens, shown; with -PwriteGoldens, written (Goldens). */
     @Test
     void everyFixturesCardIsItsGolden() throws IOException {
-        List<String> changed = new ArrayList<>();
+        Goldens.Batch goldens = new Goldens.Batch();
         for (String fixture : FIXTURES) {
             for (boolean markdown : List.of(false, true)) {
                 Path golden = ROOT.resolve("test/goldens/cards/" + fixture.replace('/', '-') + (markdown ? ".md" : ".json"));
-                String card = card(fixture, markdown);
-                if (Boolean.getBoolean("evaluator.writeGoldens")) {
-                    Files.createDirectories(golden.getParent());
-                    Files.writeString(golden, card);
-                } else if (!Files.exists(golden) || !Files.readString(golden).equals(card)) {
-                    changed.add(ROOT.relativize(golden).toString());
-                }
+                goldens.check(golden, card(fixture, markdown));
             }
         }
-        assertEquals(List.of(), changed, "a card changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        goldens.assertUnchanged("the card changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 }

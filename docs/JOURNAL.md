@@ -1286,3 +1286,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** none.
 - **Resolved:** Pass 6 column in docs/AGENT.md.
 - **Touched:** docs/AGENT.md.
+
+### J-097 `gradle test -PshowGoldens`: read a changed golden before writing it
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** The last next step of the navigation review (J-093): step 6 of `docs/how/change-a-formula.md` says read each changed golden, then write, but only writing showed one.
+- **Found:** Six tests compared goldens, each with its own copy of the `-PwriteGoldens` property and its own compare (`CardGoldensTest`, `IngestTest`, `JavaAdapterTest`, `TreeSitterAdaptersTest`, `DependenciesTest`, `DuplicationTest`); the build prints a failed test's message and nothing else (`testLogging`), so the diff goes in the message and no setting changed. Proof on a real change: `BASELINE_SOURCE_LINES` 84,971 to 1,000, run with `-PshowGoldens`: the output named all ten cards in both renderings, e.g. `small-app.json` line 4, `"size": {"value": 0` to `{"value": 2`; no golden file changed; the edit was undone. No golden moved in the commit.
+- **Options:** the diff on stdout (refused: not shown by the build); `-PwriteGoldens` showing the diff as it writes (refused: the reading must come before the writing); the properties together meaning "write" (refused: nobody would guess it).
+- **Resolved:** `test/evaluator/Goldens.java` (`check`, `Batch`, one line diff by common lines) used by the six tests, the properties together refused in `build.gradle` and in `Goldens.mode`, E-077, `test/evaluator/GoldensTest.java`, docs/how/commands.md, step 6 of docs/how/change-a-formula.md, docs/HANDOFF.md. No kernel code changed, so no mutation run; the helper is test code, which `gradle mutate` leaves unmutated.
+- **Touched:** E-018, E-077, build.gradle, docs/DECISIONS.md.

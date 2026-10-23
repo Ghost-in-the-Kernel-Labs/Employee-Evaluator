@@ -3,6 +3,7 @@ package evaluator.ingest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import evaluator.Goldens;
 import evaluator.rubric.Fact;
 import evaluator.rubric.Json;
 import java.io.IOException;
@@ -22,8 +23,7 @@ class IngestTest {
     @Test
     void theFixturesInventoryIsItsGolden() throws IOException {
         String json = Ingest.read(FIXTURE).toJson();
-        if (Boolean.getBoolean("evaluator.writeGoldens")) Files.writeString(GOLDEN, json);
-        assertEquals(Files.readString(GOLDEN), json, "the inventory changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        Goldens.check(GOLDEN, json, "the inventory changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 
     @Test

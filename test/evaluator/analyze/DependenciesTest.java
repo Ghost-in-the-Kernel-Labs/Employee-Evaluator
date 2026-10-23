@@ -2,6 +2,7 @@ package evaluator.analyze;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import evaluator.Goldens;
 import evaluator.ingest.Ingest;
 import evaluator.ingest.Inventory;
 import evaluator.rubric.Fact;
@@ -81,8 +82,7 @@ class DependenciesTest {
     void theGraphIsItsGolden() throws IOException {
         Path golden = ROOT.resolve("test/goldens/imports/dependencies.json");
         String json = Dependencies.toJson(Dependencies.graph(report(), inventory()), report());
-        if (Boolean.getBoolean("evaluator.writeGoldens")) Files.writeString(golden, json);
-        assertEquals(Files.readString(golden), json, "the graph changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
+        Goldens.check(golden, json, "the graph changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 
     /** A cycle is one link: a → b → a → c is a chain of two parts, so depth 1, never a loop. */

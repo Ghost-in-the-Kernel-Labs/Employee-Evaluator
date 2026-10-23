@@ -18,8 +18,9 @@ decides a new one or a change, and it is recorded before the code (E-045 onward)
    `test/evaluator/score/MaintainabilityTest.java`), and the edges: a value on each limit, no facts at all
    (the metric is "not measured", never 0, SC-07).
 5. **docs/SCORE-CARD.md** if the formula's inputs or the invariants changed.
-6. **Goldens:** `gradle test`, read each changed card golden against the worked example, then
-   `gradle test -PwriteGoldens`. The goldens hold scores, not fact values: work each changed score by hand
+6. **Goldens:** `gradle test -PshowGoldens > build/show.log 2>&1`, then read each changed golden in the failures it prints
+   (`CardGoldensTest` names every changed card and its changed lines; nothing is written, E-077) against the worked example, and only then
+   `gradle test -PwriteGoldens` (the two together are refused). The goldens hold scores, not fact values: work each changed score by hand
    from the fixture's facts (`evaluator score <fixture> --no-run --facts`, `docs/how/command-line.md`), and know that a fixture whose
    metric reads 0 on the old and the new scale proves nothing about the formula; the unit test carries it.
 7. `gradle kernelMap`, `gradle mutate -Ptarget=evaluator.score.*` (E-019), the journal entry.

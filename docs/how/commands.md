@@ -11,7 +11,9 @@
   `// Unsure:` line.
 - **Generated files** (never edited by hand): `gradle kernelMap` (`docs/KERNEL-MAP.md`), `gradle modulesDoc`
   (`docs/MODULES.md`), `gradle decisionsDoc` (`docs/DECISIONS.md`).
-- **Goldens:** `gradle test -PwriteGoldens` rewrites them; review every changed value (E-018).
+- **Goldens:** `gradle test -PshowGoldens` writes nothing and prints, in each failing golden test's message, every changed golden's
+  changed lines (`@@ golden line N, new line M @@`, then `- old` and `+ new`); read them, then `gradle test -PwriteGoldens` rewrites the
+  goldens. The two properties together are refused. Both go to a file like any test run (E-018, E-077). Every golden test goes through `test/evaluator/Goldens.java`.
 - GitHub's workflow runs only by hand (E-040): never count on it.
 
 ## A long run's output

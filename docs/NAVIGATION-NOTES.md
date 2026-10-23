@@ -7,17 +7,7 @@ journal, and wipes the entries below this line; git keeps every past set.
 
 ---
 
-### 2026-10-23 · three navigability refactors (Json.quote, TestRunner split, CardsTest split) · Claude Sonnet 5.5
-- **Route:** CLAUDE.md, then `docs/how/add-or-change-a-module.md`, `agent-environment.md`, `do-a-todo-step.md`, `sandbox-test-runs.md`, `card-and-renderings.md`, `finish-work.md`.
-- **Complaints:** `rubric/evaluator/rubric/Json.java` is the JSON reader, so "put Json.quote in rubric/Json.java" meant adding to an existing class, not creating one; nothing says so in `docs/how/read-a-repository.md`. A "Start here" list is capped at five files by `DocTests.metrics`, found only by a failing test after adding two paths (`docs/how/sandbox-test-runs.md`). A per-module `gradle mutate` only runs same-package tests, so a quote test in `ingest/` left `Json.quote` with no coverage until a `rubric/` test existed; `docs/MUTATION.md` says it only in passing.
-- **Suggestions:** one line in `docs/how/finish-work.md` saying a function moved to another module needs its test in that module for mutation to see it; one line in `docs/how/add-or-change-a-module.md` (or the sandbox page) that "Start here" lists hold five files at most.
-
-### 2026-10-23 · mutation survivors of history/ (TODO 1.12) · Claude Sonnet 5.5
-- **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/how/history-shape.md`, `docs/MUTATION.md`, `docs/how/finish-work.md`, then the module's three sources and ShapeTest.
-- **Complaints:** `gradle mutate` needs `build/` to exist before redirecting its log (`> build/mutate.log` failed on a fresh worktree; `agent-environment.md` says to redirect there without saying to mkdir). The CSV has only line numbers, so each survivor needed a `sed -n Np` to read; the lines shift by the lines you add, so a re-run's numbers differ from the first. `docs/how/finish-work.md` and `agent-environment.md` do not say MUTATION.md's run entries are numbered in order (run 5 is a refactor run, not a 1.12 one).
-- **Suggestions:** in `agent-environment.md`, "mkdir -p build first" and a one-liner that prints each survivor with its source line (cut -d, -f3-7 of mutations.csv plus sed); a `gradle mutate` summary that lists survivors itself.
-
-### 2026-10-23 · mutation survivors of cli/ (TODO 1.12), a tithe · Claude Sonnet 5.5
-- **Route:** CLAUDE.md, `docs/how/commit-and-push.md`, `finish-work.md`, `commands.md`, `agent-environment.md`, `docs/MUTATION.md`, then `cli/`'s two sources and MainTest.
-- **Complaints:** `gradle mutate` stops at once in a worktree (PIT needs a green suite; `thisRepositorysCard` fails there by design), and nothing says to run it in a plain clone; my clone then also failed because the history lacks a parent object (`git fsck`: 2c28030, parent of 82fd968), so `git log` exits 128 and I had to mark 82fd968 shallow in the clone. `commit-and-push.md` says what a tithe's subject starts with but not what a tithe does; E-015 (in theGhost.md) has to be found by number.
-- **Suggestions:** done in this commit: agent-environment.md now says to use a plain clone. Still open: restore or document the missing object; one line in `commit-and-push.md` linking E-015's "no behaviour change, improves navigability".
+### 2026-10-23 · navigation review of three debriefs · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, `docs/how/navigation-review.md`, `docs/NAVIGATION-NOTES.md`, then agent-environment.md, finish-work.md, commit-and-push.md, add-or-change-a-module.md, MUTATION.md, J-074 to check each point.
+- **Complaints:** none worth acting on. The review file's step 3 says what to record when nothing is actionable but not when points converged yet were already fixed (step 4 assumes unfixed ones); I recorded one measurement entry.
+- **Suggestions:** one clause in `navigation-review.md` step 4: a valid point already fixed is recorded as "already fixed" with the commit.

@@ -1028,3 +1028,20 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   one harmless (`System.exit` in `main`), `Pipeline.github` taking its API as an argument, no golden moved.
 - **Caught by:** review of the agent's report.
 - **Touched:** docs/how/agent-environment.md, docs/AGENT.md.
+
+### J-075 Navigation review: three debriefs, all converged points already fixed
+- **Who:** Claude (Sonnet 5.5). **Class:** measurement.
+- **Intent:** The navigation review that `gradle metrics` called due (docs/how/navigation-review.md).
+- **Found:** Three debriefs (Json.quote/TestRunner/CardsTest refactors; history/ survivors; cli/ survivors). Two points
+  were met by two agents separately. (1) Running `gradle mutate` on a fresh checkout or worktree (no `build/`,
+  PIT refusing a red suite): valid when written, already fixed by 525a109 and 6590a3f in agent-environment.md
+  (plain clone, `mkdir -p build`, a survivors one-liner, the shallow-clone fix). (2) Mutation bookkeeping gaps
+  (a moved function's test must sit in its module; MUTATION.md runs numbered in order): already fixed in
+  finish-work.md and agent-environment.md. One agent alone: "Start here" lists hold five files (already in
+  add-or-change-a-module.md); the missing parent object (a shallow clone, J-074); Json.java being an existing
+  class (read-a-repository.md says nothing) and a tithe's meaning beside E-015 in commit-and-push.md (the
+  subject rule is there, the meaning is not): noted, not acted on, being one agent's each and no fact gone wrong.
+- **Options:** fix the two single-agent gaps now; leave them until a second agent meets them (step 2). The second.
+- **Resolved:** no change to instructions; no open question, so no Fable agent asked. Notes wiped.
+- **Caught by:** the navigation review.
+- **Touched:** docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.

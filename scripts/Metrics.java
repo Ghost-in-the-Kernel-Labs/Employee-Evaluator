@@ -151,8 +151,10 @@ final class Metrics {
     /** Commits since the last whose subject starts "Tithe", a warning past eight; the push is refused past sixteen (TitheGate). */
     static String cadence() {
         try {
-            int since = TitheGate.since(TitheGate.subjects());
-            return since + " commits since the last tithe" + (since > TitheGate.WARN ? ": one is due" : "");
+            List<String> subjects = TitheGate.subjects();
+            int since = TitheGate.since(subjects), review = TitheGate.since(subjects, TitheGate.REVIEW);
+            return since + " commits since the last tithe" + (since > TitheGate.WARN ? ": one is due" : "")
+                    + "; " + review + " since the last navigation review" + (review > TitheGate.REVIEW_WARN ? ": one is due" : "");
         } catch (Exception e) {
             return "not counted (" + e.getMessage() + ")";
         }

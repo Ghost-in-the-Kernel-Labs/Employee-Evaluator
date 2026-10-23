@@ -1139,3 +1139,22 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** agents
 - **Supersedes:** E-066
 - **See also:** E-020
+
+### E-068: Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits
+- **Decision:** A Ghost-level directive. Each new task goes to a fresh Claude Sonnet agent, spawned by the
+  orchestrating session. When its task ends, the agent appends a debrief to `docs/NAVIGATION-NOTES.md`: its
+  complaints and suggestions about finding its way. About every ten commits an agent reviews the file for
+  points agents converge on. None actionable: it says so in the journal and wipes the file. Actionable: it
+  still wipes the file, records each item, checks each is valid against the repository, and fixes the valid
+  ones; an open question goes to a Claude Fable agent, read only. A review's commit starts "Navigation review";
+  `gradle metrics` warns past ten commits without one, and the pre-push refuses past twenty.
+- **Why:** A fresh agent meets the repository as a newcomer does, so its trouble is the repository's, not
+  its memory's; Sonnet is the agent the routes are built for (E-060). One agent's complaint may be its own;
+  several agents' agreement is a route to fix. The tithe slipped twice while habit held it (J-045, J-051), so
+  the cadence is held by the same gate.
+- **Held by:** `CLAUDE.md` ("Fresh agents, debriefs, navigation reviews"); `docs/how/debrief-after-a-task.md`;
+  `docs/how/navigation-review.md`; `scripts/TitheGate.java` and `test/MetricsTest.java` (the cadence).
+- **Source:** Ghost, 2026-10-23.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-015, E-060, E-064, E-065

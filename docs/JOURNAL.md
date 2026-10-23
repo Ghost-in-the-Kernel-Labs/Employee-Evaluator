@@ -956,3 +956,18 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   in with each, wait for all, slow ones included; any no or no answer means no force-push and Ghost is told;
   alone, allowed and journaled.
 - **Touched:** CLAUDE.md, docs/how/when-agents-conflict.md, theGhost.md, docs/DECISIONS.md.
+
+### J-070 Ghost's directive: fresh Sonnet agents, debriefs, a navigation review about every ten commits
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: new tasks use fresh Sonnet agents; each debriefs its navigation complaints and
+  suggestions to a file; about every ten commits the file is reviewed for what agents converge on, then wiped;
+  open questions go to a Fable instance.
+- **Found:** The first debrief already exists in effect: the Sonnet agent's report on slice 3 (J-067), acted
+  on in full.
+- **Options:** the cadence held by habit; by the gate the tithe uses (warn past ten, refuse past twenty).
+- **Resolved:** E-068. docs/NAVIGATION-NOTES.md (empty set), docs/how/debrief-after-a-task.md,
+  docs/how/navigation-review.md (convergence means two or more agents; a plain fact gone wrong is fixed alone),
+  CLAUDE.md's section and two rows; TitheGate and Metrics count commits since the last "Navigation review".
+  This commit is the first review: its one set (J-067) was already acted on.
+- **Touched:** CLAUDE.md, docs/NAVIGATION-NOTES.md, docs/how/, scripts/TitheGate.java, scripts/Metrics.java,
+  test/MetricsTest.java, theGhost.md, docs/DECISIONS.md.

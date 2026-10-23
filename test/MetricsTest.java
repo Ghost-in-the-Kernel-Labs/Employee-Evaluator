@@ -43,7 +43,17 @@ final class MetricsTest {
                 .rejects("seventeen commits since the last tithe", () -> TitheGate.check(history(17)))
                 .rejects("seventeen commits and never a tithe", () -> TitheGate.check(history(17).subList(0, 17)))
                 .accepts("sixteen commits since the last tithe", () -> TitheGate.check(history(16)))
-                .accepts("a young history with no tithe yet", () -> TitheGate.check(history(5).subList(0, 5)));
+                .accepts("a young history with no tithe yet", () -> TitheGate.check(history(5).subList(0, 5)))
+                .rejects("twenty-one commits since the last navigation review", () -> TitheGate.check(reviewed(21)))
+                .accepts("twenty commits since the last navigation review", () -> TitheGate.check(reviewed(20)));
+    }
+
+    /** Subjects newest first: a tithe, n - 1 ordinary commits, then a navigation review, so only the review's count varies. */
+    private static List<String> reviewed(int n) {
+        List<String> subjects = new ArrayList<>(List.of("Tithe: the metrics"));
+        subjects.addAll(Collections.nCopies(n - 1, "Add a thing"));
+        subjects.add("Navigation review: the notes");
+        return subjects;
     }
 
     /** Subjects newest first: n ordinary commits, then a tithe, then one more. */

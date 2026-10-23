@@ -74,3 +74,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-065 | Every workpath in CLAUDE.md is a pointer to its instructions | in force | agents |
 | E-066 | When agents' work conflicts, they stop and tell Ghost; none undoes another's | in force (part); superseded by E-067 (part: force-pushing) | agents |
 | E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |
+| E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force | agents |

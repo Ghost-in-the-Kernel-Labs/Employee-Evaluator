@@ -39,6 +39,8 @@ instructions, never into this table (E-065); a new workpath gets one row and its
 | The agent's environment: metrics, the kernel map, mutation | `docs/how/agent-environment.md` |
 | A Sonnet agent's escalation to Opus | `docs/how/escalate-to-opus.md` |
 | Another agent's work conflicts with yours | `docs/how/when-agents-conflict.md` |
+| After a task: the debrief | `docs/how/debrief-after-a-task.md` |
+| The navigation review, about every ten commits | `docs/how/navigation-review.md` |
 | Reading only: the design (`docs/DESIGN.md`), a word (`docs/GLOSSARY.md`), why a rule is (`docs/GHOST-IN-THE-KERNEL.md`), a tool got wrong (`docs/FINDINGS.md`), the journal (`docs/JOURNAL.md`, its header) | the document itself |
 
 ## Commands
@@ -62,6 +64,12 @@ starts, in order (E-029). A new or changed unit test is run by `gradle mutate` o
 changed gets a test or a row in `docs/MUTATION.md` (E-019). Every eighth
 commit is a tithe (E-015); the pre-push refuses past sixteen. A doubt left in the code goes on a line of its own above it,
 `// Unsure: <why>`; `gradle metrics` lists them and nothing fails on one.
+
+## Fresh agents, debriefs, navigation reviews (E-068)
+
+Each new task goes to a fresh Claude Sonnet agent. When it is done, the agent debriefs: its complaints and
+suggestions about finding its way, appended to `docs/NAVIGATION-NOTES.md` (`docs/how/debrief-after-a-task.md`).
+About every ten commits, a navigation review (`docs/how/navigation-review.md`). A Ghost directive.
 
 ## A Sonnet agent escalates once (E-060, E-064)
 

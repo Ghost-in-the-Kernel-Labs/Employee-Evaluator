@@ -903,3 +903,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   refinement). Suite Builder not touched (Ghost: "that is ok"). The first wording named build-output paths
   in backticks; DocsTest refused them on the pre-push's clean clone, where build/ does not exist.
 - **Touched:** CLAUDE.md, docs/how/agent-environment.md.
+
+### J-066 Four navigability refactors: Shape's constants, Adapters, Tarjan, Dependencies.TOOL
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** A navigability review: no behaviour change, no golden change (E-018).
+- **Found:** Shape's thresholds were bare literals explained only in E-042 and ShapeTest; the adapter registry
+  sat in Complexity, which Dependencies reached into; Tarjan was nested in Dependencies and used by Coupling
+  and Navigability too; Pipeline alone named a tool for another module's facts.
+- **Resolved:** Named constants in Shape; `Adapters` (ALL, forLanguage) out of Complexity; `Tarjan` its own file;
+  `Dependencies.TOOL` replaces `Pipeline.DEPENDENCIES_TOOL`, same string. add-a-language-adapter.md step 4
+  points at `Adapters.ALL`. `gradle kernelMap` rewritten. MainTest.thisRepositorysCard fails before and after
+  in this worktree (Provenance reads "not measured"); not touched.
+- **Touched:** history/Shape.java, analyze/ (Adapters, Tarjan, Complexity, Dependencies, Coupling, Navigability),
+  cli/Pipeline.java, docs/how/add-a-language-adapter.md, docs/KERNEL-MAP.md.

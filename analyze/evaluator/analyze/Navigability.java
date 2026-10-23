@@ -87,7 +87,7 @@ public final class Navigability {
                 if (!a.equals(b)) between.get(a).add(b);
             }
         });
-        Map<String, Integer> part = Dependencies.Tarjan.parts(between);
+        Map<String, Integer> part = Tarjan.parts(between);
         Map<Integer, Integer> sizes = new HashMap<>();
         part.values().forEach(p -> sizes.merge(p, 1, Integer::sum));
         List<String> cyclic = new ArrayList<>();

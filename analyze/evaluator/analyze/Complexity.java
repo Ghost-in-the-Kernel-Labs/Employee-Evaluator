@@ -20,9 +20,6 @@ import java.util.TreeMap;
  * reads is not measured; a file its adapter cannot parse is listed with why, never guessed at.
  */
 public final class Complexity {
-    /** The adapters, one per language they read. */
-    static final List<Adapter> ADAPTERS = List.of(new JavaAdapter(), new TypeScriptAdapter(), new JavaScriptAdapter(), new PythonAdapter());
-
     /** Every function measured and every import read, by file in path order, and the files an adapter could not read. */
     public record Report(Map<String, List<Measure>> functions, Map<String, List<Import>> imports, Map<String, String> unread) {
         public Report {
@@ -40,7 +37,7 @@ public final class Complexity {
         Map<String, List<Import>> imports = new TreeMap<>();
         Map<String, String> unread = new TreeMap<>();
         for (Inventory.Source file : inventory.source()) {
-            Adapter adapter = adapterFor(file.language());
+            Adapter adapter = Adapters.forLanguage(file.language());
             if (adapter == null) continue;
             Parsed parsed = adapter.parse(file.path(), read(root.resolve(file.path())));
             if (parsed.unread() != null) unread.put(file.path(), parsed.unread());
@@ -59,7 +56,7 @@ public final class Complexity {
             List<Measure> measures = report.functions().get(file.path());
             if (measures == null) continue;
             for (Measure m : measures) {
-                Evidence where = new Evidence(adapterFor(file.language()).tool(), List.of(file.path() + ":" + m.line()));
+                Evidence where = new Evidence(Adapters.forLanguage(file.language()).tool(), List.of(file.path() + ":" + m.line()));
                 Subject function = new Subject(Subject.Kind.FUNCTION, file.path() + ":" + m.function());
                 facts.add(Fact.measured("COMPLEXITY.cyclomatic", function, m.cyclomatic(), where));
                 facts.add(Fact.measured("COMPLEXITY.cognitive", function, m.cognitive(), where));
@@ -88,11 +85,6 @@ public final class Complexity {
             first = false;
         }
         return json.append(first ? "]\n}\n" : "\n  ]\n}\n").toString();
-    }
-
-    static Adapter adapterFor(String language) {
-        for (Adapter adapter : ADAPTERS) if (adapter.reads(language)) return adapter;
-        return null;
     }
 
     private static String read(Path file) {

@@ -433,3 +433,16 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.bound` |  | 2026-10-22 |  |
 | analyze | `analyze/evaluator/analyze/JavaScriptImports.java:JavaScriptImports.uses` |  | 2026-10-22 |  |
 | analyze | `analyze/evaluator/analyze/TypeScriptImports.java:TypeScriptImports.resolve#2` |  | 2026-10-22 |  |
+| analyze | `analyze/evaluator/analyze/Adapters.java:Adapters.Adapters` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Adapters.java:Adapters.forLanguage` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Tarjan.java:Tarjan.Tarjan` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Tarjan.java:Tarjan.parts` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Tarjan.java:Tarjan.visit` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Tarjan.java:Tarjan.enter` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Tarjan.java:Tarjan.order` |  | 2026-10-23 |  |
+| analyze | `analyze/evaluator/analyze/Complexity.java:Complexity.adapterFor` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.Tarjan` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.parts` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.visit` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.enter` |  | 2026-10-23 | removed: 2026-10-23 |
+| analyze | `analyze/evaluator/analyze/Dependencies.java:Dependencies.Tarjan.order` |  | 2026-10-23 | removed: 2026-10-23 |

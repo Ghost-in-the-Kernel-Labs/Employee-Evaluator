@@ -48,7 +48,7 @@ public final class Coupling {
 
     /** The files in a strongly connected part of more than one file, or importing themselves, in path order. */
     static List<String> cyclic(Map<String, Set<String>> edges) {
-        Map<String, Integer> part = Dependencies.Tarjan.parts(edges);
+        Map<String, Integer> part = Tarjan.parts(edges);
         Map<Integer, Integer> sizes = new HashMap<>();
         part.values().forEach(p -> sizes.merge(p, 1, Integer::sum));
         List<String> files = new ArrayList<>();

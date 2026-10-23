@@ -24,7 +24,7 @@ imports, the dependency graph, duplication. JavaScript is the last one added (E-
    Its `tool()` names the grammar and its version. Cite the decision above the class (`// Decision:`).
 3. **Its imports** in analyze/evaluator/analyze/*Lang*Imports.java (`Import` values; resolved by path,
    never by running anything): see `analyze/evaluator/analyze/PythonImports.java` or `analyze/evaluator/analyze/TypeScriptImports.java`.
-4. **Register it** in `Complexity.ADAPTERS` (`analyze/evaluator/analyze/Complexity.java`). The order is
+4. **Register it** in `Adapters.ALL` (`analyze/evaluator/analyze/Adapters.java`). The order is
    the order facts are made in; append, so no golden moves.
 5. **Comments for duplication:** `analyze/evaluator/analyze/Duplication.java` tokenizes with `Tokens.of(text, hashComments)`; a
    language whose comments start with `#` needs its ending added there.

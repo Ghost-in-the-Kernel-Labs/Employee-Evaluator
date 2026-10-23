@@ -30,9 +30,6 @@ import java.util.List;
  */
 // Decision: E-054
 final class Pipeline {
-    /** The tool the dependency graph's facts name. */
-    static final String DEPENDENCIES_TOOL = "evaluator analyze dependencies 1";
-
     /** What to read besides the code: the sandbox to run its tests in, and the GitHub repository and applicant; each null for none. */
     record Options(Sandbox sandbox, String github, String applicant) {}
 
@@ -59,7 +56,7 @@ final class Pipeline {
         Complexity.Report report = Complexity.measure(root, inventory);
         Dependencies.Graph graph = Dependencies.graph(report, inventory);
         List<Fact> facts = new ArrayList<>(Complexity.facts(report, inventory));
-        facts.addAll(Dependencies.facts(graph, report, DEPENDENCIES_TOOL));
+        facts.addAll(Dependencies.facts(graph, report, Dependencies.TOOL));
         facts.addAll(Coupling.facts(graph));
         Duplication.fact(report).ifPresent(facts::add);
         TestFiles.ratio(inventory).ifPresent(facts::add);

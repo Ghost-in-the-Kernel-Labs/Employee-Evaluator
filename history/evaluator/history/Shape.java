@@ -28,6 +28,16 @@ public final class Shape {
     public static final String TOOL = "evaluator history 1 (git log)";
     private static final Pattern MESSY = Pattern.compile("(?i)^(revert\\b|fix(es|ed)?\\b|fixup!|squash!|typo|oops|wip\\b)");
     private static final List<String> AGENT_FILES = List.of("claude.md", "agents.md", "gemini.md", ".cursorrules", "copilot-instructions.md");
+    /** Active days at which the spread part is full: two weeks. */
+    private static final double FULL_SPREAD_DAYS = 14.0;
+    /** Commits per active day up to which the cadence part is full; above it the part falls in proportion. */
+    private static final double FULL_CADENCE_COMMITS_PER_DAY = 15.0;
+    /** The share of commits that are messy (reverts, fixes) at which the messy part is full. */
+    private static final double FULL_MESSY_SHARE = 0.05;
+    /** The share of commits carrying an agent's trailer at which the fingerprints part is full: a tenth, so the factor is 10. */
+    private static final double TRAILER_FACTOR = 10.0;
+    /** Commits touching an agent file at which the file counts as kept up (the fingerprints part is then full). */
+    private static final int KEPT_UP_AGENT_FILE_COMMITS = 2;
     /** The shape's parts and their weights, summing to 1. */
     static final Map<String, Double> WEIGHTS = Map.of("spread", 0.25, "cadence", 0.20, "variation", 0.20, "messy", 0.15, "colocation", 0.10, "fingerprints", 0.10);
 
@@ -77,10 +87,10 @@ public final class Shape {
         int agentFileCommits = (int) commits.stream().filter(c -> c.changes().stream().anyMatch(ch -> agentFile(ch.path()))).count();
         double variation = variation(commits), colocation = colocation(commits, isTest);
         Map<String, Double> parts = new LinkedHashMap<>();
-        parts.put("spread", Math.min(1, days.size() / 14.0));
-        parts.put("cadence", Math.min(1, 15.0 / ((double) commits.size() / days.size())));
+        parts.put("spread", Math.min(1, days.size() / FULL_SPREAD_DAYS));
+        parts.put("cadence", Math.min(1, FULL_CADENCE_COMMITS_PER_DAY / ((double) commits.size() / days.size())));
         parts.put("variation", Math.min(1, variation));
-        parts.put("messy", Math.min(1, messy.size() / Math.max(1, 0.05 * commits.size())));
+        parts.put("messy", Math.min(1, messy.size() / Math.max(1, FULL_MESSY_SHARE * commits.size())));
         parts.put("colocation", colocation);
         parts.put("fingerprints", fingerprints(trailers.size(), commits.size(), agentFiles.size(), agentFileCommits));
         return new Reading(commits.size(), days.size(), spread, round(variation), messy, round(colocation), trailers, agentFiles, agentFileCommits, parts);
@@ -109,8 +119,8 @@ public final class Shape {
 
     /** An agent's hand: 1 when a tenth of commits carry an agent's trailer or an agent file is kept up; otherwise in proportion. */
     static double fingerprints(int trailers, int commits, int agentFiles, int agentFileCommits) {
-        double byTrailers = Math.min(1, 10.0 * trailers / commits);
-        double byFiles = agentFiles == 0 ? 0 : agentFileCommits >= 2 ? 1 : 0.5;
+        double byTrailers = Math.min(1, TRAILER_FACTOR * trailers / commits);
+        double byFiles = agentFiles == 0 ? 0 : agentFileCommits >= KEPT_UP_AGENT_FILE_COMMITS ? 1 : 0.5;
         return Math.max(byTrailers, byFiles);
     }
 

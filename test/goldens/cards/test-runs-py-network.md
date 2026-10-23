@@ -7,7 +7,7 @@
 | Size | 0 | `SIZE.source_lines repository:.` |
 | Ambition | not measured |  |
 | AI navigability | 40 | `NAVIGABILITY.checklist repository:.` |
-| Maintainability | 100 | `MAINTAINABILITY.fan_out file:tests/test_rates.py`, `MAINTAINABILITY.import_cycle_files repository:.`, `COMPLEXITY.cognitive function:tests/test_rates.py:test_offline` and 2 more (the JSON lists all) |
+| Maintainability | 112 | `MAINTAINABILITY.fan_out file:tests/test_rates.py`, `MAINTAINABILITY.import_cycle_files repository:.`, `COMPLEXITY.cognitive function:tests/test_rates.py:test_offline` and 2 more (the JSON lists all) |
 | Provenance | not measured |  |
 
 - Quality per thousand lines: not measured
@@ -15,4 +15,4 @@
 - Provenance tier: not measured
 - Tooling bucket: unknown
 - Refuted: none
-- Produced: kernel 0.1, 2026-10-22, rubric `4d7287ec37e6`
+- Produced: kernel 0.1, 2026-10-22, rubric `cb62abb8be3c`

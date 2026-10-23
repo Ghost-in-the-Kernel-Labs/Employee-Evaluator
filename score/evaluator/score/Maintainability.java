@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Maintainability, the tools' half (E-051): six parts, each 0–1 with 1 good, weighed and summed to 0–100.
- * A part whose facts are absent is left out and the others' weights scaled to fill; none at all, no score.
+ * Maintainability, the tools' half: E-051's six parts, each 0–1 with 1 good, weighed (a part whose facts are absent is left
+ * out and the others' weights scaled to fill; none at all, no score), and that weighted score scaled to the baseline's (E-075).
  */
-// Decision: E-051
+// Decision: E-075
 final class Maintainability {
     /** The parts and their weights, summing to 1. */
     static final Map<String, Double> WEIGHTS = Map.of("duplication", 0.25, "tests", 0.25, "cycles", 0.15, "functions", 0.15, "coupling", 0.10, "unused", 0.10);
@@ -24,9 +24,19 @@ final class Maintainability {
 
     private Maintainability() {}
 
-    /** The score, over the parts whose facts are there, with every fact it read behind it. */
+    /**
+     * The score: 100 × the weighted score of the parts whose facts are there ÷ Suite Builder's at the baseline commit, rounded, no
+     * ceiling (E-071), with every fact it read behind it. The baseline is the six-part score whatever parts this repository has.
+     */
     static Score score(List<Fact> facts) {
         List<String> keys = new ArrayList<>();
+        Double weighted = weighted(facts, keys);
+        if (weighted == null) return null;
+        return new Score((int) Math.round(100 * weighted / Formulas.BASELINE_MAINTAINABILITY), keys);
+    }
+
+    /** E-051's weighted score, 0–1: the parts present weighed and the weights scaled to fill; null with no part. */
+    static Double weighted(List<Fact> facts, List<String> keys) {
         Map<String, Double> parts = parts(facts, keys);
         if (parts.isEmpty()) return null;
         double weight = 0, sum = 0;
@@ -34,7 +44,7 @@ final class Maintainability {
             weight += WEIGHTS.get(p.getKey());
             sum += WEIGHTS.get(p.getKey()) * p.getValue();
         }
-        return new Score((int) Math.round(100 * sum / weight), keys);
+        return sum / weight;
     }
 
     /** Each part present, 0–1; the keys of the facts read are added to `keys`. */

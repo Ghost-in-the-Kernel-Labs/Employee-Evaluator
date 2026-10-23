@@ -258,6 +258,13 @@ ceiling check or the floor survived; no new row, no change to a test beyond the 
 killed (a TIMED_OUT counts as killed); the two left are `Json.java`'s empty-map and empty-list returns, already judged harmless below.
 Nothing in `complexity` survived. `logScale` is gone with the log scale, so its harmless row is removed. No new row.
 
+### Run 17: 2026-10-23, `score/` and `rubric/`, Maintainability against the baseline (TODO.md 1.13, E-075)
+
+`gradle mutate -Ptarget=evaluator.score.*` then `evaluator.rubric.*`, in a plain clone of the change (`Maintainability.score` and `weighted`,
+`Formulas.BASELINE_MAINTAINABILITY`, `Metric.counted` for Maintainability). `score/`: 152 mutants, 152 killed. `rubric/`: 141 mutants, 139 killed;
+the two left are `Json.java`'s empty-map and empty-list returns, already judged harmless below. Nothing in the scaling, the weighted score or the
+absent-part rule survived. No new row.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

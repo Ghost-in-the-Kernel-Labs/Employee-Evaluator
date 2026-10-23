@@ -1256,3 +1256,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** five instruction edits and one HANDOFF section; no open question, so no Fable agent asked. Notes wiped, this review's debrief starts the next set.
 - **Caught by:** the navigation review.
 - **Touched:** docs/how/command-line.md, docs/how/change-a-formula.md, docs/how/agent-environment.md, theGhost.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-094 Maintainability against the baseline: 0.895670359282887 weighted is 100
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The third and last slice of TODO.md 1.13: Maintainability as 100 × E-051's weighted score ÷ Suite Builder's, E-051's six parts and weights kept.
+- **Found:** Suite Builder at 32762a6, read on a clean clone by a scratch program on the code facts `evaluator score --no-run` reads (none of its code run): duplication 0.027 (0.73),
+  tests 1.412 (1), cycles 87 of 914 (0.9048), functions 4,233 of 4,410 at most 15 (0.95986), coupling 851 of 914 at most 10 (0.93107), unused 88 over 913 (0.90361); weighted 0.895670359282887.
+  E-051 had said 88 for it (an earlier reading); this one is 89.57. The test builds those exact facts and reads 100. The goldens were read before they were kept: the files were
+  written, then every new value worked by hand from a scratch program's parts for each fixture (duplication 0.579 → 64.6 → 65; imports 0.7083 → 79.1 → 79; the three complexity fixtures
+  0.75 → 83.7 → 84; small-app 0.7875 → 87.9 → 88; the four test-runs fixtures all parts 1, two of them with parts absent (node-pass 0.6 of the weight, py-network 0.5) → 111.65 → 112).
+  Maintainability at Complexity moved on the three cards that have both (imports 2.13 → 2.37, small-app 0.79 → 0.88, node-pass, py-pass and py-fail 1.0 → 1.12). Nothing else moved.
+- **Options:** scaling each part (refused: a part where the baseline reads 0 divides by zero); comparing a repository with a part absent to the baseline's same parts (the lead said the baseline's weighted score; taken as said, and recorded in E-075).
+- **Resolved:** `Formulas.BASELINE_MAINTAINABILITY`, `Maintainability.weighted` and `score`, the rubric (version 4, hash cb62abb8be3c), `Metric.counted` for Maintainability, SC-01 naming all three, E-075 superseding E-051's scale, E-070 and E-071 in force, TODO.md 1.13 to DONE.md.
+- **Touched:** E-051, E-070, E-071, E-075, TODO.md, docs/DONE.md, docs/SCORE-CARD.md, docs/HANDOFF.md, docs/MUTATION.md (run 17), docs/KERNEL-MAP.md, the ten card goldens.
+

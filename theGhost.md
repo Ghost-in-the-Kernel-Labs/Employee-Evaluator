@@ -832,7 +832,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `score/evaluator/score/Maintainability.java`; `Cards.java` (every fact to every formula);
   `test/evaluator/score/MaintainabilityTest.java`.
 - **Source:** Claude's proposal, Ghost's choice ("go with those weights"), 2026-10-22.
-- **Status:** in force
+- **Status:** in force (its six parts and weights); superseded by E-075 (the scale)
 - **subject:** scoring
 - **See also:** E-034, E-035, E-036, E-045, E-050
 
@@ -1194,10 +1194,10 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** Size, built (TODO.md 1.13, first slice): `score/evaluator/score/Formulas.java` (`size`, `BASELINE_COMMIT`,
   `BASELINE_SOURCE_LINES`, `RUBRIC`, whose hash every card carries), `test/evaluator/score/FormulasTest.java` (the worked
   example), the cards' goldens. Complexity, built (second slice, E-074): `Formulas.complexity`, `BASELINE_COGNITIVE`, `BASELINE_DEPTH`, the same worked-example
-  test. Maintainability's parts to come with the rest of 1.13.
+  test. Maintainability, built (third slice, E-075): `Formulas.BASELINE_MAINTAINABILITY`, `Maintainability.score`, the same kind of test.
 - **Source:** Ghost, 2026-10-23 ("ok lets set a commit level for suite builder at its current level ... the
   baseline ... to be 100. A project that is empty scores at 0"; "linear is fine").
-- **Status:** in force (Size and Complexity, Maintainability's parts still proposed, TODO.md 1.13)
+- **Status:** in force (Size, Complexity and Maintainability, TODO.md 1.13 built)
 - **subject:** scoring
 - **See also:** E-045, E-050, E-071
 - **Supersedes:** E-048 (Size's formula; its facts stay)
@@ -1209,12 +1209,11 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   0–100. SC-01's "each 0–100" and `Score`'s bound change with TODO.md 1.13, when the first metric moves.
 - **Why:** Ghost: "Yes a score can go past 100." A cap at the baseline would make every repository larger
   than Suite Builder look the same, which is what the baseline is there to tell apart.
-- **Held by:** `rubric/evaluator/rubric/Metric.java` (`counted`: Size and Complexity so far), `rubric/evaluator/rubric/ScoreCard.java`
+- **Held by:** `rubric/evaluator/rubric/Metric.java` (`counted`: Size, Complexity and Maintainability), `rubric/evaluator/rubric/ScoreCard.java`
   (a score above 100 refused for any other metric), `rubric/evaluator/rubric/Score.java` (a floor of 0 only), docs/SCORE-CARD.md
-  SC-01, `test/evaluator/rubric/ScoreCardTest.java`, `test/ScoreCardDocTest.java`. Maintainability becomes counted
-  as TODO.md 1.13 moves it.
+  SC-01, `test/evaluator/rubric/ScoreCardTest.java`, `test/ScoreCardDocTest.java`.
 - **Source:** Ghost, 2026-10-23.
-- **Status:** in force (Size and Complexity, counted, the others with the rest of TODO.md 1.13)
+- **Status:** in force (Size, Complexity and Maintainability are counted, the rest keep 0–100)
 - **subject:** scoring
 - **See also:** E-070
 
@@ -1275,3 +1274,32 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** scoring
 - **See also:** E-032, E-049, E-050, E-070, E-071
 - **Supersedes:** E-050 (Complexity's formula; its facts stay)
+
+### E-075: Maintainability is scored against the baseline: E-051's weighted score over Suite Builder's at 32762a6 is 100
+- **Decision:** Maintainability (the tools' half) = round(100 × E-051's weighted score for the repository ÷ E-051's weighted score for Suite
+  Builder at `32762a6110ebd73246ca2413b1d54db947aee179`, which is 0.895670359282887), no ceiling (E-071). E-051's six parts, their weights
+  (duplication 0.25, tests 0.25, cycles 0.15, functions 0.15, coupling 0.10, unused imports 0.10) and its rule for a part with no facts (left
+  out, the others' weights scaled to fill it, no part no score) are kept as they were. The whole weighted score is scaled, not each part: the
+  parts are shares from 0 to 1, and a part where Suite Builder reads 0 would divide by zero. A repository with a part absent has its weighted
+  score taken over the parts it has (E-051) and then divided by the baseline's six-part score, so it is compared with the whole baseline and not
+  with the baseline's same parts; the parts are not zeroed for the baseline either. The baseline's measures, read by this kernel without the
+  sandbox (the code facts `evaluator score --no-run` reads, by a scratch program on a clean clone of Suite Builder at that commit, none of its
+  code run): duplication 0.027 (part 0.73), test-to-code ratio 1.412 (1), 87 of 914 files in an import cycle (0.9048), 4,233 of 4,410 functions
+  at most cognitive 15 (0.95986), 851 of 914 files importing at most 10 (0.93107), 88 unused imports over 913 files (0.90361): weighted
+  0.25 × 0.73 + 0.25 × 1 + 0.15 × 0.9048 + 0.15 × 0.95986 + 0.10 × 0.93107 + 0.10 × 0.90361 = 0.89567. The baseline reads 100 against itself.
+  Worked: every part perfect 100 ÷ 0.89567 = 111.65, 112; duplication 0 and tests 1 only (the rest absent) weighted 0.5, 55.82, 56; E-051's
+  four-file example, weighted 0.5625, 62.80, 63; the tests part alone at 0.4433 is 49.49, 49, at 0.4434 is 49.50, 50. Maintainability at
+  Complexity (E-047, a product with Complexity over 100) moves with it.
+- **Why:** Ghost's lead: keep E-051's parts and weights and scale the result against the baseline (E-070). E-051's scale was the weighted score
+  itself, 0 to 100, which could not tell a repository better than Suite Builder from one as good (this kernel read Suite Builder 90, and every
+  part is held at 1 at most); now a repository better than the baseline reads over 100, as Size and Complexity do. A per-part baseline was
+  refused for the divide by zero. Absent parts are left as E-051 has them: a missing part is no reading, not a bad one.
+- **Held by:** `score/evaluator/score/Maintainability.java` (`score`, `weighted`); `score/evaluator/score/Formulas.java` (`BASELINE_MAINTAINABILITY`,
+  `RUBRIC`, whose hash every card carries); `rubric/evaluator/rubric/Metric.java` (`counted`); `test/evaluator/score/MaintainabilityTest.java`
+  (the worked example, the baseline at 100 against itself, the edges); `test/evaluator/score/FormulasTest.java` (the rubric and its hash);
+  the cards' goldens.
+- **Source:** Ghost's lead, 2026-10-23 (third slice of TODO.md 1.13); Claude Sonnet 5.5 measured and built it.
+- **Status:** in force
+- **subject:** scoring
+- **See also:** E-047, E-051, E-070, E-071, E-074
+- **Supersedes:** E-051 (Maintainability's scale; its parts and weights stay)

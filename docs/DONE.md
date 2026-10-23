@@ -122,3 +122,16 @@ Done 2026-10-23 (J-056 to J-058, J-072 to J-082, J-087): runs 2 to 14 of `docs/M
 (`Json` read `\r`, `\b` and `\f` as letters; `Commits.paths` split a path holding a newline in two). The network and sandbox
 classes were reached without the real thing: loopback servers for `HttpGitHub` and `RegistriesProxy`, a script in place of `docker`
 for `DockerSandbox.run`. No test weakened, no golden moved by this item.
+
+### 1.13 Baseline scoring
+
+Check: E-070 built: each counted aspect scored as 100 × its measure ÷ Suite Builder's at 32762a6 (inverted
+where more is worse), Size first, then Complexity and Maintainability's parts, one commit each, each worked by
+hand on a fixture; the baseline's measures recorded with the commit they came from; the rubric's hash carrying
+the baseline; every moved card golden reviewed. With the first metric, a baselined score may pass 100 (E-071): `Score`'s
+upper bound and SC-01's "each 0–100" go for counted metrics, while Provenance, Quality and Navigability keep
+0–100. E-070 and E-071 move to in force.
+Done 2026-10-23 in three slices, one commit each (J-091, J-092, J-094): Size (E-070: 100 × lines ÷ 84,971), Complexity (E-074: 0.6 × cognitive ÷ 13,361 + 0.4 × depth ÷ 28, each ×100)
+and Maintainability (E-075: E-051's weighted score ÷ Suite Builder's 0.895670359282887, ×100), each against Suite Builder at 32762a6 with its baseline in `Formulas`, a test that the baseline reads 100
+against itself, no ceiling (E-071: `Metric.counted` holds the three, `ScoreCard` refuses over 100 for the rest), the rubric (version 4) naming the baseline, and every moved card golden read and checked by hand.
+E-070 and E-071 are in force.

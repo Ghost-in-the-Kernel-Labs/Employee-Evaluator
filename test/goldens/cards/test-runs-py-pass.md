@@ -7,12 +7,12 @@
 | Size | 0 | `SIZE.source_lines repository:.` |
 | Ambition | not measured |  |
 | AI navigability | 38 | `NAVIGABILITY.checklist repository:.` |
-| Maintainability | 100 | `MAINTAINABILITY.duplication repository:.`, `MAINTAINABILITY.test_to_code_ratio repository:.`, `MAINTAINABILITY.fan_out file:app/__init__.py` and 11 more (the JSON lists all) |
+| Maintainability | 112 | `MAINTAINABILITY.duplication repository:.`, `MAINTAINABILITY.test_to_code_ratio repository:.`, `MAINTAINABILITY.fan_out file:app/__init__.py` and 11 more (the JSON lists all) |
 | Provenance | not measured |  |
 
 - Quality per thousand lines: 7692.31 (ranked among under 2k lines)
-- Maintainability at Complexity: 1.0
+- Maintainability at Complexity: 1.12
 - Provenance tier: not measured
 - Tooling bucket: unknown
 - Refuted: none
-- Produced: kernel 0.1, 2026-10-22, rubric `4d7287ec37e6`
+- Produced: kernel 0.1, 2026-10-22, rubric `cb62abb8be3c`

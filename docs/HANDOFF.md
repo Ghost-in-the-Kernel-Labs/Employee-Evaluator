@@ -3,9 +3,12 @@
 ## What to work on next
 
 `TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. 1.7's live check waits on
-Ghost's token (below), so the work is 1.13, baseline scoring (E-070, E-071): Size (84,971 lines at 32762a6) and Complexity (13,361 total cognitive and depth 28, E-074) are built and counted (`Metric.counted` lifts their ceiling), so Maintainability's parts are next: read each part's measure at the baseline on a clean clone the same way, record it beside the others in `Formulas`, and make Maintainability counted in `Metric` only when its formula moves. 1.12, the mutation survivors, is
+Ghost's token (below), and 2.1 on Ghost's labels, so nothing in TODO.md is open to an agent. 1.13, baseline scoring, is done (E-070, E-071, E-074, E-075): Size, Complexity and Maintainability
+are counted against Suite Builder at 32762a6 and `Metric.counted` holds the three. 1.12, the mutation survivors, is
 done: runs 2 to 14 of docs/MUTATION.md closed `rubric/`, `score/`, `history/`, `cli/`, `github/` and `analyze/` (six passes, the
-last the sandbox's network and Docker). Phase 2 starts at 2.1, which waits on Ghost's labels.
+last the sandbox's network and Docker). What an agent can do meanwhile is the two next steps below, in order, then the seed corpus
+in `corpus/` (its cards are dated 2026-10-22, rubric b8043f1115a0, and no test holds them to the current rubric: regenerate them or say why not).
+Phase 2 starts at 2.1, which waits on Ghost's labels.
 
 ## Next steps from the navigation review (J-093)
 

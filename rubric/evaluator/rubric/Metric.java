@@ -12,15 +12,15 @@ public enum Metric {
     SIZE("Size", true),
     AMBITION("Ambition"),
     NAVIGABILITY("AI navigability"),
-    MAINTAINABILITY("Maintainability"),
+    MAINTAINABILITY("Maintainability", true),
     PROVENANCE("Provenance");
 
     /** The metric's name as the card and the documents write it. */
     public final String title;
 
     /**
-     * Whether the score is a count against the baseline, which may pass 100 (E-071). Size and Complexity are counted;
-     * Maintainability's parts join them as TODO.md 1.13 moves them. Provenance, Quality and Navigability stay 0–100.
+     * Whether the score is a count against the baseline, which may pass 100 (E-071). Size, Complexity and Maintainability are counted
+     * (TODO.md 1.13 is done). Provenance, Quality and Navigability stay 0–100.
      */
     public final boolean counted;
 

@@ -56,8 +56,10 @@ class FormulasTest {
     void theRubricNamesTheBaseline() {
         assertTrue(Formulas.RUBRIC.contains("size E-070 against 32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines)"));
         assertTrue(Formulas.RUBRIC.contains(Formulas.BASELINE_COMMIT) && Formulas.RUBRIC.contains("(" + Formulas.BASELINE_SOURCE_LINES + " source lines)"));
-        assertTrue(Formulas.RUBRIC.startsWith("phase-1 rubric 3:"));
+        assertTrue(Formulas.RUBRIC.startsWith("phase-1 rubric 4:"));
         assertTrue(Formulas.RUBRIC.contains("complexity E-074 against 32762a6110ebd73246ca2413b1d54db947aee179 (13361 cognitive, depth 28)"));
+        assertTrue(Formulas.RUBRIC.contains("maintainability E-075 against 32762a6110ebd73246ca2413b1d54db947aee179 (weighted 0.895670359282887)"));
+        assertTrue(Formulas.RUBRIC.contains("(weighted " + Formulas.BASELINE_MAINTAINABILITY + ")"));
     }
 
     /**
@@ -121,6 +123,6 @@ class FormulasTest {
     /** The rubric's hash is the first 12 hex digits of its SHA-256; it changes with the rubric, as every card's golden does. */
     @Test
     void theRubricsHash() {
-        assertEquals("4d7287ec37e6", Formulas.rubricHash());
+        assertEquals("cb62abb8be3c", Formulas.rubricHash());
     }
 }

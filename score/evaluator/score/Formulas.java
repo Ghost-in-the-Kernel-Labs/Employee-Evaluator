@@ -18,9 +18,10 @@ public final class Formulas {
      * The rubric's name and version: every formula and its decision. A card carries its hash, so two cards
      * scored by different rubrics are told apart; a formula changed gives it a new version.
      */
-    static final String RUBRIC = "phase-1 rubric 3: navigability E-044, provenance E-046, ratios E-047, size E-070 against "
+    static final String RUBRIC = "phase-1 rubric 4: navigability E-044, provenance E-046, ratios E-047, size E-070 against "
             + "32762a6110ebd73246ca2413b1d54db947aee179 (84971 source lines), complexity E-074 against "
-            + "32762a6110ebd73246ca2413b1d54db947aee179 (13361 cognitive, depth 28), maintainability E-051, quality E-052, bucket E-053";
+            + "32762a6110ebd73246ca2413b1d54db947aee179 (13361 cognitive, depth 28), maintainability E-075 against "
+            + "32762a6110ebd73246ca2413b1d54db947aee179 (weighted 0.895670359282887), quality E-052, bucket E-053";
 
     /**
      * The baseline Size is counted against (E-070): Suite Builder at this commit (main, 2026-10-23), read by this kernel
@@ -29,6 +30,14 @@ public final class Formulas {
     static final String BASELINE_COMMIT = "32762a6110ebd73246ca2413b1d54db947aee179";
     /** `SIZE.source_lines` of the baseline commit: the repository that reads Size 100. */
     static final long BASELINE_SOURCE_LINES = 84_971;
+
+    /**
+     * E-051's weighted score (0–1) of the baseline commit, all six parts present: duplication 0.73 (0.027 duplicated), tests 1 (ratio
+     * 1.412), cycles 0.9048 (87 of 914 files), functions 0.95986 (4,233 of 4,410 at most cognitive 15), coupling 0.93107 (851 of 914 files
+     * at most fan-out 10), unused 0.90361 (88 over 913 files). Read by this kernel without the sandbox, none of Suite Builder's code run.
+     * The repository that reads Maintainability 100.
+     */
+    static final double BASELINE_MAINTAINABILITY = 0.895670359282887;
 
     private Formulas() {}
 
@@ -56,7 +65,7 @@ public final class Formulas {
 
     /**
      * Phase 1's formulas: AI navigability is its checklist (E-044), already 0–100; Provenance (E-046);
-     * Size (E-070, against the baseline); Complexity (E-074, against the baseline); Maintainability (E-051); Quality (E-052).
+     * Size (E-070, against the baseline); Complexity (E-074, against the baseline); Maintainability (E-075, against the baseline); Quality (E-052).
      */
     public static Map<Metric, Formula> phaseOne() {
         return Map.of(Metric.NAVIGABILITY, Formulas.repositoryFact("NAVIGABILITY.checklist"), Metric.PROVENANCE, Formulas::provenance,

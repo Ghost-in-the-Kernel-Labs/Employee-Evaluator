@@ -11,6 +11,7 @@ final class KernelMapTest {
         run().exit();
     }
 
+    /** The kernel map's own rules, each tried on a small source: a function the map lacks, one gone with no closing row, one closed, superseded or moved, and a second write that adds nothing. */
     static Check run() {
         Map<String, String> one = Map.of("ingest/A.java", "class A { int f() { return 1; } }");
         String held = KernelMap.write(HEADER, one, "2026-10-04");

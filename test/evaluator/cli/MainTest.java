@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class MainTest {
     private static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
@@ -54,6 +56,17 @@ class MainTest {
         ByteArrayOutputStream err = new ByteArrayOutputStream();
         assertEquals(1, Main.run(List.of("score", ROOT.resolve("no-such-folder").toString(), "--no-run"), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err)));
         assertTrue(err.toString().contains("not a folder"));
+    }
+
+    /** What the pipeline cannot read is told as one line and exit 1, with nothing printed as a card: a .git that is no repository. */
+    @Test
+    void whatCouldNotBeReadIsRefusedWithItsReason(@TempDir Path dir) throws Exception {
+        Files.writeString(dir.resolve("a.txt"), "x\n");
+        Files.createDirectory(dir.resolve(".git"));
+        ByteArrayOutputStream out = new ByteArrayOutputStream(), err = new ByteArrayOutputStream();
+        assertEquals(1, Main.run(List.of("score", dir.toString(), "--no-run"), new PrintStream(out), new PrintStream(err)));
+        assertTrue(err.toString().startsWith("evaluator score: git log failed"), err.toString());
+        assertEquals("", out.toString());
     }
 
     /** The whole pipeline on this repository, tests unrun: every metric but Ambition and Quality's run scores. */

@@ -36,6 +36,7 @@ final class EscalationsTest {
                 .accepts("one conflict raised and named for Ghost", () -> check(HEADER + "| 2026-10-23 | t | r | conflict | two objectives | raised |\n", "- **Escalations: conflict**, one row"));
     }
 
+    /** What is wrong with the escalation log, if anything: a type with enough open rows (or any conflict) must be marked `raised` and named in docs/FOR-GHOST.md. */
     static List<String> check(String log, String forGhost) {
         List<String> failures = new ArrayList<>();
         Map<String, List<String>> open = new LinkedHashMap<>();

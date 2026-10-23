@@ -30,18 +30,18 @@ push by `scripts/prepush.sh`.
 
 Measured by `gradle metrics` in the image at every tithe pass.
 
-| Metric | Phase 1 target | Pass 0 (2026-10-18, scaffold) | Pass 1 (2026-10-19, TODO 1.5 begun) | Pass 2 (2026-10-22, TODO 1.11) | Why it matters to the agent |
-| --- | --- | --- | --- | --- | --- |
-| Mandatory context (words) | < 1,500 | 747 | 976 | 1,067 | every task pays it |
-| Fast loop (s) | ≤ 20 | not timed yet | 7 (warm) | 18 (all tests rerun) | the agent runs it after every edit |
-| Largest source file (lines) | ≤ 400 | 214 (test/GhostTest.java) | 233 (JavaComplexity.java) | 280 (test/SupplyChainTest.java) | a file over it does not fit a routing row |
-| Files a routing row opens | ≤ 5 | 4 | 5 | 5 | the context one task costs |
-| Functions over 20 paths | 0 | 0 | 0 | 0 | a function nobody can hold in mind |
-| Duplicate helpers (same body, two names) | 0 | 0 | 0 | 0 | two names for one thing |
-| Decisions without `See also` | reported, not held | 15 | 15 | 15 | a decision that floats |
-| Docs lines per source line | reported, not held | 0.76 | 0.31 | 0.32 | the ratio of intent to code |
-| Stale generated artifacts | 0 | 0 | 0 | 0 | a map that lies |
-| Commits since the last tithe | ≤ 8 | 2 | 0 (this tithe; it was 9) | 0 (this tithe; it was 13) | E-015 |
+| Metric | Phase 1 target | Pass 0 (2026-10-18, scaffold) | Pass 1 (2026-10-19, TODO 1.5 begun) | Pass 2 (2026-10-22, TODO 1.11) | Pass 3 (2026-10-23, TODO 1.12) | Why it matters to the agent |
+| --- | --- | --- | --- | --- | --- | --- |
+| Mandatory context (words) | < 1,500 | 747 | 976 | 1,067 | 847 | every task pays it |
+| Fast loop (s) | ≤ 20 | not timed yet | 7 (warm) | 18 (all tests rerun) | not timed (no Docker here) | the agent runs it after every edit |
+| Largest source file (lines) | ≤ 400 | 214 (test/GhostTest.java) | 233 (JavaComplexity.java) | 280 (test/SupplyChainTest.java) | 289 (test/SupplyChainTest.java) | a file over it does not fit a routing row |
+| Files a routing row opens | ≤ 5 | 4 | 5 | 5 | 5 | the context one task costs |
+| Functions over 20 paths | 0 | 0 | 0 | 0 | 0 | a function nobody can hold in mind |
+| Duplicate helpers (same body, two names) | 0 | 0 | 0 | 0 | 0 | two names for one thing |
+| Decisions without `See also` | reported, not held | 15 | 15 | 15 | 15 | a decision that floats |
+| Docs lines per source line | reported, not held | 0.76 | 0.31 | 0.32 | 0.40 | the ratio of intent to code |
+| Stale generated artifacts | 0 | 0 | 0 | 0 | 0 | a map that lies |
+| Commits since the last tithe | ≤ 8 | 2 | 0 (this tithe; it was 9) | 0 (this tithe; it was 13) | 0 (this tithe; it was 9) | E-015 |
 
 Pass 0's numbers are the scaffold's: almost no product code, so most are trivially met. Pass 2 is the
 first that means anything, at the phase-1 boundary: about 9.4k lines of Java, every target held, and the

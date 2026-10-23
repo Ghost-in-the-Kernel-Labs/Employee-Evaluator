@@ -998,3 +998,19 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   tests; run 6 recorded; HANDOFF names `cli/` next.
 - **Touched:** history/, test/evaluator/history/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
 - **Caught by:** mutation (E-019).
+
+### J-073 cli/'s mutation survivors closed; this commit is a tithe
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, the `cli/` module: a test or a reason for each survivor; and the tithe nine commits
+  called for (E-015).
+- **Found:** Of `cli/`'s 7 mutants not killed, 5 were two things never run: a `.git` that is no repository
+  (so `Main.score`'s IOException line) and the two notes `Pipeline.facts` prints; the GitHub line could not be
+  reached without a network until `Pipeline.github` took the API. One, `System.exit`, cannot be tested. Also:
+  PIT needs a green suite, which a worktree never has (`thisRepositorysCard`), so the run was in a plain clone.
+- **Options:** a harmless row for the GitHub line (rejected: it could change a result); an injected API,
+  taken.
+- **Resolved:** run 7 (45 mutants, 44 killed); PipelineTest and one MainTest test; the tithe fills the gaps two
+  earlier debriefs named (agent-environment.md, finish-work.md, add-or-change-a-module.md), puts a comment on the
+  two helpers Metrics flagged, and records Pass 3 in AGENT.md.
+- **Touched:** cli/, test/evaluator/cli/, docs/MUTATION.md, docs/HANDOFF.md, docs/AGENT.md, docs/how/.
+- **Caught by:** mutation (E-019).

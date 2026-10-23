@@ -92,6 +92,22 @@ the agent-file and test-file rules). Fixed (`Commits.splitPaths`), with `aPathWi
 fails before the fix. Two small changes of shape only, to make the code testable: `Git.scrub` (the
 environment, taken out of `builder`) and `Git.readCapped` no longer private. `history/` is done.
 
+### Run 7: 2026-10-23, `cli/`, which closes it (TODO.md 1.12, J-073)
+
+`gradle mutate -Ptarget=evaluator.cli.*`, in a plain clone (PIT needs a green suite; see agent-environment.md).
+Before: 45 mutants, 38 killed (three of them TIMED_OUT, the `++i` of `parse`'s option loop turned to `--i`, which
+never ends), 7 not killed: 2 survived and 5 on lines no test runs. After: 45 mutants, 44 killed, 1 left, below.
+Run 1 counted 2 survivors and 5 with no coverage in 45; the same.
+
+Tests added: `PipelineTest` (new): the note "history not read: no .git directory" for a folder with no `.git`;
+the note "tests not measured: Node: no package.json at the root" from a sandbox that is never reached; and
+`Pipeline.github`, which asks GitHub for the owner and repository named (`/repos/ghost/app/commits...`) and
+returns `Authorship`'s facts. `MainTest.whatCouldNotBeReadIsRefusedWithItsReason`: a `.git` that is no
+repository makes `git log` fail, which `Main.score` says as one line, exit 1, nothing on stdout (the lines
+`score` ran for IOException, which no test reached). One change of shape only, to make the GitHub line testable:
+`Pipeline.github` takes the `GitHubApi` (package-private) and `facts` passes `HttpGitHub.fromEnvironment()`.
+No bug found. `cli/` is done.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -101,3 +117,4 @@ environment, taken out of `builder`) and `Git.readCapped` no longer private. `hi
 | `score/Formulas.java`, `logScale`, `n <= 100` | `n < 100` | The two differ only at 100, where the formula gives 100 · (log10 100 − 2) / 3 = 0, which the guard returns anyway. |
 | `history/Shape.java`, `variation`, the two `-` in `(s - mean) * (s - mean)` | `(s + mean) * (s - mean)`, `(s - mean) * (s + mean)` | Equal to what they replace: (s + m)(s - m) = s² - m², and the sum of that over n values is Σs² - n·m², which is Σ(s - m)² when m is their mean. Only floating-point rounding, far below the three decimals the fact is rounded to, differs. |
 | `history/Commits.java`, `parse`, `close < 0` | `close <= 0` | Equal in result: a record whose close is at index 0 has an empty header, which splits into one part, and `head.length < 3` skips it on the next line. |
+| `cli/Main.java`, `main`, `System.exit(...)` | the call removed | `main` is the JVM's entry and exit; a test that called it would end the test JVM, so the work is in `run`, which returns the status and is tested for each status (0, 1). The only difference is the status the shell sees, which `run`'s return value is. |

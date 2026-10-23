@@ -9,6 +9,7 @@ import evaluator.analyze.Sandbox;
 import evaluator.analyze.TestFiles;
 import evaluator.analyze.TestRunner;
 import evaluator.github.Authorship;
+import evaluator.github.GitHubApi;
 import evaluator.github.HttpGitHub;
 import evaluator.history.Commits;
 import evaluator.history.Shape;
@@ -49,7 +50,7 @@ final class Pipeline {
         // hostile submission could point anywhere on the machine (E-013). Our own fast loop needs a plain clone.
         if (Files.isDirectory(root.resolve(".git"))) facts.addAll(Shape.facts(Commits.read(root), Commits.paths(root), TestFiles::isTest));
         else notes.println("history not read: no .git directory");
-        if (options.github() != null) facts.addAll(github(options));
+        if (options.github() != null) facts.addAll(github(HttpGitHub.fromEnvironment(), options));
         return facts;
     }
 
@@ -67,8 +68,8 @@ final class Pipeline {
     }
 
     /** Layer 2: commit verification and push attribution for `owner/repo` and its applicant. */
-    private static List<Fact> github(Options options) throws IOException {
+    static List<Fact> github(GitHubApi api, Options options) throws IOException {
         String[] name = options.github().split("/", 2);
-        return Authorship.facts(HttpGitHub.fromEnvironment(), name[0], name[1], options.applicant());
+        return Authorship.facts(api, name[0], name[1], options.applicant());
     }
 }

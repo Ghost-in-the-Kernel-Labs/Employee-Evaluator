@@ -130,6 +130,21 @@ empty (falls back to the head), a head that is no hash, the oldest of several pu
 never negative, and the evidence says "oldest push ..." or "(no push by the applicant in GitHub's log)"); and
 the fixture test now checks the evidence of the last three facts. No bug found. `github/` is done.
 
+### Run 9: 2026-10-23, `analyze/`, part 1 of 6: the Java classes only (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). `analyze/` is 1,104 mutants and is
+split over six passes by concern; this one covers `JavaComplexity` (20 left alive), `JavaImports` (8) and `JavaAdapter`
+(3) only. After: 1,104 mutants, 953 killed (the other classes' survivors untouched); of these three classes 7 are left,
+all judged harmless below (6 in `JavaComplexity`/`JavaAdapter`, 1 in `JavaImports`).
+
+Tests added, in `JavaComplexityTest` (new; source held in the test, so the fixture and its golden are unchanged, E-018):
+every nesting-sensitive rule of the cognitive count tried at nesting 1 (inside an `if`), where `1 - nesting` or
+`nesting - 1` shows: an `else if` body, an `else` body, both branches of `?:`, a `switch` in an `if`, a `case` body, a
+switch expression, a for-each, a `while` and its body, a `do` and its body, a `catch` and its block; an unlabelled `break`
+(0) and a labelled one (+1). The package import `a.b.*` resolved (only `.java` files directly in the folder, not a
+deeper one, not `xa/b`, not a text file: `JavaImports.packageFiles` had no test at all), a sibling of a file at `/`, and
+the own-package import's line (the package line; line 1 with no package). No bug found, no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -142,3 +157,6 @@ the fixture test now checks the evidence of the last three facts. No bug found. 
 | `cli/Main.java`, `main`, `System.exit(...)` | the call removed | `main` is the JVM's entry and exit; a test that called it would end the test JVM, so the work is in `run`, which returns the status and is tested for each status (0, 1). The only difference is the status the shell sees, which `run`'s return value is. |
 | `github/Authorship.java`, `facts`, `if (total == 0) return facts;` | the returned list replaced by an empty immutable list | Equal to what it replaces: at that line `facts` is the empty list just made, so an empty list is the same list. The caller (`Pipeline.facts`) only reads it with `addAll`. |
 | `github/HttpGitHub.java`, `fromEnvironment`, `return from(...)` | returns null | The line's return runs only when `EVALUATOR_GITHUB_TOKEN` is set, and a session without the token (this one) reaches it only by the throw. It is not harmless: with the token set, `AuthorshipTest.theAdapterNamesItsVariableAndNeverItsToken` calls `live.toString()` and `AuthorshipLiveTest` calls `Authorship.facts` on the result, both of which fail on null, so Ghost's token session kills it. A recorded answer cannot, since the environment is the process's and a test must not set it; `from` (which the line calls) is tried for every value. |
+| `analyze/JavaComplexity.java`, `scan` (line 53), `visitMethodInvocation`, `visitBinary`, `visitSwitch`, `visitSwitchExpression` | the returned value replaced by null | Each returns `Void`, whose only value is null: `super.scan(...)`, `super.visitMethodInvocation(...)` and `super.visitBinary(...)` return null, and `aSwitch` returns null. The mutant returns what the code returned. |
+| `analyze/JavaAdapter.java`, `Methods.visitMethod`, `return super.visitMethod(tree, null)` | the returned value replaced by null | The same: `Void`, always null. |
+| `analyze/JavaImports.java`, `packageFiles`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the directory is `file.substring(0, 0)`, which is "" as for no slash. |

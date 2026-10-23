@@ -16,6 +16,8 @@
 
 ## A long run's output
 
+`mkdir -p build` first: a fresh clone or worktree has no `build/`, and the shell fails on the redirect before the run starts.
+
 `gradle mutate`, `scripts/prepush.sh` and `gradle test` always write to a file (> build/run.log 2>&1). You, or
 a sub-agent you hand the run to, grep it for failures first ("FAILED", "prepush:"), and read nothing more when
 there are none. A failing test's message is in its report under build/test-results/test/, not the console.

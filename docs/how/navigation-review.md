@@ -14,7 +14,8 @@ reviews `docs/NAVIGATION-NOTES.md`. The review's commit subject starts "Navigati
 4. **Actionable items:** record each in the journal with the entries it came from, then check each is valid
    against the repository (is the complaint true now? would the suggestion help, and break nothing?). A valid
    one is fixed in its instructions file, the routing row, or the document it names: in this commit, or as a
-   next step said in docs/HANDOFF.md. An invalid one is recorded as such, with why.
+   next step said in docs/HANDOFF.md. A valid one an earlier commit already fixed is recorded as "already fixed" with that commit's hash
+   (`git log -S'<its text>'` finds it). An invalid one is recorded as such, with why.
 5. **Open questions** (a point whose validity or fix you cannot settle, or one that would change a decision):
    ask a Claude Fable agent (the Agent tool, model `fable`), read only, with the entries, the files they name,
    and the question. Record its answer in the journal; a change to a decision still goes to Ghost.

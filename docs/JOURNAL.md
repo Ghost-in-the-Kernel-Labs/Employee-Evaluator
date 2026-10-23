@@ -1160,3 +1160,22 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-071 (proposed until 1.13 builds it): counted, baselined metrics have no ceiling; the others
   keep 0–100. TODO.md 1.13's check says so; the item left docs/FOR-GHOST.md.
 - **Touched:** theGhost.md, TODO.md, docs/FOR-GHOST.md, docs/DECISIONS.md.
+
+### J-086 Navigation review: seven debriefs, five points converged, one fix, one gap closed
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The navigation review that `gradle metrics` called due (11 commits since the last).
+- **Found:** Points met by several agents, each checked against the repository now. (1) Reading a survivor needs
+  one file's `cat -n` at a time, and mutations.xml for what a mutant changed: five agents (parts 1 to 5),
+  already fixed by 4313875 in agent-environment.md. (2) Scratch folder naming, `-Ptarget` taking a package
+  glob only, source held in a new test rather than a grown fixture, a network class tried on a loopback
+  `HttpServer`: one agent each, all already fixed by 4313875 (MUTATION.md run 8 says the same of `HttpGitHub`).
+  (3) A worktree or fresh clone has no `build/`, so a redirect to build/run.log fails: part 5, and the two
+  agents of J-075; true, `mkdir -p build` was only under mutation. Fixed in commands.md. (4) The review's own
+  step 4 had no word for a point already fixed: the J-075 reviewer and this one; fixed in navigation-review.md
+  with the `git log -S` way to find the commit. One agent alone, noted and not acted on: no docs/how file for
+  github/; where the navigability mutation tests live; per-class survivor counts (HANDOFF now names the classes;
+  run 1 lists the files); a scratch program to try a JDK-default mutant (the harmless rows already say it).
+- **Options:** act on the single-agent points (step 2 says no); leave the build/ gap (a second recurrence). Acted only on converged ones.
+- **Resolved:** two one-line edits; no open question, so no Fable agent asked. Notes wiped, this review's debrief starts the next set.
+- **Caught by:** the navigation review.
+- **Touched:** docs/how/commands.md, docs/how/navigation-review.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.

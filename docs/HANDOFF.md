@@ -3,9 +3,14 @@
 ## Start here: 1.7's live check (2026-10-23)
 
 Ghost has made a GitHub token and is adding it to the environment as `EVALUATOR_GITHUB_TOKEN`: a
-fine-grained token with read-only access to public repositories and no permissions (public data needs
-none; the token raises the rate limit from 60 requests an hour to 5,000). The live test reads
-Ghost-in-the-Kernel-Labs/suite-builder, which is public (GitHub answers it without authentication).
+fine-grained token with read-only access to public repositories and no permissions. **It cannot read the
+live test's repository:** Ghost-in-the-Kernel-Labs/suite-builder is private (Ghost, 2026-10-23). A request
+that seems to read it unauthenticated from a cloud session goes through the session's proxy, which carries
+the session's own GitHub access: no proof of what is public. Before step 2, ask Ghost which way 1.7 goes:
+(a) a token scoped to that repository (owner Ghost-in-the-Kernel-Labs, only suite-builder, Contents
+read-only), or (b) the public token, with the live test pointed at a public repository of Ghost's with signed
+and unsigned commits, which changes 1.7's check and is Ghost's call. With the public token alone, the live
+test's 404 is expected, not a bug.
 
 1. Check the session has it, without printing it: `test -n "$EVALUATOR_GITHUB_TOKEN" && echo set`.
    Not set: the session started before Ghost saved it; say so and stop.

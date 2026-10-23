@@ -1322,3 +1322,17 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   it, run the test alone to a file, close 1.7 or report GitHub's refusal), what is done, what waits on Ghost
   (2.1's open questions, the token-optional proposal), how work is handed out, the session's environment.
 - **Touched:** docs/HANDOFF.md.
+
+### J-101 The live test's repository is private; a check through the session's proxy proved nothing
+- **Who:** Claude. **Class:** failure-caught.
+- **Intent:** Writing J-100's handoff.
+- **Found:** J-100 said Ghost-in-the-Kernel-Labs/suite-builder is public because an unauthenticated `curl`
+  got 200. The cloud session's egress proxy carries the session's own GitHub access, so the request was
+  not unauthenticated. Ghost: the repository is private; the session reads it through the GitHub
+  integration. Ghost's public-repositories token cannot read it.
+- **Options:** a token scoped to the repository; the public token with the live test pointed at one of
+  Ghost's public repositories (changes 1.7's check).
+- **Resolved:** docs/HANDOFF.md corrected: the next session asks Ghost which way before running the test.
+- **Caught by:** Ghost.
+- **Touched:** docs/HANDOFF.md.
+

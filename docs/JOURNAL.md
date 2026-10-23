@@ -1071,3 +1071,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   The scratch clones finished agents left (jclone, plain, mclone) removed.
 - **Caught by:** review (counting the notes' entries).
 - **Touched:** docs/NAVIGATION-NOTES.md.
+
+### J-078 analyze/ part 2 of 6 (Python and the tree-sitter base): 29 survivors down to 5, all harmless
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, `PythonAdapter`, `TreeSitterAdapter` and `PythonImports`: a test or a reason for each survivor.
+- **Found:** The Python fixture never reached a nesting-sensitive rule below the top, a bracketed run of `and`, an error
+  past line 1, or a relative import above the package; and `TreeSitterAdapter.normalize` had no test of its own
+  (relative imports were never resolved in a test). No bug.
+- **Options:** extend the fixture (rejected: its golden would move for no behaviour change); source held in a new
+  test, taken.
+- **Resolved:** run 10 (1,104 mutants, 977 killed); PythonAdapterTest, five rows of harmless.
+- **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
+- **Caught by:** mutation (E-019).

@@ -21,3 +21,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, `docs/how/agent-environment.md`, `docs/how/do-a-todo-step.md`, `docs/MUTATION.md` (runs 6 to 8).
 - **Complaints:** a scratch clone folder another agent left (`plain`) made its first clone fail. The mutation CSV's line numbers point at the line the mutated code sits on, not always the construct it names (the "nesting + 1" mutants are on the scan lines).
 - **Suggestions:** name a scratch clone after the branch; read the numbered source before a survivor.
+
+### 2026-10-23 · analyze/ part 2, Python and the tree-sitter base mutants (TODO 1.12) · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, theGhost.md's supply-chain block, agent-environment.md, do-a-todo-step.md, finish-work.md, debrief-after-a-task.md, MUTATION.md (run 9, the harmless rows), HANDOFF.md, then the three classes and TreeSitterAdaptersTest.
+- **Complaints:** the survivors' CSV needs the numbered source beside it (`cat -n`) to read; nothing in agent-environment.md says `-Ptarget` takes a package glob only, so every rerun was the whole `analyze/` (four minutes). The fixture's README says its values are worked in TreeSitterAdaptersTest, which does not say a new test may hold source inline instead.
+- **Suggestions:** one line in MUTATION.md: "a survivor that needs a shape the fixture lacks is tried with source held in a new test, not by growing the fixture (its golden would move, E-018)".

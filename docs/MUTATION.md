@@ -145,6 +145,22 @@ switch expression, a for-each, a `while` and its body, a `do` and its body, a `c
 deeper one, not `xa/b`, not a text file: `JavaImports.packageFiles` had no test at all), a sibling of a file at `/`, and
 the own-package import's line (the package line; line 1 with no package). No bug found, no golden moved.
 
+### Run 10: 2026-10-23, `analyze/`, part 2 of 6: Python and the tree-sitter base (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). Covers `PythonAdapter` (14 left
+alive), `TreeSitterAdapter` (11) and `PythonImports` (4) only. After: 1,104 mutants, 977 killed (the other classes'
+survivors untouched); of these three classes 5 are left, all judged harmless below.
+
+Tests added, in `PythonAdapterTest` (new; source held in the test, so the fixture and its golden are unchanged, E-018),
+each value worked by hand in its comment: an `if` with a boolean condition, an `elif` with one, and an `if` inside the
+`if`'s, the `elif`'s and the `else`'s block (cognitive 9, cyclomatic 7); an `except` and a ternary inside an `if`
+(nesting 1) and an `if` in an `except`'s block; a comprehension's `if` with an `and`; a call's arguments; a loop's
+header at the loop's level and an `if` in its `else`; brackets looked through (`a and (b and c)`, `((...))`, and
+`a and (b or c)`, which `flatten` had no Python test for); `reads` and `tool`; the line of a first error that is not
+on line 1, nested in a class, and of a token tree-sitter had to invent; imports on a later line; relative imports
+(`from . import missing` leads to the package's `__init__.py`; `..c` from `a/b.py` reaches the root, `...c` from there
+does not); `normalize` and `folder` directly. No bug found, no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -160,3 +176,8 @@ the own-package import's line (the package line; line 1 with no package). No bug
 | `analyze/JavaComplexity.java`, `scan` (line 53), `visitMethodInvocation`, `visitBinary`, `visitSwitch`, `visitSwitchExpression` | the returned value replaced by null | Each returns `Void`, whose only value is null: `super.scan(...)`, `super.visitMethodInvocation(...)` and `super.visitBinary(...)` return null, and `aSwitch` returns null. The mutant returns what the code returned. |
 | `analyze/JavaAdapter.java`, `Methods.visitMethod`, `return super.visitMethod(tree, null)` | the returned value replaced by null | The same: `Void`, always null. |
 | `analyze/JavaImports.java`, `packageFiles`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the directory is `file.substring(0, 0)`, which is "" as for no slash. |
+| `analyze/TreeSitterAdapter.java`, `firstError`, `i < node.getChildCount()` | `i <= ...` | `firstError` is called only on a node with an error in it, which is not itself the error or a missing token, so one of its children has the error and the loop returns before `i` reaches the count. |
+| `analyze/TreeSitterAdapter.java`, `firstError`, the last `return node` | returns null (no coverage) | The same: the line is a fallback no tree reaches, for a node that has an error but whose children have none. |
+| `analyze/TreeSitterAdapter.java`, `folder`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the folder is `path.substring(0, 0)`, "" as for no slash (as `JavaImports.packageFiles`, above). |
+| `analyze/PythonImports.java`, `from`, `i < statement.getChildCount()` | `i <= ...` | At `i` equal to the count `getFieldNameForChild` gives no name, `"name".equals(null)` is false and the loop continues to its end. |
+| `analyze/PythonAdapter.java`, `wildcard`, `getNamedChildCount() > 0` | `>= 0` | A `case_clause` always has its pattern as a named child (a clause without one does not parse), so the count is never 0 and the two conditions agree. |

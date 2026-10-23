@@ -108,6 +108,28 @@ repository makes `git log` fail, which `Main.score` says as one line, exit 1, no
 `Pipeline.github` takes the `GitHubApi` (package-private) and `facts` passes `HttpGitHub.fromEnvironment()`.
 No bug found. `cli/` is done.
 
+### Run 8: 2026-10-23, `github/`, which closes it (TODO.md 1.12, J-076)
+
+`gradle mutate -Ptarget=evaluator.github.*`, in a plain clone. Before: 64 mutants, 47 killed, 3 survived, 14 on
+lines no test runs (Authorship 6, HttpGitHub 11; run 1's counts). After: 66 mutants (the adapter gained two small
+functions), 64 killed; the two left are below.
+
+The 11 in `HttpGitHub` were lines that "run only against the real GitHub", but a recorded answer does reach them:
+`get` only needs a server to answer it, and the JDK's own `HttpServer` on loopback is one, so no call to GitHub
+is made. `HttpGitHubTest` (new) answers `get` for a 200 (parsed; the request's three headers, the token stripped), a
+404 and a 302 (each refused with its status, the redirect not followed), a body that is not JSON, an answer of
+exactly `MAX_BODY` bytes (read) and one byte more (refused), an interrupted thread (the flag is kept), and the
+four kinds of path refused before anything is sent. Two changes of shape only, to make that possible: the host is
+a field (`HttpGitHub.at(host, token)`, package-private, used by tests alone; production code still builds
+the adapter against `https://api.github.com` only), and `HttpGitHub.from(token)` takes the environment's value, so
+a missing, blank and padded token are tried without touching the process's environment.
+
+In `Authorship`, tests added in AuthorshipTest: a push that lists its commits (no compare asked), a list that is
+empty (falls back to the head), a head that is no hash, the oldest of several pushes; both page caps hit exactly
+(50 commit pages, 3 event pages, and no more); a commit with no date, with and without a push (the window is 0,
+never negative, and the evidence says "oldest push ..." or "(no push by the applicant in GitHub's log)"); and
+the fixture test now checks the evidence of the last three facts. No bug found. `github/` is done.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -118,3 +140,5 @@ No bug found. `cli/` is done.
 | `history/Shape.java`, `variation`, the two `-` in `(s - mean) * (s - mean)` | `(s + mean) * (s - mean)`, `(s - mean) * (s + mean)` | Equal to what they replace: (s + m)(s - m) = s² - m², and the sum of that over n values is Σs² - n·m², which is Σ(s - m)² when m is their mean. Only floating-point rounding, far below the three decimals the fact is rounded to, differs. |
 | `history/Commits.java`, `parse`, `close < 0` | `close <= 0` | Equal in result: a record whose close is at index 0 has an empty header, which splits into one part, and `head.length < 3` skips it on the next line. |
 | `cli/Main.java`, `main`, `System.exit(...)` | the call removed | `main` is the JVM's entry and exit; a test that called it would end the test JVM, so the work is in `run`, which returns the status and is tested for each status (0, 1). The only difference is the status the shell sees, which `run`'s return value is. |
+| `github/Authorship.java`, `facts`, `if (total == 0) return facts;` | the returned list replaced by an empty immutable list | Equal to what it replaces: at that line `facts` is the empty list just made, so an empty list is the same list. The caller (`Pipeline.facts`) only reads it with `addAll`. |
+| `github/HttpGitHub.java`, `fromEnvironment`, `return from(...)` | returns null | The line's return runs only when `EVALUATOR_GITHUB_TOKEN` is set, and a session without the token (this one) reaches it only by the throw. It is not harmless: with the token set, `AuthorshipTest.theAdapterNamesItsVariableAndNeverItsToken` calls `live.toString()` and `AuthorshipLiveTest` calls `Authorship.facts` on the result, both of which fail on null, so Ghost's token session kills it. A recorded answer cannot, since the environment is the process's and a test must not set it; `from` (which the line calls) is tried for every value. |

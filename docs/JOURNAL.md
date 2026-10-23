@@ -1045,3 +1045,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** no change to instructions; no open question, so no Fable agent asked. Notes wiped.
 - **Caught by:** the navigation review.
 - **Touched:** docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-076 github/'s mutation survivors closed; the "real GitHub only" lines were reachable
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, the `github/` module: a test or a reason for each survivor.
+- **Found:** Of 17 mutants not killed, 11 were in `HttpGitHub`, which run 1 expected to need the real GitHub. It
+  does not: `get` is plain HTTP to a host, and a loopback server answers it. The host was a constant, so it took a
+  field. The other 6 were edges in `Authorship` (page caps, a push that lists commits, a commit with no date).
+- **Options:** harmless rows for the adapter (rejected: a status, a size cap and a redirect rule can change a
+  result); a loopback server with the host injected, taken.
+- **Resolved:** run 8 (66 mutants, 64 killed); HttpGitHubTest, four tests in AuthorshipTest; two rows of harmless.
+  No bug.
+- **Touched:** github/, test/evaluator/github/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
+- **Caught by:** mutation (E-019).

@@ -23,25 +23,36 @@ public final class HttpGitHub implements GitHubApi {
     /** The most of an answer read; a larger one is refused. */
     static final int MAX_BODY = 10 * 1024 * 1024;
 
+    private final String host;
     private final String token;
     private final HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).followRedirects(HttpClient.Redirect.NEVER).build();
 
-    private HttpGitHub(String token) {
+    private HttpGitHub(String host, String token) {
+        this.host = host;
         this.token = token;
     }
 
     /** The adapter with the environment's token; an IOException when there is none, naming the variable, never a value. */
     public static HttpGitHub fromEnvironment() throws IOException {
-        String token = System.getenv(TOKEN_VARIABLE);
+        return from(System.getenv(TOKEN_VARIABLE));
+    }
+
+    /** The adapter for a token as the environment gave it (null or blank: refused, as above); the token is stripped. */
+    static HttpGitHub from(String token) throws IOException {
         if (token == null || token.isBlank()) throw new IOException(TOKEN_VARIABLE + " is not set");
-        return new HttpGitHub(token.strip());
+        return new HttpGitHub(HOST, token.strip());
+    }
+
+    /** The same adapter against another host, so a test can answer it from loopback; production code never calls this. */
+    static HttpGitHub at(String host, String token) {
+        return new HttpGitHub(host, token);
     }
 
     /** One GET of an API path (never a URL of its own), its answer capped, refused unless 200, parsed. */
     @Override
     public Object get(String path) throws IOException {
         if (!path.startsWith("/") || path.contains("..") || path.contains("://")) throw new IOException("not an API path: " + path);
-        HttpRequest request = HttpRequest.newBuilder(URI.create(HOST + path)).timeout(Duration.ofSeconds(30)).GET()
+        HttpRequest request = HttpRequest.newBuilder(URI.create(host + path)).timeout(Duration.ofSeconds(30)).GET()
                 .header("Accept", "application/vnd.github+json").header("X-GitHub-Api-Version", "2022-11-28")
                 .header("Authorization", "Bearer " + token).build();
         try {
@@ -63,6 +74,6 @@ public final class HttpGitHub implements GitHubApi {
     /** Never the token. */
     @Override
     public String toString() {
-        return "HttpGitHub(" + HOST + ")";
+        return "HttpGitHub(" + host + ")";
     }
 }

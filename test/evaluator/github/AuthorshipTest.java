@@ -66,6 +66,10 @@ class AuthorshipTest {
         assertEquals(expected, values(facts));
         assertEquals(List.of("8be3cda9e0cbaa35e324c7c7d273e98bf1949484", "6c35c565eed32df5b55344464254400453606dd0"), facts.get(0).evidence().sources());
         assertEquals(List.of("80a1f5bd8e08aee7e674486c66c1e29c5a69a973"), facts.get(2).evidence().sources());
+        assertEquals(List.of("(none)"), facts.get(4).evidence().sources());
+        assertEquals(List.of("5 of 7 commits"), facts.get(5).evidence().sources());
+        assertEquals(1, facts.get(6).evidence().sources().size());
+        assertTrue(facts.get(6).evidence().sources().get(0).startsWith("oldest push 2026-09-29T09:00"));
     }
 
     @Test
@@ -96,6 +100,67 @@ class AuthorshipTest {
     void noCommitsNoFacts() throws IOException {
         GitHubApi empty = path -> List.of();
         assertEquals(List.of(), Authorship.facts(empty, OWNER, REPO, APPLICANT));
+    }
+
+    private static final String H1 = "1".repeat(40), H2 = "2".repeat(40), ZEROS = "0".repeat(40);
+
+    private static Map<String, Object> push(String actor, String at, Map<String, Object> payload) {
+        return Map.of("type", "PushEvent", "actor", Map.of("login", actor), "created_at", at, "payload", payload);
+    }
+
+    /** An API with one page of events and of commits (the second page of each is empty); every path asked is kept. */
+    private static GitHubApi answering(List<Object> commits, List<Object> events, List<String> asked) {
+        return path -> {
+            asked.add(path);
+            if (!path.endsWith("page=1")) return List.of();
+            return path.contains("/commits?") ? commits : events;
+        };
+    }
+
+    @Test
+    void aPushThatListsItsCommitsNeedsNoCompareAndAnEmptyListFallsBackToItsHead() throws IOException {
+        List<String> asked = new ArrayList<>();
+        List<Object> events = List.of(
+                push(APPLICANT, "2026-10-02T00:00:00Z", Map.of("commits", List.of(Map.of("sha", "aaa"), "not a commit", Map.of("sha", "bbb")), "head", H1, "before", H2)),
+                push(APPLICANT, "2026-10-01T06:30:00Z", Map.of("commits", List.of(), "head", H2, "before", ZEROS)),
+                push(APPLICANT, "2026-10-03T00:00:00Z", Map.of("head", "not a hash", "before", H1)));
+        Authorship.Pushes pushes = Authorship.pushes(answering(List.of(), events, asked), "/repos/o/r", APPLICANT);
+        assertEquals(Set.of("aaa", "bbb", H2), pushes.shas(), "the listed commits, and the head of the push that listed none; a head that is no hash adds nothing");
+        assertEquals(java.time.Instant.parse("2026-10-01T06:30:00Z"), pushes.oldest(), "the oldest of the three, not the first");
+        assertTrue(asked.stream().noneMatch(p -> p.contains("/compare/")), "no push needed a compare: " + asked);
+    }
+
+    @Test
+    void thePagesAreReadUpToTheirCapAndNoFurther() throws IOException {
+        List<String> asked = new ArrayList<>();
+        GitHubApi always = path -> {
+            asked.add(path);
+            return List.of(Map.of("sha", "s", "author", Map.of("login", "someone"), "commit", Map.of()));
+        };
+        Authorship.facts(always, OWNER, REPO, APPLICANT);
+        long commitPages = asked.stream().filter(p -> p.contains("/commits?")).count(), eventPages = asked.stream().filter(p -> p.contains("/events?")).count();
+        assertEquals(Authorship.MAX_COMMIT_PAGES, commitPages);
+        assertEquals(Authorship.MAX_EVENT_PAGES, eventPages);
+        assertTrue(asked.contains("/repos/" + OWNER + "/" + REPO + "/commits?per_page=100&page=50"), "the last page is the cap itself");
+        assertTrue(asked.contains("/repos/" + OWNER + "/" + REPO + "/events?per_page=100&page=3"));
+    }
+
+    @Test
+    void aCommitWithoutADateStillCountsAndTheWindowSaysItsPushOrNone() throws IOException {
+        Map<String, Object> undated = Map.of("sha", "c", "author", Map.of("login", APPLICANT), "commit", Map.of());
+        List<Object> commits = List.of(undated);
+        List<Fact> none = Authorship.facts(answering(commits, List.of(), new ArrayList<>()), OWNER, REPO, APPLICANT);
+        Fact window = none.get(none.size() - 1);
+        assertEquals("PROVENANCE.authorship.push_window_days", window.kind());
+        assertEquals(0L, window.value());
+        assertEquals(List.of("(no push by the applicant in GitHub's log)"), window.evidence().sources());
+        assertEquals(1, ((Number) none.get(2).value()).intValue(), "claimed: no push, no signature");
+
+        List<Object> events = List.of(push(APPLICANT, "2026-10-01T06:30:00Z", Map.of("commits", List.of(Map.of("sha", "other")))));
+        List<Fact> pushed = Authorship.facts(answering(commits, events, new ArrayList<>()), OWNER, REPO, APPLICANT);
+        Fact later = pushed.get(pushed.size() - 1);
+        assertEquals(0L, later.value(), "the commit's date unknown (the epoch), so the push is not before it: no negative window");
+        assertEquals(List.of("oldest push 2026-10-01T06:30:00Z"), later.evidence().sources());
     }
 
     @Test

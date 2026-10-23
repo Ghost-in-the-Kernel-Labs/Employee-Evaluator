@@ -29,6 +29,7 @@ directive: every escalation also checks whether the route the agent started from
 | `wrong-step` | the route's instruction is wrong or stale |
 | `hard-problem` | the route was right and was followed; the problem itself is hard |
 | `no-replay` | the agent could not replay its steps, so the route could not be checked |
+| `conflict` | another agent's work collides with this one's: stop and go to Ghost at once (`docs/how/when-agents-conflict.md`) |
 
    Name the instructions file and the missing or wrong instruction where the type has one.
 

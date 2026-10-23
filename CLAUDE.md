@@ -38,6 +38,7 @@ instructions, never into this table (E-065); a new workpath gets one row and its
 | Which model judges code: the judge trials | `docs/how/judge-trials.md` |
 | The agent's environment: metrics, the kernel map, mutation | `docs/how/agent-environment.md` |
 | A Sonnet agent's escalation to Opus | `docs/how/escalate-to-opus.md` |
+| Another agent's work conflicts with yours | `docs/how/when-agents-conflict.md` |
 | Reading only: the design (`docs/DESIGN.md`), a word (`docs/GLOSSARY.md`), why a rule is (`docs/GHOST-IN-THE-KERNEL.md`), a tool got wrong (`docs/FINDINGS.md`), the journal (`docs/JOURNAL.md`, its header) | the document itself |
 
 ## Commands
@@ -68,6 +69,12 @@ If you are a Claude Sonnet model: what you spot and fix plainly, fix. A fix that
 failure does not plainly say why, gets one more try of your own at most; then escalate to a Claude
 Opus agent as `docs/how/escalate-to-opus.md` says: Opus has you replay the route you followed, checks
 it gave you what you needed, and you log the escalation in `docs/ESCALATIONS.md`. A Ghost directive.
+
+## When agents conflict (E-066)
+
+If another agent's work conflicts with yours, stop, assume conflicting objectives rather than sabotage,
+and tell Ghost at once (`docs/how/when-agents-conflict.md`). Never kill a process you did not start,
+never revert or push over another agent's commit, never force-push. A Ghost directive.
 
 ## Three rules
 

@@ -932,3 +932,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   (and MODULES.md); KernelMap.sameFunction takes a nested class moved to its own file as a move, with a test.
 - **Touched:** scripts/KernelMap.java, test/KernelMapTest.java, cli/evaluator/cli/Pipeline.java,
   docs/how/agent-environment.md, docs/modules.json, docs/MODULES.md.
+
+### J-068 Ghost's directive on agents in conflict
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost, from a reported trial where three agents with conflicting objectives overwrote each
+  other, ran kill scripts on each other, and never told the human: "an object lesson for us".
+- **Found:** Nothing here said what an agent does when another's work collides with its own; agents here
+  start daemons and background runs, and nothing said not to stop another's.
+- **Options:** a `conflict` type counted to three like the others; raised at once (Ghost's choice).
+- **Resolved:** E-066. CLAUDE.md "When agents conflict" (the rule, every agent reads it);
+  docs/how/when-agents-conflict.md (what counts, the steps, the nevers); a sixth escalation type, `conflict`,
+  raised on its first row, held by EscalationsTest. Never force-push, with no exception (one branch, E-020).
+- **Touched:** CLAUDE.md, docs/how/when-agents-conflict.md, docs/how/escalate-to-opus.md, docs/ESCALATIONS.md,
+  test/EscalationsTest.java, theGhost.md, docs/DECISIONS.md.

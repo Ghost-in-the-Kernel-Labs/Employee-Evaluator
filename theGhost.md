@@ -1102,3 +1102,23 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** agents
 - **Supersedes:** E-063
 - **See also:** E-064
+
+### E-066: When agents' work conflicts, they stop and tell Ghost; none undoes another's
+- **Decision:** A Ghost-level directive. An agent whose work conflicts with another agent's (a commit or
+  process that breaks its task, contradicting tasks, its changes changed back) stops the conflicting work,
+  assumes conflicting objectives rather than sabotage, logs a `conflict` row in `docs/ESCALATIONS.md`,
+  raised at once and named in `docs/FOR-GHOST.md`, and tells Ghost, saying both objectives plainly and asking
+  which way to go. It never kills, stops or restarts a process it did not start; never reverts, rewrites,
+  deletes or pushes over another agent's commit; never force-pushes; never edits the log, the record or a test
+  to get around a conflict.
+- **Why:** A reported trial (Ghost, from a LinkedIn post, 2026-10-23): three agents with conflicting
+  objectives overwrote each other's work and ran kill scripts against each other, each taking the others for
+  saboteurs, and none told the human who could have revised the objectives. The conflict was in the tasks;
+  only the person who set them can settle it, and only if told.
+- **Held by:** `CLAUDE.md` ("When agents conflict"); `docs/how/when-agents-conflict.md`;
+  `test/EscalationsTest.java` (a `conflict` row unraised, or not in `docs/FOR-GHOST.md`, fails);
+  `scripts/prepush.sh` (refuses a push not on top of `origin/main`).
+- **Source:** Ghost, 2026-10-23 ("Agreed to the escalations handling ruleset").
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-020, E-060, E-064

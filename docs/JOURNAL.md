@@ -1278,3 +1278,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the facts after the card on the same stdout (refused: a JSON card would no longer parse); the facts as JSON (refused: a `name value` line is what grep and a hand check want); the print in `cli/` over `Formulas` (refused: it would redo their arithmetic there).
 - **Resolved:** `FactsText` in `score/` (sorted `name value` lines; the cognitive total and function count, the file count, the six parts and the weighted score computed by `Formulas.cognitiveTotal` and `Maintainability`), `Main`'s `--facts` flag refused with `--markdown` or `--date`, E-076, `docs/how/command-line.md` and step 6 of `docs/how/change-a-formula.md` no longer send an agent to a scratch program, HANDOFF's next step is `-PshowGoldens` alone.
 - **Touched:** E-010, E-076, docs/how/command-line.md, docs/how/change-a-formula.md, docs/HANDOFF.md, docs/MUTATION.md (run 18), docs/KERNEL-MAP.md, docs/DECISIONS.md.
+
+### J-096 Tithe: Pass 6 in AGENT.md, the fast loop timed five times
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The tithe due (E-015): seven commits since the last, eight with J-095's.
+- **Found:** In a plain clone, `gradle metrics --args=--time` read the fast loop 17 s cold, then 9, 9, 9 and 8; no run failed, so no race in a test (E-072). Every held metric is within target; the largest source file is 283 lines (test/SupplyChainTest.java), mandatory context 780 words, docs per source line 0.41. The metrics list no function over 15 lines or 6 paths without a comment, so no comment was added.
+- **Options:** none.
+- **Resolved:** Pass 6 column in docs/AGENT.md.
+- **Touched:** docs/AGENT.md.

@@ -1065,7 +1065,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `test/DocsTest.java` (every path in `docs/how/` exists, as CLAUDE.md's do); AGT-03 and
   AGT-04 (`test/MetricsTest.java`).
 - **Source:** Ghost, 2026-10-23 ("lets start thinking about the instructions as pointers").
-- **Status:** in force
+- **Status:** superseded by E-065
 - **subject:** agents
 - **See also:** E-015, E-060
 
@@ -1086,3 +1086,19 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-060, E-063
+
+### E-065: Every workpath in CLAUDE.md is a pointer to its instructions
+- **Decision:** CLAUDE.md's routing table has two columns, the task and its instructions file. Every general
+  workpath has one file in `docs/how/`: the files to open first (its "Start here", at most four, so the
+  pointer and they stay within AGT-04's five), the contract, the tests, and the steps. A row that only names
+  a document to read points to the document itself. New steps and files go into the workpath's file.
+- **Why:** Ghost: "the pointer file should include instructions for each general workpath." E-063 made
+  pointers of the rows with steps only; the rest still carried files, contracts and tests inline, read by
+  every agent for every task. As pointers, CLAUDE.md fell from 1,114 words to 836.
+- **Held by:** `test/DocsTest.java` (every path in `docs/how/` exists); `scripts/Metrics.java` (`routing`
+  follows a pointer and counts its "Start here" files) and `test/MetricsTest.java` (AGT-03, AGT-04).
+- **Source:** Ghost, 2026-10-23.
+- **Status:** in force
+- **subject:** agents
+- **Supersedes:** E-063
+- **See also:** E-064

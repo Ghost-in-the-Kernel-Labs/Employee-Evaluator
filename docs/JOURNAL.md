@@ -879,3 +879,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   docs/FOR-GHOST.md all fail; Ghost's `reviewed:` resets the count). CLAUDE.md's rule points to the file.
 - **Touched:** CLAUDE.md, docs/how/escalate-to-opus.md, docs/ESCALATIONS.md, test/EscalationsTest.java,
   test/DocTests.java, theGhost.md, docs/DECISIONS.md.
+
+### J-064 Every workpath a pointer: CLAUDE.md's table down to task and instructions
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "the pointer file should include instructions for each general workpath."
+- **Found:** Following the pointers, two workpaths opened six files (the instructions file and five more),
+  past AGT-04's five; the metric counted only the row until it followed the pointer.
+- **Options:** count only the row (the pointer hides the cost); follow it and make room.
+- **Resolved:** E-065, superseding E-063: fourteen new files in docs/how/ (seventeen with the three before),
+  each with its start files, contract, tests and steps; the table is two columns; reading-only documents
+  share one row. The routing metric follows a pointer; the sandbox's and the card's start lists lost one file
+  each to their steps. CLAUDE.md 836 words; mandatory context 1,036.
+- **Touched:** CLAUDE.md, docs/how/, scripts/Metrics.java, theGhost.md (E-063, E-065), docs/DECISIONS.md.

@@ -12,36 +12,33 @@ Baseline, binding on every task (E-033, E-061). The rest of theGhost.md is read 
 
 ## Where to start: find the task's row
 
-Open the two to five files the row starts at, nothing else yet; read the contract it names; run its
-tests before and after. Read further only when the code points there: a function's callers by
-searching for its name, a decision it cites (`// Decision: E-011`) in `theGhost.md`. A row with no
-files yet points at the plan. A row is a pointer: where an action has steps, its row names its
-instructions file in `docs/how/`, and a new step goes into that file, never into this table (E-063).
+Each row points to the instructions for its workpath: the files to open first, the contract, the tests,
+and the steps. Open that file and the files it starts at, nothing else yet; run its tests before and
+after. Read further only where the code points: a function's callers, a decision it cites
+(`// Decision: E-011`) by its line in `docs/DECISIONS.md`. A new step or file goes into the workpath's
+instructions, never into this table (E-065); a new workpath gets one row and its own file.
 
-| Task | Start here | Contract | Tests |
-| --- | --- | --- | --- |
-| What to work on; a decision; a plan | `docs/HANDOFF.md`, `TODO.md` (its first item); a decision: `docs/DECISIONS.md` (one line each), then its entry in `theGhost.md` | `theGhost.md` | `test/TodoTest.java`, `test/GhostTest.java` |
-| The design: pitch, architecture, provenance, the phases | `docs/DESIGN.md` | | |
-| A module: add one, or change its imports | `docs/modules.json` (its `adding` line), `docs/MODULES.md` (written from it) | E-004 | `test/ModulesTest.java` |
-| The score card, a fact, a metric's definition | `docs/SCORE-CARD.md`, `rubric/evaluator/rubric/Fact.java`, `rubric/evaluator/rubric/ScoreCard.java` | `docs/SCORE-CARD.md` (SC-01 onward) | `test/ScoreCardDocTest.java`, `test/evaluator/rubric/` |
-| Reading a repository: inventory, languages, what is vendored | `ingest/evaluator/ingest/Ingest.java`, `ingest/evaluator/ingest/SetAside.java`, `ingest/evaluator/ingest/Size.java` | E-025, E-026 | `test/evaluator/ingest/`, the golden `test/goldens/small-app/inventory.json` (`gradle test -PwriteGoldens` rewrites it; review the diff) |
-| Add a language adapter | `docs/how/add-a-language-adapter.md` | E-030, E-031, E-032 | `test/evaluator/analyze/TreeSitterAdaptersTest.java` |
-| Add a fact | `docs/how/add-a-fact.md` | `docs/SCORE-CARD.md` | `test/ScoreCardDocTest.java` |
-| Change a formula | `docs/how/change-a-formula.md` | E-045 onward | `test/evaluator/score/CardsTest.java` |
-| Complexity and the dependency graph: a language's adapter | `analyze/evaluator/analyze/Complexity.java`, `analyze/evaluator/analyze/Dependencies.java`, `analyze/evaluator/analyze/Adapter.java`, the language's adapter (`analyze/evaluator/analyze/JavaComplexity.java`, or `analyze/evaluator/analyze/TreeSitterAdapter.java` and its subclass) | E-030, E-031, E-032 | `test/evaluator/analyze/`, the goldens under `test/goldens/` |
-| Maintainability: test files, coupling, duplication | `analyze/evaluator/analyze/TestFiles.java`, `analyze/evaluator/analyze/Coupling.java`, `analyze/evaluator/analyze/Duplication.java`, `analyze/evaluator/analyze/Tokens.java` | E-034, E-035, E-036 | `test/evaluator/analyze/DuplicationTest.java` and its golden, `CouplingTest`, `TestFilesTest` |
-| A submission's own tests: the sandbox, the reports | `analyze/evaluator/analyze/TestRunner.java`, `analyze/evaluator/analyze/TestPlans.java`, `analyze/evaluator/analyze/DockerSandbox.java`, `analyze/evaluator/analyze/Reports.java`, `ingest/evaluator/ingest/Quarantine.java` | E-037, E-033; E-013 | `test/evaluator/analyze/TestRunnerTest.java` (a fake sandbox), `TestPlansTest`, `DockerSandboxTest`, `ReportsTest`, `test/fixtures/reports/` |
-| The git history's shape; provenance layer 3 | `history/evaluator/history/Shape.java`, `history/evaluator/history/Commits.java`, `history/evaluator/history/AgentTools.java` (the agent tools found) | E-042, E-053; docs/DESIGN.md (Provenance) | `test/evaluator/history/ShapeTest.java` (histories built by `GitFixture`) |
-| Commit verification and push attribution; layer 2 | `github/evaluator/github/Authorship.java`, `github/evaluator/github/HttpGitHub.java` | E-043; MOD-05 | `test/evaluator/github/AuthorshipTest.java` (recorded answers), `AuthorshipLiveTest` (with `EVALUATOR_GITHUB_TOKEN`) |
-| Facts into a card; a metric's formula; the ratios; the tier; JSON and Markdown | `score/evaluator/score/Cards.java`, `score/evaluator/score/Formulas.java`, `score/evaluator/score/CardJson.java`, `score/evaluator/score/CardMarkdown.java` | SC-01 to SC-11; MOD-03; E-045 | `test/evaluator/score/CardsTest.java`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/` |
-| The navigability checklist: agent docs, their paths, module cycles, naming | `analyze/evaluator/analyze/Navigability.java`, `analyze/evaluator/analyze/DocPaths.java`, `analyze/evaluator/analyze/Naming.java` | E-044 | `test/evaluator/analyze/NavigabilityTest.java` |
-| The command line: `evaluator score`, every module's facts in order | `cli/evaluator/cli/Main.java`, `cli/evaluator/cli/Pipeline.java` | E-010, E-054 | `test/evaluator/cli/MainTest.java`, `CardGoldensTest` and `test/goldens/cards/` (`gradle test -PwriteGoldens` rewrites them; review the diff) |
-| Which model judges code: the judge trials (phase 2's groundwork) | `docs/judges/` (one file per trial: the brief, every run's scores, the comparisons) | E-017; TODO.md 2.1, 2.2 | |
-| Writing down what happened | `docs/JOURNAL.md` (one entry, its fields) | E-008 | `test/JournalTest.java` |
-| A word | `docs/GLOSSARY.md` | E-007 | `test/GlossaryTest.java` |
-| Why a rule is what it is | `docs/GHOST-IN-THE-KERNEL.md` | | |
-| The agent's environment: metrics, the kernel map | `docs/AGENT.md`, `docs/KERNEL-MAP.md`, `scripts/Metrics.java`, `scripts/KernelMap.java` | E-015, E-021 | `test/KernelMapTest.java` |
-| Something an existing tool got wrong | `docs/FINDINGS.md` | E-022 | |
+| Task | Instructions |
+| --- | --- |
+| What to work on; a decision; a plan; finishing a step | `docs/how/do-a-todo-step.md` |
+| A module: add one, or change its imports | `docs/how/add-or-change-a-module.md` |
+| The score card's shape: a metric, a field, an invariant | `docs/how/change-the-score-card.md` |
+| Add a fact | `docs/how/add-a-fact.md` |
+| Change a formula | `docs/how/change-a-formula.md` |
+| Reading a repository: inventory, languages, what is set aside | `docs/how/read-a-repository.md` |
+| Add a language adapter | `docs/how/add-a-language-adapter.md` |
+| Complexity and the dependency graph | `docs/how/complexity-and-dependencies.md` |
+| Maintainability: test files, coupling, duplication | `docs/how/maintainability.md` |
+| A submission's own tests: the sandbox, the reports | `docs/how/sandbox-test-runs.md` |
+| The git history's shape; provenance layer 3 | `docs/how/history-shape.md` |
+| Commit verification and push attribution; layer 2 | `docs/how/github-authorship.md` |
+| Facts into a card; the ratios, tier, bucket; JSON and Markdown | `docs/how/card-and-renderings.md` |
+| The navigability checklist | `docs/how/navigability-checklist.md` |
+| The command line | `docs/how/command-line.md` |
+| Which model judges code: the judge trials | `docs/how/judge-trials.md` |
+| The agent's environment: metrics, the kernel map, mutation | `docs/how/agent-environment.md` |
+| A Sonnet agent's escalation to Opus | `docs/how/escalate-to-opus.md` |
+| Reading only: the design (`docs/DESIGN.md`), a word (`docs/GLOSSARY.md`), why a rule is (`docs/GHOST-IN-THE-KERNEL.md`), a tool got wrong (`docs/FINDINGS.md`), the journal (`docs/JOURNAL.md`, its header) | the document itself |
 
 ## Commands
 

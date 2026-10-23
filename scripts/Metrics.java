@@ -74,13 +74,28 @@ final class Metrics {
             if (cells.length < 3 || line.startsWith("| Task") || line.startsWith("| ---")) continue;
             int count = 0;
             Matcher code = CODE.matcher(cells[2]);
-            while (code.find()) if (code.group(1).contains("/") || code.group(1).matches(".*\\.(md|json|java|sh)")) count++;
+            while (code.find()) {
+                String path = code.group(1);
+                if (!path.contains("/") && !path.matches(".*\\.(md|json|java|sh)")) continue;
+                count++;
+                // A pointer to a workpath's instructions (E-063): its "Start here" files are opened too.
+                if (path.startsWith("docs/how/")) count += startHere(Repo.read(path));
+            }
             if (count > most) {
                 most = count;
                 which = cells[1].trim();
             }
         }
         return most + (which.isEmpty() ? "" : " (" + which + ")");
+    }
+
+    /** The files an instructions file's "Start here" list opens: one per bullet. */
+    static int startHere(String how) {
+        int start = how.indexOf("**Start here:**");
+        if (start < 0) return 0;
+        int end = how.indexOf("\n\n", start);
+        String list = how.substring(start, end < 0 ? how.length() : end);
+        return (int) list.lines().filter(l -> l.startsWith("- ")).count();
     }
 
     /** Bodies of three statements or more that appear under more than one name. */

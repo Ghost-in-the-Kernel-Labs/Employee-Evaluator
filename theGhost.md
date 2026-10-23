@@ -1178,3 +1178,26 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-061, E-065
+
+### E-070: Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0
+- **Decision:** A counted aspect (lines of code, logic statements, function size, how well factored, and the
+  like) is scored against a baseline: Suite Builder at commit `32762a6110ebd73246ca2413b1d54db947aee179`
+  (main, 2026-10-23, 746 commits) reads 100, an empty project reads 0, and the scale between is linear:
+  100 × the aspect's measure ÷ Suite Builder's. A repository may read above or below 100. For an aspect where
+  more is worse (the largest function), the ratio is inverted. The baseline and its commit are part of the
+  rubric, so every card names what it was counted against. The formulas move to it one metric at a time
+  (TODO.md 1.13), Size first.
+- **Why:** Ghost: "If we declare a given repository to be baseline in a specific aspect, then we create a
+  measurable method to count that aspect." The anchors so far (Size's 100 and 100,000 lines, E-048) were
+  constants picked by hand; a baseline is one that can be pointed at. Suite Builder over Katana: Katana is the
+  purer AI-built project (Fable as manager, Suite Builder's lessons taken in), but Suite Builder is the working,
+  mature product, its harness noted for rigour by other models, and a rigorously tested codebase following
+  compiler principles is the next best thing to a compiler. Every baseline carries its developer's tendencies;
+  that is accepted, not avoided (Ghost).
+- **Held by:** to come with TODO.md 1.13 (`score/evaluator/score/Formulas.java`, the rubric's hash, the cards'
+  goldens); proposed until then.
+- **Source:** Ghost, 2026-10-23 ("ok lets set a commit level for suite builder at its current level ... the
+  baseline ... to be 100. A project that is empty scores at 0"; "linear is fine").
+- **Status:** proposed
+- **subject:** scoring
+- **See also:** E-045, E-048, E-050

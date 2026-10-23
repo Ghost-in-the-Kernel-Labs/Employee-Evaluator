@@ -1139,3 +1139,15 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   purpose, and names the test. No production code changed.
 - **Caught by:** review.
 - **Touched:** test/evaluator/analyze/ReportsTest.java, docs/MUTATION.md.
+
+### J-084 Baseline scoring decided: Suite Builder at 32762a6 is 100, empty is 0, linear
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: score counted aspects against a declared baseline repository.
+- **Found:** The card bounds every score to 0–100 (`Score`, SC-07); Ghost's baseline lets a repository read
+  above 100. Anthropic's agent-built C compiler is public and would be a second reference, but is Rust, which
+  the kernel cannot read yet.
+- **Options:** Katana or Suite Builder as the baseline (Ghost: Suite Builder, the mature working product); a
+  log scale or linear (Ghost: linear).
+- **Resolved:** E-070 (proposed until built); TODO.md 1.13 after 1.12, Size first; the score's bound and the
+  compiler put to Ghost in docs/FOR-GHOST.md.
+- **Touched:** theGhost.md, TODO.md, docs/FOR-GHOST.md, docs/DECISIONS.md.

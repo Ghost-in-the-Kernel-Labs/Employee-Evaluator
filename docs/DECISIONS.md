@@ -76,3 +76,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |
 | E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force | agents |
 | E-069 | CLAUDE.md is a memory map: what applies only sometimes is a "When X, read Y" pointer | in force | agents |
+| E-070 | Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0 | proposed | scoring |

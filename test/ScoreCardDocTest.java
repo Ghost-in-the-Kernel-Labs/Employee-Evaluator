@@ -147,7 +147,10 @@ final class ScoreCardDocTest {
     }
 
     private static void same(String what, List<String> documented, List<String> coded, List<String> failures) {
-        if (!documented.equals(coded)) failures.add(what + ": the document says " + documented + ", rubric/ says " + coded);
+        if (documented.equals(coded)) return;
+        boolean order = documented.size() == coded.size() && new java.util.HashSet<>(documented).equals(new java.util.HashSet<>(coded));
+        failures.add(what + ": the document says " + documented + ", rubric/ says " + coded
+                + (order ? " (the same words in another order: the document follows the order the code declares them in, the Metric enum for metrics)" : ""));
     }
 
     /** The text under a `## heading` (a decision after it allowed, "(E-011)"), up to the next one. */

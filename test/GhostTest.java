@@ -137,7 +137,9 @@ final class GhostTest {
         }
         for (String status : d.statuses()) {
             if (!d.field("Status").isEmpty() && !STATUS.matcher(status).matches()) {
-                failures.add(name(d.id()) + " has an unknown status: " + status);
+                String broken = status.contains("(") || status.contains(")")
+                        ? " (a parenthesis after a status may not hold a ';': the statuses are split on it first, so write the reason without one)" : "";
+                failures.add(name(d.id()) + " has an unknown status: " + status + "; a status is one of proposed, in force, withdrawn, refused, superseded by E-000, joined by ';'" + broken);
             }
         }
     }

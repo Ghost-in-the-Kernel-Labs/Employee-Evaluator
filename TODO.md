@@ -25,9 +25,9 @@ recorded as it closes; no test weakened (E-019). Ghost's go, 2026-10-22.
 Check: E-070 built: each counted aspect scored as 100 × its measure ÷ Suite Builder's at 32762a6 (inverted
 where more is worse), Size first, then Complexity and Maintainability's parts, one commit each, each worked by
 hand on a fixture; the baseline's measures recorded with the commit they came from; the rubric's hash carrying
-the baseline; every moved card golden reviewed. Before the first metric moves, Ghost settles whether a score
-may pass 100 on the card (`Score` and SC-07 hold 0–100 today) or the card keeps 0–100 and shows the multiple
-beside it. E-070 moves to in force.
+the baseline; every moved card golden reviewed. With the first metric, a baselined score may pass 100 (E-071): `Score`'s
+upper bound and SC-01's "each 0–100" go for counted metrics, while Provenance, Quality and Navigability keep
+0–100. E-070 and E-071 move to in force.
 
 ## Phase 2: the evaluation engine with agents
 

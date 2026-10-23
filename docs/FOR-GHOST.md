@@ -19,9 +19,6 @@ says so to Ghost; Ghost removes it when settled.
   (IPv6-mapped IPv4); a later Fable reading says it is fixed. Suite Builder keeps saved third-party crawls
   in `test/data` and `test/bench` beside a rule against pages saved from others' sites. Katana keeps about
   19k lines of GPL-licensed opensourcecobol4j output under `lower/prototypes/` as reference.
-- **A score past 100 (E-070, TODO.md 1.13):** the baseline makes Suite Builder 100 and lets a repository read
-  above it; the card holds every score to 0–100 today (`Score`, SC-07). Either the card's bound goes, or it keeps
-  0–100 and shows "× Suite Builder" beside it. Needed before 1.13's first metric moves.
 - **A second reference: Anthropic's agent-built C compiler** (Nicholas Carlini, 2026; 16 Claude agents, about
   100,000 lines, compiles Linux 6.9; public on GitHub, link in anthropic.com/engineering/building-c-compiler).
   It is Rust: measuring it needs a Rust adapter, a new grammar to vendor (a dependency, your approval).

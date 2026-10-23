@@ -1201,3 +1201,17 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** proposed
 - **subject:** scoring
 - **See also:** E-045, E-048, E-050
+
+### E-071: A baseline-scored metric may pass 100
+- **Decision:** A metric scored against the baseline (E-070) has no ceiling: a repository counted at twice
+  Suite Builder's measure reads 200. The floor stays 0. Metrics that are shares or checklists rather than counts
+  (Provenance, whose tiers read 50 and 80; Quality, from pass rate and coverage; Navigability's checklist) keep
+  0–100. SC-01's "each 0–100" and `Score`'s bound change with TODO.md 1.13, when the first metric moves.
+- **Why:** Ghost: "Yes a score can go past 100." A cap at the baseline would make every repository larger
+  than Suite Builder look the same, which is what the baseline is there to tell apart.
+- **Held by:** to come with TODO.md 1.13 (`rubric/evaluator/rubric/Score.java`, docs/SCORE-CARD.md SC-01,
+  `test/ScoreCardDocTest.java`); proposed until then.
+- **Source:** Ghost, 2026-10-23.
+- **Status:** proposed
+- **subject:** scoring
+- **See also:** E-070

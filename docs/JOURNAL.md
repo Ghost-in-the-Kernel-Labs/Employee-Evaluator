@@ -1151,3 +1151,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** E-070 (proposed until built); TODO.md 1.13 after 1.12, Size first; the score's bound and the
   compiler put to Ghost in docs/FOR-GHOST.md.
 - **Touched:** theGhost.md, TODO.md, docs/FOR-GHOST.md, docs/DECISIONS.md.
+
+### J-085 A baselined score may pass 100
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost answered E-070's open question: "Yes a score can go past 100."
+- **Found:** The bound lives in SC-01 and `Score`. Provenance's tiers (50, 80), Quality's shares and the
+  navigability checklist are not counts, so a ceiling-free scale does not fit them.
+- **Resolved:** E-071 (proposed until 1.13 builds it): counted, baselined metrics have no ceiling; the others
+  keep 0–100. TODO.md 1.13's check says so; the item left docs/FOR-GHOST.md.
+- **Touched:** theGhost.md, TODO.md, docs/FOR-GHOST.md, docs/DECISIONS.md.

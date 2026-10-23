@@ -12,9 +12,9 @@ decides a new one or a change, and it is recorded before the code (E-045 onward)
    `score/evaluator/score/Maintainability.java`), its constants named, `// Decision: E-xxx` above it. It
    reads only facts (MOD-03).
 3. **The rubric's version:** add or change the decision's number in `Formulas.RUBRIC`. That changes
-   `Formulas.rubricHash()`, so `theRubricsHash` in `test/evaluator/score/CardsTest.java` and every card
+   `Formulas.rubricHash()`, so `theRubricsHash` in `test/evaluator/score/FormulasTest.java` and every card
    golden change with it; that is intended.
-4. **Tests:** the worked example as a test in `test/evaluator/score/CardsTest.java` (Maintainability:
+4. **Tests:** the worked example as a test in `test/evaluator/score/FormulasTest.java` (Maintainability:
    `test/evaluator/score/MaintainabilityTest.java`), and the edges: a value on each limit, no facts at all
    (the metric is "not measured", never 0, SC-07).
 5. **docs/SCORE-CARD.md** if the formula's inputs or the invariants changed.

@@ -8,7 +8,7 @@
 
 **Contract:** SC-01 to SC-11; MOD-03 (`score/` reads facts only); E-045 onward.
 
-**Tests:** `test/evaluator/score/CardsTest.java`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/`.
+**Tests:** `test/evaluator/score/CardsTest.java` (the card's own rules), `FormulasTest`, `CardRenderingTest`, `MaintainabilityTest`; the cards' goldens, `test/goldens/cards/`.
 
 ## Steps
 

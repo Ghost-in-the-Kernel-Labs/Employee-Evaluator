@@ -1311,3 +1311,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** two test messages; no open question, so no Fable agent asked; notes wiped, this review's debrief starts the next set. No new HANDOFF step: nothing found is larger than an instructions change. Test code only, so no mutation run (`gradle mutate` leaves `test/` unmutated).
 - **Caught by:** the navigation review.
 - **Touched:** test/GhostTest.java, test/ScoreCardDocTest.java, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-100 Handoff for the session with Ghost's GitHub token
+- **Who:** Claude. **Class:** direction.
+- **Intent:** Ghost made a GitHub token and asked for a handoff to the next session.
+- **Found:** The token Ghost made reads public repositories only, with no permissions; the live test's
+  repository, Ghost-in-the-Kernel-Labs/suite-builder, is public (GitHub answers it unauthenticated), so it
+  suffices. The old handoff asked for a repository-scoped token with Contents read.
+- **Resolved:** docs/HANDOFF.md rewritten: 1.7's live check first (check the variable is set without printing
+  it, run the test alone to a file, close 1.7 or report GitHub's refusal), what is done, what waits on Ghost
+  (2.1's open questions, the token-optional proposal), how work is handed out, the session's environment.
+- **Touched:** docs/HANDOFF.md.

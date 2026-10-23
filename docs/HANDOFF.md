@@ -1,34 +1,52 @@
 # Handoff: what to work on next, and what it waits on
 
-## What to work on next
+## Start here: 1.7's live check (2026-10-23)
 
-`TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. 1.7's live check waits on
-Ghost's token (below), and 2.1 on Ghost's labels, so nothing in TODO.md is open to an agent. 1.13, baseline scoring, is done (E-070, E-071, E-074, E-075): Size, Complexity and Maintainability
-are counted against Suite Builder at 32762a6 and `Metric.counted` holds the three. 1.12, the mutation survivors, is
-done: runs 2 to 14 of docs/MUTATION.md closed `rubric/`, `score/`, `history/`, `cli/`, `github/` and `analyze/` (six passes, the
-last the sandbox's network and Docker). The seed corpus in `corpus/` was made again under the current rubric
-(E-078, J-098); `test/CorpusTest.java` holds each card to the rubric its README names, not to the current one (the README says why).
-Phase 2 starts at 2.1, which waits on Ghost's labels.
+Ghost has made a GitHub token and is adding it to the environment as `EVALUATOR_GITHUB_TOKEN`: a
+fine-grained token with read-only access to public repositories and no permissions (public data needs
+none; the token raises the rate limit from 60 requests an hour to 5,000). The live test reads
+Ghost-in-the-Kernel-Labs/suite-builder, which is public (GitHub answers it without authentication).
 
-## Next steps from the navigation review (J-093)
+1. Check the session has it, without printing it: `test -n "$EVALUATOR_GITHUB_TOKEN" && echo set`.
+   Not set: the session started before Ghost saved it; say so and stop.
+2. Run the live test alone, its output to a file: `gradle test --offline --tests
+   'evaluator.github.AuthorshipLiveTest' > build/run.log 2>&1` (`mkdir -p build` first), then grep it for
+   failures. `--offline` is Gradle's; the test itself reaches GitHub (MOD-05).
+3. It passes: 1.7's check holds (TODO.md 1.7). Close 1.7 as `docs/how/do-a-todo-step.md` says, the facts it
+   read recorded in the journal by kind and count, never the token. It fails: read the failure, fix what is
+   ours, and if GitHub refuses (401, 403, a rate limit) say so to Ghost rather than retry in a loop.
 
-None left: `evaluator score --facts` (E-076) and `gradle test -PshowGoldens` (E-077) are both done. After them, per `TODO.md` the first open item is 1.7,
-which waits on Ghost's token, then 2.1, which waits on Ghost's labels: nothing in `TODO.md` is open to an agent. The seed corpus waits for the judge that classifies folders (E-057).
+Never log, print or write the token, nor paste it into a commit, the journal or a report.
 
-## What waits on whom
+## Then
 
-- **1.7's live check, on Ghost:** a fine-grained, read-only token for Ghost-in-the-Kernel-Labs/suite-builder
-  (Contents and Metadata: read, with an expiry), set in the environment's settings as
-  `EVALUATOR_GITHUB_TOKEN`; a new session picks it up and `AuthorshipLiveTest` runs. The session's own
-  GitHub credentials are not the product's and are not used.
-- **2.1, on Ghost:** 30 repositories hand-labeled on Ambition and Quality.
-- **On a run, proven on paper only:** the sandbox's install phase through the registries network and its
-  proxy (proven on loopback); the first hosted machine runs `sandbox/setup.sh` and a fixture with a locked
-  dependency.
+Nothing else in `TODO.md` is open to an agent: 2.1 waits on Ghost's 30 hand-labelled repositories, and
+every later step on 2.1. Done since the last handoff: 1.12 (mutation survivors), 1.13 (baseline scoring,
+Suite Builder at 32762a6 reads 100), `--facts`, `-PshowGoldens`, the corpus under rubric 4.
 
-## A session's Docker
+## Waiting on Ghost
 
-`scripts/prepush.sh` needs a Docker daemon. A cloud session starts one with `dockerd` in the background
-(it stops at the background time limit; start it again before a push). The image builds on first use.
+- **2.1, the calibration set:** Ghost proposed public repositories from the lab (ghost-in-the-kernel,
+  uhneer, CryptoDevving). Open: fixtures keyed by an opaque id with the id-to-repository map kept outside the
+  repository (E-014); asking uhneer and CryptoDevving first; CryptoDevving's cloned projects as the "not own
+  work" cases for the admission gate (E-056). An agent may list the three accounts' public repositories
+  (language, size, kind, domain, no scores) for Ghost to choose from, once Ghost says yes.
+- **The token optional** (proposed, not decided): public repositories read without one, a token only for the
+  rate limit, and a rate-limit refusal said plainly.
+- The rest is in `docs/FOR-GHOST.md`.
 
-Ghost's own open items (not an agent's work) are in `docs/FOR-GHOST.md`.
+## How the work is done here
+
+Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
+reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The next navigation review is due
+in about ten commits; a tithe in about five.
+
+## A session's environment
+
+- `scripts/prepush.sh` needs Docker: start `dockerd` in the background before a push; it stops at the
+  background time limit, so start it again when needed. The image builds on first use.
+- A cloud checkout may be shallow (`git rev-parse --is-shallow-repository`): `git fetch --unshallow origin
+  main` before anything reads the history.
+- On a sandbox run, proven on paper only: the install phase through the registries proxy; the first hosted
+  machine runs `sandbox/setup.sh` and a fixture with a locked dependency.

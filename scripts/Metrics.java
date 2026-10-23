@@ -36,7 +36,7 @@ final class Metrics {
         Map<String, String> java = Repo.files(".java");
         List<Scan.Function> functions = Repo.functions(java);
         Map<String, String> metrics = new LinkedHashMap<>();
-        metrics.put("Mandatory context (words)", String.valueOf(words(Repo.read("CLAUDE.md"))) + " (CLAUDE.md)");
+        metrics.put("Mandatory context (words)", mandatory(Repo.read("CLAUDE.md"), Repo.read("theGhost.md")));
         metrics.put("Fast loop (s)", time ? fastLoop() : "not timed (--time)");
         metrics.put("Largest source file (lines)", largest(java));
         metrics.put("Files a routing row opens", routing(Repo.read("CLAUDE.md")));
@@ -47,6 +47,13 @@ final class Metrics {
         metrics.put("Stale generated artifacts", stale());
         metrics.put("Commits since the last tithe", cadence());
         return metrics;
+    }
+
+    /** What every agent reads before a task: CLAUDE.md, and theGhost.md's first section, the supply-chain rules (E-061). */
+    static String mandatory(String claude, String ghost) {
+        int start = ghost.indexOf("\n## "), end = start < 0 ? -1 : ghost.indexOf("\n## ", start + 1);
+        int rules = start < 0 ? 0 : words(ghost.substring(start, end < 0 ? ghost.length() : end));
+        return (words(claude) + rules) + " (CLAUDE.md " + words(claude) + ", theGhost.md's first section " + rules + ")";
     }
 
     static int words(String text) {

@@ -14,8 +14,9 @@ import java.util.regex.Pattern;
 /**
  * docs/KERNEL-MAP.md, the tool's own function ledger (docs/AGENT.md): `gradle kernelMap`
  * appends a row for every function in a module the map does not yet hold, and never changes a row.
- * A function that goes away is closed by hand, with a later row whose last column is `removed:
- * <commit>` or `superseded-by: <key>`, because only a person or an agent knows which it was.
+ * A function that goes away is closed by a later row it appends too (E-062): `superseded-by: <key>`
+ * when its name appears exactly once among the functions new in this run (it moved), else `removed:
+ * <date>`. A rename reads as removed and new; the two rows still say what happened.
  */
 final class KernelMap {
     static final String PATH = "docs/KERNEL-MAP.md";
@@ -59,7 +60,7 @@ final class KernelMap {
         }
         for (String key : open) {
             if (!current.contains(key)) {
-                problems.add("`" + key + "` is gone from the source: add a row closing it, last column `removed: <commit>` or `superseded-by: <key>`");
+                problems.add("`" + key + "` is gone from the source and the map holds it open: run `gradle kernelMap`, which closes it");
             }
         }
         Set<String> known = new LinkedHashSet<>();
@@ -71,18 +72,36 @@ final class KernelMap {
         return problems;
     }
 
-    /** The map with a row appended for every function it does not hold; no row is changed. */
+    /** The map with a row appended for every function it does not hold, and one closing every function gone; no row is changed. */
+    // Decision: E-062
     static String write(String map, Map<String, String> sources, String today) {
         Set<String> open = open(rows(map));
         List<Scan.Function> functions = Repo.functions(sources);
         StringBuilder out = new StringBuilder(map.endsWith("\n") ? map : map + "\n");
+        Set<String> current = new LinkedHashSet<>(), added = new LinkedHashSet<>();
         for (Scan.Function f : functions) {
+            current.add(f.key());
             if (open.contains(f.key())) continue;
-            String module = f.key().split("/")[0];
-            out.append("| ").append(module).append(" | `").append(f.key()).append("` | ").append(standsOn(f))
+            added.add(f.key());
+            out.append("| ").append(module(f.key())).append(" | `").append(f.key()).append("` | ").append(standsOn(f))
                     .append(" | ").append(today).append(" |  |\n");
         }
+        for (String gone : open) {
+            if (current.contains(gone)) continue;
+            List<String> moved = added.stream().filter(key -> name(key).equals(name(gone))).toList();
+            String closed = moved.size() == 1 ? "superseded-by: `" + moved.get(0) + "`" : "removed: " + today;
+            out.append("| ").append(module(gone)).append(" | `").append(gone).append("` |  | ").append(today).append(" | ").append(closed).append(" |\n");
+        }
         return out.toString();
+    }
+
+    private static String module(String key) {
+        return key.split("/")[0];
+    }
+
+    /** A function's name without its file: `Json.parse` of `rubric/.../Json.java:Json.parse`. */
+    private static String name(String key) {
+        return key.substring(key.lastIndexOf(':') + 1);
     }
 
     /**

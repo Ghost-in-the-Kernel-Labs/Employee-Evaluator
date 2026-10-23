@@ -820,3 +820,16 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** CLAUDE.md, "A Sonnet agent escalates once"; E-060. "Once" is read as: a plain fix is made; a
   failure that does not say why gets one more try at most, then Opus; if Opus fails too, Ghost.
 - **Touched:** CLAUDE.md, theGhost.md.
+
+### J-060 Ghost's two calls on the Fable advisor's pass: one copy of the supply-chain rules, a map that closes itself
+- **Who:** Claude. **Class:** decision.
+- **Intent:** Ghost: "yes to gradle kernel map"; the supply-chain block moved to theGhost.md "provided agents
+  read the ghost before doing tasks".
+- **Found:** theGhost.md is about 11,000 words, so reading all of it before a task would cost more than the
+  block saves. Its first section can be the block: about 200 words, read first.
+- **Options:** read all of theGhost.md up front; read its first section, made the block.
+- **Resolved:** E-061: the block is theGhost.md's first section and its one copy; CLAUDE.md's first section
+  sends every agent there; the metric counts both (1,290 words, CLAUDE.md 1,090). E-062: `gradle kernelMap`
+  closes a gone function itself, `superseded-by` when it moved. E-033's directive clause superseded in part.
+- **Touched:** theGhost.md, CLAUDE.md, test/SupplyChainTest.java, scripts/Metrics.java, scripts/KernelMap.java,
+  test/KernelMapTest.java, docs/KERNEL-MAP.md.

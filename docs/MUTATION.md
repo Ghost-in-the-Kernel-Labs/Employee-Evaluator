@@ -199,6 +199,24 @@ twice: 120 of 123, 0.976, cited `a.js:11-11` and `b.js:20-20`; the fixture's str
 `TestFilesTest`: a file called `test` or `spec` is a file, not a folder. One change of shape only, to make `apart` testable: it
 is no longer private. No bug found, no golden moved.
 
+### Run 13: 2026-10-23, `analyze/`, part 5 of 6: a submission's test runs (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). Covers `Reports` (11 left alive),
+`ReportFiles` (9), `TestPlans` (6), `TestRunner` (3) and `TestRuns` (3) only. After: 1,104 mutants, 1,047 killed (the other
+classes' survivors untouched); of these five classes 9 are left, all judged harmless below (8 in `Reports.parse`, 1 in `TestRunner`).
+
+Tests added, each value worked by hand in its comment: `ReportFilesTest` (new; the fixtures' reports, so no golden moves): the
+reports of a folder summed in order (junit.xml, then surefire's sorted, then jest.json: 9 cases, 5 passed, 2 failed, 2 skipped)
+with a `.txt`, a folder named `.xml` and a link out of the copy left unread; a linked surefire folder, `jest.json` and
+`junit.xml` not followed (the three had no test that ran them); a report of exactly the size cap read and one byte more refused;
+`add` from values that differ. `ReportsTest`: JaCoCo's LINE counter with equal counts (3 and 3 is 3 of 6, not nothing), 2 and 0,
+and 0 and 0; a report of exactly `MAX_BYTES` read and one byte over refused, for JUnit and for Jest; an element of 9,999 + 1
+attributes read and 10,001 refused (the JDK's secure-processing limit); a run of skipped tests only gives no pass rate, and a
+coverage of no lines no fact. `TestPlansTest`: a repository with tests and no build file, and one with `build.gradle.kts` only;
+Node with no `package.json`, one that is not JSON and one that is JSON but not an object; a requirements file that is a link
+or a folder not read; a manifest of exactly 1 MiB read and one byte over not. `TestRunnerTest`: the output folder removed
+afterwards, and an install that timed out (not "failed"). No bug found, no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -224,3 +242,10 @@ is no longer private. No bug found, no golden moved.
 | `analyze/Dependencies.java`, `longest` (lines 75 and 79), `a.compareTo(b) <= 0` | `< 0` | The merge compares a part's first file so far with one more; the two differ only when both are the same file, and then either is returned. |
 | `analyze/Dependencies.java`, `chain` (line 103), `first.get(p).compareTo(first.get(start)) < 0` | `<= 0` | Two different parts never have the same first file (a file is in one part), so the compare is never 0. |
 | `analyze/Dependencies.java`, `chain` (line 103), `length.get(p).equals(length.get(start))` | negated: a part of a different length with a smaller first file takes the start | Not shown to change a result, but not proved either. It needs a part found after the start, shorter than it, with a smaller first file; Tarjan numbers parts in the order their trees close and the roots go in path order, so a part with a smaller first file is closed before one with a larger, unless a still smaller root reaches the start, and that root is a longer start already taken. Tried by search: the mutant against the code on about 700,000 random graphs of 2 to 10 files (cycles and files with no entry among them), the same chain every time. If a graph is ever found, it gets a test and this row goes. |
+| `analyze/Reports.java`, `parse`, `setFeature(FEATURE_SECURE_PROCESSING, true)` | the call removed | The JDK's `DocumentBuilderFactory` has secure processing on by default, so the call sets what is already set. The limit it brings (10,000 attributes to an element) is tried by `secureProcessingLimitsAnElementsAttributes` and holds with the call gone. The call stays so that the report's safety does not rest on a default. |
+| `analyze/Reports.java`, `parse`, `setFeature` for external general entities and external parameter entities (both false) | each call removed | A second lock behind two others: an external entity must first be declared, a declaration is `<!ENTITY` in the document's own DTD (refused by the text check on the line above `try`) or in an external DTD (never loaded: `load-external-dtd` is false, and `jacoco.xml`'s DOCTYPE shows it is not fetched). With nothing declared the two features have nothing to refuse. Not proved against an encoding trick that hides the text `<!ENTITY` from the check; the loaded-DTD lock would still hold. |
+| `analyze/Reports.java`, `parse`, `setAttribute` for `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` | each call removed | The same second lock: with `load-external-dtd` false no DTD is read, so its access list is never asked; no schema is used (the parse does not validate), so the schema access list is never asked either. |
+| `analyze/Reports.java`, `parse`, `setXIncludeAware(false)` | the call removed | `false` is the factory's default; the call sets what is already set. |
+| `analyze/Reports.java`, `parse`, `setExpandEntityReferences(false)` | the call removed | Tried: with the call, an undeclared `&foo;` under an external DOCTYPE stays an entity-reference node and without it is dropped, but the text of the element (`getTextContent`) and its attributes, all this class reads, come out the same, and a declared entity is refused first. |
+| `analyze/Reports.java`, `parse`, `builder.setErrorHandler(null)` | the call removed | `null` is what the builder starts with ("the implementation's own default"); the call sets what is already set. |
+| `analyze/TestRunner.java`, `runPlans`, `valid > 0` | `valid >= 0` | With no lines the mutant makes `Lines(0, 0)` instead of empty, and `TestRuns.facts` filters out a coverage of `valid() > 0` first, so no fact differs. |

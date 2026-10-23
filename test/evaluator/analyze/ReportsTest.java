@@ -81,4 +81,41 @@ class ReportsTest {
         assertEquals(List.of("shop.CartTest.fetchesExchangeRates"), reaching.get(0).evidence().sources());
         assertEquals(List.of(), TestRuns.facts(new Reports.Outcome(0, 0, 0, 0, List.of()), Optional.empty(), "t", List.of()));
     }
+
+    /** JaCoCo's LINE counter: 3 missed and 3 covered is 3 of 6 (equal counts are not "counts nothing"); 2 missed, 0 covered is 0 of 2; 0 and 0 is nothing. */
+    @Test
+    void jacocosLineCounterIsMissedPlusCovered() throws Reports.Refused {
+        assertEquals(Optional.of(new Reports.Lines(3, 6)), Reports.coverage("<report name=\"r\"><counter type=\"LINE\" missed=\"3\" covered=\"3\"/></report>"));
+        assertEquals(Optional.of(new Reports.Lines(0, 2)), Reports.coverage("<report name=\"r\"><counter type=\"LINE\" missed=\"2\" covered=\"0\"/></report>"));
+        assertEquals(Optional.empty(), Reports.coverage("<report name=\"r\"><counter type=\"LINE\" missed=\"0\" covered=\"0\"/></report>"));
+    }
+
+    /** The cap is on size, not on one byte under it: a report of exactly MAX_BYTES is read, one byte more is refused (each of the three readers). */
+    @Test
+    void aReportOfExactlyTheCapIsReadAndOneByteMoreIsNot() throws Reports.Refused {
+        String xml = "<testsuite/>";
+        assertEquals(new Reports.Outcome(0, 0, 0, 0, List.of()), Reports.junit(List.of(xml + " ".repeat(Reports.MAX_BYTES - xml.length()))));
+        assertThrows(Reports.Refused.class, () -> Reports.junit(List.of(xml + " ".repeat(Reports.MAX_BYTES - xml.length() + 1))));
+        String json = "{}";
+        assertEquals(new Reports.Outcome(0, 0, 0, 0, List.of()), Reports.jest(json + " ".repeat(Reports.MAX_BYTES - json.length())));
+        assertThrows(Reports.Refused.class, () -> Reports.jest(json + " ".repeat(Reports.MAX_BYTES - json.length() + 1)));
+    }
+
+    /** The JDK's secure processing limit is on: an element with 10,001 attributes (its limit is 10,000) is refused; with 10,000 it is read. */
+    @Test
+    void secureProcessingLimitsAnElementsAttributes() throws Reports.Refused {
+        StringBuilder many = new StringBuilder("<testsuite><testcase name=\"t\"");
+        for (int i = 0; i < 9_999; i++) many.append(" a").append(i).append("=\"1\"");
+        assertEquals(new Reports.Outcome(1, 1, 0, 0, List.of()), Reports.junit(List.of(many + "/></testsuite>")));
+        many.insert(many.length(), " b=\"1\"");
+        assertThrows(Reports.Refused.class, () -> Reports.junit(List.of(many + "/></testsuite>")));
+    }
+
+    /** A run with only skipped tests has no pass rate (0 of 0), and a coverage of no lines is no fact. */
+    @Test
+    void noRunTestsAndNoLinesGiveNoFacts() {
+        assertEquals(List.of(), TestRuns.facts(new Reports.Outcome(2, 0, 0, 2, List.of()), Optional.of(new Reports.Lines(0, 0)), "t", List.of("r")));
+        List<Fact> facts = TestRuns.facts(new Reports.Outcome(5, 2, 1, 2, List.of()), Optional.of(new Reports.Lines(1, 3)), "t", List.of("r"));
+        assertEquals(List.of(0.667, 0.333), facts.stream().map(Fact::value).toList());
+    }
 }

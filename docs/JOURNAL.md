@@ -1115,3 +1115,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   next agent learns why from the failure itself. The review will record the converged points as already fixed.
 - **Caught by:** review, and a test run on a clean clone before the push.
 - **Touched:** docs/how/agent-environment.md, test/DocsTest.java.
+
+### J-082 analyze/ part 5 of 6 (a submission's test runs): 32 survivors down to 9, all harmless
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, `Reports`, `ReportFiles`, `TestPlans`, `TestRunner` and `TestRuns`: a test or a reason for each survivor.
+- **Found:** No test ran `ReportFiles.outcome` with a surefire folder or a `jest.json`, or `files` with a link, a folder or a `.txt` in it; the size caps were tried far over, never at the cap; `TestPlans` had no test for a missing or unparsable `package.json`, a `build.gradle.kts`, no build file, or a requirements file that is a link or a folder; no test checked that the run's output folder is removed or that an install can time out; a run of skipped tests only, and a coverage of no lines, had no test. Eight `Reports.parse` survivors are the XML doors: only one (secure processing's attribute limit) has an effect I could see, and the JDK turns it on by default, so removing the call changes nothing. No bug.
+- **Options:** a test for each door of `parse` (tried: only the attribute limit, and only against the default, so no); harmless rows saying why, taken for seven doors and `runPlans`' `valid > 0`.
+- **Resolved:** run 13 (1,104 mutants, 1,047 killed); ReportFilesTest (new), ReportsTest, TestPlansTest and TestRunnerTest extended; seven harmless rows.
+- **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
+- **Caught by:** mutation (E-019).

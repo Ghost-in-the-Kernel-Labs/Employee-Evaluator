@@ -25,15 +25,18 @@ class TestRunnerTest {
     static final class Fake implements Sandbox {
         final List<String> calls = new ArrayList<>();
         final List<Path> works = new ArrayList<>();
+        final List<Path> outs = new ArrayList<>();
         BiConsumer<Path, Path> onTest = (work, out) -> {};
         int installExit = 0;
+        boolean installTimesOut = false;
         boolean testTimesOut = false;
 
         @Override
         public Run run(Phase phase, Path work, Path out, String script, Duration timeout) {
             calls.add(phase + ": " + script);
             works.add(work);
-            if (phase == Phase.INSTALL) return new Run(installExit, false, "");
+            outs.add(out);
+            if (phase == Phase.INSTALL) return new Run(installExit, installTimesOut, "");
             onTest.accept(work, out);
             return new Run(1, testTimesOut, "");
         }
@@ -74,6 +77,7 @@ class TestRunnerTest {
         assertEquals(List.of("python/junit.xml", "python/coverage.xml"), result.facts().get(0).evidence().sources());
         assertTrue(Files.exists(repo.resolve(".claude/settings.json")), "the submission's checkout is never touched");
         assertFalse(Files.exists(fake.works.get(0)), "the copy is removed afterwards");
+        assertFalse(Files.exists(fake.outs.get(0)), "the output folder is removed afterwards");
         assertEquals(List.of(), result.notMeasured());
     }
 
@@ -94,6 +98,10 @@ class TestRunnerTest {
         failing.installExit = 1;
         assertEquals(List.of("Python: the install failed (exit 1)"), TestRunner.run(repo, Ingest.read(repo), failing).notMeasured());
         assertEquals(1, failing.calls.size(), "no test runs after a failed install");
+        Fake stuck = new Fake();
+        stuck.installTimesOut = true;
+        assertEquals(List.of("Python: the install ran past 10 minutes"), TestRunner.run(repo, Ingest.read(repo), stuck).notMeasured());
+        assertEquals(1, stuck.calls.size(), "no test runs after an install that timed out");
         Fake slow = new Fake();
         slow.testTimesOut = true;
         assertEquals(List.of("Python: the tests ran past 10 minutes"), TestRunner.run(repo, Ingest.read(repo), slow).notMeasured());

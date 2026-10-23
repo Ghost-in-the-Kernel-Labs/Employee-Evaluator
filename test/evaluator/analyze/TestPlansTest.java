@@ -116,4 +116,50 @@ class TestPlansTest {
         assertEquals(false, TestPlans.hashPinned(HASHED + "flask==3.0.0\n"));
         assertEquals(false, TestPlans.hashPinned("# nothing\n"));
     }
+
+    /** A Gradle build of either kind is named; a repository with tests and no build file at all says that instead. */
+    @Test
+    void javaWithOnlyAKotlinGradleFileOrNoBuildFileIsNotMeasuredAndSaysWhich(@TempDir Path repo) throws IOException {
+        write(repo.resolve("src/test/java/a/CartTest.java"), "class CartTest {}\n");
+        assertEquals("no build file the sandbox runs (pom.xml)", plans(repo).get(0).notMeasured());
+        write(repo.resolve("build.gradle.kts"), "plugins { java }");
+        assertEquals("Gradle builds are not run yet (unplanned: docs/HANDOFF.md)", plans(repo).get(0).notMeasured());
+    }
+
+    /** No package.json, one that is not JSON and one that is JSON but not an object: each says why, none throws. */
+    @Test
+    void nodeWithNoManifestOrOneThatDoesNotParseIsNotMeasured(@TempDir Path repo) throws IOException {
+        write(repo.resolve("src/sum.test.ts"), "test('a', () => {});\n");
+        assertEquals("no package.json at the root", plans(repo).get(0).notMeasured());
+        write(repo.resolve("package.json"), "{not json");
+        assertEquals("package.json does not parse", plans(repo).get(0).notMeasured());
+        write(repo.resolve("package.json"), "[1, 2]");
+        assertEquals("package.json does not parse", plans(repo).get(0).notMeasured());
+    }
+
+    /** A requirements file that is a link or a folder is not a file the plan reads: a link could lead out of the copy. */
+    @Test
+    void aRequirementsLinkOrFolderIsNotRead(@TempDir Path repo) throws IOException {
+        write(repo.resolve("tests/test_app.py"), "def test_a():\n    assert True\n");
+        write(repo.resolve("pins.dat"), HASHED);
+        Files.createSymbolicLink(repo.resolve("requirements-link.txt"), repo.resolve("pins.dat"));
+        Files.createDirectories(repo.resolve("requirements-dir.txt"));
+        TestPlans.Plan plan = plans(repo).get(0);
+        assertNull(plan.install());
+        assertNull(plan.notMeasured());
+    }
+
+    /** A manifest of exactly 1 MiB is read (here a pinned requirements file); one byte more reads as empty, so not pinned. */
+    @Test
+    void aManifestIsReadUpToExactlyOneMebibyte(@TempDir Path repo) throws IOException {
+        write(repo.resolve("tests/test_app.py"), "def test_a():\n    assert True\n");
+        String pinned = "requests==2.32.3 --hash=sha256:aa\n";
+        write(repo.resolve("requirements.txt"), pinned + "#".repeat(1024 * 1024 - pinned.length()));
+        assertEquals(1024 * 1024, Files.size(repo.resolve("requirements.txt")));
+        TestPlans.Plan plan = plans(repo).get(0);
+        assertNull(plan.notMeasured());
+        assertTrue(plan.install().endsWith("-r requirements.txt"));
+        write(repo.resolve("requirements.txt"), pinned + "#".repeat(1024 * 1024 - pinned.length() + 1));
+        assertEquals("requirements.txt is not pinned by hash (E-037)", plans(repo).get(0).notMeasured());
+    }
 }

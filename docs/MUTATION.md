@@ -161,6 +161,23 @@ on line 1, nested in a class, and of a token tree-sitter had to invent; imports 
 (`from . import missing` leads to the package's `__init__.py`; `..c` from `a/b.py` reaches the root, `...c` from there
 does not); `normalize` and `folder` directly. No bug found, no golden moved.
 
+### Run 11: 2026-10-23, `analyze/`, part 3 of 6: TypeScript/JavaScript and the navigability checklist (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). Covers `TypeScriptAdapter` (7 left
+alive), `JavaScriptImports` (7), `TypeScriptImports` (1), `JavaScriptAdapter` (1), `Naming` (4), `Navigability` (2) and
+`DocPaths` (1) only. After: 1,104 mutants, 1,000 killed (the other classes' survivors untouched); of these seven classes
+none is left, so no new harmless row.
+
+Tests added, each value worked by hand in its comment: `TypeScriptAdapterTest` (new; source held in the test, so the
+fixtures and their goldens are unchanged, E-018): an `if` with a boolean condition, an `else if` with one, and an `if` in the
+`if`'s, the `else if`'s and the `else`'s block (cyclomatic 8, cognitive 11); requires and an `import` out of order in one
+file (sorted by line), an object pattern with an alias, a `var`, a call that is not `require`, a `require` with two arguments;
+a bare `require`; a name bound as `require` (used only outside its own declaration); `resolve` for `../x`, `./y` and a bare
+`x` with a file of that name beside, in TypeScript and JavaScript; both `tool()` strings. In `NavigabilityTest`: `Naming.style`
+of a name of no style, `fit` with more "other" names than the dominant style, a constructor left out of the names (the
+summary's text), `Navigability.module` of `src/main`, `main` and `src/lib/main`, and a doc of exactly the size cap read
+and one byte over it not. No bug found, no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

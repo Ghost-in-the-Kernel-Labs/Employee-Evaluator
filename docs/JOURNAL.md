@@ -1083,3 +1083,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** run 10 (1,104 mutants, 977 killed); PythonAdapterTest, five rows of harmless.
 - **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/KERNEL-MAP.md.
 - **Caught by:** mutation (E-019).
+
+### J-079 analyze/ part 3 of 6 (TypeScript/JavaScript and the navigability checklist): 23 survivors down to 0
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, `TypeScriptAdapter`, `JavaScriptImports`, `TypeScriptImports`, `JavaScriptAdapter`, `Naming`, `Navigability` and `DocPaths`: a test or a reason for each survivor.
+- **Found:** The TypeScript fixture never put a condition or a block inside an `else if` or an `else`; no test had a constructor, a name of no style, a `var` or an aliased require, an import and a require out of order, `../` against a bare package name, a path made only of container folders, or a doc of exactly the size cap. One of my own hand values was wrong (`src/lib/main` is the module `src/lib`, as the code says); the test was corrected, not the code. No bug.
+- **Options:** extend the fixture (rejected: goldens would move, E-018); source held in a new test, taken.
+- **Resolved:** run 11 (1,104 mutants, 1,000 killed); TypeScriptAdapterTest (new), NavigabilityTest extended; no new harmless row.
+- **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
+- **Caught by:** mutation (E-019).

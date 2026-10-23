@@ -10,6 +10,7 @@ import evaluator.rubric.Fact;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,5 +101,48 @@ class NavigabilityTest {
         assertEquals("src/billing", Navigability.module("src/billing/invoice.py"));
         assertEquals("java/src/main/java/shop", Navigability.module("java/src/main/java/shop/Cart.java"));
         assertEquals(".", Navigability.module("setup.py"));
+    }
+
+    /** A name that fits no style is "other", and is never the style the rest are held to. */
+    @Test
+    void aNameOfNoStyleIsOtherAndNeverDominant() {
+        assertEquals("other", Naming.style("Foo_bar"));
+        assertEquals("other", Naming.style("a-B"));
+        // Foo_bar and Baz_qux are other (2), fooBar camel (1): the dominant style is camel's, so 1 of 3, not 2 of 3.
+        assertEquals(List.of(1, 3), Arrays.stream(Naming.fit(List.of("Foo_bar", "Baz_qux", "fooBar"))).boxed().toList());
+        // Lowercase words count with any style: total and index (2), then snake and pascal one each (dominant 1): 3 of 4.
+        assertEquals(List.of(3, 4), Arrays.stream(Naming.fit(List.of("total", "index", "make_it", "Make"))).boxed().toList());
+    }
+
+    /**
+     * A constructor carries its class's name and is left out; a method does not. Cart.java: the constructor Cart
+     * (left out), addItem and removeItem (camel, 2 of 2); the file Cart (pascal, 1 of 1): 3 of 3.
+     */
+    @Test
+    void aConstructorIsLeftOutOfTheNamesAndTheSummaryCountsThem(@TempDir Path repo) throws IOException {
+        write(repo.resolve("Cart.java"), "class Cart {\n    Cart() {}\n    void addItem() {}\n    void removeItem() {}\n}\n");
+        Inventory inventory = Ingest.read(repo);
+        Complexity.Report report = Complexity.measure(repo, inventory);
+        assertEquals("3 of 3 names in their language's style (functions and files)", Naming.summary(inventory, report));
+        assertEquals(1.0, Naming.consistency(inventory, report));
+    }
+
+    /** A file that is only container names has its own name as the module's last part: `src/main` is in `src`, `main` is at the root. */
+    @Test
+    void aFileNamedLikeAContainerIsStillAFile() {
+        assertEquals("src", Navigability.module("src/main"));
+        assertEquals(".", Navigability.module("main"));
+        assertEquals("src/lib", Navigability.module("src/lib/main"), "a folder of containers only is the module, its file left out");
+    }
+
+    /** A doc of exactly the size cap is read; one byte more is not (E-013: the cap keeps a hostile doc from being slurped). */
+    @Test
+    void aDocOfExactlyTheCapIsRead(@TempDir Path repo) throws IOException {
+        String path = "`docs/a.md`";
+        write(repo.resolve("CLAUDE.md"), path + " ".repeat(DocPaths.MAX_DOC - path.length()));
+        assertEquals(DocPaths.MAX_DOC, Files.size(repo.resolve("CLAUDE.md")));
+        assertEquals(List.of("docs/a.md"), DocPaths.named(repo, List.of("CLAUDE.md")));
+        write(repo.resolve("CLAUDE.md"), path + " ".repeat(DocPaths.MAX_DOC - path.length() + 1));
+        assertEquals(List.of(), DocPaths.named(repo, List.of("CLAUDE.md")));
     }
 }

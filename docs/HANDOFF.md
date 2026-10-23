@@ -7,6 +7,13 @@ Ghost's token (below), so the work is 1.13, baseline scoring (E-070, E-071): Siz
 done: runs 2 to 14 of docs/MUTATION.md closed `rubric/`, `score/`, `history/`, `cli/`, `github/` and `analyze/` (six passes, the
 last the sandbox's network and Docker). Phase 2 starts at 2.1, which waits on Ghost's labels.
 
+## Next steps from the navigation review (J-093)
+
+Larger than an instructions change, so not done in the review: (1) `evaluator score --facts`, printing the
+repository-wide fact values (source lines, total cognitive complexity, depth) so a baseline can be recorded
+without a scratch program (met by the Size and Complexity agents); (2) `gradle test -PshowGoldens`, printing
+each changed golden's diff so `docs/how/change-a-formula.md` step 6 can be followed in its order, reading before writing.
+
 ## What waits on whom
 
 - **1.7's live check, on Ghost:** a fine-grained, read-only token for Ghost-in-the-Kernel-Labs/suite-builder

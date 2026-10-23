@@ -18,13 +18,18 @@
 - The fast loop needs a plain clone. In a git worktree `.git` is a file, which the scorer deliberately does
   not follow (`cli/evaluator/cli/Pipeline.java`), so `MainTest.thisRepositorysCard` fails there on Provenance.
 - Search with `git grep`, not a bare grep: the judges' JSON and the kernel map flood a bare one.
-- A tithe pass records a column in `docs/AGENT.md`'s table.
+- **A tithe pass** (about every eighth commit, E-015): in a plain `git clone` of your worktree's folder (enough; the
+  fast loop cannot pass in a worktree), run `gradle metrics --args=--time` (it times the loop with every test rerun;
+  `date` around `gradle test --offline --rerun-tasks` does the same, and the time program is not installed). Run it
+  several times: a parallel run that fails once in ten is a race in a test, not noise (E-072). Add a column to
+  `docs/AGENT.md`'s table, put a comment on whatever `gradle metrics` lists, write the journal entry, and commit
+  with the subject "Tithe" (E-015).
 - A mutation run over a module is recorded in `docs/MUTATION.md`, numbered in order (a refactor's run counts too);
   each survivor gets a test or a harmless row. `mkdir -p build` first on a fresh checkout. PIT refuses a red
   suite, so in a worktree (where `thisRepositorysCard` fails) run `gradle mutate` in a plain `git clone` of it
   and copy your changed files across. To read the survivors with their source lines:
-  `grep -v KILLED build/mutation/mutations.csv | cut -d, -f1,3,4,5,6` (the line numbers move as you add lines, so re-read after a rerun).
-  A TIMED_OUT mutant counts as killed.
+  `grep -v KILLED build/mutation/mutations.csv | grep -v TIMED_OUT | cut -d, -f1,3,4,5,6` (the line numbers move as you add lines, so re-read after a rerun).
+  A TIMED_OUT mutant counts as killed, which is why the line above drops those rows too.
 - Reading a survivor (J-074 to J-079): `cat -n` one source file at a time (the CSV's line numbers are that file's own);
   the CSV names a mutator only, and mutations.xml beside it (build output, so not in backticks: a path check holds every backticked path) says what each mutant changed (its `lineNumber`,
   `mutatedMethod` and `description`). `-Ptarget` takes a package glob (`evaluator.analyze.*`), not one class, so a rerun of

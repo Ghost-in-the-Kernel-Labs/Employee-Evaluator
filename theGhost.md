@@ -26,7 +26,7 @@ too, so they are not proposed again without new evidence.
 - **Why:** the reason, and the evidence it came from.
 - **Held by:** the code, rule, test or document that keeps it true.
 - **Source:** who decided and when.
-- **Status:** in force | proposed | refused | withdrawn | superseded by E-000
+- **Status:** in force | proposed | refused | withdrawn | superseded by E-000 (a parenthesis after a status may not hold a `;`: the test splits statuses on it first)
 - **subject:** one or two words, so entries can be grouped
 - **See also:** E-000 (optional)
 - **Supersedes:** E-000 (only on a decision that replaces one; the old one's status names this one)

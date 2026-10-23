@@ -19,5 +19,7 @@ decides a new one or a change, and it is recorded before the code (E-045 onward)
    (the metric is "not measured", never 0, SC-07).
 5. **docs/SCORE-CARD.md** if the formula's inputs or the invariants changed.
 6. **Goldens:** `gradle test`, read each changed card golden against the worked example, then
-   `gradle test -PwriteGoldens`.
+   `gradle test -PwriteGoldens`. The goldens hold scores, not fact values: work each changed score by hand
+   from the fixture's facts (a scratch program, `docs/how/command-line.md`), and know that a fixture whose
+   metric reads 0 on the old and the new scale proves nothing about the formula; the unit test carries it.
 7. `gradle kernelMap`, `gradle mutate -Ptarget=evaluator.score.*` (E-019), the journal entry.

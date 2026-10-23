@@ -12,6 +12,11 @@
 
 - `cli/` only names the work: a rule belongs in the module that does the work, not here.
 - Every typed value is checked before use; a wrong one is a usage error on stderr with a non-zero exit, never a stack trace.
+- To run it from a build (there is no application task): `gradle compileJava --offline`, then
+  `java -cp "build/classes/java/main:third_party/tree-sitter/*" evaluator.cli.Main score <folder> --no-run`
+  (without the tree-sitter jars it dies on a missing class). The card carries each score's fact ids, not the
+  fact values; reading a repository's line count or cognitive total still takes a scratch program on
+  `Ingest`, `Size`, `Complexity` or `Dependencies` (a printing option is a next step in `docs/HANDOFF.md`).
 - The cards' goldens are written from the fixtures by `gradle test -PwriteGoldens`; review the diff.
 
 ## Always

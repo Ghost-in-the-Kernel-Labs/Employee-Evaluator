@@ -1247,3 +1247,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** keeping `logScale` for nothing (removed, with its harmless row), a cap on depth (the lead's formula has none).
 - **Resolved:** `Formulas.BASELINE_COGNITIVE`, `BASELINE_DEPTH`, `complexity`, the rubric (version 3, hash 4d7287ec37e6), `Metric.counted` for Complexity, SC-01 naming both, E-074 superseding E-050's formula.
 - **Touched:** E-050, E-070, E-071, E-074, TODO.md 1.13, docs/SCORE-CARD.md, docs/HANDOFF.md, docs/MUTATION.md (run 16), docs/KERNEL-MAP.md, the ten card goldens.
+
+### J-093 Navigation review: facts not shown to the formula agents, the tithe's steps
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The navigation review `gradle metrics` called due, over seven debriefs.
+- **Found:** (1) No way to run `evaluator score` from a build, and a card holds fact ids, not values: two agents (Size, Complexity), still true; the java command was tried and works. Fixed in command-line.md; a `--facts` option is larger, so a next step in HANDOFF. (2) Step 6 of change-a-formula.md cannot be followed in its order (read goldens before writing): the same two agents, true; a `-PshowGoldens` is a next step in HANDOFF, the step now says to work scores by hand and that a 0-on-both-scales fixture proves nothing. (3) A status's parenthesis may not hold a `;`, learned only from a failing test: the same two, true (GhostTest splits on it first); fixed in theGhost.md's entry form. (4) What a tithe pass does is spread over three files, and the fast loop is timed in a plain clone: the fast-loop and tithe agents, true; fixed in agent-environment.md (a Tithe step, timing, the race remark). Already fixed: none. Single agent: the survivors grep overcounts TIMED_OUT rows, which the doc itself calls killed, a fact gone wrong, fixed in agent-environment.md; a "commit only" closing step has no home in do-a-todo-step.md, noted and not acted on; the first debrief had nothing.
+- **Options:** a new HANDOFF item for the java command (it is an instructions change, so no); writing `--facts` now (a command-line option, so a next step).
+- **Resolved:** five instruction edits and one HANDOFF section; no open question, so no Fable agent asked. Notes wiped, this review's debrief starts the next set.
+- **Caught by:** the navigation review.
+- **Touched:** docs/how/command-line.md, docs/how/change-a-formula.md, docs/how/agent-environment.md, theGhost.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.

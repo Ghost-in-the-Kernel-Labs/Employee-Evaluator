@@ -25,6 +25,15 @@ class TestFilesTest {
         }
     }
 
+    /** Only the folders above a file count: a file called `test` or `spec` is a file, not a test folder. */
+    @Test
+    void aFileNamedLikeATestFolderIsNotInIt() {
+        assertFalse(TestFiles.isTest("src/test"));
+        assertFalse(TestFiles.isTest("spec"));
+        assertTrue(TestFiles.isTest("test/x"));
+        assertTrue(TestFiles.isTest("a/spec/b/c.rb"));
+    }
+
     /** small-app: tests/test_util.py's 3 lines over the 20 of Report.java (7), main.py (6), util.py (2), index.ts (5). */
     @Test
     void theRatioIsTestLinesOverCodeLines() {

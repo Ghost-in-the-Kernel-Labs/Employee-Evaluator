@@ -104,7 +104,7 @@ public final class Duplication {
     }
 
     /** Whether a group is a copy: in two functions, or in one at least a window apart (not one run overlapping itself). */
-    private static boolean apart(List<int[]> group) {
+    static boolean apart(List<int[]> group) {
         if (group.size() < 2) return false;
         int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
         for (int[] p : group) {

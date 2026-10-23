@@ -77,6 +77,41 @@ class DuplicationTest {
         assertEquals(Files.readString(golden), text.toString(), "the facts changed: if that is intended, `gradle test -PwriteGoldens` and review the diff (E-018)");
     }
 
+    /** The 60 tokens of a block with no token twice: 24 punctuation marks and 36 keywords, each its own token. */
+    private static final String BLOCK = "! % ^ & * ( ) - + = [ ] { } | ; : , . < > ? ~ @ # abstract and as assert async await boolean break byte case catch "
+            + "char class const continue def default del delete do double elif else enum except export extends false False final finally float for from function";
+
+    /**
+     * Two JavaScript functions share BLOCK (60 tokens) and nothing else. a.js (line 10): `return null`, a newline, BLOCK, so 62
+     * tokens, BLOCK at 2 to 61 on its line 2. b.js (line 20): BLOCK, a newline, `yield`: 61 tokens, BLOCK at 0 to 59. Duplicated:
+     * 60 + 60 = 120 of 62 + 61 = 123 tokens, 120 / 123 = 0.9756, to three places 0.976. A stretch that starts at token 2, not 0, is
+     * counted as 60 tokens (62 - 2), and cited by its lines: a.js 10 + 2 - 1 = 11, b.js 20 + 1 - 1 = 20.
+     */
+    @Test
+    void aStretchThatStartsPartWayIsCountedByItsLengthAndCitedByItsLines() {
+        String a = "return null\n" + BLOCK;
+        String b = BLOCK + "\nyield";
+        Complexity.Report report = new Complexity.Report(Map.of(
+                "a.js", List.of(new Measure("a", 10, 1, 0, 12, a)),
+                "b.js", List.of(new Measure("b", 20, 1, 0, 21, b))), Map.of(), Map.of());
+        assertEquals(62, Tokens.of(a, false).tokens().size());
+        assertEquals(61, Tokens.of(b, false).tokens().size());
+        Fact fact = Duplication.fact(report).orElseThrow();
+        assertEquals(0.976, fact.value());
+        assertEquals(List.of("a.js:11-11", "b.js:20-20"), fact.evidence().sources());
+    }
+
+    /** A group is a copy in two functions, or in one at least WINDOW (60) tokens apart; a lone place or a nearer pair is not. */
+    @Test
+    void aGroupIsACopyOnlyWhenItsPlacesAreInTwoFunctionsOrAWindowApart() {
+        assertEquals(false, Duplication.apart(List.of(new int[] {0, 5})), "one place");
+        assertEquals(true, Duplication.apart(List.of(new int[] {0, 5}, new int[] {1, 5})), "two functions");
+        assertEquals(true, Duplication.apart(List.of(new int[] {0, 0}, new int[] {0, 60})), "exactly a window apart");
+        assertEquals(false, Duplication.apart(List.of(new int[] {0, 0}, new int[] {0, 59})), "one token short");
+        assertEquals(false, Duplication.apart(List.of(new int[] {0, 40}, new int[] {0, 70})), "30 apart, far from the start");
+        assertEquals(true, Duplication.apart(List.of(new int[] {0, 70}, new int[] {0, 5}, new int[] {0, 10})), "the least and the most of three");
+    }
+
     private static Duplication.Unit unit(String text) {
         Tokens.List2 t = Tokens.of(text, true);
         return new Duplication.Unit("a.py", 1, t.tokens(), t.lines(), new boolean[t.tokens().size()]);

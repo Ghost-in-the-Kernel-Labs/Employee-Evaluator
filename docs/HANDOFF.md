@@ -4,8 +4,8 @@
 
 `TODO.md`, from its first item, in order; what is done is in `docs/DONE.md`. 1.7's live check waits on
 Ghost's token (below), so the work is 1.12, the mutation survivors: `rubric/`, `score/`, `history/`, `cli/` and `github/` are done
-(docs/MUTATION.md, runs 2 to 4 and 6 to 8); `analyze/` is in six passes by concern: the Java classes (run 9), Python with the tree-sitter base (run 10) and TypeScript/JavaScript with the navigability checklist (run 11) are done;
-next: the graph and duplication, then the rest in order (it is 1,104 of run 1's 1,714 mutants). Phase 2 starts at 2.1, which waits on Ghost's labels.
+(docs/MUTATION.md, runs 2 to 4 and 6 to 8); `analyze/` is in six passes by concern: the Java classes (run 9), Python with the tree-sitter base (run 10) and TypeScript/JavaScript with the navigability checklist (run 11) and the dependency graph with duplication (run 12) are done;
+next: test runs (`TestRunner`, `TestRuns`, `TestPlans`, `Reports` and the sandboxes), then the rest in order (it is 1,104 of run 1's 1,714 mutants). Phase 2 starts at 2.1, which waits on Ghost's labels.
 
 ## What waits on whom
 

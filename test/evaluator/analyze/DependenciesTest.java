@@ -96,6 +96,59 @@ class DependenciesTest {
         assertEquals(List.of(), Dependencies.longest(Map.of("x", Set.of())));
     }
 
+    private static Map<String, Set<String>> graphOf(String... edges) {
+        Map<String, Set<String>> map = new LinkedHashMap<>();
+        for (String edge : edges) {
+            String[] parts = edge.split(">");
+            map.computeIfAbsent(parts[0], k -> new java.util.TreeSet<>());
+            if (parts.length > 1) for (String to : parts[1].split(",")) {
+                map.get(parts[0]).add(to);
+                map.computeIfAbsent(to, k -> new java.util.TreeSet<>());
+            }
+        }
+        return map;
+    }
+
+    /** Two chains of one link: the first file in path order starts it, whichever part is found later. */
+    @Test
+    void equalChainsGoToTheFirstFile() {
+        assertEquals(List.of("a", "b"), Dependencies.longest(graphOf("a>b", "c>d")));
+        assertEquals(List.of("a", "b"), Dependencies.longest(graphOf("c>d", "a>b")));
+    }
+
+    /** From a, b and c are both one link further: b, the first in path order, is the step; with c → d beyond, c is, being longer. */
+    @Test
+    void aStepGoesToTheFirstOfEqualNextLinksAndToALongerOneOverIt() {
+        assertEquals(List.of("a", "b"), Dependencies.longest(graphOf("a>b,c")));
+        assertEquals(List.of("a", "c", "d"), Dependencies.longest(graphOf("a>b,c", "c>d")));
+    }
+
+    /**
+     * a → c → b → a is one part, standing for its first file a, however the edges are listed (c also leads to z):
+     * the chain is a, z. The parts of the edges, worked by hand: z is found first (0), the cycle after it (1).
+     */
+    @Test
+    void aCycleStandsForItsFirstFile() {
+        Map<String, Set<String>> edges = new LinkedHashMap<>();
+        edges.put("a", Set.of("c"));
+        edges.put("b", Set.of("a"));
+        edges.put("c", new java.util.TreeSet<>(Set.of("b", "z")));
+        edges.put("z", Set.of());
+        assertEquals(List.of("a", "z"), Dependencies.longest(edges));
+    }
+
+    /** With no chain the evidence says so and the depth is 0; with one it is the chain itself, and depth is its links. */
+    @Test
+    void theDepthFactCitesTheChainOrSaysThereIsNone() {
+        Complexity.Report none = new Complexity.Report(Map.of(), Map.of(), Map.of());
+        Fact empty = Dependencies.facts(new Dependencies.Graph(Map.of(), List.of()), none, "t").get(0);
+        assertEquals(0, empty.value());
+        assertEquals(List.of("(no file imports another)"), empty.evidence().sources());
+        Fact chain = Dependencies.facts(new Dependencies.Graph(Map.of(), List.of("a", "b", "c")), none, "t").get(0);
+        assertEquals(2, chain.value());
+        assertEquals(List.of("a", "b", "c"), chain.evidence().sources());
+    }
+
     @Test
     void aDeepChainDoesNotExhaustTheStack() {
         Map<String, Set<String>> edges = new LinkedHashMap<>();

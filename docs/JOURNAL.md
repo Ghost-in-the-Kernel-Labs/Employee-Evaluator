@@ -1092,3 +1092,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** run 11 (1,104 mutants, 1,000 killed); TypeScriptAdapterTest (new), NavigabilityTest extended; no new harmless row.
 - **Touched:** test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
 - **Caught by:** mutation (E-019).
+
+### J-080 analyze/ part 4 of 6 (the dependency graph and duplication): 35 survivors down to 11, all harmless; this commit is a tithe
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** TODO.md 1.12, `Duplication`, `Tokens`, `Dependencies`, `Measure`, `Tarjan` and `TestFiles`: a test or a reason for each survivor; and the tithe eight commits called for (E-015).
+- **Found:** `Measure.within` and `Tarjan.order`'s deeper walk had no test of their own (`order` is always given parts already in dependency order, so its `push` never ran); no tokenizer test closed a string at the end of the text, escaped a quote or counted a block comment's lines; the duplication fixture's stretches all start at token 0, so `i - start` and `i + start` agreed; `Duplication.apart` was private and its single-place guard unreachable without a 64-bit hash collision; a cycle's first file came out right only because every member is also some edge's target. The fingerprint's six mutants cannot change a result (`sameTokens` checks every group). One Negate in `Dependencies.chain` could not be killed or proved harmless: 700,000 random graphs gave no difference. No bug.
+- **Options:** a harmless row for `apart`'s guard (rejected: a collision would make it wrong); `apart` made package-private, taken. A proof for the `chain` row: tried, not found; the row says so.
+- **Resolved:** run 12 (1,104 mutants, 1,024 killed); MeasureTest, TokensTest and TarjanTest (new), DependenciesTest, DuplicationTest and TestFilesTest extended; five harmless rows. The tithe puts the five points the debriefs agreed on into agent-environment.md (reading a survivor, `-Ptarget`, source held in a test, a network class on loopback, a scratch clone's name) and records Pass 4 in AGENT.md.
+- **Touched:** analyze/ (`Duplication.apart`), test/evaluator/analyze/, docs/MUTATION.md, docs/HANDOFF.md, docs/AGENT.md, docs/how/agent-environment.md, docs/NAVIGATION-NOTES.md.
+- **Caught by:** mutation (E-019).

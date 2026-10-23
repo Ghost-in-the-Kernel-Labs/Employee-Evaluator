@@ -178,6 +178,27 @@ of a name of no style, `fit` with more "other" names than the dominant style, a 
 summary's text), `Navigability.module` of `src/main`, `main` and `src/lib/main`, and a doc of exactly the size cap read
 and one byte over it not. No bug found, no golden moved.
 
+### Run 12: 2026-10-23, `analyze/`, part 4 of 6: the dependency graph and duplication (TODO.md 1.12)
+
+`gradle mutate -Ptarget=evaluator.analyze.*`, in a plain clone (about four minutes). Covers `Duplication` (10 left alive),
+`Tokens` (8), `Dependencies` (7), `Measure` (7), `Tarjan` (2) and `TestFiles` (1) only (a TIMED_OUT mutant counts as killed:
+`Tokens` had 18 of those, not counted). After: 1,104 mutants, 1,024 killed (the other classes' survivors untouched); of these
+six classes 11 are left, all judged harmless below (6 in `Duplication`, 1 in `Tokens`, 4 in `Dependencies`).
+
+Tests added, each value worked by hand in its comment: `MeasureTest` (new): `within` for inside, sharing the first or the last
+line, the same lines, before, after, wrapping, itself and the reverse. `TokensTest` (new): the lines of a multi-line block
+comment (`b` on line 3), a comment opened right after a `*` and `/` that is not its close, an unclosed block comment, a string with
+no closing quote (`"`, backtick, triple, an escape last), an escaped quote and an escaped backslash, `'` and `"` ending at a
+newline, a backtick and triple quotes running over one. `TarjanTest` (new): the parts' numbers in closing order (b 0, c 1, a 2;
+a cycle shares one) and `order` on a chain and a diamond (its `push` was run by no test, since `longest`'s parts always come
+numbered successors first). `DependenciesTest`: equal chains go to the first file whichever is found first, a step goes to the first
+of equal next links and to a longer one over it, a cycle a, c, b standing for `a` whatever the edge order, and the depth fact's
+evidence for no chain and for one. `DuplicationTest`: a duplicated stretch that starts at token 2 (BLOCK, 60 tokens with none
+twice: 120 of 123, 0.976, cited `a.js:11-11` and `b.js:20-20`; the fixture's stretches all started at 0, so `i - start` and
+`i + start` agreed) and `apart` for one place, two functions, 60 and 59 apart, and 30 apart far from the start (`max + min`).
+`TestFilesTest`: a file called `test` or `spec` is a file, not a folder. One change of shape only, to make `apart` testable: it
+is no longer private. No bug found, no golden moved.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -198,3 +219,8 @@ and one byte over it not. No bug found, no golden moved.
 | `analyze/TreeSitterAdapter.java`, `folder`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the folder is `path.substring(0, 0)`, "" as for no slash (as `JavaImports.packageFiles`, above). |
 | `analyze/PythonImports.java`, `from`, `i < statement.getChildCount()` | `i <= ...` | At `i` equal to the count `getFieldNameForChild` gives no name, `"name".equals(null)` is false and the loop continues to its end. |
 | `analyze/PythonAdapter.java`, `wildcard`, `getNamedChildCount() > 0` | `>= 0` | A `case_clause` always has its pattern as a named child (a clause without one does not parse), so the count is never 0 and the two conditions agree. |
+| `analyze/Duplication.java`, `fingerprint` (lines 90 and 91): the loop bound, `h * 1_000_003L`, `+ code[i]`, `+ 1`, and the returned `h` | each changed, or the return made 0 | The fingerprint is only the key that gathers windows into groups; `sameTokens` then checks each group token for token and `apart` and `mark` read the result, so any function of the window, a constant one too, marks the same tokens (E-036: "a fingerprint collision marks nothing"). Only the time differs: a constant puts every window in one group, quadratic. |
+| `analyze/Tokens.java`, `comment`, `end < 0` | `end <= 0` | `indexOf("*/", at + 2)` gives -1 or an index of at least 2, never 0, so the two agree. |
+| `analyze/Dependencies.java`, `longest` (lines 75 and 79), `a.compareTo(b) <= 0` | `< 0` | The merge compares a part's first file so far with one more; the two differ only when both are the same file, and then either is returned. |
+| `analyze/Dependencies.java`, `chain` (line 103), `first.get(p).compareTo(first.get(start)) < 0` | `<= 0` | Two different parts never have the same first file (a file is in one part), so the compare is never 0. |
+| `analyze/Dependencies.java`, `chain` (line 103), `length.get(p).equals(length.get(start))` | negated: a part of a different length with a smaller first file takes the start | Not shown to change a result, but not proved either. It needs a part found after the start, shorter than it, with a smaller first file; Tarjan numbers parts in the order their trees close and the roots go in path order, so a part with a smaller first file is closed before one with a larger, unless a still smaller root reaches the start, and that root is a longer start already taken. Tried by search: the mutant against the code on about 700,000 random graphs of 2 to 10 files (cycles and files with no entry among them), the same chain every time. If a graph is ever found, it gets a test and this row goes. |

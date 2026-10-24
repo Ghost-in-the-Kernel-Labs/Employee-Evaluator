@@ -18,6 +18,8 @@
 
 ## A long run's output
 
+A gradle run here (`test`, `decisionsDoc`, `kernelMap`) can pass the 120 s tool timeout: start it with `run_in_background`, redirected to the file below, and wait for it.
+
 `mkdir -p build` first: a fresh clone or worktree has no `build/`, and the shell fails on the redirect before the run starts.
 
 `gradle mutate`, `scripts/prepush.sh` and `gradle test` always write to a file (> build/run.log 2>&1). You, or

@@ -19,10 +19,10 @@
   not follow (`cli/evaluator/cli/Pipeline.java`), so `MainTest.thisRepositorysCard` fails there on Provenance.
 - Search with `git grep`, not a bare grep: the judges' JSON and the kernel map flood a bare one.
 - **A tithe pass** (about every eighth commit, E-015): in a plain `git clone` of your worktree's folder (enough; the
-  fast loop cannot pass in a worktree), run `gradle metrics --args=--time` (it times the loop with every test rerun;
+  fast loop cannot pass in a worktree), run `env -u EVALUATOR_GITHUB_TOKEN gradle metrics --args=--time` (with the token set, `AuthorshipLiveTest` calls GitHub and the loop reads about 150 s instead of 8 s: that is the token's time, not the code's; it times the loop with every test rerun;
   `date` around `gradle test --offline --rerun-tasks` does the same, and the time program is not installed). Run it
   several times: a parallel run that fails once in ten is a race in a test, not noise (E-072). Add a column to
-  `docs/AGENT.md`'s table, put a comment on whatever `gradle metrics` lists, write the journal entry, and commit
+  `docs/AGENT.md`'s table, put a comment on whatever `gradle metrics` lists, write the journal entry (Class `measurement`), append your debrief to `docs/NAVIGATION-NOTES.md`, and commit
   with the subject "Tithe" (E-015).
 - A mutation run over a module is recorded in `docs/MUTATION.md`, numbered in order (a refactor's run counts too);
   each survivor gets a test or a harmless row. `mkdir -p build` first on a fresh checkout. PIT refuses a red

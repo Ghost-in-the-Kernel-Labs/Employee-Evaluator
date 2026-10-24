@@ -1395,3 +1395,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** none.
 - **Resolved:** Pass 7 column in docs/AGENT.md, three comments, HANDOFF's cadence line corrected to the counts above. No behaviour changed, no golden moved.
 - **Touched:** docs/AGENT.md, docs/HANDOFF.md, rubric/evaluator/rubric/Label.java, test/GhostTest.java, test/evaluator/GoldensTest.java.
+
+### J-108 Navigation review: five debriefs read; do-a-todo-step, commands and the tithe step gain the lines the agents hunted for
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The navigation review due (E-068): nine commits since the last (J-099), the five debriefs of J-104 to J-107 and the previous review's own.
+- **Found:** Converging (three agents): do-a-todo-step.md is silent on a superseded entry's status (one hit the `;` rule only after a 3-minute run, though J-099 already put the rule in the failing message, fdf5d9a: valid, the message cannot save the run), on the journal Class for a landing, and on a new phase's heading in DONE.md; the tithe agent also found no word on where its Class and debrief go. Single, but plainly facts: gradle runs exceed the 120 s tool timeout (commands.md silent); the token makes the tithe loop read 150 s. Not acted on: the Ambition and Quality scales have no one home (one agent; the label's enums now hold them). Also found: J-104 has Class `feature`, outside the list, unchecked by JournalTest; history is not rewritten.
+- **Options:** (a) tithe step says to unset the token, or Metrics.java unsets it for its child run (a code change, not this review's): chose the line, yes. Open questions for Fable: none.
+- **Resolved:** do-a-todo-step.md (superseding, Class, new phase heading), agent-environment.md (`env -u EVALUATOR_GITHUB_TOKEN`, tithe Class and debrief), commands.md (background for long gradle runs); NAVIGATION-NOTES.md wiped.
+- **Touched:** docs/how/do-a-todo-step.md, agent-environment.md, commands.md, NAVIGATION-NOTES.md.

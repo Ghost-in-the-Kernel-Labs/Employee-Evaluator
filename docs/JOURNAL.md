@@ -1378,3 +1378,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** `Label` and `CalibrationSet` take four required fields and refuse any other; Status has PENDING and MET (30 labels). Fixtures, README, tests, TODO.md 2.1 and DECISIONS.md follow. The 30 draft labels were trimmed outside the repository and validated by the real loader as 30 labelled; they are not committed and await Ghost's review.
 - **Caught by:** DocTests.ghost, which refused a `;` inside the superseded status.
 - **Touched:** rubric/evaluator/rubric/Label.java, CalibrationSet.java; test/evaluator/rubric/CalibrationSetTest.java; calibration/README.md; test/fixtures/calibration-synthetic/; TODO.md; theGhost.md (E-079 status, E-080), docs/DECISIONS.md, docs/KERNEL-MAP.md.
+
+### J-106 The 30 calibration labels land; 2.1 closed
+- **Who:** Ghost, Claude (Sonnet 5.5). **Class:** measurement.
+- **Intent:** Land the calibration set (TODO.md 2.1) now that Ghost has reviewed the 30 labels.
+- **Found:** Each file holds exactly id, kind, ambition and quality, and none holds a name, an owner or a URL (checked against the private map, which stays outside the repository). Kind: own-work 23, clone 7, generated 0. Ambition: utility 14, product 10, toy 3, research 3. Quality: 1 x 2, 2 x 6, 3 x 17, 4 x 4, 5 x 1. The real-folder test reads the set as MET at 30.
+- **Options:** none; the format was settled in E-080.
+- **Resolved:** the labels were drafted by Claude Sonnet agents applying the rubric and reviewed by Ghost, who confirmed them. Caveat: agreement measured later against these labels (2.2 to 2.4) is partly model against model; Ghost's review is what keeps it from being circular. The id-to-repository map and the domain spread stay outside the repository (E-014).
+- **Caught by:** the real-folder test of `CalibrationSetTest`.
+- **Touched:** calibration/c001.json to c030.json; TODO.md, docs/DONE.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.

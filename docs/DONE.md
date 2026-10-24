@@ -142,3 +142,14 @@ Done 2026-10-23 in three slices, one commit each (J-091, J-092, J-094): Size (E-
 and Maintainability (E-075: E-051's weighted score ÷ Suite Builder's 0.895670359282887, ×100), each against Suite Builder at 32762a6 with its baseline in `Formulas`, a test that the baseline reads 100
 against itself, no ceiling (E-071: `Metric.counted` holds the three, `ScoreCard` refuses over 100 for the rest), the rubric (version 4) naming the baseline, and every moved card golden read and checked by hand.
 E-070 and E-071 are in force.
+
+## Phase 2: the evaluation engine with agents
+
+### 2.1 Calibration set
+
+Check: 30 repositories labeled by Ghost on Ambition and Quality, in a fixture format with a test
+that holds every label to its fields; the spread of domains is recorded in the private id-to-repository map outside the repository (E-014).
+Done 2026-10-24 (J-106): 30 labels in `calibration/` (c001 to c030), each exactly id, kind, ambition and quality. Kind spread: own-work 23, clone 7,
+generated 0. Ambition spread: utility 14, product 10, toy 3, research 3. Quality spread: 1 x 2, 2 x 6, 3 x 17, 4 x 4, 5 x 1. The labels were drafted by Claude Sonnet agents
+applying the rubric (`docs/SCORE-CARD.md`, `docs/DESIGN.md`) and reviewed by Ghost, who confirmed them. The id-to-repository map and the domain spread live outside the repository (E-014).
+The real-folder test reads the set as MET at 30.

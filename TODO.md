@@ -11,11 +11,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.1 Calibration set
-
-Check: 30 repositories labeled by Ghost on Ambition and Quality, in a fixture format with a test
-that holds every label to its fields; the spread of domains is recorded in the private id-to-repository map outside the repository (E-014).
-
 ### 2.2 Judge harness
 
 Check: a repo summary (inventory, README, sampled files, commit log) and the kernel's facts to a judging

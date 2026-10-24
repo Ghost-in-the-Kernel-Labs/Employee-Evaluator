@@ -1,26 +1,17 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.1, the calibration set (2026-10-24)
+## Start here: 2.2, the judge harness (2026-10-24)
 
-1.7 is closed (J-103). 2.1 is the first open item and waits on Ghost's 30 hand-labelled repositories. Ghost has
-cleared uhneer's and CryptoDevving's work for benchmark use (lab members). A cloud session cannot list their
-repositories: its GitHub access is bound to the repositories attached to it, and listing an account's repositories
-is refused. Ask Ghost for the repository names, or list them from a machine that can, and an agent then writes
-the metadata (language, size, kind, domain, no scores) for Ghost to choose from.
+2.1 is closed (J-106): 30 labels in `calibration/`, reviewed by Ghost, the set MET at 30. The first open item in
+`TODO.md` is 2.2, the judge harness. It waits on a model API to run the judges (Haiku runs, Opus on a split)
+and on a prompt whose agreement with the calibration set is then measured; read its check in `TODO.md` and
+`docs/DESIGN.md` step 2.2 before starting, and ask Ghost if the API access is not in place.
 
-## Then
-
-Nothing else in `TODO.md` is open to an agent: 2.1 waits on Ghost's 30 hand-labelled repositories, and
-every later step on 2.1. Done since the last handoff: 1.12 (mutation survivors), 1.13 (baseline scoring,
-Suite Builder at 32762a6 reads 100), `--facts`, `-PshowGoldens`, the corpus under rubric 4.
+Agreement against the labels is partly model against model (the labels were drafted by Claude Sonnet agents);
+Ghost's review is what keeps it from being circular (J-106).
 
 ## Waiting on Ghost
 
-- **2.1, the calibration set:** Ghost proposed public repositories from the lab (ghost-in-the-kernel,
-  uhneer, CryptoDevving). Open: fixtures keyed by an opaque id with the id-to-repository map kept outside the
-  repository (E-014); asking uhneer and CryptoDevving first; CryptoDevving's cloned projects as the "not own
-  work" cases for the admission gate (E-056). An agent may list the three accounts' public repositories
-  (language, size, kind, domain, no scores) for Ghost to choose from, once Ghost says yes.
 - **The token optional** (proposed, not decided): public repositories read without one, a token only for the
   rate limit, and a rate-limit refusal said plainly.
 - The rest is in `docs/FOR-GHOST.md`.

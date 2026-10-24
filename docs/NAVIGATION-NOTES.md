@@ -26,3 +26,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md "what to work on" row, then do-a-todo-step.md, finish-work.md, commit-and-push.md, debrief-after-a-task.md and commands.md.
 - **Complaints:** DONE.md had no Phase 2 heading and its ordering rule for a new phase is not written down; I added the heading. do-a-todo-step.md does not say which journal Class to use for a landing.
 - **Suggestions:** a line in do-a-todo-step.md on opening a new phase section in DONE.md.
+
+### 2026-10-24 · the tithe pass (Pass 7) · Claude Sonnet 5.5
+- **Route:** CLAUDE.md "when you run a command" row and the tithe step in docs/how/agent-environment.md, then the last tithe commit for its shape, commit-and-push.md and this debrief page.
+- **Complaints:** agent-environment.md does not say that `EVALUATOR_GITHUB_TOKEN` in the environment makes the timed loop read about 150 s (AuthorshipLiveTest); I took it for a regression until the per-test times showed it. The tithe step does not say where the journal's Class or the NAVIGATION-NOTES entry goes.
+- **Suggestions:** one line in the tithe step: "time the loop with `env -u EVALUATOR_GITHUB_TOKEN`"; or let Metrics.java unset it for its child run.

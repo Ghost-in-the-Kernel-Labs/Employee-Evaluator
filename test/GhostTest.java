@@ -131,6 +131,7 @@ final class GhostTest {
         return ids;
     }
 
+    /** Fails a decision that lacks a required field or holds a status outside the written set; says why a parenthesis broke one. */
     private static void fieldsAndStatus(Decision d, List<String> failures) {
         for (String required : REQUIRED) {
             if (d.field(required).isEmpty()) failures.add(name(d.id()) + " has no " + required);

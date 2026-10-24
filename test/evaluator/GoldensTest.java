@@ -119,6 +119,7 @@ class GoldensTest {
         assertEquals(Goldens.Mode.COMPARE, Goldens.mode(false, false));
     }
 
+    // A batch of changed goldens is named whole in one failure, and shown (not written) when showing is asked for.
     @Test
     void aBatchNamesEveryChangedGoldenAtOnceAndShowsEachWhenShowing() throws IOException {
         Path same = golden("a\n");

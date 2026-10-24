@@ -26,6 +26,7 @@ public record Label(String id, Kind kind, Ambition ambition, int quality) {
         TOY, UTILITY, PRODUCT, RESEARCH;
     }
 
+    /** Refuses a label whose id is not opaque, whose kind or ambition is missing, or whose quality is out of range (E-080). */
     public Label {
         if (id == null || !ID.matcher(id).matches()) throw new IllegalArgumentException("a label's id is opaque, c and three digits, not " + id);
         if (kind == null || ambition == null) throw new IllegalArgumentException("a label has a kind and an ambition");

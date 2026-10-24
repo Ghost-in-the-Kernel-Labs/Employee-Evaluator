@@ -1387,3 +1387,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** the labels were drafted by Claude Sonnet agents applying the rubric and reviewed by Ghost, who confirmed them. Caveat: agreement measured later against these labels (2.2 to 2.4) is partly model against model; Ghost's review is what keeps it from being circular. The id-to-repository map and the domain spread stay outside the repository (E-014).
 - **Caught by:** the real-folder test of `CalibrationSetTest`.
 - **Touched:** calibration/c001.json to c030.json; TODO.md, docs/DONE.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
+
+### J-107 Tithe: Pass 7 in AGENT.md, three functions commented
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The tithe due (E-015): eleven commits since the last, three past the eight.
+- **Found:** In a plain clone, `gradle metrics --args=--time` read the fast loop 8 s on five runs, none failed, so no race in a test (E-072). With `EVALUATOR_GITHUB_TOKEN` set in the environment, `AuthorshipLiveTest` calls GitHub and the same loop reads 143 to 158 s (138 s in that one test): the number is the token's, not the code's, so the timing ran with the variable unset. Every other held metric is within target; the largest source file is 283 lines (test/SupplyChainTest.java), mandatory context 780 words, docs per source line 0.40. The metrics listed three functions over 15 lines or 6 paths with no comment (`Label`'s constructor, `GhostTest.fieldsAndStatus`, one `GoldensTest` test); each has one now. Eight commits have passed since the last navigation review.
+- **Options:** none.
+- **Resolved:** Pass 7 column in docs/AGENT.md, three comments, HANDOFF's cadence line corrected to the counts above. No behaviour changed, no golden moved.
+- **Touched:** docs/AGENT.md, docs/HANDOFF.md, rubric/evaluator/rubric/Label.java, test/GhostTest.java, test/evaluator/GoldensTest.java.

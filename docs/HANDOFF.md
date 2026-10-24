@@ -21,7 +21,7 @@ Ghost's review is what keeps it from being circular (J-106).
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
 `MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The next navigation review is due
-in about ten commits; a tithe in about five.
+in about two commits (eight have passed); a tithe in about eight.
 
 ## A session's environment
 

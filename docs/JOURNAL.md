@@ -1360,3 +1360,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** Ghost accepted the pass as enough (2026-10-24). 1.7 moved to DONE.md. Ghost also cleared uhneer's
   and CryptoDevving's repositories (lab members) for the calibration set, 2.1.
 - **Touched:** TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-104 2.1's format half: the calibration label, its loader and its test; the labels wait on Ghost
+- **Who:** Claude (Sonnet 5.5), for Ghost. **Class:** feature.
+- **Intent:** Make the calibration set ready to receive Ghost's 30 hand labels (TODO.md 2.1): a fixture format and a test that holds every label to its fields.
+- **Found:** DESIGN.md names the scales (Ambition toy / utility / product / research, Quality 1–5) and nothing else, so the other fields are a new decision, E-079. The check "30 labelled, at least five domains" cannot pass yet, so it reports PENDING below 30 and enforces from 30.
+- **Options:** a CSV or one file for the set; one JSON file per label named by an opaque id (chosen: a leak shows in one file, the loader refuses a file not named by its id).
+- **Resolved:** `Label` and `CalibrationSet` in rubric/ (no new import, no dependency), `calibration/` (empty but for its README), synthetic labels under `test/fixtures/calibration-synthetic/`. 2.1 stays open in TODO.md: it waits on Ghost's labels. No golden moved. Mutation over rubric: the new classes 0 survivors; the 2 left are `Json`'s, already in docs/MUTATION.md.
+- **Caught by:** the kernel map and metrics doc tests, which asked for `gradle kernelMap` once the functions existed.
+- **Touched:** rubric/evaluator/rubric/Label.java, CalibrationSet.java; test/evaluator/rubric/CalibrationSetTest.java; calibration/README.md; test/fixtures/calibration-synthetic/; theGhost.md (E-079), docs/DECISIONS.md, docs/KERNEL-MAP.md.

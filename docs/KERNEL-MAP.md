@@ -490,3 +490,15 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/FactsText.java:FactsText.text` |  | 2026-10-23 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.cognitiveFacts` |  | 2026-10-23 |  |
 | score | `score/evaluator/score/Formulas.java:Formulas.cognitiveTotal` |  | 2026-10-23 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.CalibrationSet` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.parse` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.load` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.of` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.status` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.text` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.choose` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.quality` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/CalibrationSet.java:CalibrationSet.fail` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/Label.java:Label.Label` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/Label.java:Label.wire` |  | 2026-10-24 |  |
+| rubric | `rubric/evaluator/rubric/Label.java:Label.wires` |  | 2026-10-24 |  |

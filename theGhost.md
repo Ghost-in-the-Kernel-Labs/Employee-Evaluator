@@ -1356,3 +1356,19 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** corpus
 - **See also:** E-054, E-057, E-070
+
+### E-079: A calibration label is one JSON file, an opaque id and five closed fields, held by a loader in rubric/
+- **Decision:** The calibration set (TODO.md 2.1) lives in `calibration/`, one file `<id>.json` per hand-labelled repository, the id `c` and three digits and the file named by it. Fields: `id`; `domain`, one of
+  `web-app`, `cli-tool`, `library`, `data-pipeline`, `game`, `mobile-app`, `infrastructure`, `machine-learning`; `kind`, one of `own-work`, `clone`, `generated` (the admission gate's cases, E-056);
+  `ambition`, one of `toy`, `utility`, `product`, `research` (docs/SCORE-CARD.md); `quality`, a whole number 1 to 5 (docs/DESIGN.md step 2.1); and `rationale`, optional, one line of 280 characters at most. Ambition and
+  Quality are labelled for every kind. A field outside this list, a missing required field, a duplicate id, a file not named by its id, a rationale holding anything URL-like (a scheme, `www.`, `@`, a host, `github`, an owner/repo
+  pair) or name-like (two capitalised words in a row) is refused by `CalibrationSet` and `Label` in `rubric/`. The set must span at least five domains and reach 30 labels: the test reports PENDING below 30 and enforces both from 30.
+  The id-to-repository map is Ghost's and stays outside this repository. The loader's own tests use synthetic labels under `test/fixtures/calibration-synthetic/`, ids `c9xx`, never in `calibration/`.
+- **Why:** docs/DESIGN.md names the scales (Ambition toy / utility / product / research, Quality 1–5) but no other field; E-014 forbids any name, URL or identity from entering, so the id is opaque by construction
+  and the one free field is screened. The domain list is closed so "spans five domains" and the per-domain drift the bias audit wants (DESIGN open question) are countable. The name-like screen over-refuses on purpose
+  (it also stops "Spring Boot"): Ghost rewrites the line, a leak does not get in. Pending below 30 so the build is not red while the labelling waits on Ghost, enforced after so the item cannot close short.
+- **Held by:** `rubric/evaluator/rubric/CalibrationSet.java`, `Label.java`; `test/evaluator/rubric/CalibrationSetTest.java`; `calibration/README.md`.
+- **Source:** the TODO.md 2.1 format task given to a Claude Sonnet 5.5 agent; the field list is that agent's, for Ghost to confirm or change before labelling.
+- **Status:** in force
+- **subject:** calibration
+- **See also:** E-014, E-056, E-057

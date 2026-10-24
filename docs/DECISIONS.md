@@ -85,3 +85,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-076 | `evaluator score --facts` prints the values behind a card, one `name value` line each | in force | command line |
 | E-077 | `gradle test -PshowGoldens` shows what a golden would change and writes nothing; one helper holds every golden | in force | tests |
 | E-078 | The seed corpus is held to the rubric its README names, not to the current rubric | in force | corpus |
+| E-079 | A calibration label is one JSON file, an opaque id and five closed fields, held by a loader in rubric/ | in force | calibration |

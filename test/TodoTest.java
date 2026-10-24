@@ -8,15 +8,16 @@ import java.util.regex.Pattern;
 /**
  * Holds TODO.md and docs/DONE.md (E-006): items in numeric order under their phase,
  * each with a check, the first open item's check a real one, and no number both open and done.
+ * An item too large for one go is sliced into parts, 2.2a, 2.2b, ...: a part follows its step and its letter.
  */
 final class TodoTest {
     private static final Pattern PHASE = Pattern.compile("(?m)^## Phase (\\d+)");
-    private static final Pattern ITEM = Pattern.compile("(?m)^### (\\d+)\\.(\\d+) ");
+    private static final Pattern ITEM = Pattern.compile("(?m)^### (\\d+)\\.(\\d+)([a-z]?) ");
     private static final String NO_CHECK = "none in the roadmap";
 
-    record Item(int phase, int step, String body) {
+    record Item(int phase, int step, String part, String body) {
         String number() {
-            return phase + "." + step;
+            return phase + "." + step + part;
         }
 
         String check() {
@@ -35,7 +36,10 @@ final class TodoTest {
                 .rejects("items out of order", () -> check(OUT_OF_ORDER, ""))
                 .rejects("a first open item with no check", () -> check(FIRST_UNCHECKED, ""))
                 .rejects("an item both open and done", () -> check(SOUND, "### 0.3 The container\n"))
-                .accepts("a sound list", () -> check(SOUND, "### 0.1 Repo\n"));
+                .rejects("parts out of order", () -> check(PARTS_OUT_OF_ORDER, ""))
+                .rejects("a part with no check", () -> check(PART_UNCHECKED, ""))
+                .accepts("a sound list", () -> check(SOUND, "### 0.1 Repo\n"))
+                .accepts("a sliced item", () -> check(PARTS, "### 0.2 Other\n"));
     }
 
     /** What TODO.md gets wrong: items out of order, an item with no Check line, a first open item whose check is not written, or one also in DONE.md. */
@@ -44,7 +48,7 @@ final class TodoTest {
         List<Item> items = items(todo, failures);
         for (int i = 1; i < items.size(); i++) {
             Item a = items.get(i - 1), b = items.get(i);
-            if (a.phase() > b.phase() || (a.phase() == b.phase() && a.step() >= b.step())) {
+            if (a.phase() > b.phase() || (a.phase() == b.phase() && (a.step() > b.step() || (a.step() == b.step() && a.part().compareTo(b.part()) >= 0)))) {
                 failures.add(b.number() + " comes after " + a.number());
             }
         }
@@ -58,7 +62,7 @@ final class TodoTest {
         items.forEach(item -> open.add(item.number()));
         Matcher doneItem = ITEM.matcher(done);
         while (doneItem.find()) {
-            String number = doneItem.group(1) + "." + doneItem.group(2);
+            String number = doneItem.group(1) + "." + doneItem.group(2) + doneItem.group(3);
             if (open.contains(number)) failures.add(number + " is both in TODO.md and in docs/DONE.md");
         }
         return failures;
@@ -75,7 +79,7 @@ final class TodoTest {
             String body = todo.substring(starts.get(i), end);
             Matcher m = ITEM.matcher(body);
             m.find();
-            Item parsed = new Item(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), body);
+            Item parsed = new Item(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2)), m.group(3), body);
             int heading = phaseAbove(todo, starts.get(i));
             if (heading != parsed.phase()) failures.add(parsed.number() + " sits under Phase " + heading);
             items.add(parsed);
@@ -100,6 +104,10 @@ final class TodoTest {
             ### 1.1 Ingestion
             Check: the inventory of a fixture repo is byte-identical to its golden.
             """;
+    private static final String PARTS = SOUND.replace("### 0.6 Scripts\nCheck: none in the roadmap; written here before the item starts.",
+            "### 0.6a Scripts\nCheck: the first part.\n### 0.6b More scripts\nCheck: the second part.\n### 0.7 After\nCheck: later.");
+    private static final String PARTS_OUT_OF_ORDER = PARTS.replace("0.6b More", "0.6a More");
+    private static final String PART_UNCHECKED = PARTS.replace("Check: the second part.", "");
     private static final String OUT_OF_ORDER = SOUND.replace("0.6 Scripts", "0.2 Scripts");
     private static final String FIRST_UNCHECKED = SOUND.replace("Check: a clean clone builds offline.",
             "Check: none in the roadmap; written here before the item starts.");

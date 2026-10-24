@@ -1403,3 +1403,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** (a) tithe step says to unset the token, or Metrics.java unsets it for its child run (a code change, not this review's): chose the line, yes. Open questions for Fable: none.
 - **Resolved:** do-a-todo-step.md (superseding, Class, new phase heading), agent-environment.md (`env -u EVALUATOR_GITHUB_TOKEN`, tithe Class and debrief), commands.md (background for long gradle runs); NAVIGATION-NOTES.md wiped.
 - **Touched:** docs/how/do-a-todo-step.md, agent-environment.md, commands.md, NAVIGATION-NOTES.md.
+
+### J-109 TODO.md 2.2 sliced into fourteen parts; TodoTest and DocsTest learn a part's letter
+- **Who:** Claude Sonnet 5.5, with Ghost's go. **Class:** decision.
+- **Intent:** Slice 2.2, the judge harness, too large for one go (`docs/how/do-a-todo-step.md`), into parts one fresh Sonnet agent can do, the ones needing no model API first.
+- **Found:** `TodoTest` and `DocsTest` read only `### N.M ` headings, so a part such as 2.2a did not parse. The agent runner is Python (E-001) and outside the Java module map, so no module entry is needed; the pinned image has no `python3`, so its tests would be PENDING in the gate. The labels' kind (own-work, clone, generated) and the judge's (built, plan only, generated, mixed) share only "generated", and the set has none. A constant answer clears 77 % on kind and 90 % on Quality within one.
+- **Options:** parts as a list inside one item (as 1.13 was, but then no check per part); `2.2.1` numbering (also unparsed, and the same change); letters (chosen: smallest change, DONE.md keeps the number).
+- **Resolved:** 2.2a to 2.2n in TODO.md, each with a check; DESIGN.md "Step 2.2 sliced" with the table, the findings and nine questions; the questions in FOR-GHOST.md; HANDOFF names 2.2a. Two tests accept an optional letter after the step and refuse parts out of order or without a check. No decision added: the open ones are questions to Ghost.
+- **Touched:** TODO.md, docs/DESIGN.md, docs/FOR-GHOST.md, docs/HANDOFF.md, test/TodoTest.java, test/DocsTest.java.

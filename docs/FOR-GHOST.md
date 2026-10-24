@@ -22,5 +22,12 @@ says so to Ghost; Ghost removes it when settled.
 - **A second reference: Anthropic's agent-built C compiler** (Nicholas Carlini, 2026; 16 Claude agents, about
   100,000 lines, compiles Linux 6.9; public on GitHub, link in anthropic.com/engineering/building-c-compiler).
   It is Rust: measuring it needs a Rust adapter, a new grammar to vendor (a dependency, your approval).
-- **The judge (E-055):** Haiku three times, averaged, with the kernel's facts and an enforced schema; Opus
-  where they split. Recorded in TODO.md 2.2's check; nothing waits on it before 2.2.
+- **The judge harness (TODO.md 2.2, sliced into 2.2a to 2.2n; `docs/DESIGN.md`, "Step 2.2 sliced"):** parts a to k need nothing
+  from you and an agent can start at 2.2a now. 2.2l to 2.2n wait on you: (1) how an API key reaches a session, and whether
+  judges run in a session or CI; (2) the budget per call, evaluation and trial, and the iteration limit; (3) the ids and
+  prices of Haiku 5.5 and Opus 5.5; (4) standard-library HTTP or the Anthropic SDK (a dependency); (5) `python3` in the pinned
+  image (else the harness tests are PENDING in the gate); (6) the 30 labelled repositories re-fetched outside the
+  repository, by whom and where; (7) what a real run may commit (proposal: ids, scores, kinds, tiers only); (8) what
+  agreement means (the labels' own-work/clone/generated against the judge's built/plan/generated/mixed share only
+  "generated", and the set holds none; a constant answer clears 77 % on kind and 90 % on Quality within one); (9) the rule
+  for a three-way tie (proposal: Opus decides).

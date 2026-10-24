@@ -19,7 +19,7 @@ final class DocsTest {
     private static final Pattern CODE = Pattern.compile("`([^`]+)`");
     private static final Pattern PHASES = Pattern.compile("phases? (\\d+(?:\\.\\d+)?)((?:\\s*(?:and|,|–|-)\\s*\\d+(?:\\.\\d+)?)*)");
     private static final Pattern NUMBER = Pattern.compile("\\d+(?:\\.\\d+)?");
-    private static final Pattern TODO_ITEM = Pattern.compile("(?m)^### (\\d+\\.\\d+) ");
+    private static final Pattern TODO_ITEM = Pattern.compile("(?m)^### (\\d+\\.\\d+[a-z]?) ");
 
     public static void main(String[] args) {
         run().exit();
@@ -105,7 +105,7 @@ final class DocsTest {
             if (phases.group(2).contains("–") || phases.group(2).contains("-")) named = range(named);
             for (String step : named) {
                 for (String open : openSteps) {
-                    if (open.equals(step) || open.startsWith(step + ".")) return true;
+                    if (open.equals(step) || open.startsWith(step + ".") || open.matches(Pattern.quote(step) + "[a-z]")) return true;
                 }
             }
         }

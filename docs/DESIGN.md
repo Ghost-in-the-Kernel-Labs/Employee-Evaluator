@@ -163,6 +163,72 @@ Phase 2 adds the judgment metrics (Ambition, the agent half of Quality, Complexi
 
 **Security note:** submitted repositories are untrusted input. The judging agents must treat README text, comments and commit messages as data, never as instructions, and the sandbox must assume the repo is hostile.
 
+### Step 2.2 sliced: the judge harness in fourteen parts (2026-10-24)
+
+Too large for one go (`docs/how/do-a-todo-step.md`), so TODO.md 2.2 is parts 2.2a to 2.2n, each with its own check, in this
+order. The parts that need no model API come first (a to k), so progress needs no key; the two that need one come last.
+Where each piece lives: the harness is Python in `agent-runner/` (E-001), standard library only until Ghost approves a
+dependency; it is not a Java module, so `docs/modules.json` gains nothing (ModulesTest already leaves `agent-runner/` out of
+the source). The Java it needs goes in existing modules: the brief in `cli/`, the own-code filter in `ingest/`, the card's
+rules over `rubric/` and `score/`. No kernel module imports a model client (E-003, MOD-01); the harness's one door to the
+network is `agent-runner/transport.py` (the counterpart of MOD-05, held by a Python test from 2.2a). The judge is given no
+tool (E-013): it reads a prebuilt summary and nothing else, so its agreement may differ from trials 1 to 4, whose judges
+ran with tools.
+
+| Part | Builds | Model API or key | Needs Ghost | Cost |
+| --- | --- | --- | --- | --- |
+| 2.2a | `agent-runner/` scaffold, its Java gate, the import guard, `docs/how/judge-harness.md` | no | whether the image gains `python3` | none |
+| 2.2b | `evaluator brief`: the inventory, facts and commit log as JSON | no | no | none |
+| 2.2c | the repo summary builder (README, sampled files, log, facts; data fence) | no | no | none |
+| 2.2d | the answer schema (kind, folder classes, scores, tier, evidence) and its validator | no | no | none |
+| 2.2e | the prompt files, rendering and hash | no | no | none |
+| 2.2f | `Judge` interface, `FakeJudge`, recorded-response `ReplayJudge` | no | what may be recorded (question 7) | none |
+| 2.2g | the `Budget` (tokens per call, evaluation, trial; reserve before a call) | no | numbers and prices later | none |
+| 2.2h | three Haiku runs, mean and vote, Opus on a split over 15 (E-055) | no | the category tie rule | none |
+| 2.2i | agreement with the calibration set, baselines, the record under the prompt's hash | no | the definition (question 8) | none |
+| 2.2j | `score --judged`: the kernel counts only the folders judged own code (E-057) | no | no | none |
+| 2.2k | `Fact.judged` bounded by the record (SC-05); the plan and generated rules | no | no | none |
+| 2.2l | the live transport, the only network door; loopback tests; a keyed smoke | build: no; smoke: yes | key, budget, model ids, SDK or stdlib | small |
+| 2.2m | the first run on the 30 labelled repositories, agreement recorded | yes | key, budget, the repositories | needs a cap |
+| 2.2n | the prompt iterated until every judged field clears 80 % or the budget ends | yes | key, budget | needs a cap |
+
+The first part an agent can start with no key is 2.2a. Parts b, c and d do not depend on one another after a; e needs d
+and c; f needs d and e; g is independent; h needs f and g; i needs h; j and k need d and i (k needs the record).
+
+Findings that shaped the slicing, for whoever builds it:
+
+- **The label vocabulary and the judge's differ.** The labels say own-work, clone or generated (E-056); the judge says built,
+  plan only, generated or mixed (E-057). Only "generated" is shared, the set holds none, and a clone is not something a summary
+  shows (the history and GitHub do). So agreement on kind can be measured only as generated or not, and is empty on this set.
+- **A constant can clear the floor.** Always answering Quality 3 is within one of 27 of the 30 labels (90 %), and always
+  answering own-work gets 23 of 30 (77 %) on kind; 2.2i records every figure beside its constant-answer baseline so that
+  80 % is read against that, and 2.2n asks for the margin over it, not the figure alone.
+- **Agreement is partly model against model.** The labels were drafted by Claude Sonnet agents and reviewed by Ghost (J-106).
+- **Nothing real is committed.** Summaries and live recordings go under `build/` (E-014, E-013); what 2.2m commits is ids,
+  scores, kinds and tiers, never a folder name or an evidence quote from a repository that is not ours.
+- **Cost, from trial 4:** 150 Haiku runs cost about $1.30, and E-055 puts an Opus run at about fourteen Haiku runs. One pass
+  over the set is 90 Haiku runs and some Opus runs, of the order of a few dollars; the first run is the measurement.
+
+Open questions only Ghost can answer (also in `docs/FOR-GHOST.md`):
+
+1. **The key.** How an API key reaches a session (an environment secret under a name he picks; never a file in the repository),
+   and whether judges run in a session or in CI. Until it is settled 2.2l's smoke is skipped and 2.2m and 2.2n wait.
+2. **The budget.** A cap per call, per evaluation and per trial (2.2g counts tokens; the first run proves the numbers), and how
+   many prompt iterations 2.2n may spend before it stops and reports.
+3. **The model ids** for Claude Haiku 5.5 and Claude Opus 5.5, and their prices.
+4. **How the API is called.** Standard library HTTP (no dependency), or the Anthropic SDK (a dependency, E-033, needing a
+   hash-pinned requirements file like `sandbox/requirements.txt`).
+5. **`python3` in the gate.** The pinned image has no Python, so the harness's tests report PENDING in `scripts/prepush.sh`
+   and run only where an agent runs them; adding it is a change to the pinned image (an apt install, or a second image).
+6. **The 30 labelled repositories.** They are outside the repository and their map is his: can they be re-fetched for
+   summaries, by whom, and where does the run happen? Proposal: a script he runs, which reads his map and writes summaries
+   under `build/`; no agent reads the map.
+7. **What may be committed from a real run:** proposal, ids, scores, kinds and tiers only.
+8. **What "agreement" means.** Proposal: per field, the share of labels the judgment equals (Ambition and Quality exact, Quality
+   also within one, kind as generated or not), the constant-answer baseline beside it, the 80 % floor applied to each field
+   its own gate judges (kind at 2.2, Ambition at 2.3, Quality at 2.4); and whether the schema should carry a clone signal.
+9. **A category with no majority** (three different folder classes, or tiers): proposal, Opus decides, as for a split score.
+
 ## Phase 3 — Web app with GitHub integration (Opus plan)
 
 Phase 3 is one web application: GitHub OAuth for applicants, an employer board, a submission flow that enqueues engine jobs, and billing. The website and the GitHub app are the same thing.

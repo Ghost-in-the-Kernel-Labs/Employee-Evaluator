@@ -4,20 +4,149 @@ The roadmap as a chain (E-016): items are done in this order, never out of it, a
 cannot be done as written stops the chain and goes to Ghost. Each item's plan is its step in
 `docs/DESIGN.md`, by the same number; its check is written here. A done item moves to
 `docs/DONE.md` with its number kept. `test/TodoTest.java` holds this file: headings in numeric
-order, every item with a check, and the first open item's check a real one.
+order, every item with a check, and the first open item's check a real one. An item too large for one
+go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in order, the plan in its step in
+`docs/DESIGN.md`; the item moves to `docs/DONE.md` whole when its last part is done.
 
 ## Phase 1: the rubric and the scorer CLI
 
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2 Judge harness
+### 2.2a The agent-runner scaffold and its gate
 
-Check: a repo summary (inventory, README, sampled files, commit log) and the kernel's facts to a judging
-prompt, structured output back (enforced by the API's schema); three Haiku runs averaged, Opus on a
-metric they split on by more than 15 (E-055); the judge names the repository's kind and classifies its
-folders, and the kernel measures only the folders judged own code (E-057); agreement with the calibration set measured and recorded
-with the prompt's hash; no prompt scores live under 80 % agreement.
+Check: `agent-runner/` exists as a Python 3 package (standard library only) with `docs/how/judge-harness.md` (the
+workpath, one row in `CLAUDE.md`) and a Java test, `test/AgentRunnerTest.java`, that runs `python3 -I -m unittest discover`
+in it and fails the build when a Python test fails (PENDING and green when `python3` is absent, as `CalibrationSet` is
+before 30 labels); a Python test fails any `agent-runner/` file other than `transport.py` (2.2l) that imports `socket`, `http`,
+`urllib`, `ssl` or `anthropic`, and one that reads an environment variable naming a key. No API, no key; Ghost is not needed
+(whether the pinned image gains `python3` is a question for him: until it does the gate reports PENDING and agents run the
+tests by hand). Cost: none.
+
+### 2.2b The kernel's brief
+
+Check: `evaluator brief <path>` prints one JSON document, byte-identical across two runs on each fixture and a golden:
+the inventory (path, language, lines, why set aside), the kernel's facts (the `--facts` values, E-076), the commit log
+(short hash, date, subject, files changed, capped at 200 newest) and the paths of any README and agent instruction files; no
+file's contents and no author name or email. It only reads and reports what the existing modules count (no new Java module). No API,
+no key, no Ghost. Cost: none.
+
+### 2.2c The repo summary builder
+
+Check: `agent-runner/` turns the brief and the checked-out path into a summary: the README (trimmed), sampled files
+(a fixed rule: the largest files by lines in each folder the inventory holds, then a sample of tests, to a byte cap), the commit
+log and the facts, every part labelled with its path; the same input gives the same bytes (a golden on two of our own
+synthetic fixtures); a file is cut at the cap with a marker, never dropped silently; every piece of the repository's text sits
+inside a fence the prompt names data (E-013), control characters and ANSI escapes stripped, and a fixture whose README says
+"ignore your instructions" shows it only inside the fence. The judge is given no tool (E-013): this summary is all it reads.
+Summaries of real repositories are written only under `build/` (E-014). No API, no key, no Ghost. Cost: none.
+
+### 2.2d The judgment schema and its parser
+
+Check: `agent-runner/` holds one JSON schema file for the judge's answer, and a validator that holds an answer to it: the
+repository's kind (built, plan only, generated, mixed; E-057), each folder's class (own code, own tests, own tooling, docs,
+generated, vendored, reference, fixture data), the seven metrics' 0–100 scores that need judgment with a confidence and
+evidence, the Ambition tier (toy, utility, product, research), Quality 1–5 and a short verdict. A valid answer round-trips; each
+of these is refused with a message naming the field: a score of 101, an unknown kind, an unknown folder class, a missing
+evidence list (SC-02), an extra field, free text where an enum belongs. The schema file is the one the API is later given
+(2.2l). No API, no key, no Ghost. Cost: none.
+
+### 2.2e The judging prompt and its hash
+
+Check: a prompt is files under `agent-runner/prompts/` (instructions with archetype anchors and navigability by its mechanisms,
+E-057, taken from the trial notes in `docs/judges/`, and the answer schema), rendered with a summary into the text sent;
+rendering is deterministic (a golden on a synthetic summary); the prompt's hash is the SHA-256 of its instructions, schema
+and template version, not of the summary, and moves when any one byte of them moves (tested for each) and when nothing else
+does; `agent-runner/prompts/<name>.hash` holds it and a test refuses a prompt whose hash line is stale; the kernel's facts
+are shown "to judge, never to count" (E-055). No API, no key, no Ghost. Cost: none.
+
+### 2.2f The judge interface, a fake judge and the recorded-response replay
+
+Check: a `Judge` takes a rendered prompt, a model id and a run number and returns the raw answer with the tokens used;
+`FakeJudge` returns scripted answers (and an unparsable one on request); `ReplayJudge` returns the recorded answer for
+the key (prompt hash, summary hash, model id, run number) from a recordings file and raises on a missing key, never
+falling through to a live judge; the recordings format is fixed in the how-file and a test holds hand-written synthetic
+recordings to it; tests of everything above this slice use these two and never the network. Nothing from a real run is
+committed here (E-014; the question of what may be, below, is Ghost's). No API, no key. Ghost: not to build. Cost: none.
+
+### 2.2g The cost cap
+
+Check: a `Budget` counts tokens (dollars once Ghost supplies prices and model ids, a data file with its date) with a cap per
+call, per evaluation and per trial; it reserves the worst case (the prompt's tokens plus the output limit) before a call
+and refuses the call, the judge never reached, when the reserve would pass a cap; it charges the real usage after; the
+cost of every judgment is recorded beside it (the number that sets the unlock price floor, DESIGN open question). Tested
+with `FakeJudge`: the call that would pass the cap is not made, a refused call charges nothing, per-evaluation and per-trial
+caps are independent. No API, no key. Ghost: the caps' numbers and the prices are his, but the type is built with any numbers.
+Cost: none.
+
+### 2.2h Three runs, the mean, the vote and Opus on a split
+
+Check: with a judge and a budget, `agent-runner/` runs the prompt three times on Claude Haiku 5.5, takes the mean of each
+score and the vote of each category (kind, folder classes, tier), and runs Claude Opus 5.5 once more when the three
+scores of a metric are more than 15 apart (15 does not, 16 does) or a category has no majority; the Opus answer for that
+metric or category stands (E-055); every fact keeps its runs and the model behind it; an unparsable run is retried once and
+then counts as missing, and fewer than two usable runs is a refusal, not a score. Table-driven with `FakeJudge`, the
+boundaries at 15 and 16 and a three-way category tie each a case; a budget refusal mid-way returns what was judged, flagged
+partial. No API, no key. Ghost: confirm the tie rule (Opus decides; E-055 is silent). Cost: none.
+
+### 2.2i Agreement with the calibration set
+
+Check: given a judgment per calibration id (from a `FakeJudge` or a replay), the harness reads `calibration/` and
+computes, per field, the fraction of labels the judgment matches: Ambition tier exactly; Quality exactly and within one;
+kind as generated or not (the judge's built, plan only, generated, mixed and the labels' own-work, clone, generated share
+only "generated", and the set holds none, which the record says); beside each figure the baseline of always answering the most common label
+(Quality within one reads 90 % for a constant 3 on this set, a floor met by nothing); it writes
+`agent-runner/records/<prompt hash>.json` (prompt name and hash, models, runs, date, the figures, the baselines, and for each
+opaque id the judged value and the label); a prompt with a figure under 80 % is marked not live for that field, and no record
+for the prompt's current hash means no fact (SC-05). A fake judge right on exactly k of 30 gives k/30, worked by hand. No API,
+no key. Ghost: confirm the definition (question below). Cost: none.
+
+### 2.2j The kernel counts the folders the judge calls own code
+
+Check: `evaluator score --judged <judgment.json>` takes a judgment in the 2.2d shape and measures Size, Complexity's
+total and depth and Maintainability's parts only over files whose most specific classified folder is own code (E-057);
+a hand-written judgment on a fixture gives Size, Complexity and Maintainability worked by hand, a file in no classified
+folder keeps the kernel's own rule, and the same fixture without `--judged` is unchanged (no golden moves); the card names
+the judgment's prompt hash and models. Touches `ingest/` (a filter over the inventory), `score/`, `cli/`; no new module and
+no model client (E-003). No API, no key, no Ghost. Cost: none.
+
+### 2.2k The card's rules for the judged kind
+
+Check: a judged fact is built with `Fact.judged` and confidence at most the recorded agreement of its prompt's hash (SC-05),
+read from `agent-runner/records/`; a prompt with no record for its hash gives no fact; kind plan only withholds Size,
+Complexity and Maintainability and reads Ambition unverified, kind generated gives the declined outcome with no card
+(E-056, E-057); each case a fixture with a hand-written judgment and a golden. Reads `rubric/`'s `Fact`, `Calibration` and `Label`
+only; no model client. No API, no key. Ghost: none. Cost: none.
+
+### 2.2l The live judge: the one door to the API
+
+Check: `agent-runner/transport.py` is the only file that reaches the network: it sends the rendered prompt and the 2.2d
+schema to the API's structured-output feature (the schema is enforced there, not asked for in prose), reads the key from the
+environment only and never logs or writes it, passes every call through the `Budget`, retries 429 and 5xx a bounded number of
+times, and writes each answer in the recordings format; tested without a key against a loopback server (the request carries the
+schema and the model id, a failure retries as set, the key appears nowhere in logs or recordings); a smoke test that
+calls the real API once on a synthetic summary runs only when the key is set, and says SKIPPED otherwise. Needs a model API
+and a key to run the smoke: waits on Ghost: key and budget (and the model ids, and the standard library or the SDK, a
+dependency he must approve, E-033). Cost: small (one call).
+
+### 2.2m The first run on the calibration set
+
+Check: the 30 labelled repositories summarised outside the repository by 2.2c (Ghost's private map, never read by an agent),
+judged by 2.2h through 2.2l (three Haiku runs each, Opus on a split), the answers recorded and the agreement of 2.2i written
+to `agent-runner/records/` with the prompt's hash, committed with ids, scores, kinds and tiers only (never a folder name or
+an evidence quote from a real repository, E-014); the run's cost recorded. Needs a model API and a key; needs the 30
+repositories re-fetched, which only Ghost can arrange. Waits on Ghost: key, budget and the repositories. Cost: needs a cost
+cap (about 90 Haiku runs and the Opus runs; trial 4 spent about $1.30 on 150 Haiku runs).
+
+### 2.2n The prompt iterated to the floor
+
+Check: the prompt revised, one hashed version at a time and each version's record kept, until every field the harness
+judges clears 80 % beyond its baseline on the calibration set or the trial's budget is spent (then stop and tell Ghost);
+the winning prompt's hash and figures in `docs/judges/` as trial 5; the original check of 2.2 holds in full: the harness
+judges a repository from a summary and the kernel's facts to enforced structured output, three Haiku runs and Opus on a
+split, the judge names the kind and classifies the folders and the kernel measures the own code (2.2j), agreement
+recorded with the prompt's hash, no prompt scoring live under 80 %. Needs a model API and a key. Waits on Ghost: key and
+budget. Cost: needs a cost cap (each iteration repeats 2.2m's run).
 
 ### 2.3 Ambition judge
 

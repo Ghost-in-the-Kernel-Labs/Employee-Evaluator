@@ -1369,3 +1369,12 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** `Label` and `CalibrationSet` in rubric/ (no new import, no dependency), `calibration/` (empty but for its README), synthetic labels under `test/fixtures/calibration-synthetic/`. 2.1 stays open in TODO.md: it waits on Ghost's labels. No golden moved. Mutation over rubric: the new classes 0 survivors; the 2 left are `Json`'s, already in docs/MUTATION.md.
 - **Caught by:** the kernel map and metrics doc tests, which asked for `gradle kernelMap` once the functions existed.
 - **Touched:** rubric/evaluator/rubric/Label.java, CalibrationSet.java; test/evaluator/rubric/CalibrationSetTest.java; calibration/README.md; test/fixtures/calibration-synthetic/; theGhost.md (E-079), docs/DECISIONS.md, docs/KERNEL-MAP.md.
+
+### J-105 The calibration label trimmed to id, kind, ambition and quality (E-080)
+- **Who:** Claude (Sonnet 5.5), for Ghost. **Class:** decision.
+- **Intent:** Carry out Ghost's instruction to trim the calibration label to ambition, quality and kind (TODO.md 2.1).
+- **Found:** A label exists only to give ground truth to the judges and the admission gate; domain was only a spread check and nothing consumes a rationale. With the rationale gone no free text remains, so the URL and name screen has nothing to screen.
+- **Options:** keep domain as optional; keep the screen as dead code; remove both (chosen, E-080 supersedes E-079's field list). The five-domains check cannot be tested from labels, so TODO.md 2.1 now says the spread is recorded in Ghost's private id-to-repository map (E-014).
+- **Resolved:** `Label` and `CalibrationSet` take four required fields and refuse any other; Status has PENDING and MET (30 labels). Fixtures, README, tests, TODO.md 2.1 and DECISIONS.md follow. The 30 draft labels were trimmed outside the repository and validated by the real loader as 30 labelled; they are not committed and await Ghost's review.
+- **Caught by:** DocTests.ghost, which refused a `;` inside the superseded status.
+- **Touched:** rubric/evaluator/rubric/Label.java, CalibrationSet.java; test/evaluator/rubric/CalibrationSetTest.java; calibration/README.md; test/fixtures/calibration-synthetic/; TODO.md; theGhost.md (E-079 status, E-080), docs/DECISIONS.md, docs/KERNEL-MAP.md.

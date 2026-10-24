@@ -1370,6 +1370,22 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `rubric/evaluator/rubric/CalibrationSet.java`, `Label.java`; `test/evaluator/rubric/CalibrationSetTest.java`; `calibration/README.md`.
 - **Source:** the TODO.md 2.1 format task given to a Claude Sonnet 5.5 agent; the field list is that agent's, for Ghost to confirm or change before labelling.
   Ghost added hardware, crypto-defi, developer-tooling and agent to the domain list (2026-10-24).
-- **Status:** in force
+- **Status:** superseded by E-080 (its field list only, the rest stands)
 - **subject:** calibration
 - **See also:** E-014, E-056, E-057
+
+### E-080: A calibration label is three fields, kind, ambition and quality, and an opaque id; no domain, no rationale
+- **Decision:** A calibration label (TODO.md 2.1) is one file `<id>.json` in `calibration/`, the id `c` and three digits and the file named by it. Fields, all required: `id`; `kind`, one of `own-work`, `clone`,
+  `generated` (the admission gate's cases, E-056); `ambition`, one of `toy`, `utility`, `product`, `research` (docs/SCORE-CARD.md); `quality`, a whole number 1 to 5 (docs/DESIGN.md step 2.1). Any other field,
+  a missing field, an unknown value, a duplicate id or a file not named by its id is refused by `CalibrationSet` and `Label` in `rubric/`. `domain` and `rationale` are gone from the format, the loader, the tests, the
+  fixtures and the README, and with the rationale its URL and name screen, since no free text remains to screen. The set still reaches 30 labels: the test reports PENDING below 30 and MET from 30. "Spans at least five
+  domains" is no longer checked by the repository: the spread of domains is recorded in the id-to-repository map, which is Ghost's and stays outside this repository (E-014). This supersedes E-079's field list;
+  everything else in E-079 (the opaque id, one file per label, the synthetic fixtures `c9xx`) stands.
+- **Why:** A label exists only to give ground truth for the judges (Ambition, the agent-review half of Quality) and for the admission gate (kind). Domain was only a spread check and nothing consumes a rationale;
+  a field nothing reads is a place for a leak (E-014) and a cost for Ghost to fill 30 times. Three closed fields cannot name a repository, an owner or a person.
+- **Held by:** `rubric/evaluator/rubric/CalibrationSet.java`, `Label.java`; `test/evaluator/rubric/CalibrationSetTest.java`; `calibration/README.md`; `test/fixtures/calibration-synthetic/`; TODO.md 2.1's check.
+- **Source:** Ghost's instruction to trim the calibration label to ambition, quality and kind (2026-10-24), carried out by a Claude Sonnet 5.5 agent.
+- **Status:** in force
+- **subject:** calibration
+- **See also:** E-014, E-056, E-079
+- **Supersedes:** E-079

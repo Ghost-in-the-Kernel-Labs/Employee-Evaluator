@@ -14,7 +14,7 @@ order, every item with a check, and the first open item's check a real one.
 ### 2.1 Calibration set
 
 Check: 30 repositories labeled by Ghost on Ambition and Quality, in a fixture format with a test
-that holds every label to its fields; the set spans at least five domains.
+that holds every label to its fields; the spread of domains is recorded in the private id-to-repository map outside the repository (E-014).
 
 ### 2.2 Judge harness
 

@@ -12,35 +12,29 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-/** The calibration set's format (TODO.md 2.1, E-079): each refusal once, the real folder held to its fields, the 30-and-five-domains check pending until 30. */
+/** The calibration set's format (TODO.md 2.1, E-080): each refusal once, the real folder held to its fields, the 30-label check pending until 30. */
 class CalibrationSetTest {
     private static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
-    private static final String OK = "{\"id\":\"c901\",\"domain\":\"web-app\",\"kind\":\"own-work\",\"ambition\":\"toy\",\"quality\":3,\"rationale\":\"synthetic\"}";
+    private static final String OK = "{\"id\":\"c901\",\"kind\":\"own-work\",\"ambition\":\"toy\",\"quality\":3}";
 
     private static String message(String json) {
         return assertThrows(IllegalArgumentException.class, () -> CalibrationSet.parse(json)).getMessage();
     }
 
-    private static Label label(String id, Label.Domain domain) {
-        return new Label(id, domain, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "");
+    private static Label label(String id) {
+        return new Label(id, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3);
     }
 
     @Test
     void aSoundLabelParses() {
-        assertEquals(new Label("c901", Label.Domain.WEB_APP, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "synthetic"), CalibrationSet.parse(OK));
-        assertEquals("", CalibrationSet.parse(OK.replace(",\"rationale\":\"synthetic\"", "")).rationale());
-        assertEquals(Label.Domain.MACHINE_LEARNING, CalibrationSet.parse(OK.replace("web-app", "machine-learning")).domain());
-        assertEquals(Label.Domain.HARDWARE, CalibrationSet.parse(OK.replace("web-app", "hardware")).domain());
-        assertEquals(Label.Domain.CRYPTO_DEFI, CalibrationSet.parse(OK.replace("web-app", "crypto-defi")).domain());
-        assertEquals(Label.Domain.DEVELOPER_TOOLING, CalibrationSet.parse(OK.replace("web-app", "developer-tooling")).domain());
-        assertEquals(Label.Domain.AGENT, CalibrationSet.parse(OK.replace("web-app", "agent")).domain());
+        assertEquals(new Label("c901", Label.Kind.OWN_WORK, Label.Ambition.TOY, 3), CalibrationSet.parse(OK));
         assertEquals(Label.Kind.CLONE, CalibrationSet.parse(OK.replace("own-work", "clone")).kind());
         assertEquals(Label.Ambition.RESEARCH, CalibrationSet.parse(OK.replace("toy", "research")).ambition());
     }
 
     @Test
     void aMissingFieldIsRefused() {
-        for (String field : List.of("id", "domain", "kind", "ambition", "quality")) {
+        for (String field : List.of("id", "kind", "ambition", "quality")) {
             String without = OK.replaceAll("\"" + field + "\":(\"[^\"]*\"|\\d),?", "").replace(",}", "}");
             assertEquals("missing field " + field, message(without));
         }
@@ -49,12 +43,13 @@ class CalibrationSetTest {
     @Test
     void anUnknownFieldIsRefused() {
         assertTrue(message(OK.replace("}", ",\"repo\":\"x\"}")).startsWith("unknown field repo"));
+        assertTrue(message(OK.replace("}", ",\"domain\":\"game\"}")).startsWith("unknown field domain"));
+        assertTrue(message(OK.replace("}", ",\"rationale\":\"x\"}")).startsWith("unknown field rationale"));
         assertEquals("a label is a JSON object", message("[]"));
     }
 
     @Test
     void aValueOutOfItsRangeIsRefused() {
-        assertTrue(message(OK.replace("web-app", "weather")).contains("domain weather is not one of [web-app, cli-tool,"));
         assertTrue(message(OK.replace("own-work", "stolen")).contains("kind stolen is not one of"));
         assertTrue(message(OK.replace("toy", "huge")).contains("ambition huge is not one of [toy, utility, product, research]"));
         assertTrue(message(OK.replace("\"quality\":3", "\"quality\":0")).contains("1–5, not 0"));
@@ -63,8 +58,7 @@ class CalibrationSetTest {
         assertTrue(message(OK.replace("\"quality\":3", "\"quality\":\"3\"")).contains("whole number"));
         assertEquals(1, CalibrationSet.parse(OK.replace("\"quality\":3", "\"quality\":1")).quality());
         assertEquals(5, CalibrationSet.parse(OK.replace("\"quality\":3", "\"quality\":5")).quality());
-        assertEquals("field domain is text", message(OK.replace("\"web-app\"", "7")));
-        assertEquals("field rationale is text", message(OK.replace("\"synthetic\"", "7")));
+        assertEquals("field kind is text", message(OK.replace("\"own-work\"", "7")));
     }
 
     @Test
@@ -75,23 +69,20 @@ class CalibrationSetTest {
     }
 
     @Test
-    void aUrlLikeOrNameLikeRationaleIsRefused() {
-        for (String bad : List.of("see https://example.test/x", "at www.example.test", "mail a@b", "on github", "on GitLab", "example.com", "acme/widget", "by Jane Smith", "a Foo Bar thing")) {
-            assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, bad), bad);
-        }
-        new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "a small game with a clean loop, tests at 70% and a 2.5 ratio");
-        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "x".repeat(281)));
-        new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "x".repeat(280));
-        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "two\nlines"));
-        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Domain.GAME, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, null));
-        assertThrows(IllegalArgumentException.class, () -> new Label("c901", null, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, ""));
+    void aLabelWithoutAKindOrAmbitionIsRefused() {
+        assertThrows(IllegalArgumentException.class, () -> new Label("c901", null, Label.Ambition.TOY, 3));
+        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Kind.CLONE, null, 3));
+        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Kind.CLONE, Label.Ambition.TOY, 0));
+        assertThrows(IllegalArgumentException.class, () -> new Label("c901", Label.Kind.CLONE, Label.Ambition.TOY, 6));
+        assertEquals(1, new Label("c901", Label.Kind.CLONE, Label.Ambition.TOY, 1).quality());
+        assertEquals(5, new Label("c901", Label.Kind.CLONE, Label.Ambition.TOY, 5).quality());
     }
 
     @Test
     void aDuplicateIdIsRefused() {
         assertEquals("duplicate id c001", assertThrows(IllegalArgumentException.class,
-                () -> CalibrationSet.of(List.of(label("c001", Label.Domain.GAME), label("c001", Label.Domain.LIBRARY)))).getMessage());
-        assertEquals(2, CalibrationSet.of(List.of(label("c001", Label.Domain.GAME), label("c002", Label.Domain.GAME))).size());
+                () -> CalibrationSet.of(List.of(label("c001"), label("c001")))).getMessage());
+        assertEquals(2, CalibrationSet.of(List.of(label("c001"), label("c002"))).size());
     }
 
     @Test
@@ -114,21 +105,16 @@ class CalibrationSetTest {
     }
 
     @Test
-    void theSetIsPendingUntilThirtyThenEnforced() {
-        Label.Domain[] domains = Label.Domain.values();
+    void theSetIsPendingUntilThirtyThenMet() {
         assertEquals(new CalibrationSet.Status(CalibrationSet.Status.State.PENDING, "0 of 30 repositories labelled (waits on Ghost's labels)"), CalibrationSet.status(List.of()));
-        assertEquals(CalibrationSet.Status.State.PENDING, CalibrationSet.status(set(29, 1)).state());
-        assertEquals(CalibrationSet.Status.State.FAILED, CalibrationSet.status(set(30, 4)).state());
-        assertEquals("30 labelled but only 4 domains, 5 needed", CalibrationSet.status(set(30, 4)).message());
-        assertEquals(new CalibrationSet.Status(CalibrationSet.Status.State.MET, "30 labelled across 5 domains"), CalibrationSet.status(set(30, 5)));
-        assertEquals(CalibrationSet.Status.State.MET, CalibrationSet.status(set(31, 8)).state());
-        assertEquals(CalibrationSet.Status.State.FAILED, CalibrationSet.status(set(35, 2)).state());
-        assertTrue(domains.length >= CalibrationSet.MIN_DOMAINS);
+        assertEquals(new CalibrationSet.Status(CalibrationSet.Status.State.PENDING, "29 of 30 repositories labelled (waits on Ghost's labels)"), CalibrationSet.status(set(29)));
+        assertEquals(new CalibrationSet.Status(CalibrationSet.Status.State.MET, "30 labelled"), CalibrationSet.status(set(30)));
+        assertEquals(CalibrationSet.Status.State.MET, CalibrationSet.status(set(31)).state());
     }
 
-    private static List<Label> set(int count, int domainCount) {
+    private static List<Label> set(int count) {
         List<Label> labels = new ArrayList<>();
-        for (int i = 0; i < count; i++) labels.add(label("c%03d".formatted(i + 1), Label.Domain.values()[i % domainCount]));
+        for (int i = 0; i < count; i++) labels.add(label("c%03d".formatted(i + 1)));
         return labels;
     }
 
@@ -138,6 +124,6 @@ class CalibrationSetTest {
         List<Label> labels = CalibrationSet.load(ROOT.resolve("calibration"));
         CalibrationSet.Status status = CalibrationSet.status(labels);
         System.out.println("calibration set " + status.state() + ": " + status.message());
-        assertTrue(status.state() != CalibrationSet.Status.State.FAILED, status.message());
+        assertEquals(labels.size() >= CalibrationSet.TARGET ? CalibrationSet.Status.State.MET : CalibrationSet.Status.State.PENDING, status.state(), status.message());
     }
 }

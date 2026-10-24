@@ -14,25 +14,21 @@ import java.util.stream.Stream;
 
 /**
  * The calibration set's loader and validator (TODO.md 2.1): one JSON file per label, named by its id, in a folder.
- * It refuses a missing, unknown or out-of-range field, a duplicate id, a name-like or URL-like value and a domain
- * outside the list, each with an IllegalArgumentException that names the file or field.
+ * It refuses a missing, unknown or out-of-range field, a duplicate id and an unknown value, each with an IllegalArgumentException that names the file or field.
  */
-// Decision: E-079
+// Decision: E-080
 public final class CalibrationSet {
     /** How many labelled repositories the set needs before it is enforced (TODO.md 2.1). */
     public static final int TARGET = 30;
-    /** How many domains the set must span once it is full. */
-    public static final int MIN_DOMAINS = 5;
-    private static final Set<String> REQUIRED = Set.of("id", "domain", "kind", "ambition", "quality");
-    private static final Set<String> ALLOWED = Set.of("id", "domain", "kind", "ambition", "quality", "rationale");
+    private static final Set<String> REQUIRED = Set.of("id", "kind", "ambition", "quality");
 
     private CalibrationSet() {
     }
 
-    /** Where the set stands: PENDING below the target (not a failure), MET when full and spread, FAILED when full and not. */
+    /** Where the set stands: PENDING below the target (not a failure), MET when full. */
     public record Status(State state, String message) {
-        /** The three states. */
-        public enum State { PENDING, MET, FAILED }
+        /** The two states. */
+        public enum State { PENDING, MET }
     }
 
     /** The label one fixture's text holds; anything else about it is an IllegalArgumentException. */
@@ -40,19 +36,16 @@ public final class CalibrationSet {
         Object json = Json.parse(text);
         if (!(json instanceof Map<?, ?> map)) throw new IllegalArgumentException("a label is a JSON object");
         for (Object key : map.keySet()) {
-            if (!ALLOWED.contains(key)) throw new IllegalArgumentException("unknown field " + key + " (known: " + new java.util.TreeSet<>(ALLOWED) + ")");
+            if (!REQUIRED.contains(key)) throw new IllegalArgumentException("unknown field " + key + " (known: " + new java.util.TreeSet<>(REQUIRED) + ")");
         }
         for (String key : REQUIRED) {
             if (!map.containsKey(key)) throw new IllegalArgumentException("missing field " + key);
         }
-        Object rationale = map.containsKey("rationale") ? map.get("rationale") : "";
         return new Label(
                 text(map, "id"),
-                choose(Label.Domain.values(), text(map, "domain"), "domain"),
                 choose(Label.Kind.values(), text(map, "kind"), "kind"),
                 choose(Label.Ambition.values(), text(map, "ambition"), "ambition"),
-                quality(map.get("quality")),
-                rationale instanceof String s ? s : fail("field rationale is text"));
+                quality(map.get("quality")));
     }
 
     /** Every label in the folder (`<id>.json` each, in id order), or none when the folder is absent; a duplicate id, or a file not named by its id, is refused. */
@@ -87,16 +80,12 @@ public final class CalibrationSet {
         return List.copyOf(labels);
     }
 
-    /** Where the set stands against "30 labelled, at least five domains": PENDING until the count reaches the target, then enforced. */
+    /** Where the set stands against "30 labelled": PENDING until the count reaches the target, then MET. */
     public static Status status(List<Label> labels) {
         if (labels.size() < TARGET) {
             return new Status(Status.State.PENDING, labels.size() + " of " + TARGET + " repositories labelled (waits on Ghost's labels)");
         }
-        long domains = labels.stream().map(Label::domain).distinct().count();
-        if (domains < MIN_DOMAINS) {
-            return new Status(Status.State.FAILED, labels.size() + " labelled but only " + domains + " domains, " + MIN_DOMAINS + " needed");
-        }
-        return new Status(Status.State.MET, labels.size() + " labelled across " + domains + " domains");
+        return new Status(Status.State.MET, labels.size() + " labelled");
     }
 
     private static String text(Map<?, ?> map, String key) {

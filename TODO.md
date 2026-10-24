@@ -8,11 +8,6 @@ order, every item with a check, and the first open item's check a real one.
 
 ## Phase 1: the rubric and the scorer CLI
 
-### 1.7 GitHub adapter
-
-Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on a real repository
-of Ghost's through the API, with the token read from the environment and never logged; the module
-is the only one that reaches the network (`docs/modules.json`).
 
 ## Phase 2: the evaluation engine with agents
 

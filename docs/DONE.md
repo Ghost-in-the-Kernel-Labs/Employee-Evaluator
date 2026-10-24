@@ -68,6 +68,13 @@ planted fsmonitor that plain git runs and ours does not; spread, cadence, diff v
 middle, test co-location and agent fingerprints, each a fact; the shape (E-042): a history worked by
 hand to 70, a replay faking all but time at 23, six weeks of work over 70.
 
+### 1.7 GitHub adapter
+
+Check: signed, unsigned-but-pushed, and foreign-author commits are told apart on a real repository
+of Ghost's through the API, with the token read from the environment and never logged; the module
+is the only one that reaches the network (`docs/modules.json`).
+Done 2026-10-24 (J-102, J-103): `HttpGitHub` and `Authorship` (E-043) told Suite Builder's commits apart through GitHub's API with the token from the environment, never logged. The live run, 8 signed, 302 pushed, 190 claimed, 268 foreign, 0 unmatched, applicant share 0.651 over a 20-day push window, went through a session proxy that answers without a valid token, so it proves the adapter and not the token; Ghost took it as enough.
+
 ### 1.8 Navigability checklist
 
 Check: `CLAUDE.md`/`AGENTS.md` presence and freshness (every path they name exists), module

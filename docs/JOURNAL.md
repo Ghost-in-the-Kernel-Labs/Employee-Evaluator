@@ -1350,3 +1350,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
   is enough.
 - **Caught by:** the live test; the proxy by a request with a bad token.
 - **Touched:** github/HttpGitHub.java, test/evaluator/github/HttpGitHubTest.java; TODO.md 1.7 (open); docs/HANDOFF.md.
+
+### J-103 1.7 closed on a live pass the proxy made possible
+- **Who:** Claude (Sonnet 5.5), with Ghost. **Class:** decision.
+- **Intent:** Settle 1.7 after J-102 found the pass proves nothing about the token.
+- **Found:** The live run read, of Suite Builder's history: 8 signed, 302 pushed, 190 claimed, 268 foreign,
+  0 unmatched; applicant share 0.651; push window 20 days.
+- **Options:** run again outside a proxied session; accept the pass.
+- **Resolved:** Ghost accepted the pass as enough (2026-10-24). 1.7 moved to DONE.md. Ghost also cleared uhneer's
+  and CryptoDevving's repositories (lab members) for the calibration set, 2.1.
+- **Touched:** TODO.md, docs/DONE.md, docs/HANDOFF.md.

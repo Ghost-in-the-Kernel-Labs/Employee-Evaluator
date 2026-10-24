@@ -1,16 +1,12 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 1.7's live check, half done (2026-10-23, J-102)
+## Start here: 2.1, the calibration set (2026-10-24)
 
-The first real run of `AuthorshipLiveTest` found a bug in ours, fixed: `HttpGitHub.get` refused `..` anywhere
-in a path, and GitHub's compare path is `<sha>...<sha>`; it now refuses a `..` segment only. The test then
-passes. **It does not close 1.7:** from a cloud session `api.github.com` answers the private suite-builder 200
-with an invalid token and with none, so the pass shows the adapter's reading and parsing, not the token's
-access. 1.7 closes on a run outside such a session (Ghost's machine or a runner with only the token), or on
-Ghost's word that this pass is enough. Then close it as `docs/how/do-a-todo-step.md` says, the facts it read
-recorded in the journal by kind and count, never the token.
-
-Never log, print or write the token, nor paste it into a commit, the journal or a report.
+1.7 is closed (J-103). 2.1 is the first open item and waits on Ghost's 30 hand-labelled repositories. Ghost has
+cleared uhneer's and CryptoDevving's work for benchmark use (lab members). A cloud session cannot list their
+repositories: its GitHub access is bound to the repositories attached to it, and listing an account's repositories
+is refused. Ask Ghost for the repository names, or list them from a machine that can, and an agent then writes
+the metadata (language, size, kind, domain, no scores) for Ghost to choose from.
 
 ## Then
 

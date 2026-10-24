@@ -30,6 +30,10 @@ class CalibrationSetTest {
         assertEquals(new Label("c901", Label.Domain.WEB_APP, Label.Kind.OWN_WORK, Label.Ambition.TOY, 3, "synthetic"), CalibrationSet.parse(OK));
         assertEquals("", CalibrationSet.parse(OK.replace(",\"rationale\":\"synthetic\"", "")).rationale());
         assertEquals(Label.Domain.MACHINE_LEARNING, CalibrationSet.parse(OK.replace("web-app", "machine-learning")).domain());
+        assertEquals(Label.Domain.HARDWARE, CalibrationSet.parse(OK.replace("web-app", "hardware")).domain());
+        assertEquals(Label.Domain.CRYPTO_DEFI, CalibrationSet.parse(OK.replace("web-app", "crypto-defi")).domain());
+        assertEquals(Label.Domain.DEVELOPER_TOOLING, CalibrationSet.parse(OK.replace("web-app", "developer-tooling")).domain());
+        assertEquals(Label.Domain.AGENT, CalibrationSet.parse(OK.replace("web-app", "agent")).domain());
         assertEquals(Label.Kind.CLONE, CalibrationSet.parse(OK.replace("own-work", "clone")).kind());
         assertEquals(Label.Ambition.RESEARCH, CalibrationSet.parse(OK.replace("toy", "research")).ambition());
     }

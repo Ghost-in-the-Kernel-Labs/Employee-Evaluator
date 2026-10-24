@@ -13,7 +13,7 @@ and stays green; at 30 it enforces "30 labelled, at least five domains".
 | Field | Values |
 | --- | --- |
 | `id` | `c` and three digits, unique, the file's name |
-| `domain` | `web-app`, `cli-tool`, `library`, `data-pipeline`, `game`, `mobile-app`, `infrastructure`, `machine-learning` |
+| `domain` | `web-app`, `cli-tool`, `library`, `data-pipeline`, `game`, `mobile-app`, `infrastructure`, `machine-learning`, `hardware`, `crypto-defi`, `developer-tooling`, `agent` |
 | `kind` | `own-work`, `clone` (another's work, copied), `generated` (a tool's wholesale output); the admission gate's cases (E-056) |
 | `ambition` | `toy`, `utility`, `product`, `research` (docs/SCORE-CARD.md) |
 | `quality` | a whole number, 1 to 5 (docs/DESIGN.md step 2.1) |

@@ -25,7 +25,7 @@ public record Label(String id, Domain domain, Kind kind, Ambition ambition, int 
 
     /** What the repository is about; the set must span at least five of these. */
     public enum Domain {
-        WEB_APP, CLI_TOOL, LIBRARY, DATA_PIPELINE, GAME, MOBILE_APP, INFRASTRUCTURE, MACHINE_LEARNING;
+        WEB_APP, CLI_TOOL, LIBRARY, DATA_PIPELINE, GAME, MOBILE_APP, INFRASTRUCTURE, MACHINE_LEARNING, HARDWARE, CRYPTO_DEFI, DEVELOPER_TOOLING, AGENT;
     }
 
     /** For the admission gate (E-056): the work is the applicant's own, a clone of another's, or generated wholesale by a tool. */

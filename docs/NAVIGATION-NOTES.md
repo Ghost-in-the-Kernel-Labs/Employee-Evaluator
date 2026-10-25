@@ -31,3 +31,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2c and DESIGN.md "Step 2.2 sliced", judge-harness.md, commands.md.
 - **Complaints:** no doc says how a Python golden is held or rewritten (commands.md describes only `-PwriteGoldens` for Java, which the Python child never sees); I invented `EVALUATOR_WRITE_GOLDENS`. The task's sampling rule ("largest by lines in each folder") leaves the count per folder open.
 - **Suggestions:** one line in commands.md under Goldens: "Python goldens (`agent-runner/`): `EVALUATOR_WRITE_GOLDENS=1 python3 -I -B -m unittest discover`".
+
+### 2026-10-25 · TODO.md 2.2d, the judgment schema and parser, with E-082 · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2d to 2.2k and DESIGN.md "Step 2.2 sliced", judge-harness.md, E-055 to E-057 and E-080 in theGhost.md.
+- **Complaints:** a decision's fields are required by GhostTest (Decision, Why, Held by, Source, Status, subject) but no doc lists them; I read the test. There is no "Trade-offs" field, so trade-offs went into Why. The kind vocabulary was in five places (TODO 2.2d and 2.2i, DESIGN finding and question 8, FOR-GHOST) and found only by grep.
+- **Suggestions:** list the decision fields in do-a-todo-step.md; a DESIGN table of vocabularies (kind, folder classes, tiers) with the one file that owns each.

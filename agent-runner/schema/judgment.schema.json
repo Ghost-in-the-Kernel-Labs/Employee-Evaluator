@@ -1,0 +1,100 @@
+{
+  "type": "object",
+  "description": "The judge's whole answer about one repository, read from the summary it was given and nothing else. Every field is required and no other field is allowed.",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "description": "What kind of repository this is. Take the FIRST of these six that the summary shows, in this order. generated: a tool produced it wholesale and little of it is the author's own work. clone: a copy, or a lightly changed copy, of another project; say clone only on what the summary shows (the README naming an upstream, a history that begins with one bulk import, files that are another project's); a clone is judged from a short summary, so when it shows no such sign it is not a clone. plan only: a plan or a specification with little or no running code. mixed: original work with real code and a substantial part that is plan or generated. own-work: original working code. built: use it only where the repository is working code and the summary cannot tell whose it is or how it came about; it is never the default for doubt between the others.",
+      "enum": ["generated", "clone", "plan only", "mixed", "own-work", "built"]
+    },
+    "folders": {
+      "type": "array",
+      "description": "Every folder the summary lists, each with the one class that fits it best, by its path as the summary gives it ('.' is the root). A file belongs to its most specific listed folder.",
+      "items": {
+        "type": "object",
+        "description": "One folder and its class.",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "The folder's path as the summary gives it, relative to the repository root, with no leading slash and no '..'."
+          },
+          "class": {
+            "type": "string",
+            "description": "own code: the author's working code. own tests: the author's tests. own tooling: the author's build, scripts and configuration. docs: documentation. generated: output of a tool. vendored: another project's code kept here. reference: material kept to read, not to run. fixture data: sample inputs a test reads.",
+            "enum": ["own code", "own tests", "own tooling", "docs", "generated", "vendored", "reference", "fixture data"]
+          }
+        },
+        "required": ["path", "class"],
+        "additionalProperties": false
+      }
+    },
+    "scores": {
+      "type": "object",
+      "description": "The metrics that need judgment, each a 0 to 100 score with the judge's confidence and the evidence it rests on. Size and Maintainability's parts are counted by the kernel, Provenance is read from the history; none of them is asked here.",
+      "properties": {
+        "quality": {
+          "type": "object",
+          "description": "Quality's review: correctness, tests, error handling and idiom, judged from the sampled files.",
+          "properties": {
+            "score": {"type": "integer", "description": "0 to 100.", "minimum": 0, "maximum": 100},
+            "confidence": {"type": "number", "description": "How sure the judge is of this score, 0 to 1.", "minimum": 0, "maximum": 1},
+            "evidence": {"type": "array", "description": "What the score rests on: at least one short item, each a path or a quotation from the summary.", "minItems": 1, "items": {"type": "string", "description": "One piece of evidence."}}
+          },
+          "required": ["score", "confidence", "evidence"],
+          "additionalProperties": false
+        },
+        "complexity": {
+          "type": "object",
+          "description": "Complexity's assessment: the difficulty of the problem actually solved, not the size of the code.",
+          "properties": {
+            "score": {"type": "integer", "description": "0 to 100.", "minimum": 0, "maximum": 100},
+            "confidence": {"type": "number", "description": "How sure the judge is of this score, 0 to 1.", "minimum": 0, "maximum": 1},
+            "evidence": {"type": "array", "description": "What the score rests on: at least one short item, each a path or a quotation from the summary.", "minItems": 1, "items": {"type": "string", "description": "One piece of evidence."}}
+          },
+          "required": ["score", "confidence", "evidence"],
+          "additionalProperties": false
+        },
+        "navigability": {
+          "type": "object",
+          "description": "AI navigability, judged by its mechanisms: instruction files, module boundaries, naming, tests an agent can run.",
+          "properties": {
+            "score": {"type": "integer", "description": "0 to 100.", "minimum": 0, "maximum": 100},
+            "confidence": {"type": "number", "description": "How sure the judge is of this score, 0 to 1.", "minimum": 0, "maximum": 1},
+            "evidence": {"type": "array", "description": "What the score rests on: at least one short item, each a path or a quotation from the summary.", "minItems": 1, "items": {"type": "string", "description": "One piece of evidence."}}
+          },
+          "required": ["score", "confidence", "evidence"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["quality", "complexity", "navigability"],
+      "additionalProperties": false
+    },
+    "ambition": {
+      "type": "object",
+      "description": "How hard the stated goal was, against the calibrated tiers.",
+      "properties": {
+        "tier": {
+          "type": "string",
+          "description": "toy: a small exercise or demonstration. utility: a tool that does one useful job. product: a complete thing for users. research: an attempt at something not yet known to work.",
+          "enum": ["toy", "utility", "product", "research"]
+        },
+        "confidence": {"type": "number", "description": "How sure the judge is of the tier, 0 to 1.", "minimum": 0, "maximum": 1},
+        "evidence": {"type": "array", "description": "What the tier rests on: at least one short item, each a path or a quotation from the summary.", "minItems": 1, "items": {"type": "string", "description": "One piece of evidence."}}
+      },
+      "required": ["tier", "confidence", "evidence"],
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "integer",
+      "description": "Quality as the calibration labels give it, a whole number from 1 (poor) to 5 (excellent).",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "verdict": {
+      "type": "string",
+      "description": "A short verdict in plain words, at most 400 characters."
+    }
+  },
+  "required": ["kind", "folders", "scores", "ambition", "quality", "verdict"],
+  "additionalProperties": false
+}

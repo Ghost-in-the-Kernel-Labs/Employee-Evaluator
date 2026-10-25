@@ -13,16 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2d The judgment schema and its parser
-
-Check: `agent-runner/` holds one JSON schema file for the judge's answer, and a validator that holds an answer to it: the
-repository's kind (built, plan only, generated, mixed; E-057), each folder's class (own code, own tests, own tooling, docs,
-generated, vendored, reference, fixture data), the seven metrics' 0–100 scores that need judgment with a confidence and
-evidence, the Ambition tier (toy, utility, product, research), Quality 1–5 and a short verdict. A valid answer round-trips; each
-of these is refused with a message naming the field: a score of 101, an unknown kind, an unknown folder class, a missing
-evidence list (SC-02), an extra field, free text where an enum belongs. The schema file is the one the API is later given
-(2.2l). No API, no key, no Ghost. Cost: none.
-
 ### 2.2e The judging prompt and its hash
 
 Check: a prompt is files under `agent-runner/prompts/` (instructions with archetype anchors and navigability by its mechanisms,
@@ -65,8 +55,8 @@ partial. No API, no key. Ghost: confirm the tie rule (Opus decides; E-055 is sil
 
 Check: given a judgment per calibration id (from a `FakeJudge` or a replay), the harness reads `calibration/` and
 computes, per field, the fraction of labels the judgment matches: Ambition tier exactly; Quality exactly and within one;
-kind as generated or not (the judge's built, plan only, generated, mixed and the labels' own-work, clone, generated share
-only "generated", and the set holds none, which the record says); beside each figure the baseline of always answering the most common label
+kind exactly (the judge's six values, E-082, include the labels' own-work, clone and generated; the set holds no generated, which the
+record says, and a clone is judged from a short summary); beside each figure the baseline of always answering the most common label
 (Quality within one reads 90 % for a constant 3 on this set, a floor met by nothing); it writes
 `agent-runner/records/<prompt hash>.json` (prompt name and hash, models, runs, date, the figures, the baselines, and for each
 opaque id the judged value and the label); a prompt with a figure under 80 % is marked not live for that field, and no record

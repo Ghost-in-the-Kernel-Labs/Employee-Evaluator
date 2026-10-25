@@ -1,10 +1,10 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.2d, the judgment schema and its parser (2026-10-25)
+## Start here: 2.2e, the judging prompt and its hash (2026-10-25)
 
 2.1 is closed (J-106). 2.2, the judge harness, is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in
 `TODO.md`). 2.2a is done (J-110): `agent-runner/` exists with its Java gate and its no-network import guard, and Ghost approved `python3` in the pinned image
-(E-081). 2.2b is done (J-111): `evaluator brief <path>` prints the kernel's brief as JSON. 2.2c is done (J-112): `agent_runner/summary.py` builds the judge's reading from the brief and a checkout. The first open part is **2.2d**, the judgment schema and its parser; it and every part to **2.2k** need no model API and no key. **2.2l** (the live transport: its loopback
+(E-081). 2.2b is done (J-111): `evaluator brief <path>` prints the kernel's brief as JSON. 2.2c is done (J-112): `agent_runner/summary.py` builds the judge's reading from the brief and a checkout. 2.2d is done (J-113): `agent-runner/schema/judgment.schema.json` and `agent_runner/judgment.py`; the judge's kind has six values (E-082), and the schema's description of `kind` is the precedence rule 2.2e's prompt quotes. The first open part is **2.2e**, the judging prompt and its hash; it and every part to **2.2k** need no model API and no key. **2.2l** (the live transport: its loopback
 tests need no key, its smoke does), **2.2m** (the first run on the calibration set) and **2.2n** (the prompt iterated to 80 %) wait on Ghost: key, budget, model
 ids and the 30 repositories re-fetched; his questions are in `docs/FOR-GHOST.md` (the `python3` one is answered).
 

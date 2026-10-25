@@ -961,7 +961,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   docs/judges/trial-4-haiku-round2.md for the measurements.
 - **Source:** Claude's proposal from trials 3 and 4, Ghost's choice ("record E-057 and add the javascript
   adapter"), 2026-10-22.
-- **Status:** in force
+- **Status:** superseded by E-082 (its list of kinds only, the rest stands)
 - **subject:** judges
 - **See also:** E-017, E-025, E-055, E-056
 
@@ -1398,3 +1398,24 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agent-runner
 - **See also:** E-001, E-003, E-013, E-014, E-017, E-021
+
+### E-082: The judge's kind is six values, E-057's four plus own-work and clone
+- **Decision:** The repository kind in the judge's answer (TODO.md 2.2d, `agent-runner/schema/judgment.schema.json`) is one of `generated`, `clone`, `plan only`, `mixed`, `own-work`, `built`: E-057's four
+  (built, plan only, generated, mixed) plus the calibration labels' own-work and clone (E-080). The schema's description for `kind` gives the judge a precedence rule, and the 2.2e prompt quotes it: take the first that
+  the summary shows, in this order. generated: a tool produced it wholesale and little is the author's own work. clone: a copy, or a lightly changed copy, of another project, said only on what the summary shows (the
+  README naming an upstream, a history that begins with one bulk import, files that are another project's); with no such sign it is not a clone. plan only: a plan or a specification with little or no running code. mixed:
+  original work with real code and a substantial part that is plan or generated. own-work: original working code. built: only where the repository is working code and the summary cannot tell whose it is or how it
+  came about, never the default for doubt between the others. Everything else in E-057 stands: the judge classifies and judges, the kernel counts the own code and applies the card's rules, which now read on the
+  six values (generated declines, E-056; plan only carries no Size, Complexity or Maintainability and reads Ambition unverified).
+- **Why:** The judge's kind becomes comparable to the 30 calibration labels (own-work, clone, generated), so 2.2i can measure agreement on kind for all three of the labels' values and not only on "generated or not",
+  which the set could not even test (it holds no generated repository). Trade-offs, chosen knowingly: (1) one enum now mixes two axes, what the repository contains (plan only, mixed, built) and whose work it is
+  (own-work, clone, generated), so the six values overlap, and the precedence rule is what keeps them apart; the wording can reduce the ambiguity, not remove it. (2) A clone call is made from a summary with
+  only the newest 30 commits and a few sampled files, which often cannot show a copy; the rule tells the judge to say clone only on what it sees, and the agreement figure shows how well that works. (3) Judge trial 4's
+  finding that Haiku named the kind in all but 2 of 276 runs (E-057) was measured on the four-value vocabulary with tools; it must be re-measured on six values from a summary (2.2m, 2.2n). (4) E-056's gate may
+  use the judge's clone call together with the kernel's fork and history facts; a clone call alone is not a decline.
+- **Held by:** `agent-runner/schema/judgment.schema.json` (the enum and its description); `agent-runner/agent_runner/judgment.py`; `agent-runner/tests/test_judgment.py`; TODO.md 2.2d, 2.2i.
+- **Source:** Ghost chose to add own-work and clone to the judge's kind, 2026-10-25.
+- **Status:** in force
+- **subject:** judges
+- **See also:** E-055, E-056, E-057, E-080
+- **Supersedes:** E-057 (in part: its list of kinds only)

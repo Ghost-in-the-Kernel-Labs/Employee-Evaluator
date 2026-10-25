@@ -197,9 +197,12 @@ and c; f needs d and e; g is independent; h needs f and g; i needs h; j and k ne
 
 Findings that shaped the slicing, for whoever builds it:
 
-- **The label vocabulary and the judge's differ.** The labels say own-work, clone or generated (E-056); the judge says built,
-  plan only, generated or mixed (E-057). Only "generated" is shared, the set holds none, and a clone is not something a summary
-  shows (the history and GitHub do). So agreement on kind can be measured only as generated or not, and is empty on this set.
+- **The label vocabulary and the judge's differed; E-082 (2026-10-25) joins them.** The labels say own-work, clone or generated (E-056);
+  the judge said built, plan only, generated or mixed (E-057), so only "generated" was shared and the set holds none. Ghost chose to
+  give the judge six values, E-057's four plus own-work and clone, so its kind can be compared with all 30 labels. The price: one enum
+  mixes two axes (what the repository contains, whose work it is), which the schema's precedence rule keeps apart as well as wording
+  can, and a clone call is made from a summary of 30 commits, which often cannot show a copy (the history and GitHub do), so the
+  rule says clone only on what the summary shows. Trial 4's kind result was on four values and must be re-measured (2.2m, 2.2n).
 - **A constant can clear the floor.** Always answering Quality 3 is within one of 27 of the 30 labels (90 %), and always
   answering own-work gets 23 of 30 (77 %) on kind; 2.2i records every figure beside its constant-answer baseline so that
   80 % is read against that, and 2.2n asks for the margin over it, not the figure alone.
@@ -225,8 +228,8 @@ Open questions only Ghost can answer (also in `docs/FOR-GHOST.md`):
    under `build/`; no agent reads the map.
 7. **What may be committed from a real run:** proposal, ids, scores, kinds and tiers only.
 8. **What "agreement" means.** Proposal: per field, the share of labels the judgment equals (Ambition and Quality exact, Quality
-   also within one, kind as generated or not), the constant-answer baseline beside it, the 80 % floor applied to each field
-   its own gate judges (kind at 2.2, Ambition at 2.3, Quality at 2.4); and whether the schema should carry a clone signal.
+   also within one, kind exact over the six values of E-082), the constant-answer baseline beside it, the 80 % floor applied to each field
+   its own gate judges (kind at 2.2, Ambition at 2.3, Quality at 2.4). The clone signal is the kind `clone` itself (E-082).
 9. **A category with no majority** (three different folder classes, or tiers): proposal, Opus decides, as for a split score.
 
 ## Phase 3 — Web app with GitHub integration (Opus plan)

@@ -28,6 +28,6 @@ says so to Ghost; Ghost removes it when settled.
   prices of Haiku 5.5 and Opus 5.5; (4) standard-library HTTP or the Anthropic SDK (a dependency); (5) `python3` in the pinned
   image (answered 2026-10-25: yes, E-081); (6) the 30 labelled repositories re-fetched outside the
   repository, by whom and where; (7) what a real run may commit (proposal: ids, scores, kinds, tiers only); (8) what
-  agreement means (the labels' own-work/clone/generated against the judge's built/plan/generated/mixed share only
-  "generated", and the set holds none; a constant answer clears 77 % on kind and 90 % on Quality within one); (9) the rule
+  agreement means (kind is now compared exactly, since you gave the judge six values, E-082; the set holds no generated, and a constant
+  own-work clears 77 % on kind and a constant 3 90 % on Quality within one); (9) the rule
   for a three-way tie (proposal: Opus decides).

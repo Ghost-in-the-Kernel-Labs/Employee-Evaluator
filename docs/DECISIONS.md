@@ -63,7 +63,7 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-054 | `evaluator score <path>`: every module's facts, one card, as JSON or Markdown | in force | architecture |
 | E-055 | The judge is Haiku three times, averaged, given the kernel's facts; Opus when the three disagree | in force | judges |
 | E-056 | Only AI-assisted work is ranked: evidence admits, its absence asks, hand-written or generated wholesale is declined | in force | admission |
-| E-057 | The judge classifies and judges; the kernel counts what the judge calls the author's own, and applies the card's rules | in force | judges |
+| E-057 | The judge classifies and judges; the kernel counts what the judge calls the author's own, and applies the card's rules | superseded by E-082 (its list of kinds only, the rest stands) | judges |
 | E-058 | JavaScript is read as TypeScript is, with the vendored TSX grammar, and `require` counts as an import | in force | analysis |
 | E-059 | PIT is the mutation tool, vendored with what its poms declare | in force | tests |
 | E-060 | A Sonnet agent tries a hard fix once, then asks Opus | in force | agents |
@@ -88,3 +88,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-079 | A calibration label is one JSON file, an opaque id and five closed fields, held by a loader in rubric/ | superseded by E-080 (its field list only, the rest stands) | calibration |
 | E-080 | A calibration label is three fields, kind, ambition and quality, and an opaque id; no domain, no rationale | in force | calibration |
 | E-081 | `python3`, standard library only, is in the pinned image for agent-runner/, and no network door exists yet | in force | agent-runner |
+| E-082 | The judge's kind is six values, E-057's four plus own-work and clone | in force | judges |

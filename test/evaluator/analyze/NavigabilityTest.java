@@ -145,4 +145,21 @@ class NavigabilityTest {
         write(repo.resolve("CLAUDE.md"), path + " ".repeat(DocPaths.MAX_DOC - path.length() + 1));
         assertEquals(List.of(), DocPaths.named(repo, List.of("CLAUDE.md")));
     }
+
+    /**
+     * The paths a judge's brief lists (TODO.md 2.2b). Root-level README files only, by name in order: README, README.md and readme.rst count (a name
+     * of "readme" alone or with an extension, any case); READMEFIRST, notes.md, docs/README.md (not the root), a folder named README.txt and a link
+     * README.rst do not. Agent files: CLAUDE.md and .github/copilot-instructions.md are listed in the list's order; a link AGENTS.md is not.
+     */
+    @Test
+    void thePathsOfReadmesAndAgentDocsAreListedNotRead(@TempDir Path repo) throws IOException {
+        assertEquals(List.of(), Navigability.readmes(repo));
+        assertEquals(List.of(), Navigability.agentDocs(repo));
+        for (String name : List.of("README", "README.md", "readme.rst", "READMEFIRST", "notes.md", "docs/README.md", "CLAUDE.md", ".github/copilot-instructions.md", "target.txt")) write(repo.resolve(name), "x\n");
+        Files.createDirectory(repo.resolve("README.txt"));
+        Files.createSymbolicLink(repo.resolve("README.rst"), repo.resolve("target.txt"));
+        Files.createSymbolicLink(repo.resolve("AGENTS.md"), repo.resolve("target.txt"));
+        assertEquals(List.of("README", "README.md", "readme.rst"), Navigability.readmes(repo));
+        assertEquals(List.of("CLAUDE.md", ".github/copilot-instructions.md"), Navigability.agentDocs(repo));
+    }
 }

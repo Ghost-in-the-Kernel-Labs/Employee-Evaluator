@@ -20,7 +20,8 @@ import java.util.List;
 
 /**
  * The command line: turns what was typed into a command and prints what it did. The work is in the
- * other modules; this one only names it. `evaluator score <path>` is the one command (phase 1).
+ * other modules; this one only names it. `evaluator score <path>` is the scorer's command (phase 1); `evaluator brief <path>`
+ * (phase 2) prints the kernel's facts for a judge.
  */
 // Decision: E-010
 public final class Main {
@@ -33,6 +34,10 @@ public final class Main {
               --applicant reads what GitHub verifies (needs EVALUATOR_GITHUB_TOKEN); --date fixes the card's date.
               --facts prints instead the values behind the card, one `name value` line each, and goes with neither
               --markdown nor --date.
+            usage: evaluator brief <path-to-repository>
+              Prints, as one JSON document, what a judge is told before it reads any file: the inventory, the facts
+              `score --facts` prints, the newest 200 commits (short hash, date, subject, files changed) and the paths
+              of any README and agent instruction files. No file's contents, no author; tests are not run.
             """;
 
     /** GitHub's own rule for owner/repo: an owner of letters, digits and hyphens; a repository not starting with a dot (so never `..`). */
@@ -47,6 +52,7 @@ public final class Main {
 
     /** The exit status of a command: 0 done, 1 refused. */
     static int run(List<String> args, PrintStream out, PrintStream err) {
+        if (!args.isEmpty() && args.get(0).equals("brief")) return brief(args, out, err);
         Command command;
         try {
             command = parse(args);
@@ -56,6 +62,27 @@ public final class Main {
             return 1;
         }
         return score(command, out, err);
+    }
+
+    /** `brief <path>`: the repository's brief printed (TODO.md 2.2b); a wrong use is refused with the usage, as score's are. */
+    static int brief(List<String> args, PrintStream out, PrintStream err) {
+        if (args.size() != 2 || args.get(1).startsWith("--")) {
+            err.println("evaluator: brief takes one path and no option");
+            err.print(USAGE);
+            return 1;
+        }
+        Path path = Path.of(args.get(1));
+        if (!Files.isDirectory(path)) {
+            err.println("evaluator brief: not a folder: " + path);
+            return 1;
+        }
+        try {
+            out.print(Brief.render(path, err));
+            return 0;
+        } catch (IOException | UncheckedIOException e) {
+            err.println("evaluator brief: " + e.getMessage());
+            return 1;
+        }
     }
 
     /** The card of the repository the command names, printed as it asks. */

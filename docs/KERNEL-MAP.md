@@ -502,3 +502,11 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | rubric | `rubric/evaluator/rubric/Label.java:Label.Label` |  | 2026-10-24 |  |
 | rubric | `rubric/evaluator/rubric/Label.java:Label.wire` |  | 2026-10-24 |  |
 | rubric | `rubric/evaluator/rubric/Label.java:Label.wires` |  | 2026-10-24 |  |
+| analyze | `analyze/evaluator/analyze/Navigability.java:Navigability.agentDocs` |  | 2026-10-25 |  |
+| analyze | `analyze/evaluator/analyze/Navigability.java:Navigability.readmes` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Brief.java:Brief.Brief` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Brief.java:Brief.render` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Brief.java:Brief.facts` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Brief.java:Brief.commits` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Brief.java:Brief.strings` |  | 2026-10-25 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.brief` |  | 2026-10-25 |  |

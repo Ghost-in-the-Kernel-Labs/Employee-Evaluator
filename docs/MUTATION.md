@@ -273,6 +273,14 @@ absent-part rule survived. No new row.
 and the code is shorter. `cli/`: 50 mutants, 49 killed, the one left `Main.main`'s `System.exit`, already judged harmless below. The rerun of
 `score/` after the change: 170 mutants, 170 killed. No new row.
 
+### Run 19: 2026-10-25, `analyze/` and `cli/`, `evaluator brief` (TODO.md 2.2b)
+
+`gradle mutate -Ptarget=evaluator.analyze.*` then `evaluator.cli.*`, in a plain clone of the change (`Brief`, `Main.brief`, `Navigability.readmes` and
+`agentDocs`). First pass: `Navigability`'s new methods had no coverage because their test sat under `cli/`; moved into `NavigabilityTest`, none left
+alive there (the analyze survivors that remain are older). `cli/`: 82 mutants; first pass left `Main.brief`'s IOException path, the edges of the
+200-commit and 200-character caps and a message opening with a newline, each killed by a test (`aBrokenHistoryIsRefused`, `theCapsHoldAtTheirEdges`).
+The one left is `Brief.commits`, `codePointCount(...) > MAX_SUBJECT` as `>=`, a new row below; `Main.main`'s `System.exit` is the old row.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -282,6 +290,7 @@ and the code is shorter. `cli/`: 50 mutants, 49 killed, the one left `Main.main`
 | `history/Shape.java`, `variation`, the two `-` in `(s - mean) * (s - mean)` | `(s + mean) * (s - mean)`, `(s - mean) * (s + mean)` | Equal to what they replace: (s + m)(s - m) = s² - m², and the sum of that over n values is Σs² - n·m², which is Σ(s - m)² when m is their mean. Only floating-point rounding, far below the three decimals the fact is rounded to, differs. |
 | `history/Commits.java`, `parse`, `close < 0` | `close <= 0` | Equal in result: a record whose close is at index 0 has an empty header, which splits into one part, and `head.length < 3` skips it on the next line. |
 | `cli/Main.java`, `main`, `System.exit(...)` | the call removed | `main` is the JVM's entry and exit; a test that called it would end the test JVM, so the work is in `run`, which returns the status and is tested for each status (0, 1). The only difference is the status the shell sees, which `run`'s return value is. |
+| `cli/Brief.java`, `commits`, `codePointCount(0, subject.length()) > MAX_SUBJECT` | `>=` | Equal in result: a subject of exactly 200 code points is cut to its first 200, which is itself. |
 | `github/Authorship.java`, `facts`, `if (total == 0) return facts;` | the returned list replaced by an empty immutable list | Equal to what it replaces: at that line `facts` is the empty list just made, so an empty list is the same list. The caller (`Pipeline.facts`) only reads it with `addAll`. |
 | `github/HttpGitHub.java`, `fromEnvironment`, `return from(...)` | returns null | The line's return runs only when `EVALUATOR_GITHUB_TOKEN` is set, and a session without the token (this one) reaches it only by the throw. It is not harmless: with the token set, `AuthorshipTest.theAdapterNamesItsVariableAndNeverItsToken` calls `live.toString()` and `AuthorshipLiveTest` calls `Authorship.facts` on the result, both of which fail on null, so Ghost's token session kills it. A recorded answer cannot, since the environment is the process's and a test must not set it; `from` (which the line calls) is tried for every value. |
 | `analyze/JavaComplexity.java`, `scan` (line 53), `visitMethodInvocation`, `visitBinary`, `visitSwitch`, `visitSwitchExpression` | the returned value replaced by null | Each returns `Void`, whose only value is null: `super.scan(...)`, `super.visitMethodInvocation(...)` and `super.visitBinary(...)` return null, and `aSwitch` returns null. The mutant returns what the code returned. |

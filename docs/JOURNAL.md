@@ -1421,3 +1421,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** a text grep for the banned imports (fooled by strings and comments; refused) or parsing each file with `ast` (chosen: catches `__import__`, `importlib`, `from os import getenv`, a whole-environment read); a gate that fails without `python3` (refused by the check: PENDING as `CalibrationSet` is).
 - **Resolved:** `agent-runner/agent_runner/{__init__,guard}.py`, `agent-runner/tests/test_guard.py`, `test/AgentRunnerTest.java` (in `DocTests`; the child sees no variable naming a key), the Dockerfile line, E-081, `docs/how/judge-harness.md` with its CLAUDE.md row, 2.2a to DONE.md, HANDOFF names 2.2b, FOR-GHOST question 5 answered.
 - **Touched:** E-081; Dockerfile; CLAUDE.md; TODO.md; docs/DONE.md; docs/HANDOFF.md; docs/FOR-GHOST.md; test/DocTests.java.
+
+### J-111 TODO.md 2.2b: `evaluator brief`, the kernel's facts, inventory and commit log as JSON for a judge
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** Build 2.2b: one deterministic JSON document a judge is given before it reads any file, from what the modules already count.
+- **Found:** `Inventory.toJson`, `FactsText` and `Commits` already hold everything but the README and agent-file paths; `Commits` reads no author, so identity stays out by construction (E-014). The cards' fixtures hold no `.git`, so the golden has an empty log; the log is tested on a history built in a temporary folder and on synthetic commits.
+- **Options:** the facts as `--facts` lines in an array, or an object (chosen: an object, numbers kept as numbers); README paths from the whole tree, or the root only (chosen: root, an `// Unsure:`); a new module (refused: `cli/` names the work, the path rules went to `Navigability`).
+- **Resolved:** `Brief` in `cli/`, `Main.brief`, two public path lists in `Navigability`, `BriefTest`, a golden of small-app. No new decision.
+- **Touched:** cli/, analyze/Navigability.java, docs/how/command-line.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.

@@ -21,3 +21,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2a and DESIGN.md "Step 2.2 sliced", add-or-change-a-module.md, commands.md.
 - **Complaints:** the task wording said to add the module to docs/modules.json while DESIGN.md says it gains nothing (Python is outside the Java map); the contradiction cost a check of ModulesTest. TODO 2.2a's check says `python3 -I -m unittest discover`, but `-I` ignores PYTHONDONTWRITEBYTECODE, so `__pycache__` appears unless `-B` is added; `.gitignore` held only the top-level `agent-runner/__pycache__/`. No doc says how a Check-style test is registered (DocTests).
 - **Suggestions:** one line in add-or-change-a-module.md: "Python (`agent-runner/`) and `web/` are not modules: no entry". One line in agent-environment.md on registering a new test class in `test/DocTests.java`.
+
+### 2026-10-25 · TODO.md 2.2b, `evaluator brief` · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2b and DESIGN.md "Step 2.2 sliced", command-line.md, judge-harness.md, add-or-change-a-module.md, commands.md.
+- **Complaints:** `gradle mutate -Ptarget=evaluator.cli.*` cannot run in a worktree (`MainTest.thisRepositorysCard` fails without mutation, so PIT refuses); I ran it in a plain clone with my files copied in, and no doc says so. A test of `analyze/` code must sit in `test/evaluator/analyze/` or PIT reports no coverage (finish-work.md says it, but late). The Bash classifier failed several times in a row and cost the end of the run.
+- **Suggestions:** one line in commands.md or agent-environment.md: "in a worktree, mutate `cli` from a plain clone".

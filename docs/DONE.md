@@ -166,3 +166,12 @@ tests by hand). Cost: none.
 Done 2026-10-25 (J-110): `agent-runner/` as a Python 3 package on the standard library (`agent_runner/`, `tests/`), `agent_runner/guard.py` and `tests/test_guard.py` (no file but the future `transport.py` imports a network or
 model-client module or reads an environment variable naming a key; the guard parses, never runs, a file), `test/AgentRunnerTest.java` (in `DocTests`: runs `python3 -I -B -m unittest discover`, PENDING when `python3` is absent),
 `docs/how/judge-harness.md` with its row in `CLAUDE.md`. Ghost approved `python3` in the pinned image (E-081). Not a Java module, so `docs/modules.json` gains nothing (docs/DESIGN.md, "Step 2.2 sliced").
+
+### 2.2b The kernel's brief
+
+Check: `evaluator brief <path>` prints one JSON document, byte-identical across two runs on each fixture and a golden:
+the inventory (path, language, lines, why set aside), the kernel's facts (the `--facts` values, E-076), the commit log
+(short hash, date, subject, files changed, capped at 200 newest) and the paths of any README and agent instruction files; no
+file's contents and no author name or email. It only reads and reports what the existing modules count (no new Java module). No API,
+no key, no Ghost. Cost: none.
+Done 2026-10-25 (J-111): `cli/evaluator/cli/Brief.java` and `Main.brief` print `inventory` (`Inventory.toJson`), `facts` (`FactsText`'s lines as an object), `commitsTotal`, `commits` (newest 200, short hash, UTC date, subject cut at 200 characters, files changed), `readme` (root README files) and `agentInstructions` (the E-044 list), from `Navigability.readmes` and `Navigability.agentDocs`. Tests are not run. Test: `test/evaluator/cli/BriefTest.java`, golden `test/goldens/briefs/small-app.json` (checked by hand); a stability run on all ten card fixtures. No new decision, no new module.

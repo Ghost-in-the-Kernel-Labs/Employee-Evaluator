@@ -36,6 +36,11 @@
 
   (the real output has more lines, one for every repository-wide fact and every maintainability part). A baseline is
   recorded, or a golden checked by hand, from this and a fixture's folder: no scratch program.
+- **`evaluator brief <path>`** (TODO.md 2.2b, `cli/evaluator/cli/Brief.java`) prints one JSON document for a judge, instead of a
+  card: `inventory` (`Inventory.toJson`), `facts` (`--facts`' values as an object, numbers as numbers), `commitsTotal`, `commits`
+  (the newest 200: short hash, UTC date, subject cut at 200 characters, files changed), `readme` (root README files) and
+  `agentInstructions` (E-044's list). No file's contents, no author name or address (E-014); tests are not run; the same bytes
+  each time. It takes no option. Test: `BriefTest`; golden `test/goldens/briefs/` (`gradle test -PwriteGoldens`, review the diff).
 - The cards' goldens are written from the fixtures by `gradle test -PwriteGoldens`; review the diff.
 
 ## Always

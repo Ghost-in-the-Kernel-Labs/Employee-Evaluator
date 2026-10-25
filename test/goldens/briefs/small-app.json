@@ -1,0 +1,50 @@
+{
+  "inventory": {
+    "source": [
+      {"path": "lib/Report.java", "language": "Java", "lines": 7},
+      {"path": "src/app/main.py", "language": "Python", "lines": 6},
+      {"path": "src/app/util.py", "language": "Python", "lines": 2},
+      {"path": "src/web/index.ts", "language": "TypeScript", "lines": 5},
+      {"path": "tests/test_util.py", "language": "Python", "lines": 3}
+    ],
+    "setAside": [
+      {"path": "assets/legacy.js", "language": "JavaScript", "reason": "vendored: .gitattributes assets/legacy.js"},
+      {"path": "dist/bundle.js", "language": "JavaScript", "reason": "generated: folder dist/"},
+      {"path": "node_modules/tiny/index.js", "language": "JavaScript", "reason": "vendored: folder node_modules/"},
+      {"path": "src/app/schema_pb2.py", "language": "Python", "reason": "generated: name *_pb2.py"},
+      {"path": "src/web/api.generated.ts", "language": "TypeScript", "reason": "generated: name *.generated.ts"},
+      {"path": "src/web/client.ts", "language": "TypeScript", "reason": "generated: header \"@generated\""},
+      {"path": "vendor/left_pad.js", "language": "JavaScript", "reason": "vendored: folder vendor/"}
+    ]
+  },
+  "facts": {
+    "COMPLEXITY.cognitive_total": 1,
+    "COMPLEXITY.dependency_depth": 1,
+    "COMPLEXITY.functions": 5,
+    "MAINTAINABILITY.duplication": 0,
+    "MAINTAINABILITY.files": 5,
+    "MAINTAINABILITY.import_cycle_files": 0,
+    "MAINTAINABILITY.part.coupling": 1,
+    "MAINTAINABILITY.part.cycles": 1,
+    "MAINTAINABILITY.part.duplication": 1,
+    "MAINTAINABILITY.part.functions": 1,
+    "MAINTAINABILITY.part.tests": 0.15,
+    "MAINTAINABILITY.part.unused": 1,
+    "MAINTAINABILITY.test_to_code_ratio": 0.15,
+    "MAINTAINABILITY.weighted": 0.7875,
+    "NAVIGABILITY.checklist": 40,
+    "NAVIGABILITY.checklist.agent_docs": 0,
+    "NAVIGABILITY.checklist.doc_paths_missing": 0,
+    "NAVIGABILITY.checklist.doc_paths_named": 0,
+    "NAVIGABILITY.checklist.module_cycles": 0,
+    "NAVIGABILITY.checklist.naming_consistency": 1,
+    "SIZE.set_aside_files": 7,
+    "SIZE.source_files": 5,
+    "SIZE.source_folders": 4,
+    "SIZE.source_lines": 23
+  },
+  "commitsTotal": 0,
+  "commits": [],
+  "readme": ["README.md"],
+  "agentInstructions": []
+}

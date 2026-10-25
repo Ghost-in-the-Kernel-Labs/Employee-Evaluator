@@ -13,14 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2b The kernel's brief
-
-Check: `evaluator brief <path>` prints one JSON document, byte-identical across two runs on each fixture and a golden:
-the inventory (path, language, lines, why set aside), the kernel's facts (the `--facts` values, E-076), the commit log
-(short hash, date, subject, files changed, capped at 200 newest) and the paths of any README and agent instruction files; no
-file's contents and no author name or email. It only reads and reports what the existing modules count (no new Java module). No API,
-no key, no Ghost. Cost: none.
-
 ### 2.2c The repo summary builder
 
 Check: `agent-runner/` turns the brief and the checked-out path into a summary: the README (trimmed), sampled files

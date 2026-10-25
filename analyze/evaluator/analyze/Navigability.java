@@ -32,6 +32,20 @@ public final class Navigability {
 
     private Navigability() {}
 
+    /** The agent instruction files the repository holds (E-044's list), by path from its root: for a judge's brief, which reads no file's contents. */
+    public static List<String> agentDocs(Path root) {
+        return DocPaths.found(root);
+    }
+
+    // Unsure: only a README at the root is listed; a monorepo's package READMEs are not, until a judged repository shows one is missed.
+    /** The README files at the repository's root (README, README.md, readme.rst, ...), by name, sorted; a link is not followed. */
+    public static List<String> readmes(Path root) throws IOException {
+        try (var names = java.nio.file.Files.list(root)) {
+            return names.filter(p -> java.nio.file.Files.isRegularFile(p, java.nio.file.LinkOption.NOFOLLOW_LINKS))
+                    .map(p -> p.getFileName().toString()).filter(n -> n.matches("(?i)readme(\\..*)?")).sorted().toList();
+        }
+    }
+
     /** The checklist's facts for the repository at root, its inventory, measures and graph given. */
     public static List<Fact> facts(Path root, Inventory inventory, Complexity.Report report, Dependencies.Graph graph) throws IOException {
         List<String> docs = DocPaths.found(root);

@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 /** The documents' and the kernel's tests under JUnit (E-009): each must report no problem. */
 class DocTests {
     @Test
+    void agentRunner() {
+        assertEquals(List.of(), AgentRunnerTest.run().problems());
+    }
+
+    @Test
     void corpus() {
         assertEquals(List.of(), CorpusTest.run().problems());
     }

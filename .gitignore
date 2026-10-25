@@ -13,7 +13,7 @@
 # the other languages' packages, once they exist
 web/node_modules/
 web/.next/
-agent-runner/__pycache__/
+agent-runner/**/__pycache__/
 agent-runner/.venv/
 
 # nothing an applicant submitted, no snapshot, no run output, ever (E-014)

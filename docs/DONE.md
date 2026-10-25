@@ -153,3 +153,16 @@ Done 2026-10-24 (J-106): 30 labels in `calibration/` (c001 to c030), each exactl
 generated 0. Ambition spread: utility 14, product 10, toy 3, research 3. Quality spread: 1 x 2, 2 x 6, 3 x 17, 4 x 4, 5 x 1. The labels were drafted by Claude Sonnet agents
 applying the rubric (`docs/SCORE-CARD.md`, `docs/DESIGN.md`) and reviewed by Ghost, who confirmed them. The id-to-repository map and the domain spread live outside the repository (E-014).
 The real-folder test reads the set as MET at 30.
+
+### 2.2a The agent-runner scaffold and its gate
+
+Check: `agent-runner/` exists as a Python 3 package (standard library only) with `docs/how/judge-harness.md` (the
+workpath, one row in `CLAUDE.md`) and a Java test, `test/AgentRunnerTest.java`, that runs `python3 -I -m unittest discover`
+in it and fails the build when a Python test fails (PENDING and green when `python3` is absent, as `CalibrationSet` is
+before 30 labels); a Python test fails any `agent-runner/` file other than `transport.py` (2.2l) that imports `socket`, `http`,
+`urllib`, `ssl` or `anthropic`, and one that reads an environment variable naming a key. No API, no key; Ghost is not needed
+(whether the pinned image gains `python3` is a question for him: until it does the gate reports PENDING and agents run the
+tests by hand). Cost: none.
+Done 2026-10-25 (J-110): `agent-runner/` as a Python 3 package on the standard library (`agent_runner/`, `tests/`), `agent_runner/guard.py` and `tests/test_guard.py` (no file but the future `transport.py` imports a network or
+model-client module or reads an environment variable naming a key; the guard parses, never runs, a file), `test/AgentRunnerTest.java` (in `DocTests`: runs `python3 -I -B -m unittest discover`, PENDING when `python3` is absent),
+`docs/how/judge-harness.md` with its row in `CLAUDE.md`. Ghost approved `python3` in the pinned image (E-081). Not a Java module, so `docs/modules.json` gains nothing (docs/DESIGN.md, "Step 2.2 sliced").

@@ -1,14 +1,12 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.2a, the first part of the judge harness (2026-10-24)
+## Start here: 2.2b, the kernel's brief (2026-10-25)
 
-2.1 is closed (J-106): 30 labels in `calibration/`, reviewed by Ghost, the set MET at 30. 2.2 was too large for one go and
-is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in `TODO.md`).
-The first open part is **2.2a**, the `agent-runner/` scaffold and its gate; it and every part to **2.2k** need no model API and
-no key. **2.2l** (the live transport: its loopback tests need no key, its smoke does), **2.2m** (the first run on the
-calibration set) and **2.2n** (the prompt iterated to 80 %) wait on Ghost: key, budget, model ids and the 30 repositories
-re-fetched; his nine questions are in `docs/FOR-GHOST.md`. 2.2a also needs his answer on `python3` in the pinned image
-only to make its tests more than PENDING in the gate.
+2.1 is closed (J-106). 2.2, the judge harness, is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in
+`TODO.md`). 2.2a is done (J-110): `agent-runner/` exists with its Java gate and its no-network import guard, and Ghost approved `python3` in the pinned image
+(E-081). The first open part is **2.2b**, `evaluator brief`; it and every part to **2.2k** need no model API and no key. **2.2l** (the live transport: its loopback
+tests need no key, its smoke does), **2.2m** (the first run on the calibration set) and **2.2n** (the prompt iterated to 80 %) wait on Ghost: key, budget, model
+ids and the 30 repositories re-fetched; his questions are in `docs/FOR-GHOST.md` (the `python3` one is answered).
 
 Agreement against the labels is partly model against model (the labels were drafted by Claude Sonnet agents);
 Ghost's review is what keeps it from being circular (J-106).

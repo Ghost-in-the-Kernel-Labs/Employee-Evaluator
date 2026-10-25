@@ -42,6 +42,7 @@ step goes into the workpath's file, never into this table (E-065).
 | The navigability checklist | `docs/how/navigability-checklist.md` |
 | The command line | `docs/how/command-line.md` |
 | Which model judges code: the judge trials | `docs/how/judge-trials.md` |
+| The judge harness: `agent-runner/`, its Python tests and import guard | `docs/how/judge-harness.md` |
 | The agent's environment: metrics, the kernel map, mutation | `docs/how/agent-environment.md` |
 | Reading only: the design (`docs/DESIGN.md`), a word (`docs/GLOSSARY.md`), why a rule is (`docs/GHOST-IN-THE-KERNEL.md`), a tool got wrong (`docs/FINDINGS.md`), the journal (`docs/JOURNAL.md`, its header) | the document itself |
 

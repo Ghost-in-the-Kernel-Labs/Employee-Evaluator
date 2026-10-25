@@ -87,3 +87,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-078 | The seed corpus is held to the rubric its README names, not to the current rubric | in force | corpus |
 | E-079 | A calibration label is one JSON file, an opaque id and five closed fields, held by a loader in rubric/ | superseded by E-080 (its field list only, the rest stands) | calibration |
 | E-080 | A calibration label is three fields, kind, ambition and quality, and an opaque id; no domain, no rationale | in force | calibration |
+| E-081 | `python3`, standard library only, is in the pinned image for agent-runner/, and no network door exists yet | in force | agent-runner |

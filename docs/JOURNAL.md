@@ -1411,3 +1411,13 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** parts as a list inside one item (as 1.13 was, but then no check per part); `2.2.1` numbering (also unparsed, and the same change); letters (chosen: smallest change, DONE.md keeps the number).
 - **Resolved:** 2.2a to 2.2n in TODO.md, each with a check; DESIGN.md "Step 2.2 sliced" with the table, the findings and nine questions; the questions in FOR-GHOST.md; HANDOFF names 2.2a. Two tests accept an optional letter after the step and refuse parts out of order or without a check. No decision added: the open ones are questions to Ghost.
 - **Touched:** TODO.md, docs/DESIGN.md, docs/FOR-GHOST.md, docs/HANDOFF.md, test/TodoTest.java, test/DocsTest.java.
+
+## 2026-10-25
+
+### J-110 TODO.md 2.2a: the agent-runner scaffold, its Java gate and its import guard; python3 joins the pinned image (E-081)
+- **Who:** Claude Sonnet 5.5, with Ghost's approval of python3. **Class:** decision.
+- **Intent:** Build 2.2a: `agent-runner/` as a standard-library Python package, a Java test that runs its tests under `gradle test`, and a guard against a network or key door before 2.2l.
+- **Found:** The pinned base already carried `python3` 3.12.3-0ubuntu2.1 as a dependency of another package, so installing it by name changed no bytes but keeps it on purpose. `python3 -I` ignores `PYTHONDONTWRITEBYTECODE`, so the gate adds `-B`. The plan says `docs/modules.json` gains nothing (Python is outside the Java map), against the task's wording; the plan and `ModulesTest` were followed.
+- **Options:** a text grep for the banned imports (fooled by strings and comments; refused) or parsing each file with `ast` (chosen: catches `__import__`, `importlib`, `from os import getenv`, a whole-environment read); a gate that fails without `python3` (refused by the check: PENDING as `CalibrationSet` is).
+- **Resolved:** `agent-runner/agent_runner/{__init__,guard}.py`, `agent-runner/tests/test_guard.py`, `test/AgentRunnerTest.java` (in `DocTests`; the child sees no variable naming a key), the Dockerfile line, E-081, `docs/how/judge-harness.md` with its CLAUDE.md row, 2.2a to DONE.md, HANDOFF names 2.2b, FOR-GHOST question 5 answered.
+- **Touched:** E-081; Dockerfile; CLAUDE.md; TODO.md; docs/DONE.md; docs/HANDOFF.md; docs/FOR-GHOST.md; test/DocTests.java.

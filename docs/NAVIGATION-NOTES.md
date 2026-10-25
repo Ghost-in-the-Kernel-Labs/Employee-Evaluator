@@ -16,3 +16,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md (its "slice it" line), then TODO.md, DESIGN.md step 2.2, theGhost.md E-055/E-057, add-or-change-a-module.md.
 - **Complaints:** nothing says how a sliced item is numbered; `TodoTest` and `DocsTest` parse only `N.M`, found by reading them. 1.13's slices exist only as prose in DONE.md. `docs/modules.json` says the agent runner is a phase-2 module but ModulesTest leaves `agent-runner/` out and E-001 makes it Python: no file says whether it needs an entry.
 - **Suggestions:** one line in do-a-todo-step.md: "a sliced item's parts are 2.2a, 2.2b ... (TodoTest)". A line in add-or-change-a-module.md that `agent-runner/` (Python) and `web/` are outside the Java module map.
+
+### 2026-10-25 · TODO.md 2.2a, the agent-runner scaffold and its gate · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2a and DESIGN.md "Step 2.2 sliced", add-or-change-a-module.md, commands.md.
+- **Complaints:** the task wording said to add the module to docs/modules.json while DESIGN.md says it gains nothing (Python is outside the Java map); the contradiction cost a check of ModulesTest. TODO 2.2a's check says `python3 -I -m unittest discover`, but `-I` ignores PYTHONDONTWRITEBYTECODE, so `__pycache__` appears unless `-B` is added; `.gitignore` held only the top-level `agent-runner/__pycache__/`. No doc says how a Check-style test is registered (DocTests).
+- **Suggestions:** one line in add-or-change-a-module.md: "Python (`agent-runner/`) and `web/` are not modules: no entry". One line in agent-environment.md on registering a new test class in `test/DocTests.java`.

@@ -13,16 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2a The agent-runner scaffold and its gate
-
-Check: `agent-runner/` exists as a Python 3 package (standard library only) with `docs/how/judge-harness.md` (the
-workpath, one row in `CLAUDE.md`) and a Java test, `test/AgentRunnerTest.java`, that runs `python3 -I -m unittest discover`
-in it and fails the build when a Python test fails (PENDING and green when `python3` is absent, as `CalibrationSet` is
-before 30 labels); a Python test fails any `agent-runner/` file other than `transport.py` (2.2l) that imports `socket`, `http`,
-`urllib`, `ssl` or `anthropic`, and one that reads an environment variable naming a key. No API, no key; Ghost is not needed
-(whether the pinned image gains `python3` is a question for him: until it does the gate reports PENDING and agents run the
-tests by hand). Cost: none.
-
 ### 2.2b The kernel's brief
 
 Check: `evaluator brief <path>` prints one JSON document, byte-identical across two runs on each fixture and a golden:

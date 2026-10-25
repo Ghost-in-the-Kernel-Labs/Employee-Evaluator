@@ -13,15 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2f The judge interface, a fake judge and the recorded-response replay
-
-Check: a `Judge` takes a rendered prompt, a model id and a run number and returns the raw answer with the tokens used;
-`FakeJudge` returns scripted answers (and an unparsable one on request); `ReplayJudge` returns the recorded answer for
-the key (prompt hash, summary hash, model id, run number) from a recordings file and raises on a missing key, never
-falling through to a live judge; the recordings format is fixed in the how-file and a test holds hand-written synthetic
-recordings to it; tests of everything above this slice use these two and never the network. Nothing from a real run is
-committed here (E-014; the question of what may be, below, is Ghost's). No API, no key. Ghost: not to build. Cost: none.
-
 ### 2.2g The cost cap
 
 Check: a `Budget` counts tokens (dollars once Ghost supplies prices and model ids, a data file with its date) with a cap per

@@ -1453,3 +1453,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** hash the template's body too (refused: the check names the version, and the golden holds the body); embed the schema compacted (refused: its bytes are what the hash and the API share); a placeholder pass that rescans (refused: a hostile summary could carry a placeholder).
 - **Resolved:** `prompts/judge.*`, `agent-runner/agent_runner/prompt.py`, `agent-runner/tests/test_prompt.py`, a golden, judge-harness.md, 2.2e to DONE.md, HANDOFF names 2.2f. No new decision.
 - **Touched:** agent-runner/, test/goldens/prompts/, docs/how/judge-harness.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-115 TODO.md 2.2f: the judge interface, a fake judge and the recorded-response replay
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** Build 2.2f: the interface every judge implements, the two judges tests use, and the recordings file the replay reads.
+- **Found:** The check says a judge takes "a rendered prompt", but a replay keyed by prompt hash and summary hash cannot recover either from plain text (the summary sits inside the render and the hash is of the files), so the judge is given a `RenderedPrompt`: the text plus both hashes, made by one function. No kernel code changed, so no mutation run.
+- **Options:** one JSON object for the file (refused: a new recording rewrites the whole diff); JSON lines with a version header (taken: one line per recording, sorted, byte-stable); a loader rule refusing recordings outside `build/` (refused: the check does not call for it, and a test holds only synthetic files).
+- **Resolved:** `agent_runner/judge.py`, `tests/test_judge.py`, a synthetic fixture, judge-harness.md, 2.2f to DONE.md, HANDOFF names 2.2g. No new decision.
+- **Touched:** agent-runner/, docs/how/judge-harness.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.

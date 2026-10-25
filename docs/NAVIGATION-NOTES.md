@@ -36,3 +36,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2d to 2.2k and DESIGN.md "Step 2.2 sliced", judge-harness.md, E-055 to E-057 and E-080 in theGhost.md.
 - **Complaints:** a decision's fields are required by GhostTest (Decision, Why, Held by, Source, Status, subject) but no doc lists them; I read the test. There is no "Trade-offs" field, so trade-offs went into Why. The kind vocabulary was in five places (TODO 2.2d and 2.2i, DESIGN finding and question 8, FOR-GHOST) and found only by grep.
 - **Suggestions:** list the decision fields in do-a-todo-step.md; a DESIGN table of vocabularies (kind, folder classes, tiers) with the one file that owns each.
+
+### 2026-10-25 · TODO.md 2.2f, the judge interface, fake judge and replay · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2f, DESIGN.md "Step 2.2 sliced", judge-harness.md, prompt.py's docstring for the hashes.
+- **Complaints:** the check says a judge takes "a rendered prompt" yet keys a recording by hashes the text does not carry; the docs do not say where the summary hash comes from, so I made `RenderedPrompt`. The task named `build/` for real recordings but no doc says which hash a replay file is keyed under for a changed template version (it follows the prompt hash).
+- **Suggestions:** one line in the 2.2f check: "the judge is given the text with its two hashes".

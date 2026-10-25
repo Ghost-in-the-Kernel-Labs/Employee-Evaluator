@@ -1461,3 +1461,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** one JSON object for the file (refused: a new recording rewrites the whole diff); JSON lines with a version header (taken: one line per recording, sorted, byte-stable); a loader rule refusing recordings outside `build/` (refused: the check does not call for it, and a test holds only synthetic files).
 - **Resolved:** `agent_runner/judge.py`, `tests/test_judge.py`, a synthetic fixture, judge-harness.md, 2.2f to DONE.md, HANDOFF names 2.2g. No new decision.
 - **Touched:** agent-runner/, docs/how/judge-harness.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-116 Tithe: Pass 8 in AGENT.md, one function commented
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** The tithe due (E-015): eight commits since the last, at the limit.
+- **Found:** In a plain clone with `EVALUATOR_GITHUB_TOKEN` unset, `gradle metrics --args=--time` read the fast loop 29 s on the cold first run (daemon start), then 16, 14, 13, 13, 13 and 13 s, none failed, so no race in a test (E-072). It was 8 s at Pass 7: the loop now also runs the Python suite of `agent-runner/` through its Java gate (`AgentRunnerTest`), but `python3 -I -B -m unittest discover` alone takes about 0.3 s, so the rise is the Java tests added since, and the loop stays under its 20 s. Every other held metric is within target; largest source file 283 lines (test/SupplyChainTest.java), mandatory context 794 words, docs per source line 0.41. The metrics listed one function over 15 lines or 6 paths with no comment (`AgentRunnerTest.run`); it has one now. Seven commits had passed since the last navigation review (eight with this tithe); no review was done in this pass.
+- **Options:** none.
+- **Resolved:** Pass 8 column in docs/AGENT.md, one comment, HANDOFF's cadence line corrected. No behaviour changed, no golden moved.
+- **Touched:** docs/AGENT.md, docs/HANDOFF.md, docs/JOURNAL.md, docs/NAVIGATION-NOTES.md, test/AgentRunnerTest.java.

@@ -41,3 +41,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2f, DESIGN.md "Step 2.2 sliced", judge-harness.md, prompt.py's docstring for the hashes.
 - **Complaints:** the check says a judge takes "a rendered prompt" yet keys a recording by hashes the text does not carry; the docs do not say where the summary hash comes from, so I made `RenderedPrompt`. The task named `build/` for real recordings but no doc says which hash a replay file is keyed under for a changed template version (it follows the prompt hash).
 - **Suggestions:** one line in the 2.2f check: "the judge is given the text with its two hashes".
+
+### 2026-10-25 · the tithe pass (Pass 8) · Claude Sonnet 5.5
+- **Route:** CLAUDE.md "when you run a command" row, the tithe step in docs/how/agent-environment.md, the last tithe commit for its shape, commit-and-push.md and this debrief page.
+- **Complaints:** the tithe step names the metrics run but not that the first run after a fresh clone is cold (29 s against 13 s warm), so the number to record is easy to get wrong. The next free J number is only found by reading the journal's tail.
+- **Suggestions:** one line in the tithe step: "discard the cold first run, record the warm ones and name the cold one apart".

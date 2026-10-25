@@ -24,6 +24,7 @@ final class AgentRunnerTest {
     record Outcome(int exit, String output, boolean timedOut) {
     }
 
+    /** The agent-runner check: the key-scrubbing cases, then the Python tests run for real and with stubbed outcomes; pending and green when python3 is absent. */
     static Check run() {
         Check check = new Check("agent-runner")
                 .accepts("an environment variable that names no key", () -> namesKey("PATH") ? List.of("PATH") : List.of())

@@ -1,0 +1,30 @@
+{
+  "inventory": {
+    "source": [
+      {"path": "app/cart.py", "language": "Python", "lines": 9},
+      {"path": "app/orders.py", "language": "Python", "lines": 5},
+      {"path": "app/tax.py", "language": "Python", "lines": 5},
+      {"path": "lib/util/join.py", "language": "Python", "lines": 2},
+      {"path": "lib/util/table.py", "language": "Python", "lines": 563},
+      {"path": "tests/test_cart.py", "language": "Python", "lines": 2},
+      {"path": "tests/test_join.py", "language": "Python", "lines": 2},
+      {"path": "tests/test_orders.py", "language": "Python", "lines": 2},
+      {"path": "tests/test_table.py", "language": "Python", "lines": 2},
+      {"path": "tests/test_tax.py", "language": "Python", "lines": 2}
+    ],
+    "setAside": []
+  },
+  "facts": {
+    "MAINTAINABILITY.test_to_code_ratio": 0.5,
+    "SIZE.source_files": 10,
+    "SIZE.source_lines": 592
+  },
+  "commitsTotal": 3,
+  "commits": [
+    {"hash": "c3d4e5f", "date": "2026-10-03", "subject": "Add the price table", "filesChanged": 2},
+    {"hash": "b2c3d4e", "date": "2026-10-02", "subject": "Add orders and tax", "filesChanged": 4},
+    {"hash": "a1b2c3d", "date": "2026-10-01", "subject": "Start the shop", "filesChanged": 5}
+  ],
+  "readme": ["README.md"],
+  "agentInstructions": []
+}

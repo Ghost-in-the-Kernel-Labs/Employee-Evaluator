@@ -1429,3 +1429,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the facts as `--facts` lines in an array, or an object (chosen: an object, numbers kept as numbers); README paths from the whole tree, or the root only (chosen: root, an `// Unsure:`); a new module (refused: `cli/` names the work, the path rules went to `Navigability`).
 - **Resolved:** `Brief` in `cli/`, `Main.brief`, two public path lists in `Navigability`, `BriefTest`, a golden of small-app. No new decision.
 - **Touched:** cli/, analyze/Navigability.java, docs/how/command-line.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.
+
+### J-112 TODO.md 2.2c: the repo summary builder, the judge's whole reading, in a data fence
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** Build 2.2c: turn the brief and a checkout into one deterministic text a judge reads with no tool, treating the repository's text as data.
+- **Found:** Python goldens have no Gradle switch: `-PwriteGoldens` reaches only the JVM, and the gate's child sees a scrubbed environment, so the Python golden test rewrites on `EVALUATOR_WRITE_GOLDENS=1` run by hand. A path, a commit subject and a fact value are repository text too, so they go in fences, not only files.
+- **Options:** a fixed-length fence (refused: a file can hold it) or one longer than any tilde run inside (chosen); dropping files over the total cap (refused: named in a `not-shown` fence); reading the brief's agent instruction paths into the summary (left out: the brief names them, 2.2e may decide).
+- **Resolved:** `summary.py`, `test_summary.py`, two synthetic fixtures with briefs and two goldens, `judge-harness.md` updated, 2.2c to DONE.md, HANDOFF names 2.2d.
+- **Touched:** agent-runner/, test/fixtures/summary-*, test/goldens/summaries/, docs/how/judge-harness.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.

@@ -1,0 +1,20 @@
+{
+  "inventory": {
+    "source": [
+      {"path": "src/notes.py", "language": "Python", "lines": 10},
+      {"path": "tests/test_notes.py", "language": "Python", "lines": 5}
+    ],
+    "setAside": []
+  },
+  "facts": {
+    "SIZE.source_files": 2,
+    "SIZE.source_lines": 15
+  },
+  "commitsTotal": 2,
+  "commits": [
+    {"hash": "b2c3d4e", "date": "2026-10-02", "subject": "Add a test for add", "filesChanged": 1},
+    {"hash": "a1b2c3d", "date": "2026-10-01", "subject": "Start the note keeper", "filesChanged": 3}
+  ],
+  "readme": ["README.md"],
+  "agentInstructions": []
+}

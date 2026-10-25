@@ -26,3 +26,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2b and DESIGN.md "Step 2.2 sliced", command-line.md, judge-harness.md, add-or-change-a-module.md, commands.md.
 - **Complaints:** `gradle mutate -Ptarget=evaluator.cli.*` cannot run in a worktree (`MainTest.thisRepositorysCard` fails without mutation, so PIT refuses); I ran it in a plain clone with my files copied in, and no doc says so. A test of `analyze/` code must sit in `test/evaluator/analyze/` or PIT reports no coverage (finish-work.md says it, but late). The Bash classifier failed several times in a row and cost the end of the run.
 - **Suggestions:** one line in commands.md or agent-environment.md: "in a worktree, mutate `cli` from a plain clone".
+
+### 2026-10-25 · TODO.md 2.2c, the repo summary builder · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2c and DESIGN.md "Step 2.2 sliced", judge-harness.md, commands.md.
+- **Complaints:** no doc says how a Python golden is held or rewritten (commands.md describes only `-PwriteGoldens` for Java, which the Python child never sees); I invented `EVALUATOR_WRITE_GOLDENS`. The task's sampling rule ("largest by lines in each folder") leaves the count per folder open.
+- **Suggestions:** one line in commands.md under Goldens: "Python goldens (`agent-runner/`): `EVALUATOR_WRITE_GOLDENS=1 python3 -I -B -m unittest discover`".

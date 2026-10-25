@@ -13,16 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2c The repo summary builder
-
-Check: `agent-runner/` turns the brief and the checked-out path into a summary: the README (trimmed), sampled files
-(a fixed rule: the largest files by lines in each folder the inventory holds, then a sample of tests, to a byte cap), the commit
-log and the facts, every part labelled with its path; the same input gives the same bytes (a golden on two of our own
-synthetic fixtures); a file is cut at the cap with a marker, never dropped silently; every piece of the repository's text sits
-inside a fence the prompt names data (E-013), control characters and ANSI escapes stripped, and a fixture whose README says
-"ignore your instructions" shows it only inside the fence. The judge is given no tool (E-013): this summary is all it reads.
-Summaries of real repositories are written only under `build/` (E-014). No API, no key, no Ghost. Cost: none.
-
 ### 2.2d The judgment schema and its parser
 
 Check: `agent-runner/` holds one JSON schema file for the judge's answer, and a validator that holds an answer to it: the

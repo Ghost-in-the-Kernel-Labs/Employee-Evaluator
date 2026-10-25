@@ -46,3 +46,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md "when you run a command" row, the tithe step in docs/how/agent-environment.md, the last tithe commit for its shape, commit-and-push.md and this debrief page.
 - **Complaints:** the tithe step names the metrics run but not that the first run after a fresh clone is cold (29 s against 13 s warm), so the number to record is easy to get wrong. The next free J number is only found by reading the journal's tail.
 - **Suggestions:** one line in the tithe step: "discard the cold first run, record the warm ones and name the cold one apart".
+
+### 2026-10-25 · TODO.md 2.2g, the cost cap · Claude Sonnet 5.5
+- **Route:** CLAUDE.md, do-a-todo-step.md, TODO.md 2.2g, DESIGN "Step 2.2 sliced", judge-harness.md, judge.py for the Answer's tokens.
+- **Complaints:** the check does not say what an evaluation and a trial are, so I defined them (one repository; a whole run) in budget.py's docstring; DESIGN question 2 gives no unit. The 2.2f how-file entry made the right place for the new line easy to find, but the next J number and Class list again took a read of the journal's header.
+- **Suggestions:** one line in DESIGN question 2 defining evaluation and trial; the J-number rule ("one past the last ### J-") is in the journal header, so mention it in do-a-todo-step.md.

@@ -13,16 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2g The cost cap
-
-Check: a `Budget` counts tokens (dollars once Ghost supplies prices and model ids, a data file with its date) with a cap per
-call, per evaluation and per trial; it reserves the worst case (the prompt's tokens plus the output limit) before a call
-and refuses the call, the judge never reached, when the reserve would pass a cap; it charges the real usage after; the
-cost of every judgment is recorded beside it (the number that sets the unlock price floor, DESIGN open question). Tested
-with `FakeJudge`: the call that would pass the cap is not made, a refused call charges nothing, per-evaluation and per-trial
-caps are independent. No API, no key. Ghost: the caps' numbers and the prices are his, but the type is built with any numbers.
-Cost: none.
-
 ### 2.2h Three runs, the mean, the vote and Opus on a split
 
 Check: with a judge and a budget, `agent-runner/` runs the prompt three times on Claude Haiku 5.5, takes the mean of each

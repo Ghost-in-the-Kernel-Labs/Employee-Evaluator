@@ -1469,3 +1469,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** none.
 - **Resolved:** Pass 8 column in docs/AGENT.md, one comment, HANDOFF's cadence line corrected. No behaviour changed, no golden moved.
 - **Touched:** docs/AGENT.md, docs/HANDOFF.md, docs/JOURNAL.md, docs/NAVIGATION-NOTES.md, test/AgentRunnerTest.java.
+
+### J-117 TODO.md 2.2g: the cost cap
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** Build 2.2g: a token budget a judge runs under, refusing a call before it is made and recording what each judgment cost.
+- **Found:** There is no tokenizer, so the prompt's tokens cannot be counted before a call; the reserve uses ceil(bytes / 3), above the fake judge's four characters to a token and near the worst real case, and the real counts replace it after the call. The check's "per trial" is taken as a whole run over many evaluations and "per evaluation" as one repository, so the two counters reset separately; a reserve still held counts against a cap, so an overlapping call cannot slip past. A usage above its reserve is possible only if the API breaks its output limit; it is charged and flagged, not refused after the fact. The prices file's format is built and tested with synthetic numbers; no real price, cap or model id is written anywhere.
+- **Options:** dollar caps (refused: Ghost's question 2 asks for token caps first); a cap checked only after a charge (refused: the check says reserve first); raising on an overrun (refused: it would lose the run that holds the evidence); a default cap in code (refused: caps are Ghost's, None means no cap).
+- **Resolved:** `agent_runner/budget.py`, `tests/test_budget.py`, a synthetic prices fixture, judge-harness.md, 2.2g to DONE.md, HANDOFF names 2.2h and what waits on Ghost. No new decision, no Java changed.
+- **Touched:** agent-runner/, docs/how/judge-harness.md, TODO.md, docs/DONE.md, docs/HANDOFF.md.

@@ -30,4 +30,4 @@ says so to Ghost; Ghost removes it when settled.
   repository, by whom and where; (7) what a real run may commit (proposal: ids, scores, kinds, tiers only); (8) what
   agreement means (kind is now compared exactly, since you gave the judge six values, E-082; the set holds no generated, and a constant
   own-work clears 77 % on kind and a constant 3 90 % on Quality within one); (9) the rule
-  for a three-way tie (proposal: Opus decides).
+  for a three-way tie (answered 2026-10-25: Opus decides, E-083).

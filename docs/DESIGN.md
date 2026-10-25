@@ -184,7 +184,7 @@ ran with tools.
 | 2.2e | the prompt files, rendering and hash | no | no | none |
 | 2.2f | `Judge` interface, `FakeJudge`, recorded-response `ReplayJudge` | no | what may be recorded (question 7) | none |
 | 2.2g | the `Budget` (tokens per call, evaluation, trial; reserve before a call) | no | numbers and prices later | none |
-| 2.2h | three Haiku runs, mean and vote, Opus on a split over 15 (E-055) | no | the category tie rule | none |
+| 2.2h | three Haiku runs, mean and vote, Opus on a split over 15 (E-055) | no | no (the category tie rule is E-083) | none |
 | 2.2i | agreement with the calibration set, baselines, the record under the prompt's hash | no | the definition (question 8) | none |
 | 2.2j | `score --judged`: the kernel counts only the folders judged own code (E-057) | no | no | none |
 | 2.2k | `Fact.judged` bounded by the record (SC-05); the plan and generated rules | no | no | none |

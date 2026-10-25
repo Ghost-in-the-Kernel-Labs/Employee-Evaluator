@@ -13,16 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2h Three runs, the mean, the vote and Opus on a split
-
-Check: with a judge and a budget, `agent-runner/` runs the prompt three times on Claude Haiku 5.5, takes the mean of each
-score and the vote of each category (kind, folder classes, tier), and runs Claude Opus 5.5 once more when the three
-scores of a metric are more than 15 apart (15 does not, 16 does) or a category has no majority; the Opus answer for that
-metric or category stands (E-055); every fact keeps its runs and the model behind it; an unparsable run is retried once and
-then counts as missing, and fewer than two usable runs is a refusal, not a score. Table-driven with `FakeJudge`, the
-boundaries at 15 and 16 and a three-way category tie each a case; a budget refusal mid-way returns what was judged, flagged
-partial. No API, no key. Ghost: confirm the tie rule (Opus decides; E-055 is silent). Cost: none.
-
 ### 2.2i Agreement with the calibration set
 
 Check: given a judgment per calibration id (from a `FakeJudge` or a replay), the harness reads `calibration/` and

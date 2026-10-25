@@ -89,3 +89,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-080 | A calibration label is three fields, kind, ambition and quality, and an opaque id; no domain, no rationale | in force | calibration |
 | E-081 | `python3`, standard library only, is in the pinned image for agent-runner/, and no network door exists yet | in force | agent-runner |
 | E-082 | The judge's kind is six values, E-057's four plus own-work and clone | in force | judges |
+| E-083 | On a category tie among the three Haiku votes, Opus decides and its answer stands | in force | judges |

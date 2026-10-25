@@ -1419,3 +1419,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **subject:** judges
 - **See also:** E-055, E-056, E-057, E-080
 - **Supersedes:** E-057 (in part: its list of kinds only)
+
+### E-083: On a category tie among the three Haiku votes, Opus decides and its answer stands
+- **Decision:** When the three Haiku votes on a category (the kind, a folder's class, the Ambition tier) have no majority, that is no value with more than half of the votes, Claude Opus 5.5 judges that category and its answer stands, as it does for a metric more than 15 points apart (E-055). The same holds when only two runs are usable and they differ. The Opus answer may be a value none of the Haiku runs gave. Opus is called once for everything that needs it. The rule is built in `agent-runner/agent_runner/ensemble.py` (TODO.md 2.2h).
+- **Why:** E-055 says a category is the three runs' vote and that Opus takes the metrics the runs disagree on, but is silent on a vote with no winner. Opus's deeper read is what E-055 trusts where the cheap runs disagree, a tie is that disagreement in its plainest form, and the alternatives (a fixed pick, the run with the highest confidence) would be an arbitrary choice that hides the split. The cost is one Opus run, which E-055 already accepts for a split.
+- **Held by:** `agent-runner/agent_runner/ensemble.py`; `agent-runner/tests/test_ensemble.py` (the three-way tie cases); `docs/how/judge-harness.md`; TODO.md 2.2h.
+- **Source:** Ghost confirmed that Opus decides a category tie, 2026-10-25.
+- **Status:** in force
+- **subject:** judges
+- **See also:** E-055

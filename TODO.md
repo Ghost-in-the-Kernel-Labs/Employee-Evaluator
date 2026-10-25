@@ -13,15 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2e The judging prompt and its hash
-
-Check: a prompt is files under `agent-runner/prompts/` (instructions with archetype anchors and navigability by its mechanisms,
-E-057, taken from the trial notes in `docs/judges/`, and the answer schema), rendered with a summary into the text sent;
-rendering is deterministic (a golden on a synthetic summary); the prompt's hash is the SHA-256 of its instructions, schema
-and template version, not of the summary, and moves when any one byte of them moves (tested for each) and when nothing else
-does; `agent-runner/prompts/<name>.hash` holds it and a test refuses a prompt whose hash line is stale; the kernel's facts
-are shown "to judge, never to count" (E-055). No API, no key, no Ghost. Cost: none.
-
 ### 2.2f The judge interface, a fake judge and the recorded-response replay
 
 Check: a `Judge` takes a rendered prompt, a model id and a run number and returns the raw answer with the tokens used;

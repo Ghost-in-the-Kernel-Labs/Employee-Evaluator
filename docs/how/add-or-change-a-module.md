@@ -12,6 +12,7 @@
 
 - A "Start here" list in `docs/how/` holds five files at most (`DocTests.metrics` fails past it): when a step needs a sixth, it goes in the Steps.
 
+- Python (`agent-runner/`) and the web app are outside the Java module map: they take no entry in `docs/modules.json`, whatever a task's wording says (`docs/how/judge-harness.md`).
 - A new module or a new import between modules is an architecture decision: draft the entry in `docs/modules.json` as a proposal, say you are waiting on Ghost, and stop.
 - Once Ghost agrees: the entry with every field, then `gradle modulesDoc` to rewrite `docs/MODULES.md` (never edit it by hand).
 - `test/ModulesTest.java` holds every import in the source to the JSON, no cycle, and no network outside `github/` (MOD-05).

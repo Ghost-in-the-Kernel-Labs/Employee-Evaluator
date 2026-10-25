@@ -13,7 +13,7 @@
   (`docs/MODULES.md`), `gradle decisionsDoc` (`docs/DECISIONS.md`).
 - **Goldens:** `gradle test -PshowGoldens` writes nothing and prints, in each failing golden test's message, every changed golden's
   changed lines (`@@ golden line N, new line M @@`, then `- old` and `+ new`); read them, then `gradle test -PwriteGoldens` rewrites the
-  goldens. The two properties together are refused. Both go to a file like any test run (E-018, E-077). Every golden test goes through `test/evaluator/Goldens.java`.
+  goldens. The two properties together are refused. Both go to a file like any test run (E-018, E-077). Every golden test goes through `test/evaluator/Goldens.java`. Python goldens (`agent-runner/`) are not Java's: `EVALUATOR_WRITE_GOLDENS=1 python3 -I -B -m unittest discover` in `agent-runner/` rewrites them (read `git diff` first; `docs/how/judge-harness.md`).
 - GitHub's workflow runs only by hand (E-040): never count on it.
 
 ## A long run's output

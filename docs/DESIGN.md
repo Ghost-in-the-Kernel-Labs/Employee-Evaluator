@@ -216,7 +216,7 @@ Open questions only Ghost can answer (also in `docs/FOR-GHOST.md`):
 
 1. **The key.** How an API key reaches a session (an environment secret under a name he picks; never a file in the repository),
    and whether judges run in a session or in CI. Until it is settled 2.2l's smoke is skipped and 2.2m and 2.2n wait.
-2. **The budget.** A cap per call, per evaluation and per trial (2.2g counts tokens; the first run proves the numbers), and how
+2. **The budget.** A cap per call, per evaluation (one repository) and per trial (a whole run over many) (2.2g counts tokens; the first run proves the numbers), and how
    many prompt iterations 2.2n may spend before it stops and reports.
 3. **The model ids** for Claude Haiku 5.5 and Claude Opus 5.5, and their prices.
 4. **How the API is called.** Standard library HTTP (no dependency), or the Anthropic SDK (a dependency, E-033, needing a

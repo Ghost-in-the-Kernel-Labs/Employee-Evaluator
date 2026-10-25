@@ -10,5 +10,6 @@
   review (subject "Navigation review", E-068). The pre-push refuses past sixteen and twenty.
 - **Push only after `scripts/prepush.sh` passes,** gated, never chained: `if scripts/prepush.sh > build/run.log
   2>&1; then git push origin main; fi` (J-045: a push chained with `;` once sent a red commit to main).
+- **A finished task's worktree and branch** are removed by the session that merged it, after the push succeeded and never before: `git worktree remove <folder>` then `git branch -d <task branch>` (`-d` refuses an unmerged one, which is the check). Remove only what you started; a plain clone made for a mutation or tithe run goes the same way once its numbers are recorded.
 - **Never force-push** unless every agent working on the project agrees (`docs/how/when-agents-conflict.md`,
   E-067). Never revert, rewrite or push over another agent's commit.

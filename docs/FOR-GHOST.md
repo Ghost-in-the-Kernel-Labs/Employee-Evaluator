@@ -27,7 +27,5 @@ says so to Ghost; Ghost removes it when settled.
   judges run in a session or CI; (2) the budget per call, evaluation and trial, and the iteration limit; (3) the ids and
   prices of Haiku 5.5 and Opus 5.5; (4) standard-library HTTP or the Anthropic SDK (a dependency); (5) `python3` in the pinned
   image (answered 2026-10-25: yes, E-081); (6) the 30 labelled repositories re-fetched outside the
-  repository, by whom and where; (7) what a real run may commit (proposal: ids, scores, kinds, tiers only); (8) what
-  agreement means (kind is now compared exactly, since you gave the judge six values, E-082; the set holds no generated, and a constant
-  own-work clears 77 % on kind and a constant 3 90 % on Quality within one); (9) the rule
+  repository, by whom and where; (7) what a real run may commit (proposal: ids, scores, kinds, tiers only); (8) what agreement means (answered 2026-10-25: both the raw 80 % floor and a margin over the constant-answer baseline, E-084; **confirm or change the margin's size**: the agent proposed half the gap between the baseline and 100 %, so Quality within one needs 29 of 30, kind 27, Ambition 24, Quality exactly 24; kind is compared exactly, E-082, and the set holds no generated); (9) the rule
   for a three-way tie (answered 2026-10-25: Opus decides, E-083).

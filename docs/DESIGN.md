@@ -185,7 +185,7 @@ ran with tools.
 | 2.2f | `Judge` interface, `FakeJudge`, recorded-response `ReplayJudge` | no | what may be recorded (question 7) | none |
 | 2.2g | the `Budget` (tokens per call, evaluation, trial; reserve before a call) | no | numbers and prices later | none |
 | 2.2h | three Haiku runs, mean and vote, Opus on a split over 15 (E-055) | no | no (the category tie rule is E-083) | none |
-| 2.2i | agreement with the calibration set, baselines, the record under the prompt's hash | no | the definition (question 8) | none |
+| 2.2i | agreement with the calibration set, baselines, the record under the prompt's hash | no | no (the definition is E-084; the margin's size to confirm) | none |
 | 2.2j | `score --judged`: the kernel counts only the folders judged own code (E-057) | no | no | none |
 | 2.2k | `Fact.judged` bounded by the record (SC-05); the plan and generated rules | no | no | none |
 | 2.2l | the live transport, the only network door; loopback tests; a keyed smoke | build: no; smoke: yes | key, budget, model ids, SDK or stdlib | small |
@@ -230,6 +230,7 @@ Open questions only Ghost can answer (also in `docs/FOR-GHOST.md`):
 8. **What "agreement" means.** Proposal: per field, the share of labels the judgment equals (Ambition and Quality exact, Quality
    also within one, kind exact over the six values of E-082), the constant-answer baseline beside it, the 80 % floor applied to each field
    its own gate judges (kind at 2.2, Ambition at 2.3, Quality at 2.4). The clone signal is the kind `clone` itself (E-082).
+   Answered 2026-10-25 (E-084): both tests, the raw 80 % floor and a margin over the baseline; the margin's size (half the gap to 100 %) is the agent's proposal, for Ghost to confirm.
 9. **A category with no majority** (three different folder classes, or tiers): proposal, Opus decides, as for a split score.
 
 ## Phase 3 — Web app with GitHub integration (Opus plan)

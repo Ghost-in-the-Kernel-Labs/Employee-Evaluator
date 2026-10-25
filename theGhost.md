@@ -1428,3 +1428,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** judges
 - **See also:** E-055
+
+### E-084: A judged field is live only if its raw agreement is at least 80 % and it beats the constant answer by a margin
+- **Decision:** A judged field (the Ambition tier, Quality exactly, Quality within one, the kind) is live for a prompt only if BOTH hold on the calibration set: (1) the raw agreement is at least 80 %, and (2) it beats the constant-answer baseline, always answering the most common label (for Quality within one, the integer that is within one of most labels), by a margin. The margin is a parameter, default one half: the figure must close at least half of the gap between the baseline and 100 %, that is figure >= baseline + 0.5 * (1 - baseline), so a baseline of 90 % needs 95 % and no fixed number of points is asked. The baselines are computed from the labels. On the 30 labels the counts are: Quality within one baseline 27 (90 %), needs 29 (28 of 30 is 93.3 %, under 95 %); kind baseline 23 (76.7 %), needs 27 (88.3 %); Ambition baseline 14 (46.7 %), the margin needs 22 and the 80 % floor binds at 24; Quality exactly baseline 17 (56.7 %), the margin needs 24 (78.3 % rounds up) and the floor 24. A partial, refused or missing result for an id counts as a miss for that id and is counted apart. A prompt with no record for its current hash is live for no field (SC-05). Built in `agent-runner/agent_runner/agreement.py` (TODO.md 2.2i).
+- **Why:** A constant answer clears 77 % on kind and 90 % on Quality within one on this set, so the 80 % floor alone would call a judge that learned nothing live. The margin over the baseline answers that; a fixed +10 points would be impossible at a 90 % baseline, which is why the margin is a share of the gap. The size of the share, one half, is the agent's proposal and open for Ghost to confirm or change; it is one constant (`MARGIN`) and a parameter.
+- **Held by:** `agent-runner/agent_runner/agreement.py`; `agent-runner/tests/test_agreement.py` (k of 30 either side of the floor and the margin for each field); `docs/how/judge-harness.md`; TODO.md 2.2i, 2.2k.
+- **Source:** Ghost chose both the raw 80 % floor and the margin over the baseline, 2026-10-25; the margin's size (half the gap) is the agent's proposal for Ghost to confirm
+- **Status:** in force
+- **subject:** judges
+- **See also:** E-055, E-056, E-082

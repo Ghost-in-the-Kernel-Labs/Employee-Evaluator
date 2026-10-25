@@ -16,3 +16,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** TODO.md 2.2h, then judge-harness.md and do-a-todo-step.md; the module docstrings of judge.py and budget.py gave the interfaces.
 - **Complaints:** the Check says "scores of a metric" and "15 apart" without saying how the rule meets Quality's 1 to 5 integer or a confidence, nor how a retry is numbered under a replay key; both were chosen and written in the `ensemble.py` docstring. `gradle decisionsDoc` fails to write its output if `build/` does not exist in a fresh worktree (the redirect fails first); `mkdir -p build` is in the task text but not in commands.md.
 - **Suggestions:** a line in commands.md that a new worktree needs `mkdir -p build` before any redirect to `build/run.log`.
+
+### 2026-10-25 · TODO 2.2i, agreement with the calibration set · Claude Sonnet 5.5
+- **Route:** TODO.md 2.2i, then judge-harness.md, do-a-todo-step.md; ensemble.py and judge.py for the interfaces.
+- **Complaints:** decisions are in theGhost.md and do-a-todo-step.md says "the end of theGhost.md" but not that the last E-number is found by its last `### E-` heading; the question-8 text in FOR-GHOST.md wraps across lines, so a one-line search for it found nothing. `python3 -I -m unittest tests.test_x` cannot import the package (-I drops the current directory); only `discover` works.
+- **Suggestions:** in judge-harness.md, say that a single Python test file runs as `python3 -I -B -m unittest discover -p 'test_x.py'`.

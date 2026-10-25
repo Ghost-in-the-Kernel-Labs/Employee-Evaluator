@@ -13,18 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2i Agreement with the calibration set
-
-Check: given a judgment per calibration id (from a `FakeJudge` or a replay), the harness reads `calibration/` and
-computes, per field, the fraction of labels the judgment matches: Ambition tier exactly; Quality exactly and within one;
-kind exactly (the judge's six values, E-082, include the labels' own-work, clone and generated; the set holds no generated, which the
-record says, and a clone is judged from a short summary); beside each figure the baseline of always answering the most common label
-(Quality within one reads 90 % for a constant 3 on this set, a floor met by nothing); it writes
-`agent-runner/records/<prompt hash>.json` (prompt name and hash, models, runs, date, the figures, the baselines, and for each
-opaque id the judged value and the label); a prompt with a figure under 80 % is marked not live for that field, and no record
-for the prompt's current hash means no fact (SC-05). A fake judge right on exactly k of 30 gives k/30, worked by hand. No API,
-no key. Ghost: confirm the definition (question below). Cost: none.
-
 ### 2.2j The kernel counts the folders the judge calls own code
 
 Check: `evaluator score --judged <judgment.json>` takes a judgment in the 2.2d shape and measures Size, Complexity's

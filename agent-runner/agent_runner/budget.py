@@ -3,7 +3,7 @@
   estimate_tokens(text)  the prompt-token estimate that RESERVES, ceil(utf-8 bytes / 3), at least 1. There is no tokenizer here, so
                          the rule is deliberately high: English text and code run near four characters (and so near four
                          bytes) to a token, other scripts fewer, so a third of the bytes does not undercount them. The
-                         estimate only reserves. The real counts come back from the API in 2.2l and are what is charged.
+                         estimate only reserves. The real counts come back from the API (`transport.py`, 2.2l) and are what is charged.
   Budget                 caps per call, per evaluation and per trial, each None (no cap) or a number of tokens, and the
                          same three in dollars (they need a prices file).
   BudgetedJudge          wraps any `Judge` so 2.2h runs it under a `Budget` unchanged.

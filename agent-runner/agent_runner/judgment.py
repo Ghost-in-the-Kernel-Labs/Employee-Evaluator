@@ -1,12 +1,12 @@
 """The judgment schema and its parser (TODO.md 2.2d): the judge's answer, held to one JSON schema file, strictly.
 
-The schema is `agent-runner/schema/judgment.schema.json`, the file the API is later given (2.2l) and the prompt quotes
+The schema is `agent-runner/schema/judgment.schema.json`, the file the API is given (2.2l, `transport.api_schema`) and the prompt quotes
 (2.2e). There is no `jsonschema` library here (standard library only, E-081), so this file holds a small strict checker of
 that one schema and of an answer against it. The schema is kept to the subset a structured-output enforcement accepts:
 
   - an object has `properties`, `required` naming every one of them, and `additionalProperties` false;
   - a string may have an `enum` of strings; an integer or number may have `minimum` and `maximum` (the API refuses them
-    on an integer, so 2.2l's `transport.api_schema` drops them from the copy it sends, and this parser enforces them);
+    on an integer, so `transport.api_schema` (2.2l) drops them from the copy it sends, and this parser enforces them);
   - an array has `items` (an object or a string, any depth) and may have `minItems` and `maxItems`;
   - every node has a `type` and a non-empty `description`; nothing else (no `$ref`, `oneOf`, `pattern`, `format`,
     string lengths, `default`): `check_schema` refuses any other keyword, so the file cannot drift out of the subset.

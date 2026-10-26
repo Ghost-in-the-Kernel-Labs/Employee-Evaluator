@@ -31,7 +31,7 @@ MAX_COMMITS = 30
 FILES_PER_FOLDER = 2
 TESTS_SAMPLED = 3
 FENCE_NAME = "data"
-# The judge is given no tool (E-013): this summary is all it reads. A later part that builds a request uses this list.
+# The judge is given no tool (E-013): this summary is all it reads. The request `transport.py` builds sends no tools (this list is empty).
 JUDGE_TOOLS = ()
 
 _OSC = re.compile(r"\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)?")

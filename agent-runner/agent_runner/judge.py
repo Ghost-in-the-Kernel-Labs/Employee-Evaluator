@@ -3,7 +3,7 @@
 A judge takes a rendered prompt, a model id and a run number and returns the raw answer text with the tokens used
 (`Answer`). Parsing the text is `judgment.parse`'s work, not the judge's: a judge that returns text that does not parse is
 a case the layers above must meet (2.2h retries an unparsable run once). There is no live judge in this file: the only one
-will be `transport.py`'s (2.2l), the one door to the network and to a key (E-003, E-013), and it will implement `Judge`.
+is `transport.py`'s (2.2l), the one door to the network and to a key (E-003, E-013), and it implements `Judge`.
 Everything above this slice is tested with the two judges here and never reaches a network.
 
   RenderedPrompt  the text sent (`prompt.render`), with the prompt hash and the summary hash that key a recording.

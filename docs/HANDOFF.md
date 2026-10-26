@@ -1,13 +1,13 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.2l, the live judge, which waits on Ghost (2026-10-26)
+## Start here: 2.2m, the first run on the calibration set, which waits on the 30 repositories (2026-10-26)
 
 2.1 is closed (J-106). 2.2, the judge harness, is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in
 `TODO.md`). 2.2a to 2.2k are done (J-110 to J-122; `docs/how/judge-harness.md` lists what each built: the scaffold and import guard, `evaluator brief`, the summary builder, the answer schema and validator, the prompt and its hash, `Judge`/`FakeJudge`/`ReplayJudge`, the `Budget`, `ensemble.py`'s three runs, `agreement.py`'s figures and records, `evaluator score --judged` (E-085), and now the card's rules for the judged kind: `AgreementRecord` and `JudgedRules` in `ingest/`, `Declined` in `score/`, `--records` and exit status 2 in `cli/`, E-086; the rules are in `docs/how/command-line.md`).
 
-Every part that needs no key is built. **The next open part is 2.2l (`agent-runner/transport.py`, the only door to the network), and it waits on Ghost for:** (1) an API key and how it reaches a session (the environment only, never logged); (2) the budget per call, evaluation and trial, and the iteration limit; (3) the model ids and prices of Haiku 5.5 and Opus 5.5 (`claude-haiku-5-5` and `claude-opus-5-5` are unconfirmed defaults); (4) standard-library HTTP or the Anthropic SDK (a dependency he must approve, E-033). Already decided: `python3` is in the image (E-081), Opus decides a category tie (E-083), a field is live at 80 % and half the gap over its baseline (E-084, the half is to confirm), the schema is enforced by the API's structured output, and the build and loopback tests need no key (only the one smoke call does). 2.2m and 2.2n wait on the key, a cap and the 30 labelled repositories re-fetched outside the repository.
+2.2l is built (J-124, E-087): `agent-runner/agent_runner/transport.py` is the one door (`live_judge(budget, output_limit, ...)`, a `BudgetedJudge` over a private standard-library judge; the API key only from `ANTHROPIC_KEY`; the schema enforced by the API's structured output; retries; recordings under `build/`), `budget.py` has dollar caps and a per-model prompt-length limit, Ghost's data is in `agent-runner/caps.json` (per trial $5.00, per evaluation $0.50, output limit 8000, 3 prompt iterations in 2.2n) and `agent-runner/prices/2026-10-26.json`, and the model ids `claude-haiku-5-5` and `claude-opus-5-5` are confirmed. **The one real-API smoke test is written and has not been run:** the orchestrating session runs it after review with `EVALUATOR_LIVE_SMOKE=1 python3 -I -B -m unittest discover -p 'test_transport.py' -k LiveSmoke` in `agent-runner/` (a cent or two); record what it shows (an answer that parses, or the stop reason). Open risk for that run: the schema file's numeric ranges (`minimum`, `maximum`) may not be accepted by the API's structured output; if the call is refused with a 400 naming the schema, that is a 2.2d change. **The next open part is 2.2m, and it waits on Ghost for the 30 labelled repositories re-fetched outside this repository** (question 6, by whom and where). 2.2n follows 2.2m. Already decided: `python3` is in the image (E-081), Opus decides a category tie (E-083), a field is live at 80 % and half the gap over its baseline (E-084, the half is to confirm).
 
-**To confirm for Ghost (`docs/FOR-GHOST.md`):** E-086, proposed: a clone is scored with a note, the declined outcome's shape and exit status 2, Quality within one as Quality's gate, a kind that is not live decides nothing; and the risk that the 30 labels hold no generated repository, so a live kind figure does not show "generated" is recognised. Also E-085's two rules (own tests make the test-to-code ratio by the judge's class; the wrapper file shape) and 2.2i's margin (E-084).
+**To confirm for Ghost (`docs/FOR-GHOST.md`):** E-087's agent-chosen details (the output limit of 8000, the retry numbers) and E-086, proposed: a clone is scored with a note, the declined outcome's shape and exit status 2, Quality within one as Quality's gate, a kind that is not live decides nothing; and the risk that the 30 labels hold no generated repository, so a live kind figure does not show "generated" is recognised. Also E-085's two rules (own tests make the test-to-code ratio by the judge's class; the wrapper file shape) and 2.2i's margin (E-084).
 
 Agreement against the labels is partly model against model (the labels were drafted by Claude Sonnet agents);
 Ghost's review is what keeps it from being circular (J-106).
@@ -19,15 +19,12 @@ Ghost's review is what keeps it from being circular (J-106).
 save (the Bearer type with header `x-api-key`, no prefix, host `api.anthropic.com`, resolved correctly in its preview but the save failed),
 so the variable is the route. Check it without printing it: `test -n "$ANTHROPIC_KEY" && echo set`. Not set means the session started before
 Ghost saved it: say so and stop; never ask for the key in the chat, never log, print or write it. The environment's network policy must allow
-`api.anthropic.com`; if a call is refused, tell Ghost the host and see the environment network page. `transport.py` should send the key as
+`api.anthropic.com`; if a call is refused, tell Ghost the host and see the environment network page. `transport.py` sends the key as
 `x-api-key` and `anthropic-version: 2023-06-01`, and send no key at all when the variable is unset (so a secret injected by a proxy would also
 work). The smoke test runs on an explicit switch, not on detecting a key. Ghost should also set a monthly spend limit on the Console workspace:
 the `Budget` only covers calls through the harness.
 
-**Still to ask Ghost before 2.2l:** (3) the caps (suggest a few dollars per trial for the first run), (4) the transport (suggested:
-standard-library HTTP, no dependency), and the model ids and prices (`claude-haiku-5-5` and `claude-opus-5-5` are unconfirmed defaults, and the
-dated prices file is empty). The first live pass over the 30 labels is about 90 Haiku runs and some Opus runs, a few dollars (trial 4 cost about
-$1.30 for 150 Haiku runs); the first run is the measurement.
+**Asked and answered (2026-10-26):** the caps, the transport (standard library), the model ids and the prices are Ghost's and now data (E-087); the Haiku 5.5 price is $0.10 / $0.50 per million tokens up to 100,000 prompt tokens and $0.50 / $2.50 above, so a longer prompt is refused (`PromptTooLong`). The first live pass over the 30 labels is about 90 Haiku runs and some Opus runs, a few dollars (trial 4 cost about $1.30 for 150 Haiku runs); the first run is the measurement.
 
 **A cheaper route offered and not decided:** tune the prompt with Claude Code subagents standing in for Haiku and Opus (no key, session usage
 instead of API billing), then make one real measurement through the API for the record that counts. It breaks "the judge gets no tools"
@@ -61,7 +58,7 @@ AI is not possible from history or from correct code; do not promise it.
 
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
-`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; four commits have passed since (this slice included) and the next is due in about six; a tithe is due in about two (seven have passed since the last, this handoff included).
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; seven commits have passed since (2.2l's two included) and the next is due in about three; **a tithe is due now** (nine have passed since the last, 2.2l's two included).
 
 ## A session's environment
 

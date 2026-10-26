@@ -13,17 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2l The live judge: the one door to the API
-
-Check: `agent-runner/transport.py` is the only file that reaches the network: it sends the rendered prompt and the 2.2d
-schema to the API's structured-output feature (the schema is enforced there, not asked for in prose), reads the key from the
-environment only and never logs or writes it, passes every call through the `Budget`, retries 429 and 5xx a bounded number of
-times, and writes each answer in the recordings format; tested without a key against a loopback server (the request carries the
-schema and the model id, a failure retries as set, the key appears nowhere in logs or recordings); a smoke test that
-calls the real API once on a synthetic summary runs only when the key is set, and says SKIPPED otherwise. Needs a model API
-and a key to run the smoke: waits on Ghost: key and budget (and the model ids, and the standard library or the SDK, a
-dependency he must approve, E-033). Cost: small (one call).
-
 ### 2.2m The first run on the calibration set
 
 Check: the 30 labelled repositories summarised outside the repository by 2.2c (Ghost's private map, never read by an agent),

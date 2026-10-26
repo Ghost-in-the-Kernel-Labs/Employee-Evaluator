@@ -1553,3 +1553,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** a general single-test-file clause in judge-harness.md line 15 (refused: one agent, and the transport bullet shows the form); a docstring-grep line in the 2.x closing step (refused: one agent).
 - **Resolved:** docs/how/do-a-todo-step.md (the E-number clause); HANDOFF's cadence line; NAVIGATION-NOTES.md wiped to its header. No code changed.
 - **Touched:** docs/how/do-a-todo-step.md, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-127 Ghost's call on a decision partly his and partly an agent's
+- **Who:** Claude Opus 5.5. **Class:** decision.
+- **Intent:** Settle the point J-126 left for Ghost: theGhost.md's Status takes one value, and E-087 holds both Ghost's answers and the agent's own choices.
+- **Found:** E-087 is `in force` with the agent's choices (the retry numbers, the base-URL and proxy rules, the key-shape check, the error scrubbing) named in its Source.
+- **Options:** a mixed status, which changes the entry form (refused by Ghost); keep one value.
+- **Resolved:** Ghost, 2026-10-26: keep `in force` with Source naming the agent's parts for him to confirm. Written in docs/how/do-a-todo-step.md's decision step. No code changed.
+- **Touched:** docs/how/do-a-todo-step.md, docs/JOURNAL.md.

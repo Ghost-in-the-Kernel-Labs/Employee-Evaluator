@@ -4,7 +4,7 @@
 `judgment.parse`, and returns a `Result`: one record per judged field with the value that stands, how it was reached, and
 every run behind it. It calls only the `Judge` it is given, so a `FakeJudge`, a `ReplayJudge` or a `BudgetedJudge` over
 either runs unchanged; it imports no client and reaches no network (E-003, E-013). The model ids are parameters; the defaults
-`claude-haiku-5-5` and `claude-opus-5-5` are placeholders until Ghost confirms the real ids (open question 3).
+`claude-haiku-5-5` and `claude-opus-5-5` are Ghost's confirmed ids (E-087).
 
 Run numbers (they key a recording, so every call of a model has its own). Haiku slot k (1, 2, 3) is run k; its one retry,
 made only when the answer does not parse, is run 3 + k (4, 5, 6). Opus is run 1; its one retry is run 2. A slot that fails

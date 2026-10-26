@@ -1,0 +1,1 @@
+{"version": 1, "date": "2026-10-26", "per_tokens": 1000000, "source": "https://platform.claude.com/docs/en/about-claude/pricing", "models": {"claude-haiku-5-5": {"input": 0.10, "output": 0.50, "max_prompt_tokens": 100000}, "claude-opus-5-5": {"input": 4.00, "output": 20.00}}}

@@ -6,7 +6,7 @@ import unittest
 from decimal import Decimal
 
 from agent_runner import budget as budgets
-from agent_runner.budget import Budget, BudgetedJudge, BudgetError, BudgetRefused, PriceMissing
+from agent_runner.budget import Budget, BudgetedJudge, BudgetError, BudgetRefused, PriceMissing, PromptTooLong
 from agent_runner.judge import Answer, FakeJudge, RenderedPrompt
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -204,8 +204,15 @@ class PricesFile(unittest.TestCase):
             BudgetedJudge(fake, budget, 10).judge(prompt_of(), "unlisted", 1)
         self.assertEqual(1, len(fake.calls))
 
-    def test_the_real_prices_file_is_absent_so_dollars_are_off(self):
-        self.assertFalse(os.path.exists(os.path.join(ROOT, "prices.json")))
+    def test_the_dated_prices_file_loads_with_its_source_and_prompt_limit(self):
+        prices = budgets.load_prices(os.path.join(ROOT, "prices", "2026-10-26.json"))
+        self.assertEqual(("2026-10-26", "https://platform.claude.com/docs/en/about-claude/pricing"), (prices.date, prices.source))
+        self.assertEqual((100000, None), (prices.max_prompt_tokens("claude-haiku-5-5"), prices.max_prompt_tokens("claude-opus-5-5")))
+        self.assertEqual(Decimal("0.3"), prices.dollars("claude-haiku-5-5", 1000000, 400000) - Decimal("0"))
+        self.assertEqual(Decimal("0.16"), prices.dollars("claude-opus-5-5", 0, 8000))
+
+    def test_prices_dollars_off_without_a_file(self):
+        self.assertIsNone(Budget().prices)
 
     def test_a_broken_file_is_refused(self):
         with open(PRICES, encoding="utf-8") as handle:
@@ -216,11 +223,111 @@ class PricesFile(unittest.TestCase):
             return json.dumps(data)
         for text in ("not json", "[]", broken(version=2), broken(date="1/1/2000"), broken(per_tokens=0), broken(models={}),
                      broken(models={"m": {"input": 1}}), broken(models={"m": {"input": -1, "output": 1}}),
-                     broken(models={"m": {"input": True, "output": 1}}), broken(extra=1)):
+                     broken(models={"m": {"input": True, "output": 1}}), broken(extra=1),
+                     broken(source=""), broken(source=3), broken(models={"m": {"input": 1, "output": 1, "max_prompt_tokens": 0}}),
+                     broken(models={"m": {"input": 1, "output": 1, "max_prompt_tokens": 1.5}}),
+                     broken(models={"m": {"input": 1, "output": 1, "max_prompt_tokens": True}}),
+                     broken(models={"m": {"input": 1, "output": 1, "other": 1}})):
             with self.assertRaises(BudgetError, msg=text[:40]):
                 budgets.parse_prices(text)
         with self.assertRaises(BudgetError):
             budgets.load_prices(os.path.join(ROOT, "no-such-file.json"))
+
+
+def prices_of(**limits):
+    return budgets.parse_prices(json.dumps({"version": 1, "date": "2026-01-01", "per_tokens": 1000000, "source": "https://example.invalid/p",
+                                            "models": {"m": dict({"input": 1, "output": 2}, **limits)}}))
+
+
+class DollarCaps(unittest.TestCase):
+    def test_a_dollar_cap_needs_prices(self):
+        for name in ("dollars_per_call", "dollars_per_evaluation", "dollars_per_trial"):
+            with self.assertRaises(BudgetError):
+                Budget(**{name: 1})
+        Budget(prices=prices_of(), dollars_per_call=None)
+        with self.assertRaises(BudgetError):
+            Budget(prices=prices_of(), dollars_per_call=-1)
+
+    def test_a_reserve_exactly_at_a_dollar_cap_passes_and_one_over_is_refused(self):
+        budget = Budget(prices=prices_of(), dollars_per_call=3)  # 1 + 2 dollars for 1M in and 1M out
+        budget.release(budget.reserve(1000000, 1000000, "m"))
+        with self.assertRaises(BudgetRefused) as caught:
+            budget.reserve(1000001, 1000000, "m")
+        error = caught.exception
+        self.assertEqual(("call", "dollars"), (error.cap, error.unit))
+        self.assertIn("call cap is 3 dollars", str(error))
+        self.assertEqual("dollars", budget.refusals[0]["unit"])
+        json.dumps(budget.refusals)
+
+    def test_a_refused_call_for_dollars_never_reaches_the_judge(self):
+        fake = FakeJudge([answer(1, 1)])
+        budget = Budget(prices=prices_of(), dollars_per_call=1)
+        with self.assertRaises(BudgetRefused):
+            BudgetedJudge(fake, budget, 1000000).judge(prompt_of(), "m", 1)  # 2 dollars of output alone
+        self.assertEqual(([], []), (fake.calls, budget.records))
+
+    def test_evaluation_and_trial_dollars_count_spent_plus_held_plus_this_reserve(self):
+        budget = Budget(prices=prices_of(), dollars_per_evaluation=5, dollars_per_trial=7)
+        first = budget.reserve(0, 1000000, "m")  # 2 dollars held
+        budget.charge(first, 0, 500000)  # 1 dollar spent
+        held = budget.reserve(0, 1000000, "m")  # 2 more held: 3 of 5
+        with self.assertRaises(BudgetRefused) as caught:
+            budget.reserve(1000000, 1000000, "m")  # 3 + 3 > 5
+        self.assertEqual(("evaluation", "dollars"), (caught.exception.cap, caught.exception.unit))
+        budget.release(held)
+        budget.begin_evaluation()
+        budget.charge(budget.reserve(0, 1000000, "m"), 0, 1000000)  # trial spent 3
+        budget.begin_evaluation()
+        with self.assertRaises(BudgetRefused) as caught:
+            budget.reserve(0, 2100000, "m")  # 3 + 4.2 > 7
+        self.assertEqual(("trial", "dollars"), (caught.exception.cap, caught.exception.unit))
+        self.assertEqual(Decimal("3"), budget.spent_dollars("trial"))
+        budget.begin_trial()
+        self.assertEqual((Decimal(0), Decimal(0)), (budget.spent_dollars("evaluation"), budget.spent_dollars("trial")))
+
+    def test_charged_dollars_use_the_real_usage(self):
+        budget = Budget(prices=prices_of(), dollars_per_evaluation=10)
+        BudgetedJudge(FakeJudge([answer(500000, 250000)]), budget, 1000000).judge(prompt_of(), "m", 1)
+        self.assertEqual("1", budget.records[0]["dollars"])
+        self.assertEqual(Decimal("1.0"), budget.spent_dollars("evaluation"))
+
+    def test_token_caps_and_dollar_caps_are_both_kept(self):
+        budget = Budget(per_call=50, prices=prices_of(), dollars_per_call=100)
+        with self.assertRaises(BudgetRefused) as caught:
+            budget.reserve(30, 30, "m")
+        self.assertEqual("tokens", caught.exception.unit)
+
+
+class PromptLength(unittest.TestCase):
+    def test_a_prompt_above_the_prices_limit_is_refused_unmade_and_held_nothing(self):
+        fake = FakeJudge([answer(1, 1)] * 3)
+        budget = Budget(prices=prices_of(max_prompt_tokens=10), per_evaluation=1000)
+        judge = BudgetedJudge(fake, budget, 5)
+        with self.assertRaises(PromptTooLong) as caught:
+            judge.judge(prompt_of("x" * 31), "m", 1)  # estimate 11
+        self.assertIsInstance(caught.exception, BudgetError)
+        self.assertNotIsInstance(caught.exception, BudgetRefused)
+        self.assertEqual(([], []), (fake.calls, budget.records))
+        self.assertEqual("prompt_length", budget.refusals[0]["cap"])
+        self.assertEqual((11, 10), (budget.refusals[0]["reserve"], budget.refusals[0]["limit"]))
+        judge.judge(prompt_of("x" * 30), "m", 1)  # estimate 10: at the limit passes, and nothing was held by the refusal
+        self.assertEqual(1, len(fake.calls))
+
+    def test_no_limit_means_no_refusal_and_a_real_input_above_it_is_charged_and_flagged(self):
+        budget = Budget(prices=prices_of())
+        BudgetedJudge(FakeJudge([answer(10**6, 1)]), budget, 5).judge(prompt_of(), "m", 1)
+        self.assertFalse(budget.records[0]["above_price_tier"])
+        budget = Budget(prices=prices_of(max_prompt_tokens=100))
+        judge = BudgetedJudge(FakeJudge([answer(101, 1), answer(100, 1)]), budget, 5)
+        judge.judge(prompt_of(), "m", 1)
+        judge.judge(prompt_of(), "m", 2)
+        self.assertEqual([True, False], [r["above_price_tier"] for r in budget.records])
+        self.assertEqual(102 + 101, budget.spent("evaluation"))
+
+    def test_without_prices_nothing_is_flagged(self):
+        budget = Budget()
+        BudgetedJudge(FakeJudge([answer(5, 5)]), budget, 5).judge(prompt_of(), "m", 1)
+        self.assertFalse(budget.records[0]["above_price_tier"])
 
 
 if __name__ == "__main__":

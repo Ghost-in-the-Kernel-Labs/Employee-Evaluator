@@ -42,6 +42,30 @@ class GuardCatches(unittest.TestCase):
         self.assertFalse(guard.is_door("agent_runner/other.py"))
         self.assertFalse(guard.is_door("transport.py"))
 
+    def test_the_loopback_test_may_import_http_and_nothing_more(self):
+        loopback = guard.LOOPBACK_MODULES
+        self.assertEqual({"http"}, set(loopback))
+        self.assertEqual([], guard.violations("import http.server\nfrom http import client\n", loopback))
+        self.assertTrue(guard.violations("import http.server\n"))  # for every other file it is still banned
+        for line in ("import socket", "import urllib.request", "import ssl", "import anthropic", "import requests"):
+            with self.subTest(line):
+                self.assertTrue(guard.violations(line + "\n", loopback), line)
+        self.assertTrue(guard.violations("__import__('socket')\n", loopback))
+
+    def test_the_loopback_test_still_may_not_read_a_key_variable(self):
+        loopback = guard.LOOPBACK_MODULES
+        for text in ("import os\nos.environ['ANTHROPIC_KEY']\n", "import os\nos.environ.get('ANTHROPIC_KEY')\n",
+                     "import os\nos.getenv('API_TOKEN')\n", "import os\ndict(os.environ)\n"):
+            with self.subTest(text):
+                self.assertTrue(guard.violations(text, loopback), text)
+        self.assertEqual([], guard.violations("from unittest import mock\nmock.patch.dict('os.environ', {'ANTHROPIC_KEY': 'x'})\n", loopback))
+
+    def test_only_the_loopback_test_file_is_the_loopback_test(self):
+        self.assertTrue(guard.is_loopback_test("tests/test_transport.py"))
+        self.assertFalse(guard.is_loopback_test("tests/test_guard.py"))
+        self.assertFalse(guard.is_loopback_test("agent_runner/transport.py"))
+        self.assertFalse(guard.is_door("tests/test_transport.py"))
+
 
 class EveryFileIsHeld(unittest.TestCase):
     def test_no_file_but_the_door_reaches_the_network_or_a_key(self):
@@ -57,8 +81,9 @@ class EveryFileIsHeld(unittest.TestCase):
                 seen += 1
                 if guard.is_door(relative):
                     continue
+                allowed = guard.LOOPBACK_MODULES if guard.is_loopback_test(relative) else frozenset()
                 with open(path, encoding="utf-8") as handle:
-                    problems += ["%s %s" % (relative, v) for v in guard.violations(handle.read())]
+                    problems += ["%s %s" % (relative, v) for v in guard.violations(handle.read(), allowed)]
         self.assertGreater(seen, 0)
         self.assertEqual([], problems)
 

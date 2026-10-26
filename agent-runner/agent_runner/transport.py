@@ -13,8 +13,11 @@ variable `ANTHROPIC_KEY` is set and not empty: with it unset no key header is se
 alone reads that variable (guard.py bans it elsewhere); the key is read for each call, never stored on the judge, and is never
 printed, logged, written, put in a repr, in an exception message or in a recording. A key a header cannot carry is refused
 without being shown. Body: `model`, `max_tokens` (the output limit), `messages` (the prompt text as one user message) and
-`output_config` with `format` {type json_schema, schema: the parsed 2.2d schema file} and `effort` (EFFORT). The schema is
-enforced by the API's structured output, not asked for in prose. No `thinking`, `temperature`, `top_p`, `top_k` or fallback is
+`output_config` with `format` {type json_schema, schema: `api_schema` of the parsed 2.2d schema file} and `effort` (EFFORT). The
+schema is enforced by the API's structured output, not asked for in prose. The API refuses `minimum` and `maximum` on an
+integer (HTTP 400, the first smoke run, 2026-10-26), so `api_schema` drops the numeric range keywords (NUMERIC_RANGE) from
+the copy sent; each range is also in its field's description, and `judgment.parse` still enforces it, so an answer out of
+range is an unparsable one. The file, and so the prompt hash, are unchanged. No `thinking`, `temperature`, `top_p`, `top_k` or fallback is
 sent: both models think adaptively by default, thinking tokens are billed as output and count inside `max_tokens`.
 
 The answer is the concatenation of the response's `text` blocks (`thinking` and other blocks skipped). Tokens are `usage`'s
@@ -63,6 +66,7 @@ BACKOFF = 1.0
 MAX_SLEEP = 60.0
 TIMEOUT = 300
 LOOPBACK = frozenset({"127.0.0.1", "::1", "localhost"})
+NUMERIC_RANGE = frozenset({"minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum"})
 _KEY_SHAPE = re.compile(r"[\x21-\x7e]+")
 
 __all__ = ("live_judge", "key_present", "TransportError", "EFFORT")
@@ -125,6 +129,15 @@ def _connection(url, timeout):
     return connection
 
 
+def api_schema(schema):
+    """The copy of the 2.2d schema the API is sent: every numeric range keyword dropped, everything else as in the file."""
+    if isinstance(schema, dict):
+        return {k: api_schema(v) for k, v in schema.items() if k not in NUMERIC_RANGE}
+    if isinstance(schema, list):
+        return [api_schema(v) for v in schema]
+    return schema
+
+
 def _error_detail(body):
     """The API's error type and message from an error body, scrubbed; "" when the body is not the API's shape."""
     try:
@@ -150,7 +163,7 @@ class _LiveJudge(judges.Judge):
         self._url, self._base = url, base_url.rstrip("/")
         self._output_limit, self._retries, self._sleep, self._timeout = output_limit, retries, sleep, timeout
         self._recordings_path, self._stop_log = recordings_path, stop_log
-        self._schema = judgment.load_schema()
+        self._schema = api_schema(judgment.load_schema())
 
     def __repr__(self):
         return "LiveJudge(base_url=%r, retries=%d, output_limit=%d)" % (self._base, self._retries, self._output_limit)

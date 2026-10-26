@@ -5,7 +5,8 @@ The schema is `agent-runner/schema/judgment.schema.json`, the file the API is la
 that one schema and of an answer against it. The schema is kept to the subset a structured-output enforcement accepts:
 
   - an object has `properties`, `required` naming every one of them, and `additionalProperties` false;
-  - a string may have an `enum` of strings; an integer or number may have `minimum` and `maximum`;
+  - a string may have an `enum` of strings; an integer or number may have `minimum` and `maximum` (the API refuses them
+    on an integer, so 2.2l's `transport.api_schema` drops them from the copy it sends, and this parser enforces them);
   - an array has `items` (an object or a string, any depth) and may have `minItems` and `maxItems`;
   - every node has a `type` and a non-empty `description`; nothing else (no `$ref`, `oneOf`, `pattern`, `format`,
     string lengths, `default`): `check_schema` refuses any other keyword, so the file cannot drift out of the subset.

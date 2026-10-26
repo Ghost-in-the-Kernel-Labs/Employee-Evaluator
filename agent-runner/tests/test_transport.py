@@ -115,10 +115,25 @@ class RequestShape(Base):
             schema = json.load(handle)
         self.assertEqual({"model", "max_tokens", "messages", "output_config"}, set(body))
         self.assertEqual((HAIKU, 777, [{"role": "user", "content": "the rendered prompt"}]), (body["model"], body["max_tokens"], body["messages"]))
-        self.assertEqual({"format": {"type": "json_schema", "schema": schema}, "effort": transport.EFFORT}, body["output_config"])
+        self.assertEqual({"format": {"type": "json_schema", "schema": transport.api_schema(schema)}, "effort": transport.EFFORT}, body["output_config"])
         self.assertEqual("medium", transport.EFFORT)
         self.assertEqual(("2023-06-01", "application/json"), (headers["anthropic-version"], headers["content-type"]))
         self.assertEqual(judge.Answer(ANSWER, 100, 20), got)
+
+    def test_the_schema_sent_drops_the_numeric_ranges_and_nothing_else(self):
+        with open(judgment.SCHEMA_PATH, encoding="utf-8") as handle:
+            text = handle.read()
+        schema = json.loads(text)
+        sent = transport.api_schema(schema)
+        self.assertNotIn('"minimum"', json.dumps(sent))
+        self.assertNotIn('"maximum"', json.dumps(sent))
+        self.assertIn('"minimum"', text)
+        self.assertEqual(json.loads(text), schema)
+        quality = sent["properties"]["quality"]
+        self.assertEqual({"type", "description"}, set(quality))
+        self.assertIn("1 (poor) to 5 (excellent)", quality["description"])
+        self.assertEqual(1, sent["properties"]["scores"]["properties"]["quality"]["properties"]["evidence"]["minItems"])
+        self.assertEqual({"a": [{"b": 1}], "minItems": 1}, transport.api_schema({"a": [{"b": 1, "maximum": 2}], "minItems": 1, "exclusiveMinimum": 0}))
 
     def test_the_fake_key_is_sent_as_x_api_key_and_with_no_variable_no_key_header_is_sent(self):
         server = self.serve(ok(), ok(), ok())

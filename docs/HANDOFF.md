@@ -12,6 +12,45 @@ Every part that needs no key is built. **The next open part is 2.2l (`agent-runn
 Agreement against the labels is partly model against model (the labels were drafted by Claude Sonnet agents);
 Ghost's review is what keeps it from being circular (J-106).
 
+## What the last session settled and left (2026-10-26, J-123)
+
+**The API key.** Ghost has an Anthropic API key and, at the end of the last session, was putting it in the environment as the variable
+`ANTHROPIC_KEY` (the cloud environment's settings, Edit, Environment variables; the name is Ghost's). The Network-secrets form would not
+save (the Bearer type with header `x-api-key`, no prefix, host `api.anthropic.com`, resolved correctly in its preview but the save failed),
+so the variable is the route. Check it without printing it: `test -n "$ANTHROPIC_KEY" && echo set`. Not set means the session started before
+Ghost saved it: say so and stop; never ask for the key in the chat, never log, print or write it. The environment's network policy must allow
+`api.anthropic.com`; if a call is refused, tell Ghost the host and see the environment network page. `transport.py` should send the key as
+`x-api-key` and `anthropic-version: 2023-06-01`, and send no key at all when the variable is unset (so a secret injected by a proxy would also
+work). The smoke test runs on an explicit switch, not on detecting a key. Ghost should also set a monthly spend limit on the Console workspace:
+the `Budget` only covers calls through the harness.
+
+**Still to ask Ghost before 2.2l:** (3) the caps (suggest a few dollars per trial for the first run), (4) the transport (suggested:
+standard-library HTTP, no dependency), and the model ids and prices (`claude-haiku-5-5` and `claude-opus-5-5` are unconfirmed defaults, and the
+dated prices file is empty). The first live pass over the 30 labels is about 90 Haiku runs and some Opus runs, a few dollars (trial 4 cost about
+$1.30 for 150 Haiku runs); the first run is the measurement.
+
+**A cheaper route offered and not decided:** tune the prompt with Claude Code subagents standing in for Haiku and Opus (no key, session usage
+instead of API billing), then make one real measurement through the API for the record that counts. It breaks "the judge gets no tools"
+(E-013), counts no real tokens, and is still model against model, so such a record must not be stored under the live hash. If Ghost wants it,
+it is a new slice before 2.2m.
+
+**Outside the repository (lost with the last session unless Ghost saved them):** the id-to-repository map for `c001` to `c030`, the labelling
+sheet, the three evidence files behind each label, the domain of each label (the labels carry none, E-080), and rough sizes of about 80
+candidate repositories. Ghost was asked to copy them out of the old session. If they are gone, the labels still stand; only the means to
+audit or extend them is lost, and 2.2m's re-fetching of the 30 labelled repositories (question 6) needs the map. Nothing from them may enter
+this repository (E-014). Labels were drafted by Claude Sonnet agents under the rubric and confirmed by Ghost.
+
+**Provenance, learnt from one owner's own claims (no names here):** for twelve public repositories whose owner gave human-share claims
+(under 5 % AI, human, a known AI rewrite, about 30 %), the kernel's layer-3 history facts did not separate the groups; they track size and
+cadence. The two known rewrites stand out by hand (one large commit over most source files, the same day) but barely move the kernel's
+facts. Large-commit measures are noise when a vendored file is the big commit. Candidate facts, a design call for Ghost and not a TODO yet:
+a burst of changes over most files in one day, and large-commit measures that skip vendored and generated files. Line-level attribution to an
+AI is not possible from history or from correct code; do not promise it.
+
+**Environment tips learnt:** if `dockerd` will not start with "process with PID n is still running", the pid file is stale: confirm with
+`ps -p n`, then `rm -f /var/run/docker.pid` and start it again. A finished task's worktree is removed by the session that merged it
+(`docs/how/commit-and-push.md`).
+
 ## Waiting on Ghost
 
 - **The token optional** (proposed, not decided): public repositories read without one, a token only for the
@@ -22,7 +61,7 @@ Ghost's review is what keeps it from being circular (J-106).
 
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
-`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; four commits have passed since (this slice included) and the next is due in about six; a tithe is due in about two (six have passed since the last, this slice included).
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; four commits have passed since (this slice included) and the next is due in about six; a tithe is due in about two (seven have passed since the last, this handoff included).
 
 ## A session's environment
 

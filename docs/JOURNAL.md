@@ -1518,3 +1518,14 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** declining on a kind that is not live (refused: the gravest effect of a judgment needs a verified field); gating Quality by Quality exactly (refused: within one is the calibration's headline); exit status 0 for a decline (refused: a caller reading stdout for a card would take the message for one); a note for a missing record on the card (refused: it moves a golden); a new module (refused: `ingest/` already reads the judge's file).
 - **Resolved:** `AgreementRecord`, `JudgedRules`, `Declined`, `Judged` notes, `--records`, exit status 2; eight hand-written cases with synthetic records, each a golden in three forms; E-086 (proposed), command-line.md, SCORE-CARD.md, MUTATION.md run 21 (ingest 270 of 271, score 178 of 178, cli 112 of 114, the survivors old rows), FOR-GHOST.md, 2.2k to DONE.md, HANDOFF names 2.2l.
 - **Touched:** ingest/, score/, cli/, test/, theGhost.md (E-086), docs/ (DECISIONS, KERNEL-MAP, MODULES, modules.json, SCORE-CARD, DONE, JOURNAL, HANDOFF, MUTATION, FOR-GHOST, how/command-line.md, how/judge-harness.md), TODO.md.
+
+### J-123 Handoff for the session with the API key
+- **Who:** Claude Sonnet 5.5, with Ghost. **Class:** direction.
+- **Intent:** Hand 2.2l (the live judge) to a new session in which Ghost's API key is in the environment.
+- **Found:** The Network-secrets form would not save a Bearer secret with header `x-api-key` for `api.anthropic.com` although its preview
+  resolved; Ghost chose an environment variable, `ANTHROPIC_KEY`. A key sent through a session's proxy cannot be shown to work for that host
+  from a cloud session (the same trap as J-101), so the new session checks the variable first.
+- **Resolved:** docs/HANDOFF.md carries the key's route, the questions still open (caps, transport, model ids and prices), the cheaper
+  session-agent route offered, what lived outside the repository, and what the provenance study showed.
+- **Touched:** docs/HANDOFF.md.
+

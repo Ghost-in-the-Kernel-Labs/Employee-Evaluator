@@ -72,6 +72,18 @@ class CardRenderingTest {
         assertTrue(markdown.endsWith("- Produced: kernel 0.1, 2026-10-21, rubric `abc123`\n- Judged: prompt `ab12`, models `m-1`, `m\"2`\n"), markdown);
     }
 
+    /** TODO.md 2.2k: the notes of the card's rules for the judged kind are a `notes` list in the JSON and a `Judged note` line each in the Markdown; none, nothing added. */
+    @Test
+    void aJudgedCardCarriesItsNotes() {
+        ScoreCard card = Cards.card(List.of(fact("NAVIGABILITY.checklist", 70)), List.of(), Formulas.phaseOne(), PRODUCED);
+        Judged judged = new Judged("ab12", List.of("m-1"), List.of("kind: built (agreement 27 of 30)", "ambition: \"toy\", a_b"));
+        assertEquals(CardJson.render(card, new Judged("ab12", List.of("m-1"))), CardJson.render(card, new Judged("ab12", List.of("m-1"), List.of())));
+        assertTrue(CardJson.render(card, judged).endsWith("\"judged\": {\"promptHash\": \"ab12\", \"models\": [\"m-1\"], \"notes\": "
+                + "[\"kind: built (agreement 27 of 30)\", \"ambition: \\\"toy\\\", a_b\"]}}\n}\n"), CardJson.render(card, judged));
+        assertTrue(CardMarkdown.render(card, judged).endsWith("- Judged: prompt `ab12`, models `m-1`\n- Judged note: kind: built (agreement 27 of 30)\n"
+                + "- Judged note: ambition: \"toy\", a\\_b\n"), CardMarkdown.render(card, judged));
+    }
+
     /** A rank and a review render as objects in the metrics' order, the review's text escaped (phase 2 fills them; 2.6, 2.8). */
     @Test
     void aRankAndAReviewInTheJson() {

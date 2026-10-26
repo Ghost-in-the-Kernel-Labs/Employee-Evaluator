@@ -12,12 +12,13 @@ import java.util.regex.Pattern;
  * A judge's final answer about one repository, as the kernel reads it (TODO.md 2.2j): a wrapper object round the answer of
  * agent-runner/schema/judgment.schema.json (the 2.2d shape), naming the prompt that asked and the models that answered.
  * Exactly three members: `promptHash` (64 lower-case hex digits), `models` (one to eight model ids) and `judgment` (the answer).
- * The kernel acts on the answer's folders only; its kind is checked and kept, not acted on here (2.2k). The file is the judge's
+ * The folders say which files are counted (2.2j); the kind, the Ambition, the Quality and the Quality review are kept as the answer gave them, for `JudgedRules` (2.2k), which checks the members it reads. The file is the judge's
  * text and so data, never instructions (E-013, E-017): it is parsed, never run, and no model is called (E-003). Whatever else
  * does not match is refused with a message that says what, so a wrong file is never half-read.
  */
 // Decision: E-003
-public record Judgment(String promptHash, List<String> models, String kind, List<OwnCode.Folder> folders) {
+public record Judgment(String promptHash, List<String> models, String kind, List<OwnCode.Folder> folders,
+                       int quality, Map<String, Object> ambition, Map<String, Object> qualityReview) {
     /** The biggest judgment file read, in characters; a real answer is a few thousand. */
     public static final int MAX_CHARS = 1_000_000;
     static final List<String> KINDS = List.of("generated", "clone", "plan only", "mixed", "own-work", "built");
@@ -29,6 +30,8 @@ public record Judgment(String promptHash, List<String> models, String kind, List
     public Judgment {
         models = List.copyOf(models);
         folders = List.copyOf(folders);
+        ambition = java.util.Collections.unmodifiableMap(new java.util.LinkedHashMap<>(ambition));
+        qualityReview = java.util.Collections.unmodifiableMap(new java.util.LinkedHashMap<>(qualityReview));
     }
 
     // Unsure: rubric/'s Json keeps the last of a member given twice, where the harness's parser refuses it; a hand-edited file could differ from what the harness accepted.
@@ -47,7 +50,11 @@ public record Judgment(String promptHash, List<String> models, String kind, List
         if (!HASH.matcher(hash).matches()) throw new IllegalArgumentException("promptHash must be 64 lower-case hex digits, not " + shown(hash));
         List<String> models = models(top.get("models"));
         Map<String, Object> answer = answer(top.get("judgment"));
-        return new Judgment(hash, models, string(answer.get("kind"), "judgment.kind"), folders(answer.get("folders")));
+        Map<String, Object> scores = object(answer.get("scores"), "judgment.scores");
+        Object review = scores.get("quality");
+        return new Judgment(hash, models, string(answer.get("kind"), "judgment.kind"), folders(answer.get("folders")),
+                ((Double) answer.get("quality")).intValue(), object(answer.get("ambition"), "judgment.ambition"),
+                review instanceof Map<?, ?> ? object(review, "judgment.scores.quality") : Map.of());
     }
 
     /** The 2.2d answer: its six members present and no other, its kind one of the six, the members the kernel does not act on of their type. */

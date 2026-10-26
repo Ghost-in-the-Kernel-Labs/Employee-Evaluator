@@ -48,8 +48,8 @@
       "mayImport": ["rubric"],
       "mustNotImport": ["analyze", "history", "github", "score", "cli"],
       "phase": 1,
-      "entryPoints": ["ingest/evaluator/ingest/Ingest.java → Ingest.read()", "ingest/evaluator/ingest/Size.java → Size.facts()", "ingest/evaluator/ingest/OwnCode.java → OwnCode.split() (the judge's own-code folders, E-085)", "ingest/evaluator/ingest/Judgment.java → Judgment.read()"],
-      "startAt": "`ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025); the folders a judge calls own code, `OwnCode.java` over `Judgment.java` (E-085)."
+      "entryPoints": ["ingest/evaluator/ingest/Ingest.java → Ingest.read()", "ingest/evaluator/ingest/Size.java → Size.facts()", "ingest/evaluator/ingest/OwnCode.java → OwnCode.split() (the judge's own-code folders, E-085)", "ingest/evaluator/ingest/Judgment.java → Judgment.read()", "ingest/evaluator/ingest/JudgedRules.java → JudgedRules.apply() (the card's rules for the judged kind, E-086)", "ingest/evaluator/ingest/AgreementRecord.java → AgreementRecord.parse(), live() (a prompt's recorded agreement, E-084)"],
+      "startAt": "`ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025); the folders a judge calls own code, `OwnCode.java` over `Judgment.java` (E-085); what a judge's kind, Ambition and Quality may change, `JudgedRules.java` over `AgreementRecord.java` (E-086)."
     },
     "analyze": {
       "purpose": "Static analysis over the inventory, one adapter per language: complexity per function, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox.",

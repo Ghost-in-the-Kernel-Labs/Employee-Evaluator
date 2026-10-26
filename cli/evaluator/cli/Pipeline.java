@@ -13,6 +13,7 @@ import evaluator.github.GitHubApi;
 import evaluator.github.HttpGitHub;
 import evaluator.history.Commits;
 import evaluator.history.Shape;
+import evaluator.ingest.AgreementRecord;
 import evaluator.ingest.Ingest;
 import evaluator.ingest.Inventory;
 import evaluator.ingest.Judgment;
@@ -38,11 +39,18 @@ final class Pipeline {
      * What to read besides the code: the sandbox to run its tests in, and the GitHub repository and applicant; and the judgment whose
      * own-code folders say which files Size, Complexity and Maintainability count (TODO.md 2.2j); each null for none.
      */
-    record Options(Sandbox sandbox, String github, String applicant, Judgment judgment) {
+    record Options(Sandbox sandbox, String github, String applicant, Judgment judgment, Path records) {
         Options(Sandbox sandbox, String github, String applicant) {
-            this(sandbox, github, applicant, null);
+            this(sandbox, github, applicant, null, null);
+        }
+
+        Options(Sandbox sandbox, String github, String applicant, Judgment judgment) {
+            this(sandbox, github, applicant, judgment, null);
         }
     }
+
+    /** Where the agreement records of the judging prompts are kept (`agent-runner/records/<prompt hash>.json`, TODO.md 2.2i), relative to where the command runs. */
+    static final Path DEFAULT_RECORDS = Path.of("agent-runner", "records");
 
     private Pipeline() {}
 
@@ -63,6 +71,21 @@ final class Pipeline {
         else notes.println("history not read: no .git directory");
         if (options.github() != null) facts.addAll(github(HttpGitHub.fromEnvironment(), options));
         return facts;
+    }
+
+    /**
+     * The agreement record of the judgment's prompt (TODO.md 2.2k), or null when its folder holds none: then the judge's kind, Ambition and Quality are not
+     * used and the card says nothing of them (SC-05). A record that is not whole or not that prompt's is an IllegalArgumentException saying so.
+     */
+    // Decision: E-084
+    static AgreementRecord record(Judgment judgment, Path folder) throws IOException {
+        Path file = (folder == null ? DEFAULT_RECORDS : folder).resolve(judgment.promptHash() + ".json");
+        if (!Files.isRegularFile(file)) return null;
+        try {
+            return AgreementRecord.parse(Files.readString(file, java.nio.charset.StandardCharsets.UTF_8), judgment.promptHash());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("the agreement record " + file + ": " + e.getMessage());
+        }
     }
 
     /** The code's facts: complexity, the dependency graph, coupling, duplication, the tests' share, the checklist. */

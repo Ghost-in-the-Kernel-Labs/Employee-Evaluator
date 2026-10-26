@@ -49,7 +49,7 @@ A `Fact` is one thing measured or judged about the submission:
   in review); the card is recomputed without it and says which facts a person refuted.
 - **SC-05 An agent judgment's confidence is bounded by calibration.** The judging prompt's precision
   on the labeled set (30 repositories to start) is recorded with the prompt's hash; a fact from that
-  prompt carries at most that number. A prompt with no recorded precision produces no fact.
+  prompt carries at most that number. A prompt with no recorded precision produces no fact. Held by `Fact.judged` and, for a judge's answer, `ingest/` (`JudgedRules` over `AgreementRecord`, which works out from the record's counts whether a field is live, E-084; the record's own flag is never read).
 - **SC-06 A fact is known by its kind and its subject.** A rule's next version that infers it again is
   the same fact, so a person's word on it stays with it. Its key is its kind and its subject (`SIZE.source_lines repository:.`).
 
@@ -75,7 +75,7 @@ One card per submission:
   submission; no evidence asks the applicant to declare and show their tooling, and a judge decides;
   work clearly written by hand, or generated wholesale by a tool, is declined with no card. What is
   ranked is the applicant's proficiency at structuring AI-built code. Held from TODO.md 3.3, the
-  submission flow.
+  submission flow. The kernel's rules for a judge's kind (generated is declined with no card, a plan carries no Size, Complexity or Maintainability) are held from TODO.md 2.2k (`JudgedRules`, `Declined`, E-086).
 - **SC-08 The anonymized card is the card minus identity.** The public board shows the scores, the
   ratios, the tier, the bucket, the language and a coarse category; never the review, the README, a
   path or any fact's evidence, since evidence identifies. Held from TODO.md 3.5, the board.
@@ -86,7 +86,7 @@ One card per submission:
 
 | Module | Facts |
 | --- | --- |
-| `ingest/` | `SIZE.source_lines`, `SIZE.source_files`, `SIZE.source_folders`, `SIZE.set_aside_files` (E-026) |
+| `ingest/` | `SIZE.source_lines`, `SIZE.source_files`, `SIZE.source_folders`, `SIZE.set_aside_files` (E-026); from a judge's answer, `AMBITION.tier` and `QUALITY.agent_review` (JudgedRules, TODO.md 2.2k, E-086) |
 | `analyze/` | `COMPLEXITY.*`, `MAINTAINABILITY.*`, `QUALITY.tests.*`, `NAVIGABILITY.checklist`, `NAVIGABILITY.checklist.*` |
 | `history/` | `PROVENANCE.history.*` |
 | `github/` | `PROVENANCE.authorship.*` |

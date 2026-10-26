@@ -291,6 +291,15 @@ folder sorts before the counted files) and `OwnCode.mostSpecific`'s `>` as `>=` 
 `cli/`: 97, 95 killed; the two left are the old `Brief.commits` and `Main.main` rows. `analyze/`: 1,115, 1,085 killed; none of the survivors is in
 `Complexity.Report.restrictedTo` or `TestFiles.ratio` (the survivors that remain are older).
 
+### Run 21: 2026-10-26, `ingest/`, `score/` and `cli/`, the card's rules for the judged kind (TODO.md 2.2k, E-086)
+
+`gradle mutate -Ptarget=evaluator.ingest.*`, `score.*` and `cli.*` (`cli/` in a plain clone of the change, as PIT will not start in a worktree there):
+`AgreementRecord`, `JudgedRules`, `Declined`, `Judged` and the two renderings' notes, `Main` (`--records`, the exit status 2) and `Pipeline.record`.
+`ingest/`: 271 mutants first, 263 killed; the eight left were the edges of the size and count checks (a record exactly at the cap, a count of 0, a count equal
+to the total, 1,000,000 against 1,000,001) and a confidence of exactly 0, each killed by `theEdgesOfTheChecksAreExact` and `theEdgesOfAConfidenceAreAccepted`.
+The rerun: 270 of 271 killed, the one left `OwnCode.mostSpecific` from run 20, which has its row below. `score/`: 178, 178 killed. `cli/`: 114, 112 killed;
+the two left are the old `Brief.commits` and `Main.main` rows.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |

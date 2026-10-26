@@ -1,0 +1,13 @@
+{
+  "scores": {
+    "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]}
+  },
+  "ratios": {"qualityPerThousandLines": null, "sizeBand": null, "maintainabilityAtComplexity": null},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["quality", "complexity", "size", "ambition", "maintainability", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "cb62abb8be3c", "judged": {"promptHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1", "models": ["synthetic-haiku-1", "synthetic-opus-1"], "notes": ["kind: plan only (agreement 27 of 30): Size, Complexity and Maintainability are withheld", "ambition: unverified (a plan only repository, E-057)", "quality: 3, confidence 0.6 (the judge claimed 0.6, agreement 29 of 30)"]}}
+}

@@ -44,10 +44,16 @@ public final class CardJson {
         out.append("  \"produced\": {\"kernelVersion\": ").append(Json.quote(card.produced().kernelVersion()))
                 .append(", \"date\": ").append(Json.quote(card.produced().date()))
                 .append(", \"rubricHash\": ").append(Json.quote(card.produced().rubricHash()))
-                .append(judged == null ? "" : ", \"judged\": {\"promptHash\": " + Json.quote(judged.promptHash()) + ", \"models\": ["
-                        + judged.models().stream().map(Json::quote).collect(Collectors.joining(", ")) + "]}")
+                .append(judged == null ? "" : ", \"judged\": " + judged(judged))
                 .append("}\n}\n");
         return out.toString();
+    }
+
+    /** The `judged` member of `produced`: the prompt, the models and, when the card's rules had something to say, their notes. */
+    static String judged(Judged judged) {
+        return "{\"promptHash\": " + Json.quote(judged.promptHash()) + ", \"models\": ["
+                + judged.models().stream().map(Json::quote).collect(Collectors.joining(", ")) + "]"
+                + (judged.notes().isEmpty() ? "" : ", \"notes\": [" + judged.notes().stream().map(Json::quote).collect(Collectors.joining(", ")) + "]") + "}";
     }
 
     /** A metric's name in the card: its enum name in lower case. */

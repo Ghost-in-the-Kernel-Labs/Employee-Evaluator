@@ -44,6 +44,7 @@ public final class CardMarkdown {
         if (judged != null) {
             out.append("- Judged: prompt ").append(code(judged.promptHash())).append(", models ")
                     .append(judged.models().stream().map(CardMarkdown::code).collect(Collectors.joining(", "))).append('\n');
+            for (String note : judged.notes()) out.append("- Judged note: ").append(escape(note)).append('\n');
         }
         return out.toString();
     }

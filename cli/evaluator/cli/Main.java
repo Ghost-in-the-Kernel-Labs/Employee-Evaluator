@@ -1,6 +1,8 @@
 package evaluator.cli;
 
 import evaluator.analyze.DockerSandbox;
+import evaluator.ingest.JudgedRules;
+import evaluator.ingest.AgreementRecord;
 import evaluator.ingest.Judgment;
 import evaluator.rubric.Fact;
 import evaluator.rubric.Produced;
@@ -9,6 +11,7 @@ import evaluator.score.CardJson;
 import evaluator.score.CardMarkdown;
 import evaluator.score.Cards;
 import evaluator.score.FactsText;
+import evaluator.score.Declined;
 import evaluator.score.Judged;
 import evaluator.score.Formulas;
 import java.io.IOException;
@@ -30,13 +33,16 @@ public final class Main {
     /** The kernel's version, as a card says what made it. */
     static final String VERSION = "0.1";
     static final String USAGE = """
-            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--facts] [--judged <judgment.json>] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
+            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--facts] [--judged <judgment.json>] [--records <folder>] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
               Scores a repository on the seven metrics of docs/SCORE-CARD.md and prints its score card, as JSON
               or with --markdown as Markdown. --no-run leaves its tests unrun (no sandbox); --github with
               --applicant reads what GitHub verifies (needs EVALUATOR_GITHUB_TOKEN); --date fixes the card's date.
               --judged takes a judge's answer (docs/how/command-line.md): Size, Complexity and Maintainability's code parts count
               only the files in folders it classes as own code, its own tests make the test-to-code ratio, and the card names its
-              prompt hash and models. No model is called.
+              prompt hash and models. No model is called. The card's rules for the judged kind (docs/how/command-line.md) read the prompt's
+              agreement record, <folder>/<prompt hash>.json (--records, default agent-runner/records): a field not live there gives no fact,
+              kind generated declines the submission (no card, a message instead, exit status 2), kind plan only withholds Size, Complexity
+              and Maintainability. Exit status: 0 a card, 1 refused, 2 declined.
               --facts prints instead the values behind the card, one `name value` line each, and goes with neither
               --markdown nor --date.
             usage: evaluator brief <path-to-repository>
@@ -55,7 +61,7 @@ public final class Main {
         System.exit(run(List.of(args), System.out, System.err));
     }
 
-    /** The exit status of a command: 0 done, 1 refused. */
+    /** The exit status of a command: 0 done, 1 refused, 2 a submission declined (E-056, E-086). */
     static int run(List<String> args, PrintStream out, PrintStream err) {
         if (!args.isEmpty() && args.get(0).equals("brief")) return brief(args, out, err);
         Command command;
@@ -98,16 +104,28 @@ public final class Main {
         }
         try {
             List<Fact> facts = Pipeline.facts(command.path(), command.options(), err);
+            Judgment judgment = command.options().judgment();
+            Judged judged = judgment == null ? null : new Judged(judgment.promptHash(), judgment.models());
+            AgreementRecord record = judgment == null ? null : Pipeline.record(judgment, command.options().records());
+            if (judgment != null && record == null) {
+                err.println("judged: no agreement record for prompt " + judgment.promptHash() + ": the judge's kind, Ambition and Quality are not used (SC-05)");
+            } else if (record != null) {
+                JudgedRules.Outcome outcome = JudgedRules.apply(judgment, record, facts);
+                judged = new Judged(judgment.promptHash(), judgment.models(), outcome.notes());
+                if (outcome.declined()) {
+                    out.print(command.markdown() ? Declined.markdown(judgment.kind(), judged) : Declined.json(judgment.kind(), judged));
+                    return Declined.EXIT_STATUS;
+                }
+                facts = outcome.facts();
+            }
             if (command.facts()) {
                 out.print(FactsText.render(facts));
                 return 0;
             }
             ScoreCard card = Cards.card(facts, List.of(), Formulas.phaseOne(), new Produced(VERSION, command.date(), Formulas.rubricHash()));
-            Judgment judgment = command.options().judgment();
-            Judged judged = judgment == null ? null : new Judged(judgment.promptHash(), judgment.models());
             out.print(command.markdown() ? CardMarkdown.render(card, judged) : CardJson.render(card, judged));
             return 0;
-        } catch (IOException | UncheckedIOException e) {
+        } catch (IOException | UncheckedIOException | IllegalArgumentException e) {
             err.println("evaluator score: " + e.getMessage());
             return 1;
         }
@@ -118,7 +136,7 @@ public final class Main {
         if (args.size() < 2 || !args.get(0).equals("score")) throw new IllegalArgumentException("the one command is score <path>");
         Path path = null;
         boolean markdown = false, run = true, facts = false, dateTyped = false;
-        String github = null, applicant = null, judged = null, date = LocalDate.now(ZoneOffset.UTC).toString();
+        String github = null, applicant = null, judged = null, records = null, date = LocalDate.now(ZoneOffset.UTC).toString();
         for (int i = 1; i < args.size(); i++) {
             String a = args.get(i);
             switch (a) {
@@ -126,6 +144,7 @@ public final class Main {
                 case "--no-run" -> run = false;
                 case "--facts" -> facts = true;
                 case "--judged" -> judged = value(args, ++i, a);
+                case "--records" -> records = value(args, ++i, a);
                 case "--github" -> github = value(args, ++i, a);
                 case "--applicant" -> applicant = value(args, ++i, a);
                 case "--date" -> {
@@ -141,7 +160,20 @@ public final class Main {
         if (path == null) throw new IllegalArgumentException("score needs a path");
         checkGithub(github, applicant);
         if (facts && (markdown || dateTyped)) throw new IllegalArgumentException("--facts prints no card: it goes with neither --markdown nor --date");
-        return new Command(path, markdown, facts, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant, judgment(judged)), date);
+        return new Command(path, markdown, facts, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant, judgment(judged), records(records, judged)), date);
+    }
+
+    /** The folder of agreement records named, or none for the default; it goes with --judged, and must be a folder. */
+    private static Path records(String folder, String judged) {
+        if (folder == null) return null;
+        if (judged == null) throw new IllegalArgumentException("--records goes with --judged");
+        try {
+            Path path = Path.of(folder);
+            if (!Files.isDirectory(path)) throw new IllegalArgumentException("--records: not a folder: " + folder);
+            return path;
+        } catch (java.nio.file.InvalidPathException e) {
+            throw new IllegalArgumentException("--records: not a folder: " + folder);
+        }
     }
 
     /** --github and --applicant go together, and --github is GitHub's owner/repo. */

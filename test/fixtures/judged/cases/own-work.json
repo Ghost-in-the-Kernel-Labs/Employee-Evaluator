@@ -1,0 +1,72 @@
+{
+  "promptHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1",
+  "models": [
+    "synthetic-haiku-1",
+    "synthetic-opus-1"
+  ],
+  "judgment": {
+    "kind": "own-work",
+    "folders": [
+      {
+        "path": "src",
+        "class": "own code"
+      },
+      {
+        "path": "src/gen",
+        "class": "generated"
+      },
+      {
+        "path": "tests",
+        "class": "own tests"
+      },
+      {
+        "path": "tests/data",
+        "class": "fixture data"
+      },
+      {
+        "path": "scripts",
+        "class": "own tooling"
+      },
+      {
+        "path": "docs",
+        "class": "docs"
+      },
+      {
+        "path": "docs/tools",
+        "class": "own code"
+      }
+    ],
+    "scores": {
+      "quality": {
+        "score": 70,
+        "confidence": 0.6,
+        "evidence": [
+          "src/calc.py"
+        ]
+      },
+      "complexity": {
+        "score": 40,
+        "confidence": 0.5,
+        "evidence": [
+          "src/calc.py"
+        ]
+      },
+      "navigability": {
+        "score": 50,
+        "confidence": 0.5,
+        "evidence": [
+          "docs/example.py"
+        ]
+      }
+    },
+    "ambition": {
+      "tier": "toy",
+      "confidence": 0.9,
+      "evidence": [
+        "src/calc.py"
+      ]
+    },
+    "quality": 3,
+    "verdict": "A synthetic fixture for the kernel's folder filter."
+  }
+}

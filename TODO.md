@@ -13,14 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2k The card's rules for the judged kind
-
-Check: a judged fact is built with `Fact.judged` and confidence at most the recorded agreement of its prompt's hash (SC-05),
-read from `agent-runner/records/`; a prompt with no record for its hash gives no fact; kind plan only withholds Size,
-Complexity and Maintainability and reads Ambition unverified, kind generated gives the declined outcome with no card
-(E-056, E-057); each case a fixture with a hand-written judgment and a golden. Reads `rubric/`'s `Fact`, `Calibration` and `Label`
-only; no model client. No API, no key. Ghost: none. Cost: none.
-
 ### 2.2l The live judge: the one door to the API
 
 Check: `agent-runner/transport.py` is the only file that reaches the network: it sends the rendered prompt and the 2.2d

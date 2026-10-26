@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-26",
+  "fields": {
+    "ambition": {
+      "baseline": {
+        "answer": "toy",
+        "figure": 0.467,
+        "matched": 14
+      },
+      "figure": 0.733,
+      "live": true,
+      "matched": 22,
+      "needed": 24,
+      "total": 30,
+      "why": null
+    },
+    "kind": {
+      "baseline": {
+        "answer": "own-work",
+        "figure": 0.767,
+        "matched": 23
+      },
+      "figure": 0.867,
+      "live": true,
+      "matched": 26,
+      "needed": 27,
+      "total": 30,
+      "why": null
+    },
+    "quality_exact": {
+      "baseline": {
+        "answer": 3,
+        "figure": 0.567,
+        "matched": 17
+      },
+      "figure": 0.767,
+      "live": true,
+      "matched": 23,
+      "needed": 24,
+      "total": 30,
+      "why": null
+    },
+    "quality_within_one": {
+      "baseline": {
+        "answer": "3 (within one)",
+        "figure": 0.9,
+        "matched": 27
+      },
+      "figure": 0.933,
+      "live": true,
+      "matched": 28,
+      "needed": 29,
+      "total": 30,
+      "why": null
+    }
+  },
+  "ids": {},
+  "labels": 30,
+  "labels_absent": {
+    "kind": [
+      "generated",
+      "plan only",
+      "mixed",
+      "built"
+    ]
+  },
+  "margin": {
+    "floor": "4/5",
+    "fraction_of_gap": "1/2"
+  },
+  "models": [
+    "synthetic-haiku-1",
+    "synthetic-opus-1"
+  ],
+  "prompt": {
+    "hash": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc3",
+    "name": "synthetic-flags-lie"
+  },
+  "results": {
+    "missing": 0,
+    "ok": 30,
+    "partial": 0,
+    "refused": 0
+  },
+  "runs": 90,
+  "version": 1
+}

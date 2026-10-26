@@ -196,4 +196,61 @@ class MainTest {
         Main.run(List.of("score", "repo", "--judged", dir.resolve("none.json").toString()), new PrintStream(new ByteArrayOutputStream()), new PrintStream(missing));
         assertTrue(missing.toString().contains("evaluator: --judged: cannot read " + dir.resolve("none.json")), missing.toString());
     }
+
+    private static final String ALL_LIVE = "a".repeat(63) + "1";
+
+    private static int score(StringBuilder out, StringBuilder err, String... args) {
+        ByteArrayOutputStream o = new ByteArrayOutputStream(), e = new ByteArrayOutputStream();
+        int status = Main.run(List.of(args), new PrintStream(o), new PrintStream(e));
+        out.append(o.toString(StandardCharsets.UTF_8));
+        err.append(e.toString(StandardCharsets.UTF_8));
+        return status;
+    }
+
+    /** TODO.md 2.2k: a generated submission is declined: the message on stdout, no card, exit 2; --markdown gives the message as Markdown; --facts prints no facts. */
+    @Test
+    void aDeclinedSubmissionIsAMessageAndExitTwo() {
+        String repo = JUDGED.resolve("app").toString(), judgment = JUDGED.resolve("cases/generated.json").toString(), records = JUDGED.resolve("records").toString();
+        for (String form : List.of("--date", "--markdown", "--facts")) {
+            StringBuilder out = new StringBuilder(), err = new StringBuilder();
+            List<String> args = new java.util.ArrayList<>(List.of("score", repo, "--no-run", "--judged", judgment, "--records", records));
+            args.addAll(form.equals("--date") ? List.of("--date", "2026-10-22") : List.of(form));
+            assertEquals(2, score(out, err, args.toArray(new String[0])), form + " " + err);
+            assertTrue(out.toString().contains("A traditional code review would serve you better here."), out.toString());
+            assertTrue(out.toString().startsWith(form.equals("--markdown") ? "# No score card" : "{\n  \"outcome\": \"declined\""), out.toString());
+            assertFalse(out.toString().contains("scores"), "no card");
+        }
+    }
+
+    /** --records names a folder and goes with --judged; the default is agent-runner/records, which holds no record, so a prompt there has none and the card says nothing of it but on stderr. */
+    @Test
+    void theRecordsFolderIsChecked(@TempDir Path dir) throws Exception {
+        assertEquals(dir, Main.parse(List.of("score", "repo", "--judged", JUDGED.resolve("judgment.json").toString(), "--records", dir.toString())).options().records());
+        assertNull(Main.parse(List.of("score", "repo", "--judged", JUDGED.resolve("judgment.json").toString())).options().records(), "none typed, the default");
+        assertEquals(Path.of("agent-runner", "records"), Pipeline.DEFAULT_RECORDS);
+        for (List<String> args : List.of(List.of("score", "repo", "--records", dir.toString()), List.of("score", "repo", "--records"),
+                List.of("score", "repo", "--judged", JUDGED.resolve("judgment.json").toString(), "--records", dir.resolve("none").toString()),
+                List.of("score", "repo", "--judged", JUDGED.resolve("judgment.json").toString(), "--records", "\0"))) {
+            assertThrows(IllegalArgumentException.class, () -> Main.parse(args), args.toString());
+        }
+        StringBuilder out = new StringBuilder(), err = new StringBuilder();
+        assertEquals(0, score(out, err, "score", JUDGED.resolve("app").toString(), "--no-run", "--facts", "--judged", JUDGED.resolve("cases/own-work.json").toString(), "--records", dir.toString()));
+        assertTrue(err.toString().contains("judged: no agreement record for prompt " + ALL_LIVE + ": the judge's kind, Ambition and Quality are not used (SC-05)"), err.toString());
+        assertFalse(out.toString().contains("AMBITION") || out.toString().contains("QUALITY"), out.toString());
+        assertTrue(out.toString().contains("SIZE.source_lines 22"), "the kernel's own measuring stands");
+    }
+
+    /** A record that is not whole, or not the prompt's, is refused with its path and a reason, exit 1, nothing on stdout; no card is made from a record that cannot be read. */
+    @Test
+    void aBrokenRecordIsRefused(@TempDir Path dir) throws Exception {
+        String good = Files.readString(JUDGED.resolve("records/" + ALL_LIVE + ".json"));
+        for (String[] bad : new String[][] {{"{", "not valid JSON"}, {good.replace("\"version\": 1", "\"version\": 9"), "not version 1"},
+                {good.replace(ALL_LIVE, "d".repeat(64)), "not the record of prompt " + ALL_LIVE}}) {
+            Files.writeString(dir.resolve(ALL_LIVE + ".json"), bad[0]);
+            StringBuilder out = new StringBuilder(), err = new StringBuilder();
+            assertEquals(1, score(out, err, "score", JUDGED.resolve("app").toString(), "--no-run", "--judged", JUDGED.resolve("cases/own-work.json").toString(), "--records", dir.toString()), bad[1]);
+            assertTrue(err.toString().contains("evaluator score: the agreement record " + dir.resolve(ALL_LIVE + ".json") + ": ") && err.toString().contains(bad[1]), err.toString());
+            assertEquals("", out.toString());
+        }
+    }
 }

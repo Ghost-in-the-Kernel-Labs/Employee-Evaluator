@@ -538,3 +538,30 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/CardMarkdown.java:CardMarkdown.render#2` |  | 2026-10-26 |  |
 | score | `score/evaluator/score/Judged.java:Judged.Judged` |  | 2026-10-26 |  |
 | cli | `cli/evaluator/cli/Main.java:Main.checkGithub` |  | 2026-10-26 |  |
+| cli | `cli/evaluator/cli/Main.java:Main.records` |  | 2026-10-26 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.Options.Options#2` |  | 2026-10-26 |  |
+| cli | `cli/evaluator/cli/Pipeline.java:Pipeline.record` | E-084 | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.Fraction.Fraction` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.Field.Field` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.Field.needed` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.AgreementRecord` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.parse` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.live` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.live#2` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.why` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.calibration` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.field` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.object` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/AgreementRecord.java:AgreementRecord.whole` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.Outcome.Outcome` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.JudgedRules` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.apply` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.judgedFact` | E-017 | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.tier` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.agreement` |  | 2026-10-26 |  |
+| ingest | `ingest/evaluator/ingest/JudgedRules.java:JudgedRules.shown` |  | 2026-10-26 |  |
+| score | `score/evaluator/score/CardJson.java:CardJson.judged` |  | 2026-10-26 |  |
+| score | `score/evaluator/score/Declined.java:Declined.Declined` |  | 2026-10-26 |  |
+| score | `score/evaluator/score/Declined.java:Declined.json` |  | 2026-10-26 |  |
+| score | `score/evaluator/score/Declined.java:Declined.markdown` |  | 2026-10-26 |  |
+| score | `score/evaluator/score/Judged.java:Judged.Judged#2` |  | 2026-10-26 |  |

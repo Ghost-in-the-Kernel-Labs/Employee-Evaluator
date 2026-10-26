@@ -1,0 +1,16 @@
+{
+  "scores": {
+    "complexity": {"value": 3, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:docs/tools/build.py:build", "COMPLEXITY.cognitive function:extra/helper.py:label", "COMPLEXITY.cognitive function:extra/test_helper.py:test_label_exists", "COMPLEXITY.cognitive function:src/calc.py:add", "COMPLEXITY.cognitive function:src/calc.py:classify", "COMPLEXITY.cognitive function:src/util.py:double"]},
+    "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
+    "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]},
+    "maintainability": {"value": 94, "facts": ["MAINTAINABILITY.duplication repository:.", "MAINTAINABILITY.test_to_code_ratio repository:.", "MAINTAINABILITY.fan_out file:docs/tools/build.py", "MAINTAINABILITY.fan_out file:extra/helper.py", "MAINTAINABILITY.fan_out file:extra/test_helper.py", "MAINTAINABILITY.fan_out file:src/calc.py", "MAINTAINABILITY.fan_out file:src/util.py", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:docs/tools/build.py:build", "COMPLEXITY.cognitive function:extra/helper.py:label", "COMPLEXITY.cognitive function:extra/test_helper.py:test_label_exists", "COMPLEXITY.cognitive function:src/calc.py:add", "COMPLEXITY.cognitive function:src/calc.py:classify", "COMPLEXITY.cognitive function:src/util.py:double", "MAINTAINABILITY.unused_imports file:docs/tools/build.py", "MAINTAINABILITY.unused_imports file:extra/helper.py", "MAINTAINABILITY.unused_imports file:extra/test_helper.py", "MAINTAINABILITY.unused_imports file:src/calc.py", "MAINTAINABILITY.unused_imports file:src/util.py"]}
+  },
+  "ratios": {"qualityPerThousandLines": null, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 2.82},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["quality", "ambition", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "cb62abb8be3c", "judged": {"promptHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa1", "models": ["synthetic-haiku-1", "synthetic-opus-1"], "notes": ["kind: built (agreement 27 of 30)", "ambition: product, confidence 0.6 (the judge claimed 0.6, agreement 25 of 30)", "quality: 3, confidence 0.6 (the judge claimed 0.6, agreement 29 of 30)"]}}
+}

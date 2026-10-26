@@ -58,7 +58,7 @@ AI is not possible from history or from correct code; do not promise it.
 
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
-`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; nine commits have passed since (this tithe included) and the next is due in about one; the tithe is done (Pass 9, J-125), the next in about eight.
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-126 (this commit); the next is due in about ten commits. The last tithe was Pass 9 (J-125); this review is one commit past it, so the next tithe is due in about seven.
 
 ## A session's environment
 

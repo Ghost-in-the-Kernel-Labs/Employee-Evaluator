@@ -21,7 +21,7 @@ The pipeline: `ingest` reads → `analyze`, `history` and `github` measure → `
 - **Input:** a path to a checked-out repository. **Output:** an Inventory; the Size facts.
 - **May import:** `rubric`.
 - **Imported by:** `analyze`, `cli`.
-- **Start at:** `ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025).
+- **Start at:** `ingest/evaluator/ingest/Ingest.java` (`Ingest.read()`), `ingest/evaluator/ingest/Size.java`; what is set aside, `ingest/evaluator/ingest/SetAside.java` (E-025); the folders a judge calls own code, `OwnCode.java` over `Judgment.java` (E-085).
 
 ### `analyze/`
 - **Purpose:** Static analysis over the inventory, one adapter per language: complexity per function, the dependency graph, duplication, coupling, the test-to-code ratio, and the repo's own tests run in a sandbox.

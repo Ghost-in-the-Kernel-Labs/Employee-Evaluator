@@ -12,6 +12,7 @@
 ## Steps
 
 - These make facts; the weights that turn them into a score are a formula: `docs/how/change-a-formula.md`.
+- Through a judgment (`score --judged`, E-085) the test-to-code ratio is own-tests lines over own-code lines plus the lines of files in no classified folder (a test by its name there), by the judge's class and not the file's name; the other facts are over the counted files only. `TestFiles.ratio(inventory, predicate)` takes what is a test from the caller.
 - Each fact's value worked by hand on a small fixture before the golden is written.
 
 ## Always

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
@@ -37,18 +38,23 @@ public final class TestFiles {
      * repository has no code that is not a test, since a ratio over nothing measures nothing (SC-07).
      */
     public static Optional<Fact> ratio(Inventory inventory) {
-        int test = 0, code = 0;
+        return ratio(inventory, TestFiles::isTest);
+    }
+
+    /** The same ratio where `test` says which files are tests: a judge's classes (TODO.md 2.2j) in place of the kernel's path rule. */
+    public static Optional<Fact> ratio(Inventory inventory, Predicate<String> test) {
+        int tested = 0, code = 0;
         List<String> tests = new ArrayList<>();
         for (Inventory.Source file : inventory.source()) {
-            if (isTest(file.path())) {
-                test += file.lines();
+            if (test.test(file.path())) {
+                tested += file.lines();
                 tests.add(file.path());
             } else {
                 code += file.lines();
             }
         }
         if (code == 0) return Optional.empty();
-        double ratio = Math.round(1000.0 * test / code) / 1000.0;
+        double ratio = Math.round(1000.0 * tested / code) / 1000.0;
         Evidence evidence = new Evidence(TOOL, tests.isEmpty() ? List.of("(no test file found)") : tests);
         return Optional.of(Fact.measured("MAINTAINABILITY.test_to_code_ratio", Subject.repository(), ratio, evidence));
     }

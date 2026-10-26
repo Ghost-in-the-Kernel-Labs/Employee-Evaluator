@@ -1,0 +1,16 @@
+{
+  "scores": {
+    "complexity": {"value": 4, "facts": ["COMPLEXITY.dependency_depth repository:.", "COMPLEXITY.cognitive function:docs/tools/build.py:build", "COMPLEXITY.cognitive function:extra/helper.py:label", "COMPLEXITY.cognitive function:extra/test_helper.py:test_label_exists", "COMPLEXITY.cognitive function:scripts/release.py:release", "COMPLEXITY.cognitive function:src/calc.py:add", "COMPLEXITY.cognitive function:src/calc.py:classify", "COMPLEXITY.cognitive function:src/gen/table.py:table", "COMPLEXITY.cognitive function:src/util.py:double", "COMPLEXITY.cognitive function:tests/test_calc.py:test_add", "COMPLEXITY.cognitive function:tests/test_calc.py:test_classify"]},
+    "size": {"value": 0, "facts": ["SIZE.source_lines repository:."]},
+    "navigability": {"value": 40, "facts": ["NAVIGABILITY.checklist repository:."]},
+    "maintainability": {"value": 91, "facts": ["MAINTAINABILITY.duplication repository:.", "MAINTAINABILITY.test_to_code_ratio repository:.", "MAINTAINABILITY.fan_out file:docs/example.py", "MAINTAINABILITY.fan_out file:docs/tools/build.py", "MAINTAINABILITY.fan_out file:extra/helper.py", "MAINTAINABILITY.fan_out file:extra/test_helper.py", "MAINTAINABILITY.fan_out file:scripts/release.py", "MAINTAINABILITY.fan_out file:src/calc.py", "MAINTAINABILITY.fan_out file:src/gen/table.py", "MAINTAINABILITY.fan_out file:src/util.py", "MAINTAINABILITY.fan_out file:tests/data/sample.py", "MAINTAINABILITY.fan_out file:tests/test_calc.py", "MAINTAINABILITY.import_cycle_files repository:.", "COMPLEXITY.cognitive function:docs/tools/build.py:build", "COMPLEXITY.cognitive function:extra/helper.py:label", "COMPLEXITY.cognitive function:extra/test_helper.py:test_label_exists", "COMPLEXITY.cognitive function:scripts/release.py:release", "COMPLEXITY.cognitive function:src/calc.py:add", "COMPLEXITY.cognitive function:src/calc.py:classify", "COMPLEXITY.cognitive function:src/gen/table.py:table", "COMPLEXITY.cognitive function:src/util.py:double", "COMPLEXITY.cognitive function:tests/test_calc.py:test_add", "COMPLEXITY.cognitive function:tests/test_calc.py:test_classify", "MAINTAINABILITY.unused_imports file:docs/example.py", "MAINTAINABILITY.unused_imports file:docs/tools/build.py", "MAINTAINABILITY.unused_imports file:extra/helper.py", "MAINTAINABILITY.unused_imports file:extra/test_helper.py", "MAINTAINABILITY.unused_imports file:scripts/release.py", "MAINTAINABILITY.unused_imports file:src/calc.py", "MAINTAINABILITY.unused_imports file:src/gen/table.py", "MAINTAINABILITY.unused_imports file:src/util.py", "MAINTAINABILITY.unused_imports file:tests/data/sample.py", "MAINTAINABILITY.unused_imports file:tests/test_calc.py"]}
+  },
+  "ratios": {"qualityPerThousandLines": null, "sizeBand": "under 2k lines", "maintainabilityAtComplexity": 3.64},
+  "provenanceTier": null,
+  "toolingBucket": "unknown",
+  "corpusRank": {},
+  "notMeasured": ["quality", "ambition", "provenance"],
+  "refuted": [],
+  "review": {},
+  "produced": {"kernelVersion": "0.1", "date": "2026-10-22", "rubricHash": "cb62abb8be3c"}
+}

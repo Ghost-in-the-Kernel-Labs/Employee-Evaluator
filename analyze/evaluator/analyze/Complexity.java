@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -27,6 +28,17 @@ public final class Complexity {
             functions = new TreeMap<>(functions);
             imports = new TreeMap<>(imports);
             unread = new TreeMap<>(unread);
+        }
+
+        /** The same report over only these files (a judge's own code, TODO.md 2.2j): every other file's functions, imports and unread entry dropped. */
+        public Report restrictedTo(Set<String> paths) {
+            return new Report(kept(functions, paths), kept(imports, paths), kept(unread, paths));
+        }
+
+        private static <V> Map<String, V> kept(Map<String, V> all, Set<String> paths) {
+            Map<String, V> kept = new TreeMap<>(all);
+            kept.keySet().retainAll(paths);
+            return kept;
         }
     }
 

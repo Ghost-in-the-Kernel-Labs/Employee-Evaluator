@@ -1,6 +1,7 @@
 package evaluator.cli;
 
 import evaluator.analyze.DockerSandbox;
+import evaluator.ingest.Judgment;
 import evaluator.rubric.Fact;
 import evaluator.rubric.Produced;
 import evaluator.rubric.ScoreCard;
@@ -8,6 +9,7 @@ import evaluator.score.CardJson;
 import evaluator.score.CardMarkdown;
 import evaluator.score.Cards;
 import evaluator.score.FactsText;
+import evaluator.score.Judged;
 import evaluator.score.Formulas;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -28,10 +30,13 @@ public final class Main {
     /** The kernel's version, as a card says what made it. */
     static final String VERSION = "0.1";
     static final String USAGE = """
-            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--facts] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
+            usage: evaluator score <path-to-repository> [--markdown] [--no-run] [--facts] [--judged <judgment.json>] [--github <owner/repo> --applicant <login>] [--date <yyyy-mm-dd>]
               Scores a repository on the seven metrics of docs/SCORE-CARD.md and prints its score card, as JSON
               or with --markdown as Markdown. --no-run leaves its tests unrun (no sandbox); --github with
               --applicant reads what GitHub verifies (needs EVALUATOR_GITHUB_TOKEN); --date fixes the card's date.
+              --judged takes a judge's answer (docs/how/command-line.md): Size, Complexity and Maintainability's code parts count
+              only the files in folders it classes as own code, its own tests make the test-to-code ratio, and the card names its
+              prompt hash and models. No model is called.
               --facts prints instead the values behind the card, one `name value` line each, and goes with neither
               --markdown nor --date.
             usage: evaluator brief <path-to-repository>
@@ -98,7 +103,9 @@ public final class Main {
                 return 0;
             }
             ScoreCard card = Cards.card(facts, List.of(), Formulas.phaseOne(), new Produced(VERSION, command.date(), Formulas.rubricHash()));
-            out.print(command.markdown() ? CardMarkdown.render(card) : CardJson.render(card));
+            Judgment judgment = command.options().judgment();
+            Judged judged = judgment == null ? null : new Judged(judgment.promptHash(), judgment.models());
+            out.print(command.markdown() ? CardMarkdown.render(card, judged) : CardJson.render(card, judged));
             return 0;
         } catch (IOException | UncheckedIOException e) {
             err.println("evaluator score: " + e.getMessage());
@@ -111,13 +118,14 @@ public final class Main {
         if (args.size() < 2 || !args.get(0).equals("score")) throw new IllegalArgumentException("the one command is score <path>");
         Path path = null;
         boolean markdown = false, run = true, facts = false, dateTyped = false;
-        String github = null, applicant = null, date = LocalDate.now(ZoneOffset.UTC).toString();
+        String github = null, applicant = null, judged = null, date = LocalDate.now(ZoneOffset.UTC).toString();
         for (int i = 1; i < args.size(); i++) {
             String a = args.get(i);
             switch (a) {
                 case "--markdown" -> markdown = true;
                 case "--no-run" -> run = false;
                 case "--facts" -> facts = true;
+                case "--judged" -> judged = value(args, ++i, a);
                 case "--github" -> github = value(args, ++i, a);
                 case "--applicant" -> applicant = value(args, ++i, a);
                 case "--date" -> {
@@ -131,10 +139,32 @@ public final class Main {
             }
         }
         if (path == null) throw new IllegalArgumentException("score needs a path");
+        checkGithub(github, applicant);
+        if (facts && (markdown || dateTyped)) throw new IllegalArgumentException("--facts prints no card: it goes with neither --markdown nor --date");
+        return new Command(path, markdown, facts, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant, judgment(judged)), date);
+    }
+
+    /** --github and --applicant go together, and --github is GitHub's owner/repo. */
+    private static void checkGithub(String github, String applicant) {
         if ((github == null) != (applicant == null)) throw new IllegalArgumentException("--github and --applicant go together");
         if (github != null && !github.matches(GITHUB_NAME)) throw new IllegalArgumentException("--github takes owner/repo, not " + github);
-        if (facts && (markdown || dateTyped)) throw new IllegalArgumentException("--facts prints no card: it goes with neither --markdown nor --date");
-        return new Command(path, markdown, facts, new Pipeline.Options(run ? new DockerSandbox() : null, github, applicant), date);
+    }
+
+    /** The judgment file named, read (none named, none read); a file that cannot be read or is not the shape docs/how/command-line.md gives is refused as what was typed. */
+    // Unsure: the file is read whole before Judgment.read measures it against its cap; a path to a huge file is the caller's own, not a submission's.
+    private static Judgment judgment(String file) {
+        if (file == null) return null;
+        String text;
+        try {
+            text = Files.readString(Path.of(file), java.nio.charset.StandardCharsets.UTF_8);
+        } catch (IOException | UncheckedIOException | java.nio.file.InvalidPathException e) {
+            throw new IllegalArgumentException("--judged: cannot read " + file);
+        }
+        try {
+            return Judgment.read(text);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("--judged " + file + ": " + e.getMessage());
+        }
     }
 
     /** A date as yyyy-mm-dd; anything else refused as what was typed, never a parser's exception. */

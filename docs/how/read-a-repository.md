@@ -6,15 +6,16 @@
 - `ingest/evaluator/ingest/Size.java` (the Size facts, E-026)
 - `ingest/evaluator/ingest/Languages.java` (file endings to languages)
 
-**Contract:** E-025, E-026; E-013 (a submission is hostile: read, never run).
+**Contract:** E-025, E-026, E-085 (`--judged`); E-013 (a submission is hostile: read, never run).
 
-**Tests:** `test/evaluator/ingest/`, the golden `test/goldens/small-app/inventory.json`.
+**Tests:** `test/evaluator/ingest/` (`OwnCodeTest`, `JudgmentTest`), the golden `test/goldens/small-app/inventory.json`.
 
 ## Steps
 
 - A rule about what is set aside goes in `ingest/evaluator/ingest/SetAside.java` with its reason in E-025's terms; a small fixture case in `test/evaluator/ingest/`.
 - The inventory golden changes when what is read changes: `gradle test -PwriteGoldens`, review the diff; a refactor changes no golden (E-018).
 - A submission is stripped before anything reads it (`ingest/evaluator/ingest/Quarantine.java`, E-033).
+- The folders a judge calls own code are applied to an inventory by `ingest/evaluator/ingest/OwnCode.java`, from the file `ingest/evaluator/ingest/Judgment.java` reads (`score --judged`, E-085; the file's shape is in `docs/how/command-line.md`).
 
 ## Always
 

@@ -15,6 +15,8 @@ import evaluator.history.Commits;
 import evaluator.history.Shape;
 import evaluator.ingest.Ingest;
 import evaluator.ingest.Inventory;
+import evaluator.ingest.Judgment;
+import evaluator.ingest.OwnCode;
 import evaluator.ingest.Size;
 import evaluator.rubric.Fact;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Every module's facts about one repository, in one order (E-054): what it holds (`ingest/`), its code
@@ -31,16 +34,24 @@ import java.util.List;
  */
 // Decision: E-054
 final class Pipeline {
-    /** What to read besides the code: the sandbox to run its tests in, and the GitHub repository and applicant; each null for none. */
-    record Options(Sandbox sandbox, String github, String applicant) {}
+    /**
+     * What to read besides the code: the sandbox to run its tests in, and the GitHub repository and applicant; and the judgment whose
+     * own-code folders say which files Size, Complexity and Maintainability count (TODO.md 2.2j); each null for none.
+     */
+    record Options(Sandbox sandbox, String github, String applicant, Judgment judgment) {
+        Options(Sandbox sandbox, String github, String applicant) {
+            this(sandbox, github, applicant, null);
+        }
+    }
 
     private Pipeline() {}
 
     /** The repository's facts; what kept a part from being read is said on `notes`. */
     static List<Fact> facts(Path root, Options options, PrintStream notes) throws IOException {
         Inventory inventory = Ingest.read(root);
-        List<Fact> facts = new ArrayList<>(Size.facts(inventory));
-        facts.addAll(code(root, inventory));
+        OwnCode.Split own = options.judgment() == null ? null : OwnCode.split(inventory, options.judgment().folders());
+        List<Fact> facts = new ArrayList<>(Size.facts(own == null ? inventory : own.counted()));
+        facts.addAll(own == null ? code(root, inventory) : code(root, inventory, own));
         if (options.sandbox() != null) {
             TestRunner.Result run = TestRunner.run(root, inventory, options.sandbox());
             facts.addAll(run.facts());
@@ -64,6 +75,24 @@ final class Pipeline {
         Duplication.fact(report).ifPresent(facts::add);
         TestFiles.ratio(inventory).ifPresent(facts::add);
         facts.addAll(Navigability.facts(root, inventory, report, graph));
+        return facts;
+    }
+
+    /**
+     * The code's facts through a judgment (TODO.md 2.2j, E-057): complexity, the graph, coupling, duplication and unused imports over the
+     * files counted; the tests' share by the judge's classes. The checklist keeps the whole inventory, as the judge scores navigability itself.
+     */
+    // Decision: E-057
+    static List<Fact> code(Path root, Inventory inventory, OwnCode.Split own) throws IOException {
+        Complexity.Report whole = Complexity.measure(root, inventory);
+        Complexity.Report report = whole.restrictedTo(own.counted().source().stream().map(Inventory.Source::path).collect(Collectors.toSet()));
+        Dependencies.Graph graph = Dependencies.graph(report, own.counted());
+        List<Fact> facts = new ArrayList<>(Complexity.facts(report, own.counted()));
+        facts.addAll(Dependencies.facts(graph, report, Dependencies.TOOL));
+        facts.addAll(Coupling.facts(graph));
+        Duplication.fact(report).ifPresent(facts::add);
+        TestFiles.ratio(own.withTests(), path -> own.tests().contains(path) || (!own.code().contains(path) && TestFiles.isTest(path))).ifPresent(facts::add);
+        facts.addAll(Navigability.facts(root, inventory, whole, Dependencies.graph(whole, inventory)));
         return facts;
     }
 

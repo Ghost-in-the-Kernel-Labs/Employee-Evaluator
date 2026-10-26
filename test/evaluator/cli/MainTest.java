@@ -118,4 +118,82 @@ class MainTest {
         assertTrue(card.contains("| Ambition | not measured"), card);
         assertTrue(card.contains("- Tooling bucket: Claude"), card);
     }
+
+    private static final Path JUDGED = ROOT.resolve("test/fixtures/judged");
+
+    private static String facts(String... extra) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream(), err = new ByteArrayOutputStream();
+        List<String> args = new java.util.ArrayList<>(List.of("score", JUDGED.resolve("app").toString(), "--no-run", "--facts"));
+        args.addAll(List.of(extra));
+        assertEquals(0, Main.run(args, new PrintStream(out), new PrintStream(err)), err.toString());
+        return out.toString(StandardCharsets.UTF_8);
+    }
+
+    private static void assertLines(String printed, List<String> lines) {
+        for (String line : lines) assertTrue(printed.lines().anyMatch(line::equals), line + "\n" + printed);
+    }
+
+    /**
+     * TODO.md 2.2j on test/fixtures/judged, worked by hand (the judgment: src and docs/tools own code, src/gen generated, tests own tests,
+     * tests/data fixture data, scripts own tooling, docs docs; extra/ in no folder). Lines, non-blank: util 2, calc 7, build 6, helper 5,
+     * test_helper 2, and set aside table 6, test_calc 5, sample 1, release 3, example 1.
+     * Counted: util, calc, build (own code) and helper, test_helper (no folder, so the kernel's rule counts them): 22 lines in 5 files in
+     * 3 folders (src, docs/tools, extra); 5 set aside. Cognitive: calc.classify 1, helper.label 1, build 1, the rest 0: total 3 over 6 functions.
+     * Depth: helper to calc to util is 2 links; build to util is 1 (release to table to calc to util, 3, is not counted). Tests part: by class,
+     * test_calc (5) own tests and test_helper (2) a test by the kernel's name rule: 7 over the code, util 2 + calc 7 + build 6 + helper 5 = 20:
+     * 0.35. Parts: duplication 1, cycles 1, coupling 1, functions 1, unused 1, tests 0.35: weighted 0.25 + 0.25 x 0.35 + 0.15 + 0.10 + 0.15
+     * + 0.10 = 0.8375.
+     */
+    @Test
+    void judgedCountsOnlyTheFoldersTheJudgeCallsOwnCode() {
+        assertLines(facts("--judged", JUDGED.resolve("judgment.json").toString()), List.of("SIZE.source_lines 22", "SIZE.source_files 5", "SIZE.source_folders 3",
+                "SIZE.set_aside_files 5", "COMPLEXITY.cognitive_total 3", "COMPLEXITY.functions 6", "COMPLEXITY.dependency_depth 2",
+                "MAINTAINABILITY.files 5", "MAINTAINABILITY.test_to_code_ratio 0.35", "MAINTAINABILITY.part.tests 0.35", "MAINTAINABILITY.part.duplication 1",
+                "MAINTAINABILITY.part.cycles 1", "MAINTAINABILITY.part.coupling 1", "MAINTAINABILITY.part.functions 1", "MAINTAINABILITY.part.unused 1",
+                "MAINTAINABILITY.weighted 0.8375"));
+    }
+
+    /**
+     * The same fixture without --judged is the kernel's own count, worked by hand: all ten files, 38 lines in 8 folders; cognitive 1 + 3
+     * (src/gen/table: an if and a nested if, 1 + 2) + 1 + 1 = 6 over 10 functions; depth release, table, calc, util = 3; tests by the path
+     * rule: test_calc 5, sample 1 (a tests folder), test_helper 2 = 8 over the 30 lines of the rest = 0.267; weighted
+     * 0.25 + 0.25 x 0.267 + 0.5 = 0.81675.
+     */
+    @Test
+    void withoutJudgedTheFixtureIsTheKernelsOwnCount() {
+        assertLines(facts(), List.of("SIZE.source_lines 38", "SIZE.source_files 10", "SIZE.source_folders 8", "SIZE.set_aside_files 0",
+                "COMPLEXITY.cognitive_total 6", "COMPLEXITY.functions 10", "COMPLEXITY.dependency_depth 3", "MAINTAINABILITY.files 10",
+                "MAINTAINABILITY.test_to_code_ratio 0.267", "MAINTAINABILITY.weighted 0.81675"));
+    }
+
+    /** The navigability checklist reads the whole inventory with or without a judgment: the judge scores it itself. */
+    @Test
+    void theNavigabilityChecklistIsNotNarrowedByAJudgment() {
+        List<String> plain = facts().lines().filter(l -> l.startsWith("NAVIGABILITY")).toList();
+        assertFalse(plain.isEmpty());
+        assertEquals(plain, facts("--judged", JUDGED.resolve("judgment.json").toString()).lines().filter(l -> l.startsWith("NAVIGABILITY")).toList());
+    }
+
+    /** --judged takes a value; a file that is missing, a folder or the wrong shape is refused with the usage and a reason, nothing on stdout. */
+    @Test
+    void judgedIsReadAndItsFileChecked(@TempDir Path dir) throws Exception {
+        Main.Command c = Main.parse(List.of("score", "repo", "--no-run", "--judged", JUDGED.resolve("judgment.json").toString()));
+        assertEquals("synthetic-opus-1", c.options().judgment().models().get(1));
+        assertNull(Main.parse(List.of("score", "repo", "--no-run")).options().judgment());
+        assertThrows(IllegalArgumentException.class, () -> Main.parse(List.of("score", "repo", "--judged")));
+        Path bare = dir.resolve("bare.json");
+        Files.writeString(bare, "{\"kind\": \"built\", \"folders\": []}");
+        for (String file : List.of(dir.resolve("none.json").toString(), dir.toString(), bare.toString())) {
+            ByteArrayOutputStream out = new ByteArrayOutputStream(), err = new ByteArrayOutputStream();
+            assertEquals(1, Main.run(List.of("score", "repo", "--judged", file), new PrintStream(out), new PrintStream(err)));
+            assertTrue(err.toString().contains("evaluator: --judged") && err.toString().contains("usage:"), err.toString());
+            assertEquals("", out.toString());
+        }
+        ByteArrayOutputStream err = new ByteArrayOutputStream();
+        Main.run(List.of("score", "repo", "--judged", bare.toString()), new PrintStream(new ByteArrayOutputStream()), new PrintStream(err));
+        assertTrue(err.toString().contains("evaluator: --judged " + bare + ": this is a bare judgment answer"), err.toString());
+        ByteArrayOutputStream missing = new ByteArrayOutputStream();
+        Main.run(List.of("score", "repo", "--judged", dir.resolve("none.json").toString()), new PrintStream(new ByteArrayOutputStream()), new PrintStream(missing));
+        assertTrue(missing.toString().contains("evaluator: --judged: cannot read " + dir.resolve("none.json")), missing.toString());
+    }
 }

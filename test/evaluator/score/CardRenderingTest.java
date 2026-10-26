@@ -57,6 +57,21 @@ class CardRenderingTest {
         assertEquals(CardJson.render(card), CardJson.render(Cards.card(List.of(nav), card.refuted(), Formulas.phaseOne(), PRODUCED)));
     }
 
+    /** TODO.md 2.2j: a judged card names the prompt's hash and the models in `produced`; with none, the same bytes as before. */
+    @Test
+    void aJudgedCardNamesItsPromptAndModels() {
+        ScoreCard card = Cards.card(List.of(fact("NAVIGABILITY.checklist", 70)), List.of(), Formulas.phaseOne(), PRODUCED);
+        Judged judged = new Judged("ab12", List.of("m-1", "m\"2"));
+        assertEquals(CardJson.render(card), CardJson.render(card, null));
+        assertEquals(CardMarkdown.render(card), CardMarkdown.render(card, null));
+        String json = CardJson.render(card, judged);
+        assertTrue(json.endsWith("  \"produced\": {\"kernelVersion\": \"0.1\", \"date\": \"2026-10-21\", \"rubricHash\": \"abc123\", "
+                + "\"judged\": {\"promptHash\": \"ab12\", \"models\": [\"m-1\", \"m\\\"2\"]}}\n}\n"), json);
+        assertEquals(CardJson.render(card), json.replace(", \"judged\": {\"promptHash\": \"ab12\", \"models\": [\"m-1\", \"m\\\"2\"]}", ""));
+        String markdown = CardMarkdown.render(card, judged);
+        assertTrue(markdown.endsWith("- Produced: kernel 0.1, 2026-10-21, rubric `abc123`\n- Judged: prompt `ab12`, models `m-1`, `m\"2`\n"), markdown);
+    }
+
     /** A rank and a review render as objects in the metrics' order, the review's text escaped (phase 2 fills them; 2.6, 2.8). */
     @Test
     void aRankAndAReviewInTheJson() {

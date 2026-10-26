@@ -1,11 +1,11 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.2j, the kernel counts the folders the judge calls own code (2026-10-25)
+## Start here: 2.2k, the card's rules for the judged kind (2026-10-26)
 
 2.1 is closed (J-106). 2.2, the judge harness, is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in
-`TODO.md`). 2.2a to 2.2h are done (J-110 to J-119; `docs/how/judge-harness.md` lists what each built: the scaffold and import guard, `evaluator brief`, the summary builder, the answer schema and validator, the prompt and its hash, `Judge`/`FakeJudge`/`ReplayJudge`, the `Budget`, and `ensemble.py`'s three runs with Opus on a split). **2.2i is done (J-120):** `agent_runner/agreement.py` computes, per field, the labels matched beside the constant-answer baseline, writes `agent-runner/records/<prompt hash>.json` and answers `is_live`; Ghost's definition (E-084) is both the raw 80 % floor and a margin over the baseline. **Ghost, to confirm:** the margin's size is the agent's proposal, half the gap between the baseline and 100 % (`agreement.MARGIN`), which makes Quality within one need 29 of 30, kind 27, Ambition and Quality exactly 24. Also open to be confirmed: Quality's 1 to 5 rule in `ensemble.py` (the median, Opus above one step apart).
+`TODO.md`). 2.2a to 2.2j are done (J-110 to J-121; `docs/how/judge-harness.md` lists what each built: the scaffold and import guard, `evaluator brief`, the summary builder, the answer schema and validator, the prompt and its hash, `Judge`/`FakeJudge`/`ReplayJudge`, the `Budget`, `ensemble.py`'s three runs, `agreement.py`'s figures and records, and now `evaluator score --judged`: the kernel counts only the folders the judge calls own code, its file shape and rules are in `docs/how/command-line.md` and E-085).
 
-The first open part is **2.2j**, which needs no Ghost, no model API and no key: `evaluator score --judged <judgment.json>` takes a judgment in the 2.2d shape and measures Size, Complexity and Maintainability only over files whose most specific classified folder is own code (E-057); it touches `ingest/` (a filter over the inventory), `score/` and `cli/`, and being Java it needs a mutation run (`gradle mutate -Ptarget=evaluator.<module>.*`). **2.2k** (`Fact.judged` bounded by the record of 2.2i) follows. **2.2l** (the live transport: its loopback tests need no key, its smoke does), **2.2m** (the first run on the calibration set) and **2.2n** (the prompt iterated to 80 %) wait on Ghost: key, budget, model ids and the 30 repositories re-fetched; his questions are in `docs/FOR-GHOST.md`.
+The first open part is **2.2k**, which needs no Ghost, no model API and no key: a judged fact is built with `Fact.judged` and confidence at most the recorded agreement of its prompt's hash (SC-05), read from `agent-runner/records/`; a prompt with no record for its hash gives no fact; kind plan only withholds Size, Complexity and Maintainability and reads Ambition unverified, kind generated gives the declined outcome with no card (E-056, E-057); each case a fixture with a hand-written judgment and a golden. It reads `rubric/`'s `Fact`, `Calibration` and `Label` only, and builds on 2.2j's `Judgment` (its `kind` is read and checked but not yet acted on). **To confirm for Ghost:** E-085's two rules (own tests make the test-to-code ratio by the judge's class; the wrapper file shape), and 2.2i's margin (E-084).
 
 Agreement against the labels is partly model against model (the labels were drafted by Claude Sonnet agents);
 Ghost's review is what keeps it from being circular (J-106).
@@ -20,7 +20,7 @@ Ghost's review is what keeps it from being circular (J-106).
 
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
-`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; two commits have passed since (this slice included) and the next is due in about seven; a tithe is due in about four (four have passed since the last, this slice included).
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-118; three commits have passed since (this slice included) and the next is due in about six; a tithe is due in about three (five have passed since the last, this slice included).
 
 ## A session's environment
 

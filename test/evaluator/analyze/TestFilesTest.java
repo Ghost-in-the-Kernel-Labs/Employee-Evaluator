@@ -51,4 +51,19 @@ class TestFilesTest {
         Inventory onlyTests = new Inventory(List.of(new Inventory.Source("tests/test_a.py", "Python", 4)), List.of());
         assertTrue(TestFiles.ratio(onlyTests).isEmpty());
     }
+
+    /**
+     * TODO.md 2.2j, worked by hand: the predicate says what is a test, not the path rule. a/x.py (10) and b/y.py (6) are tests by it,
+     * tests/z.py (4, a test by the path rule) and c.py (20) are not: 16 over 24 = 0.667, citing the two.
+     */
+    @Test
+    void theRatioTakesWhatIsATestFromThePredicate() {
+        Inventory inventory = new Inventory(List.of(new Inventory.Source("a/x.py", "Python", 10), new Inventory.Source("b/y.py", "Python", 6),
+                new Inventory.Source("tests/z.py", "Python", 4), new Inventory.Source("c.py", "Python", 20)), List.of());
+        Fact fact = TestFiles.ratio(inventory, path -> path.equals("a/x.py") || path.equals("b/y.py")).orElseThrow();
+        assertEquals(0.667, fact.value());
+        assertEquals(List.of("a/x.py", "b/y.py"), fact.evidence().sources());
+        assertEquals(0.111, TestFiles.ratio(inventory).orElseThrow().value(), "the path rule: tests/z.py alone, 4 over 36");
+        assertTrue(TestFiles.ratio(inventory, path -> true).isEmpty(), "everything a test: no code, no ratio");
+    }
 }

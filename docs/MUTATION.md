@@ -281,6 +281,16 @@ alive there (the analyze survivors that remain are older). `cli/`: 82 mutants; f
 200-commit and 200-character caps and a message opening with a newline, each killed by a test (`aBrokenHistoryIsRefused`, `theCapsHoldAtTheirEdges`).
 The one left is `Brief.commits`, `codePointCount(...) > MAX_SUBJECT` as `>=`, a new row below; `Main.main`'s `System.exit` is the old row.
 
+### Run 20: 2026-10-26, `ingest/`, `score/`, `cli/` and `analyze/`, `evaluator score --judged` (TODO.md 2.2j, E-085)
+
+`gradle mutate -Ptarget=evaluator.ingest.*`, `score.*`, `cli.*` and `analyze.*`, each in a plain clone of the change (`Judgment`, `OwnCode`,
+`Judged` and the two renderings, `Pipeline.code` through a split, `Main --judged`, `Complexity.Report.restrictedTo`, `TestFiles.ratio` with a
+predicate). `ingest/`: 181 mutants first, 178 killed; the three left were `Judgment.path`'s `length() > 1` as `>= 1` (equal in result, so the guard was
+removed and the code is shorter), `OwnCode.split`'s `with.sort(...)` removed (killed by `onlyOwnCodeAndWhatNoFolderHoldsIsCounted` once an own-tests
+folder sorts before the counted files) and `OwnCode.mostSpecific`'s `>` as `>=` (a new row below). The rerun: 179 mutants, 178 killed. `score/`: 174, 174 killed.
+`cli/`: 97, 95 killed; the two left are the old `Brief.commits` and `Main.main` rows. `analyze/`: 1,115, 1,085 killed; none of the survivors is in
+`Complexity.Report.restrictedTo` or `TestFiles.ratio` (the survivors that remain are older).
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -314,3 +324,4 @@ The one left is `Brief.commits`, `codePointCount(...) > MAX_SUBJECT` as `>=`, a 
 | `analyze/Reports.java`, `parse`, `builder.setErrorHandler(null)` | the call removed | `null` is what the builder starts with ("the implementation's own default"); the call sets what is already set. |
 | `analyze/TestRunner.java`, `runPlans`, `valid > 0` | `valid >= 0` | With no lines the mutant makes `Lines(0, 0)` instead of empty, and `TestRuns.facts` filters out a coverage of `valid() > 0` first, so no fact differs. |
 | `analyze/RegistriesProxy.java`, `reply`, `out.flush()` | the call removed | `reply` writes to a socket's own output stream, which does not buffer: every `write` is sent at once, so `flush` has nothing to send. Tried by every test of the proxy that reads a status line (all would hang for the 5 s read limit if the line were held back), none of which can tell the two apart. |
+| `ingest/OwnCode.java`, `mostSpecific`, `f.path().length() > best.path().length()` | `>=` | Equal for any list `Judgment.read` returns: two classified folders of the same length that both hold a path are the same string, and a path listed twice is refused there, so a tie never arises. |

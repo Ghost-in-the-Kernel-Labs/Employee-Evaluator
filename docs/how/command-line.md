@@ -41,6 +41,27 @@
   (the newest 200: short hash, UTC date, subject cut at 200 characters, files changed), `readme` (root README files) and
   `agentInstructions` (E-044's list). No file's contents, no author name or address (E-014); tests are not run; the same bytes
   each time. It takes no option. Test: `BriefTest`; golden `test/goldens/briefs/` (`gradle test -PwriteGoldens`, review the diff).
+- **`--judged <judgment.json>`** (TODO.md 2.2j, E-085; `ingest/evaluator/ingest/Judgment.java`, `ingest/evaluator/ingest/OwnCode.java`, `Pipeline.code`) measures through a
+  judge's answer. No model is called (E-003): the file is read as data. The file is **one JSON object of exactly three members**:
+  `promptHash` (64 lower-case hex digits, the prompt's hash from `python3 -B -m agent_runner.prompt hash`), `models` (one to eight distinct
+  model ids, letters, digits and `. _ : -`) and `judgment` (the answer of `agent-runner/schema/judgment.schema.json`, the 2.2d shape: `kind`,
+  `folders` [{`path`, `class`}], `scores`, `ambition`, `quality`, `verdict`, every member and no other). The kernel checks the wrapper, the
+  kind, the folders (relative paths with `/`, `.` the root, one trailing slash tolerated, no path twice, one of the eight classes), the
+  quality (1 to 5) and the verdict's length, and that `scores` and `ambition` are objects; the full schema check is the harness's
+  (`agent_runner.judgment.parse`), which wrote the answer. **Refused with a message and the usage, exit 1:** a bare 2.2d answer (it has
+  no prompt or models for the card to name), an ensemble `Result` (`status`, `fields`, `folders` records: take the settled values out of it first,
+  folders from `Result.folders[path].value` and `models` from `Result.models`), unreadable or non-JSON text, a wrong hash or model id, a
+  member missing or added. Nothing writes this wrapper yet: 2.2m's run will, and until then it is written by hand
+  (`test/fixtures/judged/judgment.json` is the synthetic example). **What it changes:** a file belongs to its most specific (longest) classified
+  folder. Own code and files in no classified folder are counted by Size, Complexity (the cognitive total and the dependency depth) and
+  Maintainability's code parts (duplication, cycles, coupling, functions, unused imports), a file in no folder under the kernel's own
+  rule (E-085); own tests are not counted as code but are the test files of the test-to-code ratio, whatever their names, while a file in
+  an own-code folder is code even when it is named like a test and a file in no folder is a test by its name (E-034); the other classes
+  are set aside (`SIZE.set_aside_files` counts them, the reason is `judged: <class> (folder <path>)`). The judge can only narrow: what the kernel
+  set aside stays aside. The navigability checklist keeps the whole inventory. The kind is checked, not acted on (2.2k). The card's
+  `produced` gains `"judged": {"promptHash", "models"}` and the Markdown a `Judged` line; without `--judged` nothing changes, byte for byte.
+  Goes with `--facts` (the facts through the judgment) and `--markdown`. Tests: `OwnCodeTest`, `JudgmentTest`, `MainTest` (the fixture's numbers
+  worked by hand), `CardGoldensTest.theJudgedCardIsItsGolden`.
 - The cards' goldens are written from the fixtures by `gradle test -PwriteGoldens`; review the diff.
 
 ## Always

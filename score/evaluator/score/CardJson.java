@@ -19,6 +19,14 @@ public final class CardJson {
 
     /** The card's JSON rendering. */
     public static String render(ScoreCard card) {
+        return render(card, null);
+    }
+
+    /**
+     * The card's JSON rendering, naming the judgment it was measured through (TODO.md 2.2j) in `produced` when there is one; with
+     * none, the same bytes as ever.
+     */
+    public static String render(ScoreCard card, Judged judged) {
         StringBuilder out = new StringBuilder("{\n");
         out.append("  \"scores\": {");
         String scores = card.scores().entrySet().stream().sorted(Map.Entry.comparingByKey())
@@ -35,7 +43,10 @@ public final class CardJson {
         out.append("  \"review\": ").append(object(card.review(), Json::quote)).append(",\n");
         out.append("  \"produced\": {\"kernelVersion\": ").append(Json.quote(card.produced().kernelVersion()))
                 .append(", \"date\": ").append(Json.quote(card.produced().date()))
-                .append(", \"rubricHash\": ").append(Json.quote(card.produced().rubricHash())).append("}\n}\n");
+                .append(", \"rubricHash\": ").append(Json.quote(card.produced().rubricHash()))
+                .append(judged == null ? "" : ", \"judged\": {\"promptHash\": " + Json.quote(judged.promptHash()) + ", \"models\": ["
+                        + judged.models().stream().map(Json::quote).collect(Collectors.joining(", ")) + "]}")
+                .append("}\n}\n");
         return out.toString();
     }
 

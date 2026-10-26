@@ -13,15 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2j The kernel counts the folders the judge calls own code
-
-Check: `evaluator score --judged <judgment.json>` takes a judgment in the 2.2d shape and measures Size, Complexity's
-total and depth and Maintainability's parts only over files whose most specific classified folder is own code (E-057);
-a hand-written judgment on a fixture gives Size, Complexity and Maintainability worked by hand, a file in no classified
-folder keeps the kernel's own rule, and the same fixture without `--judged` is unchanged (no golden moves); the card names
-the judgment's prompt hash and models. Touches `ingest/` (a filter over the inventory), `score/`, `cli/`; no new module and
-no model client (E-003). No API, no key, no Ghost. Cost: none.
-
 ### 2.2k The card's rules for the judged kind
 
 Check: a judged fact is built with `Fact.judged` and confidence at most the recorded agreement of its prompt's hash (SC-05),

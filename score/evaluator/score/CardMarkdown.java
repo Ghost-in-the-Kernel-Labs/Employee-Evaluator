@@ -20,6 +20,11 @@ public final class CardMarkdown {
 
     /** The card's Markdown rendering. */
     public static String render(ScoreCard card) {
+        return render(card, null);
+    }
+
+    /** The card's Markdown rendering, with a line naming the judgment's prompt and models (TODO.md 2.2j) when there is one. */
+    public static String render(ScoreCard card, Judged judged) {
         StringBuilder out = new StringBuilder("# Score card\n\n| Metric | Score | Facts behind it |\n| --- | --- | --- |\n");
         for (Metric metric : Metric.values()) {
             Score s = card.scores().get(metric);
@@ -36,6 +41,10 @@ public final class CardMarkdown {
         out.append("- Refuted: ").append(card.refuted().isEmpty() ? "none" : card.refuted().stream().map(CardMarkdown::refutation).collect(Collectors.joining("; "))).append('\n');
         out.append("- Produced: kernel ").append(escape(card.produced().kernelVersion())).append(", ").append(escape(card.produced().date()))
                 .append(", rubric ").append(code(card.produced().rubricHash())).append('\n');
+        if (judged != null) {
+            out.append("- Judged: prompt ").append(code(judged.promptHash())).append(", models ")
+                    .append(judged.models().stream().map(CardMarkdown::code).collect(Collectors.joining(", "))).append('\n');
+        }
         return out.toString();
     }
 

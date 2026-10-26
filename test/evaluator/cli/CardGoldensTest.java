@@ -21,7 +21,7 @@ class CardGoldensTest {
     private static final Path ROOT = Path.of(System.getProperty("evaluator.root", "."));
     private static final String DATE = "2026-10-22";
     static final List<String> FIXTURES = List.of("small-app", "imports", "duplication", "java-complexity", "python-complexity",
-            "typescript-complexity", "test-runs/node-pass", "test-runs/py-pass", "test-runs/py-fail", "test-runs/py-network");
+            "typescript-complexity", "test-runs/node-pass", "test-runs/py-pass", "test-runs/py-fail", "test-runs/py-network", "judged/app");
 
     private static String card(String fixture, boolean markdown) {
         Path repo = ROOT.resolve("test/fixtures/" + fixture);
@@ -43,5 +43,29 @@ class CardGoldensTest {
             }
         }
         goldens.assertUnchanged("the card changed: if that is intended, `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
+    }
+
+    /**
+     * TODO.md 2.2j: the judged card of test/fixtures/judged/app is a golden, as JSON and as Markdown, and so are the facts behind it. Worked by hand
+     * (MainTest.judgedCountsOnlyTheFoldersTheJudgeCallsOwnCode): Size 22 over the baseline's 84,971 lines is 0.026, rounds to 0; Complexity
+     * 0.6 x 100 x 3 / 13,361 + 0.4 x 100 x 2 / 28 = 0.013 + 2.857 = 2.87, rounds to 3; Maintainability 100 x 0.8375 / 0.895670 = 93.51, rounds to 94; the
+     * ratio Maintainability at Complexity 94 x 3 / 100 = 2.82. The card names the prompt hash and the two models of test/fixtures/judged/judgment.json.
+     */
+    @Test
+    void theJudgedCardIsItsGolden() throws IOException {
+        Path repo = ROOT.resolve("test/fixtures/judged/app");
+        String judgment = ROOT.resolve("test/fixtures/judged/judgment.json").toString();
+        Goldens.Batch goldens = new Goldens.Batch();
+        for (String form : List.of("--json", "--markdown", "--facts")) {
+            List<String> args = new java.util.ArrayList<>(List.of("score", repo.toString(), "--no-run", "--judged", judgment));
+            if (form.equals("--markdown")) args.add(form);
+            if (form.equals("--facts")) args.add(form);
+            else args.addAll(List.of("--date", DATE));
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            assertEquals(0, Main.run(args, new PrintStream(out), new PrintStream(new ByteArrayOutputStream())), form);
+            String extension = form.equals("--json") ? ".json" : form.equals("--markdown") ? ".md" : ".txt";
+            goldens.check(ROOT.resolve("test/goldens/cards/judged-app.judged" + extension), out.toString(StandardCharsets.UTF_8));
+        }
+        goldens.assertUnchanged("the judged card changed: `gradle test -PshowGoldens`, read the diff, then `gradle test -PwriteGoldens` (E-018, E-077)");
     }
 }

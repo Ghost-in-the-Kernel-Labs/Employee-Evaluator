@@ -67,7 +67,7 @@ One card per submission:
 | `notMeasured` | metrics no fact fed (the judgment metrics, when no agent ran, E-003) |
 | `refuted` | the facts a person refuted and by whom |
 | `review` | the agent's prose, one paragraph per judgment metric, each citing the facts it rests on |
-| `produced` | the kernel's version, the date, the rubric's hash |
+| `produced` | the kernel's version, the date, the rubric's hash (a judged card's rendering also names the prompt's hash and the models, E-085) |
 
 - **SC-07 A metric with no fact is "not measured", never 0.** A zero is a measurement; an absence is
   an absence, and the employer sees which.

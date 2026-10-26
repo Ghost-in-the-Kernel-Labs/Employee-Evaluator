@@ -91,3 +91,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-082 | The judge's kind is six values, E-057's four plus own-work and clone | in force | judges |
 | E-083 | On a category tie among the three Haiku votes, Opus decides and its answer stands | in force | judges |
 | E-084 | A judged field is live only if its raw agreement is at least 80 % and it beats the constant answer by a margin | in force | judges |
+| E-085 | `score --judged` counts the judge's own code; its own tests make the test ratio, by class | in force | judges |

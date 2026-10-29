@@ -1,5 +1,9 @@
 # Handoff: what to work on next, and what it waits on
 
+## Start here: 2.2n, the prompt iterated to the floor (2026-10-29, J-134)
+
+2.2m is done: all 30 labelled repositories judged live, the record committed under the prompt's hash (`agent-runner/records/5b05dcac...json`). No field is live yet: Ambition 21 of 30 (needs 24), Quality exactly 23 (needs 24), Quality within one 28 (needs 29), kind 22 (needs 27, under its constant answer of 23). A run cost $0.95; most of it is the few Opus calls. One answer was cut at the 8000-token output limit (the one partial). 2.2n revises the prompt one hashed version at a time, each run under caps.json, at most 3 iterations before Ghost is asked (caps.json); kind is the field furthest from the floor. The run: `gradle compileJava --offline`, then from `agent-runner/`, `python3 -B -m agent_runner.calibrate --corpus <checkouts outside the repository, one per id> --out ../build/<run> --live`. The checkouts are kept outside the repository between iterations and deleted when Ghost says 2.2n is done with them.
+
 ## Two fixes from the first calibration run (2026-10-29, J-131, J-132)
 
 The kernel crashed on 5 of 30 repositories on a source file holding an emoji: the tree-sitter binding's string entry indexes modified UTF-8 (6 bytes per emoji) while `Source` slices real UTF-8. `TreeSitterAdapter.parse` now feeds the real bytes (J-131, finding F-001; `EmojiOffsetsTest`; no golden moved). The budget's reserve was `ceil(bytes / 3)` and 13 of 77 live calls used more than their reserve; it is now `ceil(bytes / 2)` (J-132). 2.2m's run is to be redone by the orchestrating session: the five failed repositories now parse, and the reserves are higher (about 1.5 times), so the per-call and per-evaluation caps hold fewer prompts than before: check them against the new reserves. Not pushed by the agent that made them.

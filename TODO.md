@@ -13,15 +13,6 @@ go is sliced into parts (2.2a, 2.2b, ...), each with its own check, done in orde
 
 ## Phase 2: the evaluation engine with agents
 
-### 2.2m The first run on the calibration set
-
-Check: the 30 labelled repositories summarised outside the repository by 2.2c (Ghost's private map, never read by an agent),
-judged by 2.2h through 2.2l (three Haiku runs each, Opus on a split), the answers recorded and the agreement of 2.2i written
-to `agent-runner/records/` with the prompt's hash, committed with ids, scores, kinds and tiers only (never a folder name or
-an evidence quote from a real repository, E-014); the run's cost recorded. Needs a model API and a key; needs the 30
-repositories re-fetched, which only Ghost can arrange. Waits on Ghost: key, budget and the repositories. Cost: needs a cost
-cap (about 90 Haiku runs and the Opus runs; trial 4 spent about $1.30 on 150 Haiku runs).
-
 ### 2.2n The prompt iterated to the floor
 
 Check: the prompt revised, one hashed version at a time and each version's record kept, until every field the harness

@@ -1,0 +1,478 @@
+{
+  "date": "2026-10-29",
+  "fields": {
+    "ambition": {
+      "baseline": {
+        "answer": "utility",
+        "figure": 0.467,
+        "matched": 14
+      },
+      "figure": 0.7,
+      "live": false,
+      "matched": 21,
+      "needed": 24,
+      "total": 30,
+      "why": "under the floor: 21 of 30, 24 needed for 80.0 %; does not beat the constant answer by the margin: 21 of 30, baseline 14, 22 needed"
+    },
+    "kind": {
+      "baseline": {
+        "answer": "own-work",
+        "figure": 0.767,
+        "matched": 23
+      },
+      "figure": 0.733,
+      "live": false,
+      "matched": 22,
+      "needed": 27,
+      "total": 30,
+      "why": "under the floor: 22 of 30, 24 needed for 80.0 %; does not beat the constant answer by the margin: 22 of 30, baseline 23, 27 needed"
+    },
+    "quality_exact": {
+      "baseline": {
+        "answer": 3,
+        "figure": 0.567,
+        "matched": 17
+      },
+      "figure": 0.767,
+      "live": false,
+      "matched": 23,
+      "needed": 24,
+      "total": 30,
+      "why": "under the floor: 23 of 30, 24 needed for 80.0 %; does not beat the constant answer by the margin: 23 of 30, baseline 17, 24 needed"
+    },
+    "quality_within_one": {
+      "baseline": {
+        "answer": 3,
+        "figure": 0.9,
+        "matched": 27
+      },
+      "figure": 0.933,
+      "live": false,
+      "matched": 28,
+      "needed": 29,
+      "total": 30,
+      "why": "does not beat the constant answer by the margin: 28 of 30, baseline 27, 29 needed"
+    }
+  },
+  "ids": {
+    "c001": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c002": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 2
+      }
+    },
+    "c003": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c004": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c005": {
+      "judged": {
+        "ambition": "product",
+        "kind": "mixed",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "clone",
+        "quality": 3
+      }
+    },
+    "c006": {
+      "judged": {
+        "ambition": "toy",
+        "kind": "clone",
+        "quality": 1,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "clone",
+        "quality": 1
+      }
+    },
+    "c007": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c008": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "clone",
+        "quality": 2
+      }
+    },
+    "c009": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "clone",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c010": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c011": {
+      "judged": {
+        "ambition": "product",
+        "kind": "mixed",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c012": {
+      "judged": {
+        "ambition": "toy",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "toy",
+        "kind": "own-work",
+        "quality": 2
+      }
+    },
+    "c013": {
+      "judged": {
+        "ambition": "research",
+        "kind": "own-work",
+        "quality": 4,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "research",
+        "kind": "own-work",
+        "quality": 4
+      }
+    },
+    "c014": {
+      "judged": {
+        "ambition": "product",
+        "kind": "mixed",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c015": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2
+      }
+    },
+    "c016": {
+      "judged": {
+        "ambition": "research",
+        "kind": "own-work",
+        "quality": 4,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "research",
+        "kind": "own-work",
+        "quality": 4
+      }
+    },
+    "c017": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c018": {
+      "judged": {
+        "ambition": "research",
+        "kind": "own-work",
+        "quality": 4,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "research",
+        "kind": "clone",
+        "quality": 4
+      }
+    },
+    "c019": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c020": {
+      "judged": {
+        "ambition": "product",
+        "kind": "mixed",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "clone",
+        "quality": 3
+      }
+    },
+    "c021": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c022": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c023": {
+      "judged": {
+        "ambition": "product",
+        "kind": "clone",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "clone",
+        "quality": 4
+      }
+    },
+    "c024": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c025": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2
+      }
+    },
+    "c026": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 2
+      }
+    },
+    "c027": {
+      "judged": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 3
+      }
+    },
+    "c028": {
+      "judged": {
+        "ambition": null,
+        "kind": null,
+        "quality": null,
+        "status": "partial"
+      },
+      "label": {
+        "ambition": "product",
+        "kind": "own-work",
+        "quality": 5
+      }
+    },
+    "c029": {
+      "judged": {
+        "ambition": "toy",
+        "kind": "clone",
+        "quality": 2,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "toy",
+        "kind": "clone",
+        "quality": 1
+      }
+    },
+    "c030": {
+      "judged": {
+        "ambition": "utility",
+        "kind": "own-work",
+        "quality": 3,
+        "status": "ok"
+      },
+      "label": {
+        "ambition": "toy",
+        "kind": "own-work",
+        "quality": 3
+      }
+    }
+  },
+  "labels": 30,
+  "labels_absent": {
+    "kind": [
+      "generated",
+      "plan only",
+      "mixed",
+      "built"
+    ]
+  },
+  "margin": {
+    "floor": "4/5",
+    "fraction_of_gap": "1/2"
+  },
+  "models": {
+    "haiku": "claude-haiku-5-5",
+    "opus": "claude-opus-5-5"
+  },
+  "prompt": {
+    "hash": "5b05dcacec1e82b42caf6b165744b39ce5a4a57320f4598301a489282dc090bb",
+    "name": "judge"
+  },
+  "results": {
+    "missing": 0,
+    "ok": 29,
+    "partial": 1,
+    "refused": 0
+  },
+  "runs": 3,
+  "version": 1
+}

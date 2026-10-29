@@ -1610,3 +1610,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** `TypeScriptImports.specifiers` reads only `import_specifier` children; new `namespace` reads the identifier child. `ImportCommentsTest` (line and block comments before, between and after specifiers, only a comment, default and namespace clauses, type imports, re-exports, JavaScript with a require pattern, Python) fails on the old code in six of seven tests. No golden moved. Run 23 in `docs/MUTATION.md`.
 - **Touched:** analyze/evaluator/analyze/TypeScriptImports.java, test/evaluator/analyze/ImportCommentsTest.java, docs/KERNEL-MAP.md, docs/MUTATION.md, docs/JOURNAL.md, docs/NAVIGATION-NOTES.md.
 - **Caught by:** the second calibration run on real repositories.
+
+### J-134 TODO.md 2.2m: the first run on the calibration set
+- **Who:** Claude Opus 5.5. **Class:** measurement.
+- **Intent:** Judge the 30 labelled repositories with the live harness and record the agreement under the prompt's hash (2.2m).
+- **Found:** Run 1 judged 25 of 30: `evaluator brief` crashed on an emoji in a source file (fixed, J-131) and the reserve estimate ran about 1.4 times low (fixed, J-132). Run 2 judged 29: a comment inside a TypeScript import's braces crashed the import reader (fixed, J-133). Run 3 judged all 30 (29 ok, 1 partial, after an answer cut at the 8000-token output limit), $0.95: 93 Haiku calls $0.24, 4 Opus calls $0.70; no refusal, no overrun. Agreement: Ambition 21 of 30 (needs 24; baseline 14), Quality exactly 23 (needs 24; 17), Quality within one 28 (needs 29; 27), kind 22 (needs 27; 23). No field is live; kind is under its constant answer, and Quality within one swung 29 to 28 between runs 2 and 3, so one run's figure moves by a repository or two.
+- **Options:** none: 2.2n iterates the prompt against this record.
+- **Resolved:** `agent-runner/records/5b05dcacec1e82b42caf6b165744b39ce5a4a57320f4598301a489282dc090bb.json` committed (ids, labels, judged values only, E-014); 2.2m moved to docs/DONE.md; HANDOFF.md. The repositories stay outside the repository and are deleted once Ghost says 2.2n no longer needs them.
+- **Touched:** agent-runner/records/, TODO.md, docs/DONE.md, docs/JOURNAL.md, docs/HANDOFF.md.

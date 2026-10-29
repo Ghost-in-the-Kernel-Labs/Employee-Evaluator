@@ -1,9 +1,12 @@
 """The cost cap (TODO.md 2.2g): a token budget a judge is run under, and the record of what each judgment cost.
 
-  estimate_tokens(text)  the prompt-token estimate that RESERVES, ceil(utf-8 bytes / 3), at least 1. There is no tokenizer here, so
-                         the rule is deliberately high: English text and code run near four characters (and so near four
-                         bytes) to a token, other scripts fewer, so a third of the bytes does not undercount them. The
-                         estimate only reserves. The real counts come back from the API (`transport.py`, 2.2l) and are what is charged.
+  estimate_tokens(text)  the prompt-token estimate that RESERVES, ceil(utf-8 bytes / 2), at least 1. There is no tokenizer here, so
+                         the rule is deliberately high. Measured on the first live run (J-132): of 77 calls, 13 used more
+                         than their reserve under the old rule (bytes / 3); the prompts are code-heavy summaries at about
+                         2.1 bytes to a token, and the real input ran about 1.4 times the estimate (23588 real against 17118
+                         estimated, 27806 against 17535). Prose runs near four bytes to a token, so half the bytes is high
+                         for it, which is the side to err on. The estimate only reserves. The real counts come back from the
+                         API (`transport.py`, 2.2l) and are what is charged.
   Budget                 caps per call, per evaluation and per trial, each None (no cap) or a number of tokens, and the
                          same three in dollars (they need a prices file).
   BudgetedJudge          wraps any `Judge` so 2.2h runs it under a `Budget` unchanged.
@@ -87,8 +90,12 @@ def _show(number):
 
 
 def estimate_tokens(text):
-    """The reserving estimate of the tokens in `text`: ceil(UTF-8 bytes / 3), at least 1. Never the real count."""
-    return max(1, -(-len(text.encode("utf-8")) // 3))
+    """The reserving estimate of the tokens in `text`: ceil(UTF-8 bytes / 2), at least 1. Never the real count.
+
+    Half the bytes, not a third: the first live run measured code-heavy prompts at about 2.1 bytes to a token, so a
+    third of the bytes undercounted them by about 1.4 times and 13 of 77 calls used more than their reserve (J-132).
+    """
+    return max(1, -(-len(text.encode("utf-8")) // 2))
 
 
 def _number(value):

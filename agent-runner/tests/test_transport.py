@@ -254,7 +254,7 @@ class Refusals(Base):
         server = self.serve(ok())
         budget = budgets.Budget(prices=budgets.load_prices(PRICES))
         with self.assertRaises(budgets.PromptTooLong):
-            self.live(server, budget).judge(prompt_of("x" * 300010), HAIKU, 1)  # estimate 100,004 tokens
+            self.live(server, budget).judge(prompt_of("x" * 200008), HAIKU, 1)  # estimate 100,004 tokens
         self.assertEqual(0, len(server.requests))
 
     def test_the_live_judge_cannot_be_built_without_a_budget(self):

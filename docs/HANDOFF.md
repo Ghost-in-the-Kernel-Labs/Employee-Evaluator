@@ -1,5 +1,9 @@
 # Handoff: what to work on next, and what it waits on
 
+## Two fixes from the first calibration run (2026-10-29, J-131, J-132)
+
+The kernel crashed on 5 of 30 repositories on a source file holding an emoji: the tree-sitter binding's string entry indexes modified UTF-8 (6 bytes per emoji) while `Source` slices real UTF-8. `TreeSitterAdapter.parse` now feeds the real bytes (J-131, finding F-001; `EmojiOffsetsTest`; no golden moved). The budget's reserve was `ceil(bytes / 3)` and 13 of 77 live calls used more than their reserve; it is now `ceil(bytes / 2)` (J-132). 2.2m's run is to be redone by the orchestrating session: the five failed repositories now parse, and the reserves are higher (about 1.5 times), so the per-call and per-evaluation caps hold fewer prompts than before: check them against the new reserves. Not pushed by the agent that made them.
+
 ## Start here: 2.2m, the first run on the calibration set, which waits on the 30 repositories (2026-10-26)
 
 2.1 is closed (J-106). 2.2, the judge harness, is sliced into 2.2a to 2.2n (J-109; the plan is `docs/DESIGN.md`, "Step 2.2 sliced"; each part's check is in

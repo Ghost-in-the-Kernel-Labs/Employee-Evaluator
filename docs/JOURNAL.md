@@ -1593,3 +1593,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Resolved:** `TreeSitterAdapter.parse` passes `source.bytes().clone()` and a reader over `source.bytes()`; `EmojiOffsetsTest` (Python, TypeScript, JavaScript: an emoji in a string and a comment, before and inside a function; imports; a 5000-line file; the file's own text kept) fails on the old code and passes now. No golden moved (ASCII input parses to the same tree). Run 22 in `docs/MUTATION.md`; F-001 in `docs/FINDINGS.md`.
 - **Touched:** analyze/evaluator/analyze/TreeSitterAdapter.java, test/evaluator/analyze/EmojiOffsetsTest.java, docs/KERNEL-MAP.md, docs/MUTATION.md, docs/FINDINGS.md, docs/JOURNAL.md.
 - **Caught by:** the first calibration run on real repositories.
+
+### J-132 The reserve estimate undercounted real tokens: bytes / 3 became bytes / 2
+- **Who:** Claude Sonnet 5.5. **Class:** measurement.
+- **Intent:** Make the budget's reserve bound a call again after the first live run.
+- **Found:** Of 77 live calls, 13 used more than their reserve (prompt estimate plus the 8000 output limit). Real input tokens ran about 1.4 times the estimate (23588 real against 17118 estimated, 27806 against 17535); the prompts are code-heavy summaries at about 2.1 bytes to a token. Over-reserve usage is charged and flagged, never refused, so no cap was broken. Even bytes / 2 stays 6% under the second example (about 52605 bytes, 26303 estimated against 27806 real), which is why the output limit's margin, not the estimate alone, bounds a call.
+- **Options:** ceil(bytes / 2) (taken, Ghost's choice); a lower divisor or a measured factor (not asked for).
+- **Resolved:** `estimate_tokens` is ceil(bytes / 2), at least 1, the measured numbers in its docstring and in `docs/how/judge-harness.md`; the tests that pinned the rule and the default test prompt (20 bytes, still an estimate of 10) updated. Nothing else in `budget.py` changed.
+- **Touched:** agent-runner/agent_runner/budget.py, agent-runner/tests/test_budget.py, agent-runner/tests/test_transport.py, docs/how/judge-harness.md, docs/JOURNAL.md.

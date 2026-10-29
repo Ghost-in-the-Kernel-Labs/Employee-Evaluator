@@ -14,7 +14,7 @@ PRICES = os.path.join(ROOT, "tests", "fixtures", "synthetic-prices.json")
 A, B = "a" * 64, "b" * 64
 
 
-def prompt_of(text="x" * 30):
+def prompt_of(text="x" * 20):  # an estimate of 10 tokens
     return RenderedPrompt(text, A, B)
 
 
@@ -23,14 +23,20 @@ def answer(i, o):
 
 
 class Estimate(unittest.TestCase):
-    def test_a_third_of_the_bytes_rounded_up(self):
+    def test_half_the_bytes_rounded_up(self):
         self.assertEqual(1, budgets.estimate_tokens(""))
         self.assertEqual(1, budgets.estimate_tokens("a"))
-        self.assertEqual(1, budgets.estimate_tokens("abc"))
-        self.assertEqual(2, budgets.estimate_tokens("abcd"))
+        self.assertEqual(1, budgets.estimate_tokens("ab"))
+        self.assertEqual(2, budgets.estimate_tokens("abc"))
         self.assertEqual(2, budgets.estimate_tokens("éé"))  # 4 bytes
-        self.assertEqual(1, budgets.estimate_tokens("日"))  # 3 bytes
-        self.assertEqual(4, budgets.estimate_tokens("日本語日"))  # 12 bytes
+        self.assertEqual(2, budgets.estimate_tokens("日"))  # 3 bytes
+        self.assertEqual(6, budgets.estimate_tokens("日本語日"))  # 12 bytes
+
+    def test_it_covers_the_first_live_runs_measured_ratio(self):
+        # J-132: real input ran about 1.4 times the old estimate (23588 real against 17118 estimated, so a prompt of
+        # about 51354 bytes); the new estimate of that prompt must be above the real count.
+        # The second measured call (27806 real, about 52605 bytes) is still 6% above half the bytes: the rule is not a bound.
+        self.assertGreater(budgets.estimate_tokens("x" * 51354), 23588)
 
     def test_it_never_undercounts_the_fake_judges_scripted_usage(self):
         for text in ("", "a", "word " * 100, "日本語" * 50, "é" * 77, "x" * 1001, "\n".join(["line"] * 9)):
@@ -72,7 +78,7 @@ class Caps(unittest.TestCase):
     def test_a_refused_call_charges_nothing_and_holds_nothing(self):
         fake = FakeJudge([answer(10, 10)] * 3)
         budget = Budget(per_evaluation=45)
-        judge = BudgetedJudge(fake, budget, output_limit=20)  # reserve 10 + 20 = 30 for a 30-byte prompt
+        judge = BudgetedJudge(fake, budget, output_limit=20)  # reserve 10 + 20 = 30 for a 20-byte prompt
         judge.judge(prompt_of(), "m", 1)  # spent 20
         with self.assertRaises(BudgetRefused):
             judge.judge(prompt_of(), "m", 2)  # 20 + 30 > 45
@@ -304,13 +310,13 @@ class PromptLength(unittest.TestCase):
         budget = Budget(prices=prices_of(max_prompt_tokens=10), per_evaluation=1000)
         judge = BudgetedJudge(fake, budget, 5)
         with self.assertRaises(PromptTooLong) as caught:
-            judge.judge(prompt_of("x" * 31), "m", 1)  # estimate 11
+            judge.judge(prompt_of("x" * 21), "m", 1)  # estimate 11
         self.assertIsInstance(caught.exception, BudgetError)
         self.assertNotIsInstance(caught.exception, BudgetRefused)
         self.assertEqual(([], []), (fake.calls, budget.records))
         self.assertEqual("prompt_length", budget.refusals[0]["cap"])
         self.assertEqual((11, 10), (budget.refusals[0]["reserve"], budget.refusals[0]["limit"]))
-        judge.judge(prompt_of("x" * 30), "m", 1)  # estimate 10: at the limit passes, and nothing was held by the refusal
+        judge.judge(prompt_of("x" * 20), "m", 1)  # estimate 10: at the limit passes, and nothing was held by the refusal
         self.assertEqual(1, len(fake.calls))
 
     def test_no_limit_means_no_refusal_and_a_real_input_above_it_is_charged_and_flagged(self):

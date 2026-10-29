@@ -22,6 +22,10 @@ imports, the dependency graph, duplication. JavaScript is the last one added (E-
    `className`, `decisions`, `cognitive`, `imports`. Copy the closest existing adapter
    (`analyze/evaluator/analyze/PythonAdapter.java`, `analyze/evaluator/analyze/TypeScriptAdapter.java`, or `analyze/evaluator/analyze/JavaScriptAdapter.java` for a dialect of one).
    Its `tool()` names the grammar and its version. Cite the decision above the class (`// Decision:`).
+   Two things the shared `parse` already does and a new adapter must not undo (J-131, J-133; F-001 in `docs/FINDINGS.md`):
+   the parse is fed the file's real UTF-8 bytes, on a copy (the binding's string entry indexes modified UTF-8, where an
+   emoji is 6 bytes, and it hands its reader the array it was given, so the original would be overwritten); and a named
+   child may be a comment, so test a child's type before reading its fields.
 3. **Its imports** in analyze/evaluator/analyze/*Lang*Imports.java (`Import` values; resolved by path,
    never by running anything): see `analyze/evaluator/analyze/PythonImports.java` or `analyze/evaluator/analyze/TypeScriptImports.java`.
 4. **Register it** in `Adapters.ALL` (`analyze/evaluator/analyze/Adapters.java`). The order is

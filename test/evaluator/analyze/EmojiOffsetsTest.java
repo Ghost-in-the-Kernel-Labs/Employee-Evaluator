@@ -14,6 +14,10 @@ import org.junit.jupiter.api.Test;
 class EmojiOffsetsTest {
     private static final String SMILE = "😀";
 
+    /**
+     * Parses the template with each `@` an emoji and again with each `@` the word "ab": the functions' names, lines
+     * and values must agree, and the second function's text must be the emoji body exactly.
+     */
     private static void check(TreeSitterAdapter adapter, String path, String template, String body) {
         Parsed parsed = adapter.parse(path, template.replace("@", SMILE));
         assertNull(parsed.unread());
@@ -37,6 +41,7 @@ class EmojiOffsetsTest {
         assertEquals(plain.functions().get(1).text().replace("ab", SMILE), second.text());
     }
 
+    /** Python: an emoji in a comment, a string and a function body, before and inside the second function. */
     @Test
     void pythonOffsetsSurviveAnEmojiBeforeAndInsideAFunction() {
         check(new PythonAdapter(), "m.py", """
@@ -57,6 +62,7 @@ class EmojiOffsetsTest {
                     return 0""");
     }
 
+    /** TypeScript, then the same source as JavaScript: an emoji in comments and strings around an import and two functions. */
     @Test
     void typeScriptAndJavaScriptOffsetsSurviveAnEmojiBeforeAndInsideAFunction() {
         String template = """

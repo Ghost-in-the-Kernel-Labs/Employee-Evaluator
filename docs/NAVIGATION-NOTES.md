@@ -21,3 +21,8 @@ journal, and wipes the entries below this line; git keeps every past set.
 - **Route:** CLAUDE.md -> the task brief named the file; complexity-and-dependencies.md was not the TypeScript import file's how-file (none is), so I went straight to TypeScriptImports.java and the J-131 commit for the shape.
 - **Complaints:** no how-file says what the import readers assume about tree-sitter children (comments are named nodes); the full `gradle test` takes 2m40s and the 120 s tool limit moves it to the background; `DocTests > metrics` fails until `gradle kernelMap` has run, and its message names the artifact, not the command.
 - **Suggestions:** one line in add-a-language-adapter.md: "a named child may be a comment: test its type before reading its fields" (J-133).
+
+### 2026-10-29 · the tithe, Pass 10 · Claude Sonnet 5.5
+- **Route:** CLAUDE.md -> agent-environment.md ("A tithe pass") -> commands.md; `git show a37b802` and J-125 for the shape.
+- **Complaints:** the metrics list names a test's helper and its test methods as "no comment" with no pointer to whether the class's Javadoc counts (it does not). HANDOFF.md keeps old "Start here" sections beside the new one, so after 2.2m two sections disagreed on what is next. Each slice's agent updated its own paragraph and none the neighbouring ones (a repository-wide `git grep "2.2m"` finds the stale ones). The AGENT.md table is edited with a script by hand: a column is added in 13 places.
+- **Suggestions:** in agent-environment.md's tithe bullet: "grep the slice numbers just closed (`git grep -n '2.2m'`) for future tense". HANDOFF.md: one "Start here" section only, the older ones under a "Settled" heading.

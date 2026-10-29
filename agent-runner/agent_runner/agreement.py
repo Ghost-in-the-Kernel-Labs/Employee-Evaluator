@@ -31,7 +31,7 @@ The record, `records/<prompt hash>.json`, sorted keys, two-space indent, one fin
   fields {<field>: {matched, total, figure, baseline {answer, matched, figure}, needed, live, why}},
   ids {<id>: {judged {status, kind, ambition, quality}, label {kind, ambition, quality}}}.
 A figure is a decimal rounded to 3 places, for reading; `matched` and `total` are what is computed from.
-Records of real runs are the question of 2.2m and are never written by a test; the tests write under a temporary directory
+A record of real runs is written by the calibration driver (`calibrate.py`, 2.2m), never by a test; the tests write under a temporary directory
 from synthetic labels and answers (E-014).
 """
 import json

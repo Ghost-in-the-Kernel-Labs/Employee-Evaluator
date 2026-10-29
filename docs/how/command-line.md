@@ -51,7 +51,7 @@
   (`agent_runner.judgment.parse`), which wrote the answer. **Refused with a message and the usage, exit 1:** a bare 2.2d answer (it has
   no prompt or models for the card to name), an ensemble `Result` (`status`, `fields`, `folders` records: take the settled values out of it first,
   folders from `Result.folders[path].value` and `models` from `Result.models`), unreadable or non-JSON text, a wrong hash or model id, a
-  member missing or added. Nothing writes this wrapper yet: 2.2m's run will, and until then it is written by hand
+  member missing or added. Nothing writes this wrapper (2.2m's driver records agreement, not a wrapper): it is written by hand
   (`test/fixtures/judged/judgment.json` is the synthetic example). **What it changes:** a file belongs to its most specific (longest) classified
   folder. Own code and files in no classified folder are counted by Size, Complexity (the cognitive total and the dependency depth) and
   Maintainability's code parts (duplication, cycles, coupling, functions, unused imports), a file in no folder under the kernel's own

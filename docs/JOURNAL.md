@@ -1569,3 +1569,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** docs/AGENT.md (refused: an agent rarely reads it); CLAUDE.md (taken, with Ghost's agreement).
 - **Resolved:** E-088; CLAUDE.md's "Three rules" became "Four rules" with the canary line. The orchestrating session checks hand-backs for it. No code changed.
 - **Touched:** CLAUDE.md, theGhost.md, docs/DECISIONS.md, docs/JOURNAL.md.
+
+### J-129 Ghost's answers: the margin, 2.2j's two rules, E-087's details, the retry steps, the token
+- **Who:** Claude Opus 5.5. **Class:** decision.
+- **Intent:** Record Ghost's answers of 2026-10-29 to the open calls in FOR-GHOST.md.
+- **Found:** Confirmed as proposed: E-084's margin (half the gap), E-085's own-tests rule and wrapper, E-087's refusal of an unencrypted key and its scrubbing of errors. Changed: the retry sleeps, 3, 9 and 27 seconds and no `retry-after` (Ghost: a jam is a spike or a flaky link). New: a key received unencrypted is taken and its sender warned, for endpoints not yet built. Decided: the GitHub token optional, private repositories later through a GitHub App.
+- **Options:** keep honouring `retry-after` above the steps (not asked for; the steps are the rule).
+- **Resolved:** E-089 (supersedes E-087's retry sleeps), E-090; `transport.py` and its tests; the Source lines of E-084, E-085, E-087; FOR-GHOST.md, HANDOFF.md, judge-harness.md. E-090's code is still to build.
+- **Touched:** agent-runner/agent_runner/transport.py, agent-runner/tests/test_transport.py, theGhost.md, docs/DECISIONS.md, docs/FOR-GHOST.md, docs/HANDOFF.md, docs/JOURNAL.md, docs/how/judge-harness.md.

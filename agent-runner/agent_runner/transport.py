@@ -27,8 +27,9 @@ The answer is the concatenation of the response's `text` blocks (`thinking` and 
 one (2.2h retries it once). `stop_log`, a list given to the factory, receives (model, run, stop_reason) for every answer.
 
 Retries: HTTP 429, 500 to 599 (529, overloaded, included) and connection errors or timeouts are retried up to `retries` times
-(default RETRIES = 3), after a sleep of `retry-after` seconds when the header is a number (at most MAX_SLEEP), else BACKOFF *
-2**attempt seconds; `sleep` is injectable. Any other status fails at once. A certificate that does not verify, or a proxy that
+(default RETRIES = 3), after sleeps of BACKOFF * FACTOR**attempt seconds: 3, 9, then 27 (Ghost, 2026-10-29: a jammed
+connection is a spike of load or a flaky link, and both clear in widening steps); after the third retry fails, the call fails.
+A `retry-after` header is not read: the steps are the rule. `sleep` is injectable. Any other status fails at once. A certificate that does not verify, or a proxy that
 refuses the tunnel, fails at once too. TLS is never relaxed; trust comes from the default context, which OpenSSL fills from
 `SSL_CERT_FILE` itself. The environment's HTTPS proxy (`urllib.request.getproxies`, its no-proxy list honoured) carries a call to
 a real host through a CONNECT tunnel; a loopback host (127.0.0.1, ::1, localhost) is never sent through a proxy. The key travels
@@ -57,13 +58,14 @@ from agent_runner import judgment
 # Decision: E-014
 # Decision: E-017
 # Decision: E-087
+# Decision: E-089
 DEFAULT_BASE_URL = "https://api.anthropic.com"
 API_VERSION = "2023-06-01"
 KEY_VARIABLE = "ANTHROPIC_KEY"
 EFFORT = "medium"
 RETRIES = 3
-BACKOFF = 1.0
-MAX_SLEEP = 60.0
+BACKOFF = 3.0
+FACTOR = 3
 TIMEOUT = 300
 LOOPBACK = frozenset({"127.0.0.1", "::1", "localhost"})
 NUMERIC_RANGE = frozenset({"minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum"})
@@ -183,35 +185,30 @@ class _LiveJudge(judges.Judge):
         return headers
 
     def _once(self, body):
-        """(status, headers' retry-after or None, body bytes) of one POST; OSError and HTTPException go to the caller."""
+        """(status, body bytes) of one POST; OSError and HTTPException go to the caller."""
         connection = _connection(self._url, self._timeout)
         try:
             connection.request("POST", self._url.path.rstrip("/") + "/v1/messages", body=body, headers=self._headers())
             response = connection.getresponse()
-            return response.status, response.getheader("retry-after"), response.read()
+            return response.status, response.read()
         finally:
             connection.close()
 
-    def _delay(self, attempt, retry_after):
-        try:
-            if retry_after is not None:
-                return min(max(float(retry_after), 0.0), MAX_SLEEP)
-        except ValueError:
-            pass
-        return min(BACKOFF * 2 ** attempt, MAX_SLEEP)
+    def _delay(self, attempt):
+        return BACKOFF * FACTOR ** attempt
 
     def _post(self, body):
         """The 200 response's bytes; retries as the module docstring says, else `TransportError`."""
         for attempt in range(self._retries + 1):
             try:
-                status, retry_after, data = self._once(body)
+                status, data = self._once(body)
                 problem = None
             except ssl.SSLCertVerificationError:
                 raise TransportError("the API host's certificate did not verify") from None
             except (OSError, http.client.HTTPException) as error:
                 if str(error).startswith("Tunnel connection failed"):
                     raise TransportError("the proxy refused the tunnel: %s" % _scrub(str(error))) from None
-                status, retry_after, data = None, None, b""
+                status, data = None, b""
                 problem = "no answer (%s)" % type(error).__name__
             if status == 200:
                 return data
@@ -222,7 +219,7 @@ class _LiveJudge(judges.Judge):
                     raise TransportError(problem)
             if attempt == self._retries:
                 raise TransportError("%s, after %d retries" % (problem, self._retries))
-            self._sleep(self._delay(attempt, retry_after))
+            self._sleep(self._delay(attempt))
 
     def judge(self, prompt, model, run):
         data = self._post(self._body(prompt, model))

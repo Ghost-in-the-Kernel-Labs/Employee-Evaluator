@@ -50,8 +50,8 @@ AI is not possible from history or from correct code; do not promise it.
 
 ## Waiting on Ghost
 
-- **The token optional** (proposed, not decided): public repositories read without one, a token only for the
-  rate limit, and a rate-limit refusal said plainly.
+- **The token optional** (decided 2026-10-29, E-090; to build): public repositories read without one, a token only for the
+  rate limit, and a rate-limit refusal said plainly; private repositories later through a GitHub App.
 - The rest is in `docs/FOR-GHOST.md`.
 
 ## How the work is done here

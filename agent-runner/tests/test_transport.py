@@ -178,23 +178,18 @@ class RequestShape(Base):
 
 
 class Retries(Base):
-    def test_429_then_200_succeeds_after_one_retry_and_sleeps_the_retry_after(self):
+    def test_429_then_200_succeeds_after_one_retry_and_a_three_second_sleep(self):
         server = self.serve((429, {"retry-after": "2"}, error("rate_limit_error", "slow down")), ok())
         self.assertEqual(ANSWER, self.live(server).judge(prompt_of(), HAIKU, 1).text)
         self.assertEqual(2, len(server.requests))
-        self.assertEqual([2.0], self.sleeps)
+        self.assertEqual([3.0], self.sleeps)
 
-    def test_without_retry_after_the_sleep_doubles(self):
-        server = self.serve((500, {}, error("api_error", "x")), (529, {}, error("overloaded_error", "busy")), (503, {}, b"<html>"), ok())
+    def test_the_sleeps_are_3_9_27_and_the_retry_after_header_is_not_read(self):
+        server = self.serve((500, {}, error("api_error", "x")), (529, {"retry-after": "100000"}, error("overloaded_error", "busy")),
+                            (503, {}, b"<html>"), ok())
         self.live(server).judge(prompt_of(), HAIKU, 1)
         self.assertEqual(4, len(server.requests))
-        self.assertEqual([transport.BACKOFF * 1, transport.BACKOFF * 2, transport.BACKOFF * 4], self.sleeps)
-
-    def test_a_retry_after_that_is_not_a_number_or_is_huge_is_bounded(self):
-        server = self.serve((429, {"retry-after": "Wed, 21 Oct 2026 07:28:00 GMT"}, error("rate_limit_error", "x")),
-                            (429, {"retry-after": "100000"}, error("rate_limit_error", "x")), ok())
-        self.live(server).judge(prompt_of(), HAIKU, 1)
-        self.assertEqual([transport.BACKOFF, transport.MAX_SLEEP], self.sleeps)
+        self.assertEqual([3.0, 9.0, 27.0], self.sleeps)
 
     def test_repeated_500s_stop_after_the_set_number_and_raise_naming_the_status_and_type(self):
         server = self.serve((500, {}, error("api_error", "internal trouble")))

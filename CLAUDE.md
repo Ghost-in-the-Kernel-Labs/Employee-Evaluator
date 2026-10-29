@@ -62,7 +62,7 @@ What is read only when it applies is a pointer here, not text: look it up at tha
 - **When your task is done:** your debrief, `docs/how/debrief-after-a-task.md`.
 - **When `gradle metrics` says a navigation review is due:** `docs/how/navigation-review.md`.
 
-## Three rules
+## Four rules
 
 The maintainer is "Ghost" (GitHub: ghost-in-the-kernel) in every file, comment and commit, and commits are
 authored as Ghost (`docs/how/commit-and-push.md`). One working branch, `main` (E-020).
@@ -72,3 +72,6 @@ Nothing an applicant submitted, no snapshot of it and no identity ever enters th
 
 The kernel imports no model client (E-003). Judgment lives in `agent-runner/` (phase 2) and arrives
 as facts with evidence and confidence (E-017).
+
+Every reply you write, a hand-back to the session that started you included, starts with the words "Context Canary"
+(E-088): a reply without them tells Ghost, or the orchestrating session, that the instructions are slipping.

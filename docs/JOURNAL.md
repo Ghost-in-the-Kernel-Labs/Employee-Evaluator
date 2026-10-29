@@ -1561,3 +1561,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** a mixed status, which changes the entry form (refused by Ghost); keep one value.
 - **Resolved:** Ghost, 2026-10-26: keep `in force` with Source naming the agent's parts for him to confirm. Written in docs/how/do-a-todo-step.md's decision step. No code changed.
 - **Touched:** docs/how/do-a-todo-step.md, docs/JOURNAL.md.
+
+### J-128 The context canary: every reply starts with "Context Canary"
+- **Who:** Claude Opus 5.5. **Class:** decision.
+- **Intent:** Ghost's request of 2026-10-29: a fixed opening word on every reply, so an agent that has stopped following its instructions shows it a turn or two before things go wrong; mostly for the Sonnet agents' hand-backs.
+- **Found:** docs/AGENT.md is the metrics contract, read at a tithe, not on entry; CLAUDE.md is the one file every agent loads. The line adds about forty words of mandatory context, under the 1500 limit.
+- **Options:** docs/AGENT.md (refused: an agent rarely reads it); CLAUDE.md (taken, with Ghost's agreement).
+- **Resolved:** E-088; CLAUDE.md's "Three rules" became "Four rules" with the canary line. The orchestrating session checks hand-backs for it. No code changed.
+- **Touched:** CLAUDE.md, theGhost.md, docs/DECISIONS.md, docs/JOURNAL.md.

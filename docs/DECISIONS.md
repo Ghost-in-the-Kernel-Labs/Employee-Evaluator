@@ -94,3 +94,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-085 | `score --judged` counts the judge's own code; its own tests make the test ratio, by class | in force | judges |
 | E-086 | The card's rules for the judged kind: a judged value counts only where its field is live; generated is declined with exit status 2; clone is scored with a note | proposed | judges |
 | E-087 | The live judge is one standard-library door under a dollar budget; the caps, the prices and the model ids are data | in force | judges |
+| E-088 | Every reply starts with "Context Canary" | in force | process |

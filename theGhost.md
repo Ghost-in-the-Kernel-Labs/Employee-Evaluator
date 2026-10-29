@@ -1464,3 +1464,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** judges
 - **See also:** E-003, E-013, E-014, E-033, E-081, E-083, E-084
+
+### E-088: Every reply starts with "Context Canary"
+- **Decision:** Every reply an agent writes in this repository, a sub-agent's hand-back to the session that started it included, starts with the words "Context Canary". The line is in CLAUDE.md, the file every agent loads on entry. The orchestrating session checks each hand-back for it and tells Ghost when one lacks it.
+- **Why:** In a long session an agent can stop following its instructions without saying so. A fixed opening is the cheapest instruction there is to keep, so its absence is an early warning that harder rules are slipping too. Its presence proves less: an agent can keep the canary after losing a harder rule, so a missing canary is an alarm and a present one is not a clean bill of health.
+- **Held by:** CLAUDE.md ("Four rules"); the orchestrating session's review of each hand-back (E-068).
+- **Source:** Ghost, 2026-10-29 (the canary trick, placed in CLAUDE.md rather than docs/AGENT.md because only CLAUDE.md is read by every agent on entry).
+- **Status:** in force
+- **subject:** process
+- **See also:** E-015, E-065, E-068

@@ -307,6 +307,12 @@ existing `firstError` fallback). In `TreeSitterAdapter.java` the new `reader` le
 result, and a null reader, which crashes the JVM. `firstError` and `folder` survivors were already judged. `EmojiOffsetsTest` kills
 the mutants of the offset handling (without the copy of the bytes or with the string entry it fails in four of five tests).
 
+### Run 23: 2026-10-29, `analyze/`, the TypeScript import reader skips a comment (J-133)
+
+`gradle mutate -Ptarget=evaluator.analyze.*` in a plain clone of the change: 1127 mutants, 1092 killed (11 of them timeouts), 35 left, all
+already judged in the rows below but one. In `TypeScriptImports.java`, `specifiers` has none (the `import_specifier` check and the name
+guard are killed by `ImportCommentsTest`); `namespace` has one, the loop bound, with its row below.
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -327,6 +333,7 @@ the mutants of the offset handling (without the copy of the bytes or with the st
 | `analyze/TreeSitterAdapter.java`, `folder`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the folder is `path.substring(0, 0)`, "" as for no slash (as `JavaImports.packageFiles`, above). |
 | `analyze/TreeSitterAdapter.java`, `reader`'s lambda, `offset >= bytes.length` | `>` | Equal in result: at `offset == bytes.length` the count is `Math.min(buffer.length, 0)`, 0, the same as the early return. |
 | `analyze/TreeSitterAdapter.java`, `reader`, the returned lambda | returns null (PIT: RUN_ERROR) | A null reader makes the binding's native code crash the JVM (a segmentation fault, found while writing it: J-131), so the mutant can only end the test run abnormally, which every test through `parse` would show. |
+| `analyze/TypeScriptImports.java`, `namespace`, `k < namespace.getNamedChildCount()` | `k <= ...` | A `namespace_import` always has its identifier as a named child (`* as` alone does not parse), so the loop returns at it before `k` reaches the count. |
 | `analyze/PythonImports.java`, `from`, `i < statement.getChildCount()` | `i <= ...` | At `i` equal to the count `getFieldNameForChild` gives no name, `"name".equals(null)` is false and the loop continues to its end. |
 | `analyze/PythonAdapter.java`, `wildcard`, `getNamedChildCount() > 0` | `>= 0` | A `case_clause` always has its pattern as a named child (a clause without one does not parse), so the count is never 0 and the two conditions agree. |
 | `analyze/Duplication.java`, `fingerprint` (lines 90 and 91): the loop bound, `h * 1_000_003L`, `+ code[i]`, `+ 1`, and the returned `h` | each changed, or the return made 0 | The fingerprint is only the key that gathers windows into groups; `sameTokens` then checks each group token for token and `apart` and `mark` read the result, so any function of the window, a constant one too, marks the same tokens (E-036: "a fingerprint collision marks nothing"). Only the time differs: a constant puts every window in one group, quadratic. |

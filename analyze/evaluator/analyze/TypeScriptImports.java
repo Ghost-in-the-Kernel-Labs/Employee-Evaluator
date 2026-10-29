@@ -44,7 +44,7 @@ final class TypeScriptImports {
                 TSNode part = clause.getNamedChild(j);
                 switch (part.getType()) {
                     case "identifier" -> names.add(source.text(part));
-                    case "namespace_import" -> names.add(source.text(part.getNamedChild(0)));
+                    case "namespace_import" -> namespace(part, source, names);
                     case "named_imports" -> specifiers(part, source, names);
                     default -> {}
                 }
@@ -53,11 +53,25 @@ final class TypeScriptImports {
         return names;
     }
 
+    /** The names of a `{ a, b as c }` list: only its `import_specifier` children (a comment or an error node between them binds nothing). */
     private static void specifiers(TSNode named, Source source, List<String> names) {
         for (int k = 0; k < named.getNamedChildCount(); k++) {
             TSNode spec = named.getNamedChild(k);
+            if (!spec.getType().equals("import_specifier")) continue;
             TSNode alias = TreeSitterAdapter.field(spec, "alias");
-            names.add(source.text(alias != null ? alias : TreeSitterAdapter.field(spec, "name")));
+            TSNode bound = alias != null ? alias : TreeSitterAdapter.field(spec, "name");
+            if (bound != null) names.add(source.text(bound));
+        }
+    }
+
+    /** The name `* as ns` binds: its identifier child (a comment inside the clause is not it). */
+    private static void namespace(TSNode namespace, Source source, List<String> names) {
+        for (int k = 0; k < namespace.getNamedChildCount(); k++) {
+            TSNode child = namespace.getNamedChild(k);
+            if (child.getType().equals("identifier")) {
+                names.add(source.text(child));
+                return;
+            }
         }
     }
 

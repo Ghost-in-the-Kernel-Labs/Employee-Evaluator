@@ -300,6 +300,13 @@ to the total, 1,000,000 against 1,000,001) and a confidence of exactly 0, each k
 The rerun: 270 of 271 killed, the one left `OwnCode.mostSpecific` from run 20, which has its row below. `score/`: 178, 178 killed. `cli/`: 114, 112 killed;
 the two left are the old `Brief.commits` and `Main.main` rows.
 
+### Run 22: 2026-10-29, `analyze/`, the tree-sitter parse fed the file's real UTF-8 bytes (J-131)
+
+`gradle mutate -Ptarget=evaluator.analyze.*` in a plain clone of the change: 1121 mutants, 1087 killed, 1 with no coverage (the
+existing `firstError` fallback). In `TreeSitterAdapter.java` the new `reader` left two (the rows below): the `>=` boundary, equal in
+result, and a null reader, which crashes the JVM. `firstError` and `folder` survivors were already judged. `EmojiOffsetsTest` kills
+the mutants of the offset handling (without the copy of the bytes or with the string entry it fails in four of five tests).
+
 ## Survivors judged harmless
 
 | Where | Mutant | Why it is harmless |
@@ -318,6 +325,8 @@ the two left are the old `Brief.commits` and `Main.main` rows.
 | `analyze/TreeSitterAdapter.java`, `firstError`, `i < node.getChildCount()` | `i <= ...` | `firstError` is called only on a node with an error in it, which is not itself the error or a missing token, so one of its children has the error and the loop returns before `i` reaches the count. |
 | `analyze/TreeSitterAdapter.java`, `firstError`, the last `return node` | returns null (no coverage) | The same: the line is a fallback no tree reaches, for a node that has an error but whose children have none. |
 | `analyze/TreeSitterAdapter.java`, `folder`, `slash < 0` | `slash <= 0` | Equal in result: at slash 0 the folder is `path.substring(0, 0)`, "" as for no slash (as `JavaImports.packageFiles`, above). |
+| `analyze/TreeSitterAdapter.java`, `reader`'s lambda, `offset >= bytes.length` | `>` | Equal in result: at `offset == bytes.length` the count is `Math.min(buffer.length, 0)`, 0, the same as the early return. |
+| `analyze/TreeSitterAdapter.java`, `reader`, the returned lambda | returns null (PIT: RUN_ERROR) | A null reader makes the binding's native code crash the JVM (a segmentation fault, found while writing it: J-131), so the mutant can only end the test run abnormally, which every test through `parse` would show. |
 | `analyze/PythonImports.java`, `from`, `i < statement.getChildCount()` | `i <= ...` | At `i` equal to the count `getFieldNameForChild` gives no name, `"name".equals(null)` is false and the loop continues to its end. |
 | `analyze/PythonAdapter.java`, `wildcard`, `getNamedChildCount() > 0` | `>= 0` | A `case_clause` always has its pattern as a named child (a clause without one does not parse), so the count is never 0 and the two conditions agree. |
 | `analyze/Duplication.java`, `fingerprint` (lines 90 and 91): the loop bound, `h * 1_000_003L`, `+ code[i]`, `+ 1`, and the returned `h` | each changed, or the return made 0 | The fingerprint is only the key that gathers windows into groups; `sameTokens` then checks each group token for token and `apart` and `mark` read the result, so any function of the window, a constant one too, marks the same tokens (E-036: "a fingerprint collision marks nothing"). Only the time differs: a constant puts every window in one group, quadratic. |

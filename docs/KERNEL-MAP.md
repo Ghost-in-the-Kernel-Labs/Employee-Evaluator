@@ -565,3 +565,4 @@ guardrail that tripped when an agent nearly overwrote another area's function.
 | score | `score/evaluator/score/Declined.java:Declined.json` |  | 2026-10-26 |  |
 | score | `score/evaluator/score/Declined.java:Declined.markdown` |  | 2026-10-26 |  |
 | score | `score/evaluator/score/Judged.java:Judged.Judged#2` |  | 2026-10-26 |  |
+| analyze | `analyze/evaluator/analyze/TreeSitterAdapter.java:TreeSitterAdapter.reader` |  | 2026-10-29 |  |

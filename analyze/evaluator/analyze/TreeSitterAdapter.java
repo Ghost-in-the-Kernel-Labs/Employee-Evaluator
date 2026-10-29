@@ -12,6 +12,7 @@ import org.treesitter.TSInputEncoding;
 import org.treesitter.TSLanguage;
 import org.treesitter.TSNode;
 import org.treesitter.TSParser;
+import org.treesitter.TSReader;
 
 /**
  * What the tree-sitter adapters share (E-028): the parse, a file that does not parse said with its
@@ -50,11 +51,27 @@ abstract class TreeSitterAdapter implements Adapter {
         Source source = new Source(text.getBytes(StandardCharsets.UTF_8));
         TSParser parser = new TSParser();
         parser.setLanguage(grammar(path));
-        TSNode root = parser.parseStringEncoding(null, text, TSInputEncoding.TSInputEncodingUTF8).getRootNode();
+        TSNode root = parser.parse(source.bytes().clone(), null, reader(source.bytes()), TSInputEncoding.TSInputEncodingUTF8).getRootNode();
         if (root.hasError()) return Parsed.unread("does not parse: line " + (firstError(root).getStartPoint().getRow() + 1));
         List<Measure> found = new ArrayList<>();
         functions(root, source, new ArrayDeque<>(), new HashMap<>(), found);
         return new Parsed(found, imports(root, source, path), null);
+    }
+
+    /**
+     * Reads the bytes handed to the parse. The binding's string entry passes the text through JNI as modified
+     * UTF-8, where a character beyond the Basic Multilingual Plane (an emoji) is 6 bytes, not 4, so every offset
+     * after one ran past the real bytes `Source` slices (J-131). Parsing the real UTF-8 bytes makes the two agree.
+     * The binding hands the reader the very array it was given as its buffer, so the parse is given a copy: the
+     * reader's writes into the buffer never reach the bytes `Source` slices.
+     */
+    private static TSReader reader(byte[] bytes) {
+        return (buffer, offset, point) -> {
+            if (offset >= bytes.length) return 0;
+            int count = Math.min(buffer.length, bytes.length - offset);
+            System.arraycopy(bytes, offset, buffer, 0, count);
+            return count;
+        };
     }
 
     // Unsure: the walks recurse; code nested thousands deep could exhaust the stack (the sandbox's limits, TODO.md 1.5).

@@ -41,7 +41,9 @@ import re
 from collections import Counter
 from fractions import Fraction
 
+from agent_runner import budget as budgets
 from agent_runner import ensemble
+from agent_runner import judge as judges
 
 # Decision: E-003
 # Decision: E-013
@@ -52,6 +54,7 @@ from agent_runner import ensemble
 # Decision: E-082
 # Decision: E-084
 VERSION = 1
+DEFAULT_CATCH = (budgets.BudgetError, judges.MissingRecording)
 FLOOR = Fraction(4, 5)
 MARGIN = Fraction(1, 2)  # Unsure: half the gap is the agent's proposal; Ghost confirms the size (E-084)
 DECIMALS = 3
@@ -109,9 +112,29 @@ def judged_value(result):
             "quality": fields["quality"]["value"]}
 
 
-def judge_all(judge, prompts, haiku=ensemble.HAIKU, opus=ensemble.OPUS):
-    """{id: Result}: `ensemble.judge_repository` over `prompts` ({id: RenderedPrompt}), in id order, one id after another."""
-    return {label_id: ensemble.judge_repository(judge, prompts[label_id], haiku, opus) for label_id in sorted(prompts)}
+def judge_all(judge, prompts, haiku=ensemble.HAIKU, opus=ensemble.OPUS, budget=None, errors=None, catch=DEFAULT_CATCH):
+    """{id: Result}: `ensemble.judge_repository` over `prompts` ({id: RenderedPrompt}), in id order, one id after another.
+
+    `budget` is the `Budget` the `judge` runs under, if any: an evaluation is one repository, so `begin_evaluation()` is called
+    before each id and the per-evaluation cap holds per repository, not over the whole run (2.2m). Once an id's judging has
+    been refused by the TRIAL cap the loop stops (every later id would be refused unmade); the ids it did not reach have no
+    result, so `compute` counts them missing. An id whose judging raises one of the `catch` errors (a `BudgetError` such as a
+    prompt too long, a `MissingRecording`) gets no result either, and its exception's class name goes in `errors` ({id: name})
+    when a dict is passed; with no dict such an error propagates. Any other error propagates."""
+    results = {}
+    for label_id in sorted(prompts):
+        if budget is not None:
+            budget.begin_evaluation()
+        seen = len(budget.refusals) if budget is not None else 0
+        try:
+            results[label_id] = ensemble.judge_repository(judge, prompts[label_id], haiku, opus)
+        except catch as error:
+            if errors is None:
+                raise
+            errors[label_id] = type(error).__name__
+        if budget is not None and any(r["cap"] == "trial" for r in budget.refusals[seen:]):
+            break
+    return results
 
 
 def _constant(labels, field):

@@ -16,6 +16,11 @@ class DocTests {
     }
 
     @Test
+    void dependencyReview() {
+        assertEquals(List.of(), DependencyReviewTest.run().problems());
+    }
+
+    @Test
     void escalations() {
         assertEquals(List.of(), EscalationsTest.run().problems());
     }

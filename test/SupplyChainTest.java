@@ -80,8 +80,10 @@ final class SupplyChainTest {
                 .accepts("a comment naming repositories", () -> build("// No repositories are declared.\nplugins { id 'java' }\n"))
                 .rejects("the directive missing from CLAUDE.md", () -> directive("# t\n\nnothing\n", "# g\n"))
                 .rejects("the directive with no rules", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\nnothing\n", "# g\n"))
-                .rejects("a second copy in theGhost.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# g\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
-                .accepts("one copy, in CLAUDE.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# g\n\n## Supply-chain rules: in CLAUDE.md\n"));
+                .rejects("a second copy in theGhost.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n" + RULE + "\n", "# g\n\n" + DIRECTIVE_HEADING + "\n\n- a\n"))
+                .rejects("a dependency rule that names neither the how-file nor E-091", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n- a\n", "# g\n"))
+                .rejects("the old rule of human approval", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n" + RULE + "\n- Never change a dependency without human approval.\n", "# g\n"))
+                .accepts("one copy, in CLAUDE.md", () -> directive("# t\n\n" + DIRECTIVE_HEADING + "\n\n" + RULE + "\n", "# g\n\n## Supply-chain rules: in CLAUDE.md\n"));
     }
 
     /** Each workflow: actions pinned to a full SHA with the tag in a comment, read-only permissions, no forbidden trigger or runner. */
@@ -132,7 +134,7 @@ final class SupplyChainTest {
         Matcher row = Pattern.compile("(?m)^\\| `([^`]+\\.jar)` \\|.*\\| `([0-9a-f]+)` \\|\\s*$").matcher(manifest);
         while (row.find()) recorded.put("third_party/" + row.group(1), row.group(2));
         jars.forEach((path, hash) -> {
-            if (!recorded.containsKey(path)) failures.add(path + " is not in third_party/MANIFEST.md: a dependency needs a decision and Ghost's approval (E-033)");
+            if (!recorded.containsKey(path)) failures.add(path + " is not in third_party/MANIFEST.md: a new dependency needs a decision and Ghost (E-091)");
             else if (!recorded.get(path).equals(hash)) failures.add(path + " has SHA-256 " + hash + ", not the " + recorded.get(path) + " recorded: it changed since it was vendored");
         });
         for (String path : recorded.keySet()) if (!jars.containsKey(path)) failures.add("third_party/MANIFEST.md lists " + path + ", which is not there");
@@ -220,6 +222,8 @@ final class SupplyChainTest {
         List<String> failures = new ArrayList<>();
         String rules = block(claude);
         if (rules == null || rules.lines().noneMatch(l -> l.startsWith("- "))) failures.add("CLAUDE.md has no supply-chain directive (`" + DIRECTIVE_HEADING + "`) with its rules: every agent reads them on entry (E-073)");
+        else if (!rules.contains("docs/how/update-a-dependency.md") || !rules.contains("E-091")) failures.add("CLAUDE.md's dependency rule does not name docs/how/update-a-dependency.md and E-091: a dependency change is read before it comes in (E-091)");
+        else if (rules.contains("human approval")) failures.add("CLAUDE.md asks for human approval of every dependency change, which E-091 replaced with the decision rule");
         if (ghost.contains(DIRECTIVE_HEADING)) failures.add("theGhost.md holds a copy of the supply-chain directive: its one copy is in CLAUDE.md (E-073)");
         return failures;
     }
@@ -279,5 +283,6 @@ final class SupplyChainTest {
         return jars;
     }
 
+    private static final String RULE = "- Read it (`docs/how/update-a-dependency.md`, E-091).";
     private static final String MANIFEST_SAMPLE = "| Jar | License | Used by | Ships | SHA-256 |\n| --- | --- | --- | --- | --- |\n| `x/a.jar` | MIT | tests | no | `00` |\n";
 }

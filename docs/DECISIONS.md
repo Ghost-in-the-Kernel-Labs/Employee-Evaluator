@@ -39,7 +39,7 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-030 | Complexity is counted two ways: McCabe's paths, and SonarSource's cognitive complexity | in force | analysis |
 | E-031 | TypeScript and Python are counted by Java's rules, where a function is drawn as each language draws it | in force | analysis |
 | E-032 | The dependency graph is the repository's own files, resolved by path; unused imports count against a file | in force | analysis |
-| E-033 | Ghost's Supply-Chain Security Baseline, held by a test | in force (part); superseded by E-061 (part: where the directive lives) | security |
+| E-033 | Ghost's Supply-Chain Security Baseline, held by a test | in force (part); superseded by E-061 (part: where the directive lives); superseded by E-091 (part: Ghost's approval of every dependency change) | security |
 | E-034 | A test file is known by its path, as test runners find them | in force | analysis |
 | E-035 | Coupling is fan-in, fan-out and import cycles, read from the dependency graph | in force | analysis |
 | E-036 | Duplication is shared 60-token runs inside functions, names and literals normalized | in force | analysis |
@@ -97,3 +97,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-088 | Every reply starts with "Context Canary" | in force | process |
 | E-089 | The live judge retries after 3, 9 and 27 seconds; a key received unencrypted is taken and its sender warned | in force | judges |
 | E-090 | A GitHub token is optional | in force | github |
+| E-091 | A dependency update is read before it comes in; a routine one that passes every layer is taken without asking Ghost | in force | security |

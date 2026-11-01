@@ -59,7 +59,7 @@ final class AgentRunnerTest {
         return output.length() <= 4000 ? output : "..." + output.substring(output.length() - 4000);
     }
 
-    private static boolean python3Present() {
+    static boolean python3Present() {
         try {
             Process p = new ProcessBuilder("python3", "--version").redirectErrorStream(true).start();
             p.getInputStream().readAllBytes();
@@ -83,7 +83,7 @@ final class AgentRunnerTest {
     }
 
     /** Runs `python3 -I -B -m unittest discover` in `dir`: isolated (no PYTHON variables, no cwd on the path), no bytecode written. */
-    private static Outcome discover(Path dir) {
+    static Outcome discover(Path dir) {
         try {
             ProcessBuilder builder = new ProcessBuilder("python3", "-I", "-B", "-m", "unittest", "discover")
                     .directory(dir.toFile()).redirectErrorStream(true);

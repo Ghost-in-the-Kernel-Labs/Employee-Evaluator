@@ -8,7 +8,7 @@
 
 **Contract:** E-091 (this method), E-033 (the baseline it keeps), E-021 (vendored, offline), E-037 (the sandbox's pins), E-013 (what is fetched is data).
 
-**Tests:** `test/DependencyReviewTest.java` (a row for every pin), `test/SupplyChainTest.java` (the hashes, digests, scripts-off and the directive).
+**Tests:** `test/DependencyReviewTest.java` (a row for every pin; it runs the scan's Python tests), `dependency-review/test_dependency_scan.py` (the scan, on synthetic packages only), `test/SupplyChainTest.java` (the hashes, digests, scripts-off and the directive).
 
 ## The threat
 
@@ -94,6 +94,18 @@ malice (a test runner may use `child_process`); it means the reviewer must expla
 | `eval(`, `new Function(`, `atob(`, `Buffer.from(..., 'base64')` | hiding code |
 | A long encoded string (200 or more base64 characters, 40 or more `\x` escapes) | a hidden payload |
 | `JSON.stringify(process.env)`, `Object.keys(process.env)` | dumping secrets |
+
+**The command** (Python 3, standard library only; OLD and NEW are the two unpacked folders of Step 1, `OUT` a new folder, all outside the repository):
+
+```sh
+python3 -I -B dependency-review/dependency_scan.py "$REVIEW/old" "$REVIEW/new" --out "$REVIEW/scan"
+```
+
+It prints `HIT <file>:<line> [<rule>] <text>` for each hit and a summary line, and exits 0 for no hit, 1 for hits, 2 when it refuses (a folder inside the repository, a missing folder). `--out` writes
+package.diff (the diff with renamed chunks paired), scripts.diff (the `scripts` of each package.json, before and after), files.diff (added, changed, removed and renamed files), pairs.txt and scan.txt.
+It reads bytes and runs nothing from the folders, opens every file without following a link, and reports a symlink as a hit instead of reading it. A binary file (a class file) is read as its printable strings, and a string
+only the new side has counts as an added line. Its rules and what each means are in the docstring of `dependency-review/dependency_scan.py`; a change to a rule changes its tests in the same commit. It is a
+folder of its own, as `agent-runner/` is, outside the Java module map (`docs/how/add-or-change-a-module.md`); `gradle mutate` is for Java, so its tests were tried by changing the code (a mutant that survived got a test).
 
 The rules are the posture's, written for npm. They apply to any registry's text; for a Python wheel, a `setup.py` or a `.pth` file added
 (a `.pth` line that starts with `import` runs on every start of the interpreter) is the install script's counterpart and the reviewer is told so; for a jar,

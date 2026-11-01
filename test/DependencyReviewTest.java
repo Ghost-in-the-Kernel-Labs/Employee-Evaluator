@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
  * Holds the dependency-update posture (E-091) to the repository. The record: every artifact the repository pins, whatever its
  * registry, has one row in `third_party/REVIEWED.md` naming the version or hash pinned and the last version reviewed, and no row
  * outlives its pin. A pin that changes therefore changes its row in the same commit, which is where a review leaves its record.
+ * The scan: `dependency-review/` is Python, standard library only, outside the Java module map as `agent-runner/` is; its tests
+ * (synthetic packages made in a temporary folder) run here as `agent-runner/`'s do, and a failing one, or none found, fails the build.
  */
 // Decision: E-091
 final class DependencyReviewTest {
@@ -36,7 +38,7 @@ final class DependencyReviewTest {
         String record = Check.read(RECORD);
         TreeSet<String> pins = pins(files);
         String row = "| pypi | pytest | 9.1.1 | not yet |\n";
-        return new Check("dependency review")
+        Check check = new Check("dependency review")
                 .repository(reviewed(record, pins))
                 .rejects("a pin with no row", () -> reviewed("", new TreeSet<>(List.of("pypi | pytest | 9.1.1"))))
                 .rejects("a row whose pin is gone", () -> reviewed(row, new TreeSet<>()))
@@ -46,6 +48,11 @@ final class DependencyReviewTest {
                 .accepts("a row for each pin", () -> reviewed(row, new TreeSet<>(List.of("pypi | pytest | 9.1.1"))))
                 .accepts("a jar read as one pin", () -> sampleCount(JAR_MANIFEST, 1))
                 .accepts("a jar, a requirement, a tarball, an image and an action each read as a pin", () -> sampleCount(SAMPLE_FILES, 5));
+        if (!AgentRunnerTest.python3Present()) {
+            System.out.println("dependency review PENDING: python3 is absent, so the scan's tests did not run (the pinned image has it)");
+            return check;
+        }
+        return check.repository(AgentRunnerTest.check(AgentRunnerTest.discover(Check.ROOT.resolve("dependency-review"))));
     }
 
     /** Every pin of the repository as `registry | artifact | pinned`, from the files that hold them. */

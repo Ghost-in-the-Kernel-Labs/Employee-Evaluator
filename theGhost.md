@@ -1009,7 +1009,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
   escalations show where the repository is hard to work in, which the navigability passes then fix.
 - **Held by:** `CLAUDE.md` ("A Sonnet agent escalates once"); review of the journal.
 - **Source:** Ghost, 2026-10-23.
-- **Status:** in force
+- **Status:** in force (part); superseded by E-092 (part: a Sonnet agent, and its one more try)
 - **subject:** agents
 - **See also:** E-015, E-055
 
@@ -1075,7 +1075,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `docs/how/escalate-to-opus.md`; `test/EscalationsTest.java` (the types; a third row of a type
   not raised, or raised and not in `docs/FOR-GHOST.md`, fails); `CLAUDE.md` ("A Sonnet agent escalates once").
 - **Source:** Ghost, 2026-10-23 ("This is a ghost level directive").
-- **Status:** in force
+- **Status:** in force (part); superseded by E-092 (part: a Sonnet agent escalating to Opus, and its twice)
 - **subject:** agents
 - **See also:** E-060, E-063
 
@@ -1147,7 +1147,7 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Held by:** `CLAUDE.md` ("Fresh agents, debriefs, navigation reviews"); `docs/how/debrief-after-a-task.md`;
   `docs/how/navigation-review.md`; `scripts/TitheGate.java` and `test/MetricsTest.java` (the cadence).
 - **Source:** Ghost, 2026-10-23.
-- **Status:** in force
+- **Status:** in force (part); superseded by E-092 (part: each task goes to a fresh Sonnet agent)
 - **subject:** agents
 - **See also:** E-015, E-060, E-064, E-065
 
@@ -1502,3 +1502,13 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** security
 - **See also:** E-013, E-021, E-033, E-037, E-065, E-073
+
+### E-092: A task goes to the cheapest tier the gate can check; models are named in one table, tiers everywhere else
+- **Decision:** Work is handed out by tier: small, mid, strong. The one map from tier to model is the table in `docs/how/hand-out-a-task.md` (today small is Haiku, mid is Sonnet, strong is Opus); every other instruction in `CLAUDE.md` and `docs/how/` names a tier, never a model family, and a test fails if one appears (exempt: the judge harness's product model ids, and the dependency posture's reviewer pins, which are the product's and the posture's settings, not worker tiers). A worker stops at the first limit it can count: one attempt at a fix the gate rejects for a reason it cannot explain in one reading (a second is the next tier's), a file outside its brief's working set, tool calls (small 40, mid 120), a choice its brief does not settle. A stopped worker hands back a one-page report (what it was asked, the commit and files, what it tried, the exact failure, the files it read, its tool calls, the choices left); the next tier starts from the report and the diff. The coordinator's rules (end a session at a natural point with a handoff, wait silently, no turn without a decision, the mechanical loop to the mid tier, delegate reading) are in the same file. This replaces E-068's "a fresh Claude Sonnet agent" with a fresh agent of the cheapest tier that fits, and E-060's and E-064's "one more try" and "failed twice" with one attempt, then the next tier. The escalation log, its six types and the three-of-a-type rule stand. Measuring the placement (a working-set measure per task row, a scoring script, a worker log) is not yet built; it is the next steps.
+- **Why:** A subscription gives a weekly allowance, and the largest cost is a long coordinating context re-read on every turn, then strong-tier workers doing work a cheaper model could do. The gate (tests, source rules, mutation, conformance) catches what a cheaper model gets wrong, so the model only has to be good enough to pass it, and a model cannot see how full its context is, so its limits must be ones it can count. Tiers in the files and models in one table make a model change one edit.
+- **Held by:** `docs/how/hand-out-a-task.md` (the table, the limits, the brief, the report); `test/TierNamesTest.java` (no family name in `CLAUDE.md` or `docs/how/` outside the table's file and the named exemptions); `docs/how/escalate-to-opus.md` and `docs/how/debrief-after-a-task.md` (worded by tier); `CLAUDE.md` (two pointer lines).
+- **Source:** Ghost, 2026-11-01: take the token posture in now, with the tier-to-model map in a docs/how file held by a test. The tool-call numbers, the exemptions and the choice to leave `.claude/agents/` (pinned by hash) as they are, are the agent's (Claude Sonnet 5.5), for Ghost to confirm.
+- **Supersedes:** E-060 (part: a Sonnet agent, one more try), E-064 (part: a Sonnet agent, failed twice), E-068 (part: each task to a fresh Sonnet agent)
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-003, E-060, E-064, E-065, E-068, E-091

@@ -1,23 +1,25 @@
-# Escalate to Opus, and replay the route (E-060, E-064)
+# Escalate to the strong tier, and replay the route (E-060, E-064, E-092)
 
-For a Claude Sonnet agent whose fix has failed twice where the failure did not plainly say why. A Ghost
-directive: every escalation also checks whether the route the agent started from gave it what it needed.
+For a mid-tier or small-tier worker whose one attempt at a fix failed where the failure did not plainly say why (the stop limits
+and the tiers are in `docs/how/hand-out-a-task.md`). A Ghost directive: every escalation also checks whether the route the agent
+started from gave it what it needed. The file keeps its name so what links it does not break.
 
-## The Sonnet agent
+## The worker
 
-1. **Spawn a Claude Opus agent** (the Agent tool, model `opus`) with: the task as it was given, the failing
-   output, your diff, the files you read, and the routing row and instructions file you started from
-   (a file under docs/how/).
-2. **Replay when asked.** Opus asks you to replay the instructions you followed from the task's start: the
+1. **Stop after one attempt** and hand back to the session that started you, which spawns a **strong-tier agent** (the model for
+   that tier is in the table of `docs/how/hand-out-a-task.md`) with: the task as it was given, the failing output, your diff, the
+   files you read, and the routing row and instructions file you started from (a file under docs/how/). A small-tier worker's
+   escalation goes to the mid tier first; the mid tier's goes to the strong.
+2. **Replay when asked.** The strong agent asks you to replay the instructions you followed from the task's start: the
    row, the instructions file, the steps you took in order. Give it from what you can recall, briefly; if you
    cannot recall, say so. That is fine, and not worth more than a few lines.
-3. **Apply Opus's answer;** if that fails too, stop and say so to Ghost.
-4. **Log it:** one row in `docs/ESCALATIONS.md`, with the issue type Opus named. Note the escalation in the
+3. **Apply the answer;** if that fails too, stop and say so to Ghost.
+4. **Log it:** one row in `docs/ESCALATIONS.md`, with the issue type the strong agent named. Note the escalation in the
    step's journal entry too.
 
-## The Opus agent
+## The strong-tier agent
 
-1. Ask the Sonnet agent to replay the instructions it followed, before reading its diff.
+1. Ask the worker to replay the instructions it followed, before reading its diff.
 2. **Validate the route:** were the instructions it needed for this task in the row and instructions file it
    started from, at the start? Read that file and compare it with what the task needed.
 3. Solve the failure, and name one issue type for the log:

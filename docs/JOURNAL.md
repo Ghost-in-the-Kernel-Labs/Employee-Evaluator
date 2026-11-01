@@ -1660,3 +1660,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** hold the push until it reproduces (refused: nine runs did not, and the gate passed on the commits pushed); push and record it (taken).
 - **Resolved:** pushed at 6f18f89 after a passing pre-push; HANDOFF says how to catch the test next time, and proposes `prepush.sh` printing failing test names.
 - **Touched:** docs/HANDOFF.md, docs/JOURNAL.md.
+
+### J-140 The token posture, step 1: tiers in the files, models in one table
+- **Who:** Claude Sonnet 5.5. **Class:** decision.
+- **Intent:** Adopt step 1 of the token posture (E-092): worker tiers and countable stop limits, the tier-to-model map in one how-file held by a test, steps 2 to 4 left as next steps.
+- **Found:** Family names stood in CLAUDE.md (two lines), `escalate-to-opus.md`, `debrief-after-a-task.md`, `navigation-review.md` (a Fable agent for open questions), and in `judge-harness.md`, `judge-trials.md` and `update-a-dependency.md`, where they are the product's model ids and the dependency posture's reviewer pins. `.claude/agents/*.md` carry `model: sonnet` and `model: haiku` and are pinned by hash.
+- **Options:** the three product/posture files exempt as whole files, written in the test and the how-file (taken); rewording them (refused: the ids are the product's settings, and a reword would blur which is which). `.claude/agents/` untouched (taken; the test does not read it). A routing row in CLAUDE.md (refused: no row fits, the two pointer lines under "When it happens" carry it, and the mandatory context stays small). The navigation review's open questions now go to the strong tier, whose table entry is Opus, where they went to Fable: Ghost to confirm.
+- **Resolved:** E-092; `docs/how/hand-out-a-task.md`; `test/TierNamesTest.java` (with six proofs); `escalate-to-opus.md`, `debrief-after-a-task.md`, `navigation-review.md` and two CLAUDE.md lines worded by tier; `gradle decisionsDoc`.
+- **Touched:** E-092, E-060, E-064, E-068 (statuses), CLAUDE.md, docs/how/, test/, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.

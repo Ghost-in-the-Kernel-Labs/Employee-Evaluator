@@ -66,15 +66,15 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-057 | The judge classifies and judges; the kernel counts what the judge calls the author's own, and applies the card's rules | superseded by E-082 (its list of kinds only, the rest stands) | judges |
 | E-058 | JavaScript is read as TypeScript is, with the vendored TSX grammar, and `require` counts as an import | in force | analysis |
 | E-059 | PIT is the mutation tool, vendored with what its poms declare | in force | tests |
-| E-060 | A Sonnet agent tries a hard fix once, then asks Opus | in force | agents |
+| E-060 | A Sonnet agent tries a hard fix once, then asks Opus | in force (part); superseded by E-092 (part: a Sonnet agent, and its one more try) | agents |
 | E-061 | The supply-chain directive has one copy, theGhost.md's first section, read before any task | superseded by E-073 | security |
 | E-062 | `gradle kernelMap` closes a function that is gone | in force | intent |
 | E-063 | CLAUDE.md's routing rows are pointers; an action's steps live in its instructions file | superseded by E-065 | agents |
-| E-064 | Every escalation replays the route, is logged, and three of a kind go to Ghost | in force | agents |
+| E-064 | Every escalation replays the route, is logged, and three of a kind go to Ghost | in force (part); superseded by E-092 (part: a Sonnet agent escalating to Opus, and its twice) | agents |
 | E-065 | Every workpath in CLAUDE.md is a pointer to its instructions | in force | agents |
 | E-066 | When agents' work conflicts, they stop and tell Ghost; none undoes another's | in force (part); superseded by E-067 (part: force-pushing) | agents |
 | E-067 | A force-push only when every active agent agrees, the slow ones waited for | in force | agents |
-| E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force | agents |
+| E-068 | Fresh Sonnet agents per task; each debriefs; a navigation review about every ten commits | in force (part); superseded by E-092 (part: each task goes to a fresh Sonnet agent) | agents |
 | E-069 | CLAUDE.md is a memory map: what applies only sometimes is a "When X, read Y" pointer | in force | agents |
 | E-070 | Counted aspects score against a baseline repository: Suite Builder at 32762a6 is 100, empty is 0 | in force (Size, Complexity and Maintainability, TODO.md 1.13 built) | scoring |
 | E-071 | A baseline-scored metric may pass 100 | in force (Size, Complexity and Maintainability are counted, the rest keep 0–100) | scoring |
@@ -98,3 +98,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-089 | The live judge retries after 3, 9 and 27 seconds; a key received unencrypted is taken and its sender warned | in force | judges |
 | E-090 | A GitHub token is optional | in force | github |
 | E-091 | A dependency update is read before it comes in; a routine one that passes every layer is taken without asking Ghost | in force | security |
+| E-092 | A task goes to the cheapest tier the gate can check; models are named in one table, tiers everywhere else | in force | agents |

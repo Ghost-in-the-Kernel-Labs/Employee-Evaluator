@@ -51,6 +51,11 @@ class DocTests {
     }
 
     @Test
+    void tierNames() {
+        assertEquals(List.of(), TierNamesTest.run().problems());
+    }
+
+    @Test
     void todo() {
         assertEquals(List.of(), TodoTest.run().problems());
     }

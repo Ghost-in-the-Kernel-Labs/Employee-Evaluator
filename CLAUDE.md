@@ -54,12 +54,12 @@ What is read only when it applies is a pointer here, not text: look it up at tha
 - **When you run a command, or a long run's output comes back:** `docs/how/commands.md`.
 - **Before you call work done:** `docs/how/finish-work.md`.
 - **When you commit or push:** `docs/how/commit-and-push.md`.
-- **If you are a Claude Sonnet model and a fix fails where the failure does not plainly say why:** one more
-  try of your own at most, then the escalation policy, `docs/how/escalate-to-opus.md` (E-060, E-064).
+- **If a fix fails where the failure does not plainly say why:** one attempt, then the next tier's, by the
+  escalation policy `docs/how/escalate-to-opus.md` (E-060, E-064, E-092).
 - **When another agent's work conflicts with yours:** stop, assume conflicting objectives, not sabotage, and
   read `docs/how/when-agents-conflict.md` (E-066, E-067). Whatever you think is happening, never kill a process
   you did not start, never revert or push over another agent's commit, never force-push alone.
-- **When you hand out a new task:** to a fresh Claude Sonnet agent (E-068).
+- **When you hand out a new task:** to a fresh agent of the cheapest tier that fits, by `docs/how/hand-out-a-task.md` (E-068, E-092).
 - **When your task is done:** your debrief, `docs/how/debrief-after-a-task.md`.
 - **When `gradle metrics` says a navigation review is due:** `docs/how/navigation-review.md`.
 

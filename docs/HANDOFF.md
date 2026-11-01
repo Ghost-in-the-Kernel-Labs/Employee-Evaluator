@@ -1,6 +1,10 @@
 # Handoff: what to work on next, and what it waits on
 
-## Start here: 2.2n, the prompt iterated to the floor (2026-10-29, J-134)
+## Dependency-update posture adopted (2026-11-01, E-091, J-136 to J-138); the dry run is next, by the orchestrating session
+
+The posture is in: `docs/how/update-a-dependency.md` (the method for npm, PyPI, Maven Central jars, tarballs and images), `third_party/REVIEWED.md` (a row for each of the 90 pins, all "pinned before E-091, not yet reviewed by this posture"), the scan `dependency-review/dependency_scan.py` (`python3 -I -B dependency-review/dependency_scan.py OLD NEW --out OUT`, folders outside the repository), and the two read-only agents `.claude/agents/patch-reviewer.md` and `.claude/agents/reputation-checker.md`, each pinned by SHA-256 in `test/DependencyReviewTest.java`. No pin, hash, lockfile or allow-list was changed, no agent was run and no call was made. The dry run (one real update read by the whole method, started by the orchestrating session with the two agents) has not been done; it is the first test of the how-file's commands, which were written and not yet run on a real artifact. See `docs/FOR-GHOST.md` for what only Ghost can settle.
+
+## Then: 2.2n, the prompt iterated to the floor (2026-10-29, J-134)
 
 2.2m is done: all 30 labelled repositories judged live, the record committed under the prompt's hash (`agent-runner/records/5b05dcac...json`). No field is live yet: Ambition 21 of 30 (needs 24), Quality exactly 23 (needs 24), Quality within one 28 (needs 29), kind 22 (needs 27, under its constant answer of 23). A run cost $0.95; most of it is the few Opus calls. One answer was cut at the 8000-token output limit (the one partial). 2.2n revises the prompt one hashed version at a time, each run under caps.json, at most 3 iterations before Ghost is asked (caps.json); kind is the field furthest from the floor. The run: `gradle compileJava --offline`, then from `agent-runner/`, `python3 -B -m agent_runner.calibrate --corpus <checkouts outside the repository, one per id> --out ../build/<run> --live`. The checkouts are kept outside the repository between iterations and deleted when Ghost says 2.2n is done with them.
 

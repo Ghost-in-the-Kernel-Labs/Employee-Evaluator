@@ -1,4 +1,11 @@
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -10,11 +17,23 @@ import java.util.regex.Pattern;
  * Holds the dependency-update posture (E-091) to the repository. The record: every artifact the repository pins, whatever its
  * registry, has one row in `third_party/REVIEWED.md` naming the version or hash pinned and the last version reviewed, and no row
  * outlives its pin. A pin that changes therefore changes its row in the same commit, which is where a review leaves its record.
+ * The two agents (`.claude/agents/`, E-091): each file's SHA-256 is pinned here, its `tools:` line is checked as well, and no third file may be there.
  * The scan: `dependency-review/` is Python, standard library only, outside the Java module map as `agent-runner/` is; its tests
  * (synthetic packages made in a temporary folder) run here as `agent-runner/`'s do, and a failing one, or none found, fails the build.
  */
 // Decision: E-091
 final class DependencyReviewTest {
+    /**
+     * The two agent files, each pinned by the SHA-256 of its bytes, and the one `tools:` line each may have (its privileges). A file
+     * that changes fails the build until Ghost approves the change here; nothing else may be under `.claude/agents/` (E-091).
+     * patch-reviewer reads files and nothing else; reputation-checker has the web and nothing else, and never sees a file of the repository.
+     */
+    static final Map<String, String> AGENT_PINS = Map.of(
+            ".claude/agents/patch-reviewer.md", "5cb61c16cca054598a142e964d2ff0c5ebc7e4ad253875e074bd80264e2ca70a",
+            ".claude/agents/reputation-checker.md", "5949cef496dab20aadfdac534310891b499ce3996581566458ff43d10f45f747");
+    static final Map<String, String> AGENT_TOOLS = Map.of(
+            ".claude/agents/patch-reviewer.md", "tools: Read, Grep, Glob",
+            ".claude/agents/reputation-checker.md", "tools: WebSearch, WebFetch");
     static final String RECORD = "third_party/REVIEWED.md";
     /** How many hex digits of a hash or digest a row carries: enough to tell two pins apart, short enough to read. */
     static final int PREFIX = 12;
@@ -40,6 +59,13 @@ final class DependencyReviewTest {
         String row = "| pypi | pytest | 9.1.1 | not yet |\n";
         Check check = new Check("dependency review")
                 .repository(reviewed(record, pins))
+                .repository(agents(agentFiles(), AGENT_PINS, AGENT_TOOLS))
+                .rejects("an agent file that changed", () -> agents(Map.of("a.md", bytes("---\ntools: Read\n---\nx\n")), Map.of("a.md", sha(bytes("---\ntools: Read\n---\ny\n"))), Map.of("a.md", "tools: Read")))
+                .rejects("an agent file with a shell among its tools", () -> agents(Map.of("a.md", bytes("---\ntools: Read, Bash\n---\n")), Map.of("a.md", sha(bytes("---\ntools: Read, Bash\n---\n"))), Map.of("a.md", "tools: Read")))
+                .rejects("an agent file with no tools line", () -> agents(Map.of("a.md", bytes("---\nname: a\n---\n")), Map.of("a.md", sha(bytes("---\nname: a\n---\n"))), Map.of("a.md", "tools: Read")))
+                .rejects("an agent file that is gone", () -> agents(Map.of(), Map.of("a.md", "0"), Map.of("a.md", "tools: Read")))
+                .rejects("a third agent file", () -> agents(Map.of("a.md", bytes("---\ntools: Read\n---\n"), "b.md", bytes("x")), Map.of("a.md", sha(bytes("---\ntools: Read\n---\n"))), Map.of("a.md", "tools: Read")))
+                .accepts("the pinned file as it is", () -> agents(Map.of("a.md", bytes("---\ntools: Read\n---\n")), Map.of("a.md", sha(bytes("---\ntools: Read\n---\n"))), Map.of("a.md", "tools: Read")))
                 .rejects("a pin with no row", () -> reviewed("", new TreeSet<>(List.of("pypi | pytest | 9.1.1"))))
                 .rejects("a row whose pin is gone", () -> reviewed(row, new TreeSet<>()))
                 .rejects("a row for another version than the pin", () -> reviewed(row, new TreeSet<>(List.of("pypi | pytest | 9.2.0"))))
@@ -53,6 +79,48 @@ final class DependencyReviewTest {
             return check;
         }
         return check.repository(AgentRunnerTest.check(AgentRunnerTest.discover(Check.ROOT.resolve("dependency-review"))));
+    }
+
+    /** Each agent file with the pinned hash and exactly the one tools line, and no other file beside it. */
+    static List<String> agents(Map<String, byte[]> files, Map<String, String> pins, Map<String, String> tools) {
+        List<String> failures = new ArrayList<>();
+        pins.forEach((path, hash) -> {
+            byte[] bytes = files.get(path);
+            if (bytes == null) {
+                failures.add(path + " is missing: it is one of the two read-only agents (E-091)");
+                return;
+            }
+            if (!sha(bytes).equals(hash)) failures.add(path + " differs from its pinned SHA-256: its tools line is its privileges, so a change is Ghost's to approve (E-091)");
+            List<String> lines = new String(bytes, StandardCharsets.UTF_8).lines().filter(l -> l.startsWith("tools:")).toList();
+            if (!lines.equals(List.of(tools.get(path)))) failures.add(path + " has the tools line(s) " + lines + ", not exactly [" + tools.get(path) + "]");
+        });
+        files.keySet().stream().filter(path -> !pins.containsKey(path)).forEach(path -> failures.add(path + " is under .claude/agents/ and is not pinned: Ghost approved two agent files only (E-091)"));
+        return failures;
+    }
+
+    /** Every file under `.claude/agents/`, by path from the root, as bytes. */
+    private static Map<String, byte[]> agentFiles() {
+        Map<String, byte[]> files = new TreeMap<>();
+        Path dir = Check.ROOT.resolve(".claude/agents");
+        if (!Files.isDirectory(dir)) return files;
+        try (var list = Files.walk(dir)) {
+            for (Path p : list.filter(Files::isRegularFile).toList()) files.put(Check.ROOT.relativize(p).toString().replace('\\', '/'), Files.readAllBytes(p));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        return files;
+    }
+
+    private static byte[] bytes(String text) {
+        return text.getBytes(StandardCharsets.UTF_8);
+    }
+
+    private static String sha(byte[] bytes) {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /** Every pin of the repository as `registry | artifact | pinned`, from the files that hold them. */

@@ -3,6 +3,12 @@
 Not an agent's reading: `CLAUDE.md` routes nowhere here. An agent adds an item when it finds one, and
 says so to Ghost; Ghost removes it when settled.
 
+- **Dependency-update posture (E-091), to confirm:** (1) every one of the 90 pins is taken as the baseline of its next review and was not read
+  (`third_party/REVIEWED.md`): the first update of each is a diff from a pin nobody has read; say if you want a whole-package read of any, the Node and Maven
+  tarballs and the sandbox's npm tree first. (2) A PyPI file's uploader is not public, so layer 4 for a wheel is its attestation where one exists; a wheel
+  with none is taken on the cooldown, the audit and the review alone. (3) A jar has no install step; the control is the PGP signature compared with the
+  version before and the read of its sources jar. (4) The two agent files are pinned in `test/DependencyReviewTest.java`, not in a lock file: this repository has none, and
+  the brief allowed no other file under `.claude/`. (5) `apt-get` of git in the kernel's `Dockerfile` (below) is outside the method: no version is pinned to review.
 - **Supply chain (E-033), what only you can do:** branch protection on `main` (pull requests required,
   force-pushes blocked; this changes E-020's "a finished step lands on main at once", so decide how an
   agent's work lands), secret scanning and Dependabot alerts, passkey MFA on GitHub, fine-grained tokens

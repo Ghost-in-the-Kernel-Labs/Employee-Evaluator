@@ -1652,3 +1652,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** pins in a data file (refused: nowhere under `.claude/` to keep it, and a new top-level file for two hashes); pins in `SupplyChainTest` (refused: the file was the largest source file, and the posture's checks belong together); pins in `DependencyReviewTest`, with the `tools:` line checked as its own rule so a changed privilege reads as one in the failure message and a third agent file fails too (taken). `patch-reviewer` is the posture's text with the file names of a wheel and a jar added and `model: sonnet`; `reputation-checker` is new, `model: haiku`, `tools: WebSearch, WebFetch`, never shown the repository's files.
 - **Resolved:** `.claude/agents/patch-reviewer.md`, `.claude/agents/reputation-checker.md`; `DependencyReviewTest.agents` with six proofs (a changed file, a shell among the tools, no tools line, a missing file, a third file, the sound file); how-file sections saying how the orchestrating session starts each. Neither agent was run: no call was made.
 - **Touched:** .claude/agents/, test/DependencyReviewTest.java, docs/how/update-a-dependency.md, theGhost.md (E-091's Held by), docs/JOURNAL.md.
+
+### J-139 An intermittent pre-push failure, test unknown
+- **Who:** Claude Opus 5.5. **Class:** failure-missed.
+- **Intent:** Push the posture's three commits (E-091, J-136 to J-138).
+- **Found:** The first `scripts/prepush.sh` run failed one of 384 tests in the pinned image (`384 tests completed, 1 failed`); the script deletes its clone, so the report and the test's name were lost. Two more pre-push runs, one in-image `gradle test` and six in-image `gradle build` runs on clean clones all passed, and the local fast loop passed: one failure in ten runs. Unidentified, it is still a race by E-072.
+- **Options:** hold the push until it reproduces (refused: nine runs did not, and the gate passed on the commits pushed); push and record it (taken).
+- **Resolved:** pushed at 6f18f89 after a passing pre-push; HANDOFF says how to catch the test next time, and proposes `prepush.sh` printing failing test names.
+- **Touched:** docs/HANDOFF.md, docs/JOURNAL.md.

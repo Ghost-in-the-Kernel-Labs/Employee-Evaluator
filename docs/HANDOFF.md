@@ -74,6 +74,8 @@ reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushe
 
 ## A session's environment
 
+- **An unexplained failure (2026-11-01, J-139):** one `scripts/prepush.sh` run on the posture's commits (6f18f89) failed one test in the image; nine clean-clone runs after it passed, and the report went with the clone, so the test is not known. A test that fails once in ten is a race (E-072). If `prepush.sh` fails again, before rerunning keep the clone's `build/test-results/test/` (the script deletes it) and name the test. A next step for a tithe: have `prepush.sh` print each failing test's name before it deletes the clone.
+
 - `scripts/prepush.sh` needs Docker: start `dockerd` in the background before a push; it stops at the
   background time limit, so start it again when needed. The image builds on first use.
 - A cloud checkout may be shallow (`git rev-parse --is-shallow-repository`): `git fetch --unshallow origin

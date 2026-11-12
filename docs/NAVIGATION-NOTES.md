@@ -6,3 +6,8 @@ reads them for points agents converge on (`docs/how/navigation-review.md`), reco
 journal, and wipes the entries below this line; git keeps every past set.
 
 ---
+
+### 2026-11-12 · the token posture, steps 2 to 4, a navigation review and Pass 11 · strong tier (Claude Opus 5.5)
+- **Route:** CLAUDE.md -> do-a-todo-step.md -> docs/HANDOFF.md for the order; `scripts/Metrics.java` and `test/MetricsTest.java` for the shape of a measure and its check; Suite Builder's `scripts/score-items.mjs` and `score-tune.mjs` read for the posture's points.
+- **Complaints:** the posture's steps 2 to 4 are named only in HANDOFF.md and hand-out-a-task.md, never as a TODO item, so `gradle scoreItems` cannot place them. A shallow clone makes `gradle metrics` count the commits since the tithe from the clone's own start (6, where it was 9). The journal holds two entries headed J-140.
+- **Suggestions:** in agent-environment.md's tithe bullet: "a shallow clone counts the cadence short: `git fetch --depth=200 origin main` first". Work the handoff names as next goes into TODO.md as an item, so the scorer sees it.

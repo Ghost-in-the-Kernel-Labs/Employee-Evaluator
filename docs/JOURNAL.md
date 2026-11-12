@@ -1700,3 +1700,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** none open; no point needed a strong-tier read.
 - **Resolved:** commands.md's line; the notes wiped to their header.
 - **Touched:** docs/how/commands.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.
+
+### J-145 Tithe: Pass 11, after the token posture's steps 2 to 4
+- **Who:** Claude Opus 5.5. **Class:** measurement.
+- **Intent:** The tithe due at nine commits since Pass 10 (E-015): the metrics measured, the column added, what `gradle metrics` lists commented, a debrief written.
+- **Found:** Every held metric within its target: the fast loop 16 s warm (23, 17, 16 on three runs, none failed); 288 lines the largest file; 5 files a routing row opens; no function over 20 paths; no duplicate helper; nothing stale. Reported: the largest routing-row working set 51,175 tokens ("What to work on"), up from 49,522 at E-093 with the journal's and theGhost.md's new entries; docs lines per source line 0.39. Two functions of E-094's had no comment (`ScoreItems.Score.line`, `ScoreItemsTest.run`): commented. In a shallow clone the cadence reads 6, the clone's own start; the full history says 9.
+- **Options:** none.
+- **Resolved:** docs/AGENT.md's Pass 11 column; the two comments; the debrief in docs/NAVIGATION-NOTES.md.
+- **Touched:** docs/AGENT.md, scripts/ScoreItems.java, test/ScoreItemsTest.java, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md, docs/HANDOFF.md.

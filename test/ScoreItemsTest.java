@@ -12,6 +12,7 @@ final class ScoreItemsTest {
         run().exit();
     }
 
+    /** The repository's open items and log, and made-up items and logs that must be placed, read or refused as said. */
     static Check run() {
         return new Check("scoreItems")
                 .repository(everyOpenItem())

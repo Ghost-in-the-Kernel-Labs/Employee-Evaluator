@@ -53,6 +53,7 @@ final class ScoreItems {
 
     /** One item scored: its id and title, points (null: unplaced), tier, and the parts that made the points. */
     record Score(String id, String title, Integer points, String tier, List<String> parts, Facts facts) {
+        /** Two lines for the report: id, points, tier and title; then what made the points and the files and layers read. */
         String line() {
             String why = points == null ? "names no file or layer: unplaced" : parts.isEmpty() ? "under a point" : String.join("; ", parts);
             String read = (facts.files().isEmpty() ? "" : "; files: " + String.join(", ", facts.files())) + (facts.layers().isEmpty() ? "" : "; layers: " + String.join(", ", facts.layers()));

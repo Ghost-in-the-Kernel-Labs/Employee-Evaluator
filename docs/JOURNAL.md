@@ -1684,3 +1684,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** Suite Builder's points unchanged (taken: the two projects compare); a layer read from its bare word (refused: "score" and "history" are ordinary words here); a named layer placing an item without a file (taken, Ghost to confirm).
 - **Resolved:** E-094; `gradle scoreItems`; `test/ScoreItemsTest.java` in DocTests; `docs/how/hand-out-a-task.md` says what is built and that the worker log (step 4) is not.
 - **Touched:** scripts/ScoreItems.java, build.gradle, test/ScoreItemsTest.java, test/DocTests.java, docs/how/hand-out-a-task.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.
+
+### J-143 The token posture, step 4: the worker log, read back
+- **Who:** Claude Opus 5.5. **Class:** decision.
+- **Intent:** Keep each worker's tokens and tool calls beside its item's placement, and read them back to tune E-094's points (E-095).
+- **Found:** `List.of(...).contains(null)` throws where a line has no tier: the first run of the refusal check failed on it, and the check reads the type first now.
+- **Options:** the log under `docs/` (taken: it is a record, kept with the journal); under `test/trials/` as Suite Builder keeps it (refused: this repository has no such folder). Suite Builder's fields and its quarter of the tool calls (taken, Ghost to confirm).
+- **Resolved:** E-095; `docs/WORKERS.jsonl` (empty: no worker has handed back since the posture); `gradle scoreItems --args=--tune`; `test/ScoreItemsTest.java`; the how-file's "Measuring it". The token posture's four steps are built.
+- **Touched:** scripts/WorkerLog.java, scripts/ScoreItems.java, docs/WORKERS.jsonl, test/ScoreItemsTest.java, docs/how/hand-out-a-task.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.

@@ -57,6 +57,8 @@ the diff, not the transcript. A report that will not fit a page means the task w
 Built: each task row's working set in tokens (`gradle metrics`, E-093), and a placement for each open item (`gradle scoreItems`,
 E-094): its points from the files and layers it names, a contract and a mechanical pass line, its tier from them, and the strong
 tier for anything waiting on Ghost. An item it leaves unplaced (no file or layer named) is scored by a mid-tier agent, who writes
-the facts used into the item so the script places it next time. Not built: the worker log (posture step 4). Each worker's report
-gives its tokens and tool calls; kept per item beside the placement, they show whether tasks are placed well: an item that
-escalated was placed too low, one far under its limits might go a tier down.
+the facts used into the item so the script places it next time. And the worker log (E-095): when a worker hands back, the
+coordinator adds one line to `docs/WORKERS.jsonl` from its report (`item`, `score`, `tier`, `kind` work, review or score,
+`tokens`, `toolCalls`, `escalated`, `date`, `source`); `gradle scoreItems --args=--tune` reads it: the cost by tier, each worker
+that escalated below the strong tier (its item scored too low), each mid-tier worker done within a quarter of its tool calls
+(it might go a tier lower), and what grading cost against the work it graded.

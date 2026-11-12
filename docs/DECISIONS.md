@@ -101,3 +101,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-092 | A task goes to the cheapest tier the gate can check; models are named in one table, tiers everywhere else | in force | agents |
 | E-093 | A routing row's working set is the tokens of the files it opens, at four characters a token, reported and not yet held | in force | agents |
 | E-094 | Each open item is scored from its own text and placed in a tier by script; one naming nothing is unplaced | in force | agents |
+| E-095 | Each worker's cost is logged beside its item's placement, and read back to tune the placement | in force | agents |

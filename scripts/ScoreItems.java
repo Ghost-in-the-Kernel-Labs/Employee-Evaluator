@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  * does not wait is unplaced: a mid-tier agent scores it and writes the facts it used.
  *
  *   gradle scoreItems                   every open item: id, points, tier, title, then the facts
+ *   gradle scoreItems --args=--tune     what the workers cost against their placements (WorkerLog, E-095)
  * Ported from Suite Builder's scripts/score-items.mjs (its G-357).
  */
 final class ScoreItems {
@@ -40,6 +41,10 @@ final class ScoreItems {
     private static final Pattern WAITS = Pattern.compile("\\bwaits? on\\b|\\bGhost'?s? (word|answer|approval|call)\\b|\\bopen question\\b|\\bGhost (decides|rules)\\b", Pattern.CASE_INSENSITIVE);
 
     public static void main(String[] args) {
+        if (List.of(args).contains("--tune")) {
+            WorkerLog.report(WorkerLog.parse(Repo.read(WorkerLog.PATH))).forEach(System.out::println);
+            return;
+        }
         for (Score s : score(Repo.read("TODO.md"), layers(Repo.read("docs/modules.json")))) System.out.println(s.line());
     }
 

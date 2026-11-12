@@ -1530,3 +1530,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-092, E-093
+
+### E-095: Each worker's cost is logged beside its item's placement, and read back to tune the placement
+- **Decision:** The token posture's step 4 (E-092): when a worker hands back, the coordinator adds one JSON line to `docs/WORKERS.jsonl` from the worker's report: `item`, `score` (its points from `gradle scoreItems`, or null when unplaced), `tier`, `kind` (work, review or score), `tokens`, `toolCalls`, `escalated` (true, false, or absent when not known), `date` and `source`. `gradle scoreItems --args=--tune` (`scripts/WorkerLog.java`) reads it and says the cost by tier and kind (the medians), each worker that escalated below the strong tier (its item scored too low), each mid-tier worker that finished, not escalated, within a quarter of its 120 tool calls (it might go a tier lower), and what reviews cost against the work they graded. A line missing its kind, tier, tokens or tool calls is refused, naming its line. The log holds numbers only: no transcript, no submission (E-014).
+- **Why:** A placement is a guess until it is checked against what the work cost; the log is how E-094's points get tuned, by Ghost, from evidence. Suite Builder's record (its G-357) has the same fields, so the two projects' numbers compare.
+- **Held by:** `scripts/WorkerLog.java`; `test/ScoreItemsTest.java` (the report of a made-up log: an escalation, a worker far under its limit, a review's cost; a line refused for its missing tier or for not being JSON; the repository's log reads); `docs/how/hand-out-a-task.md` ("Measuring it").
+- **Source:** Ghost's token posture (E-092, its steps in docs/HANDOFF.md) and Suite Builder's record. The file's place, the quarter and the fields taken unchanged are the agent's (Claude Opus 5.5), for Ghost to confirm.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-092, E-094

@@ -53,7 +53,9 @@ The scores that need your judgment:
 
 - `scores.quality` (0 to 100) and the top-level `quality` (1 to 5): the review of correctness, tests, error handling and idiom, from
   the sampled files. Credit a test only if a test file or a test folder is listed; a README or an instruction file that names
-  tests does not make them exist.
+  tests does not make them exist. Quality 3 of 5 is working code that does what its README says, with the care of a
+  practised author, even where tests are few; 2 is code you can point to as broken, unfinished or careless in the sampled
+  files. Do not take 2 for an absence of tests alone.
 - `scores.complexity` (0 to 100): the difficulty of the problem actually solved, not the size of the code. A short file can hold a hard
   piece (a protocol, an encoding, a signature, a concurrency rule, byte-exact semantics) and a long one can hold nothing hard.
   Do not call a system "just another X" without naming what in it is hard.
@@ -112,7 +114,8 @@ not more navigable for being small, and a large one is not less navigable for be
 
 ## Evidence
 
-Every score, and the tier, has at least one piece of evidence. Each piece is a path that the summary itself labels or lists (a
+Every score, and the tier, has at least one piece of evidence, and at most three, each under 200 characters: the answer
+has a length limit, and an answer cut short counts as none. Each piece is a path that the summary itself labels or lists (a
 fence's `label=` path, or a path in `Folders`, `Commit log` or `Facts`), or a short quotation from a fenced text of the
 summary. Cite only what the summary shows; a path you cannot find in it must not appear. Give the evidence that decided the
 score, not the evidence that is merely there. Confidence is a number from 0 to 1: how sure you are given what the summary cut

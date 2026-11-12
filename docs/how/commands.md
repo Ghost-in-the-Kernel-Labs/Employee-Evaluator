@@ -1,6 +1,9 @@
 # Commands, and how to read a long run
 
 - **The fast loop:** `gradle test --offline` (JDK 21, Gradle 8.14.3), doc and unit tests, under 20 s warm.
+- **The document tests alone:** `gradle test --tests DocTests --offline` (about 10 s, against 2 to 3 minutes for the whole
+  suite) runs every check on the documents: CLAUDE.md's paths, the metrics, TODO.md, the journal, the decisions. Run it
+  after editing a document, before the full loop.
 - **Before a push:** `scripts/prepush.sh` runs the fast loop on a clean clone in the pinned image
   (`Dockerfile`, AGT-01). It refuses a stale kernel map, a push past sixteen commits without a tithe, and one
   past twenty without a navigation review. It needs a Docker daemon: in a cloud session start `dockerd` in

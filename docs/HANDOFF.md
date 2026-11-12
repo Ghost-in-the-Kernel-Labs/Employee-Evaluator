@@ -2,7 +2,7 @@
 
 ## Token posture, step 1 adopted (2026-11-01, E-092, J-140); steps 2 to 4 are next
 
-Done: tiers (small, mid, strong), the one tier-to-model table, the countable stop limits (tool calls small 40, mid 120), the brief, the report and the coordinator's rules, all in `docs/how/hand-out-a-task.md`, held by `test/TierNamesTest.java` (no model family name in `CLAUDE.md` or `docs/how/` outside that file and three exempt files). Step 2 done (2026-11-12, E-093, J-141): `gradle metrics` gives each routing row's working set in tokens (`Metrics.workingSets`); the largest, 49,522 for "What to work on", is reported, its budget Ghost's to set. Step 3 done (2026-11-12, E-094, J-142): `gradle scoreItems` places each open item; fifteen of eighteen name no file or layer and are unplaced. Step 4 done (2026-11-12, E-095, J-143): the worker log `docs/WORKERS.jsonl`, read by `gradle scoreItems --args=--tune`; the coordinator adds a line when a worker hands back. **Next, in order:** the navigation review, the dependency dry run (below), and 2.2n. To confirm for Ghost: the navigation review's open questions go to the strong tier (Opus) where they went to Fable; the exemptions; `.claude/agents/*.md` still say `model: sonnet` and `model: haiku` (pinned, so changed only by Ghost).
+Done: tiers (small, mid, strong), the one tier-to-model table, the countable stop limits (tool calls small 40, mid 120), the brief, the report and the coordinator's rules, all in `docs/how/hand-out-a-task.md`, held by `test/TierNamesTest.java` (no model family name in `CLAUDE.md` or `docs/how/` outside that file and three exempt files). Step 2 done (2026-11-12, E-093, J-141): `gradle metrics` gives each routing row's working set in tokens (`Metrics.workingSets`); the largest, 49,522 for "What to work on", is reported, its budget Ghost's to set. Step 3 done (2026-11-12, E-094, J-142): `gradle scoreItems` places each open item; fifteen of eighteen name no file or layer and are unplaced. Step 4 done (2026-11-12, E-095, J-143): the worker log `docs/WORKERS.jsonl`, read by `gradle scoreItems --args=--tune`; the coordinator adds a line when a worker hands back. The navigation review is done (J-144). **Next, in order:** the tithe (Pass 11, due), the dependency dry run (below), and 2.2n. To confirm for Ghost: the navigation review's open questions go to the strong tier (Opus) where they went to Fable; the exemptions; `.claude/agents/*.md` still say `model: sonnet` and `model: haiku` (pinned, so changed only by Ghost).
 
 ## Dependency-update posture adopted (2026-11-01, E-091, J-136 to J-138); the dry run is next, by the orchestrating session
 
@@ -74,7 +74,7 @@ AI is not possible from history or from correct code; do not promise it.
 
 Each task goes to a fresh Claude Sonnet agent in its own git worktree (E-068); the session that hands it out
 reviews its diff, runs the tests and `scripts/prepush.sh`, then merges and pushes. In a worktree,
-`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review was J-126; nine commits have passed since it (this tithe included) and the next is due in about one. The tithe is done (Pass 10, J-135), the next in about eight.
+`MainTest.thisRepositorysCard` fails by design (`.git` is a file there). The last navigation review is J-144 (2026-11-12), the next due in about ten commits. The last tithe is Pass 10 (J-135); nine commits have passed since it, so the next tithe (Pass 11) is due now.
 
 ## A session's environment
 

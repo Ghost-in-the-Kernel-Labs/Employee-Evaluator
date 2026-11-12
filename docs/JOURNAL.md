@@ -1692,3 +1692,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the log under `docs/` (taken: it is a record, kept with the journal); under `test/trials/` as Suite Builder keeps it (refused: this repository has no such folder). Suite Builder's fields and its quarter of the tool calls (taken, Ghost to confirm).
 - **Resolved:** E-095; `docs/WORKERS.jsonl` (empty: no worker has handed back since the posture); `gradle scoreItems --args=--tune`; `test/ScoreItemsTest.java`; the how-file's "Measuring it". The token posture's four steps are built.
 - **Touched:** scripts/WorkerLog.java, scripts/ScoreItems.java, docs/WORKERS.jsonl, test/ScoreItemsTest.java, docs/how/hand-out-a-task.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.
+
+### J-144 Navigation review: six debriefs read; one shared complaint fixed, one already fixed
+- **Who:** Claude Opus 5.5. **Class:** measurement.
+- **Intent:** The navigation review due since J-126 (E-068): read docs/NAVIGATION-NOTES.md's six entries (2026-10-29 to 2026-11-01), act on what two or more ran into.
+- **Found:** Two points converged. (1) The tree-sitter binding's facts a language reader needs (the parse fed real bytes on a copy; a named child may be a comment): the emoji crash and the import-braces crash, two entries; already fixed in d78804f (add-a-language-adapter.md, step 2). (2) A document test seen only after a full 2 to 3 minute `gradle test`: the import-braces and the dependency-posture entries; valid, `gradle test --tests DocTests --offline` reruns every document test in about 10 s (measured), now in commands.md. Single, noted, not acted on: running one Python test file and cleaning a child's environment in judge-harness.md; the mutation run's clone-and-copy steps; Javadoc not counting as a test's comment; HANDOFF.md's older "Start here" sections; where a Python tool outside the module map may live; how a new `test/` class is wired into DocTests.java; a template example of a partial supersession.
+- **Options:** none open; no point needed a strong-tier read.
+- **Resolved:** commands.md's line; the notes wiped to their header.
+- **Touched:** docs/how/commands.md, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md.

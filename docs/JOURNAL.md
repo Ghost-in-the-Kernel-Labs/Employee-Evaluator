@@ -1708,3 +1708,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** none.
 - **Resolved:** docs/AGENT.md's Pass 11 column; the two comments; the debrief in docs/NAVIGATION-NOTES.md.
 - **Touched:** docs/AGENT.md, scripts/ScoreItems.java, test/ScoreItemsTest.java, docs/NAVIGATION-NOTES.md, docs/JOURNAL.md, docs/HANDOFF.md.
+
+### J-146 The dependency posture's dry run: pluggy 1.6.0 to 1.7.0, read by all eight layers, sent to Ghost
+- **Who:** Claude Opus 5.5. **Class:** trial.
+- **Intent:** The first real update read by docs/how/update-a-dependency.md (E-091), its commands run as written, by the orchestrating session with the two read-only agents.
+- **Found:** Every command ran as written except two gaps: a wheel's dist-info folder is named by version, so the scan shows its METADATA as added whole (Requires-Python moved there, from >=3.9 to >=3.10); GitHub's API refuses this cloud session, so the release notes came from the changelog at the tag on raw.githubusercontent.com. Layers: cooldown 28 days; a wheel; OSV none; provenance the same repository and owners but a publishing workflow renamed main.yml to deploy.yml, unexplained in public; scan 0 hits; patch-reviewer SAFE (75,472 tokens, 9 tool calls); reputation-checker CONCERN, functional only (pytest-dev/pluggy#794; 35,364 tokens, 21 tool calls).
+- **Options:** apply it as routine (refused: a provenance change and a CONCERN go to Ghost by the rules); report it to the registry (refused: nothing is UNSAFE).
+- **Resolved:** not applied; the pin stays 1.6.0 and its row unchanged; the review's line in third_party/REVIEWED.md; the question in docs/FOR-GHOST.md; the two gaps written into the how-file (Step 1, Step 3's brief); the two workers in docs/WORKERS.jsonl, the log's first lines.
+- **Touched:** third_party/REVIEWED.md, docs/FOR-GHOST.md, docs/how/update-a-dependency.md, docs/WORKERS.jsonl, docs/JOURNAL.md, docs/HANDOFF.md.

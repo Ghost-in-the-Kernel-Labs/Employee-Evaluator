@@ -113,7 +113,8 @@ reviewed by this posture": the pin is taken as the baseline of the next review, 
 
 One line per update, newest last: the artifact, the range read (last reviewed to new), the reviewer's
 verdict and where its evidence is (the commit), the reputation check's report, each layer's result, and
-whether the update went in automatically or which question Ghost answered and how. None yet.
+whether the update went in automatically or which question Ghost answered and how.
 
 | Date | Artifact | Range read | Verdict | Reputation | Layers | Decision |
 | --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-12 | pypi pluggy | 1.6.0 to 1.7.0 (the dry run, J-146) | SAFE (patch-reviewer; its report in the commit that records this line) | CONCERN, functional only: 1.7.0 refuses a hookspec marker on a class, which broke scancode-toolkit (pytest-dev/pluggy#794, closed by a maintainer as a bug fixed); no security report found | 1 cooldown: 28 days, pass; 2 install: a wheel, pass; 3 OSV: none, pass; 4 provenance: same repository and owners, built from tag 1.7.0, but the publishing workflow is deploy.yml where 1.6.0's was main.yml, unexplained in public; 5 scan: 0 hits; 6 SAFE; 7 CONCERN | To Ghost (docs/FOR-GHOST.md): a changed workflow and a reputation CONCERN; not applied, the pin stays 1.6.0 |

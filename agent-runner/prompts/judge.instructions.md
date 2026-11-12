@@ -53,9 +53,11 @@ The scores that need your judgment:
 
 - `scores.quality` (0 to 100) and the top-level `quality` (1 to 5): the review of correctness, tests, error handling and idiom, from
   the sampled files. Credit a test only if a test file or a test folder is listed; a README or an instruction file that names
-  tests does not make them exist. Quality 3 of 5 is working code that does what its README says, with the care of a
-  practised author, even where tests are few; 2 is code you can point to as broken, unfinished or careless in the sampled
-  files. Do not take 2 for an absence of tests alone.
+  tests does not make them exist. The 1 to 5 ladder: 1, code that does not run as given or is
+  mostly placeholders, stubs or a broken copy; 2, code you can point to as broken, unfinished or careless in the sampled
+  files; 3, working code that does what its README says, with the care of a practised author, even where tests are few;
+  4, working code with tests over its main paths and a structure a reader can follow; 5, code whose own automated checks (a
+  suite, a gate, mutation or conformance tests) hold most of it. Do not take 2 for an absence of tests alone.
 - `scores.complexity` (0 to 100): the difficulty of the problem actually solved, not the size of the code. A short file can hold a hard
   piece (a protocol, an encoding, a signature, a concurrency rule, byte-exact semantics) and a long one can hold nothing hard.
   Do not call a system "just another X" without naming what in it is hard.

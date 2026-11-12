@@ -75,7 +75,7 @@
       "properties": {
         "tier": {
           "type": "string",
-          "description": "toy: a small exercise or demonstration. utility: a tool that does one useful job. product: a complete thing for people other than its author, shipped as such (installed, deployed or released with what its users need); a single-purpose tool, bot, script or library that does one job is a utility, however polished. research: an attempt at something not yet known to work.",
+          "description": "toy: a small exercise, demonstration, sample or template, or a project whose own working code is a few hundred lines. utility: a tool that does one useful job. product: a complete thing a person other than its author can pick up and use: an application, a game, an instrument or a device, a site or a service; a single-purpose tool, bot, script or library that does one job for a developer is a utility, however polished. research: an attempt at something not yet known to work.",
           "enum": ["toy", "utility", "product", "research"]
         },
         "confidence": {"type": "number", "description": "How sure the judge is of the tier, 0 to 1.", "minimum": 0, "maximum": 1},

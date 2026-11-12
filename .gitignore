@@ -26,3 +26,6 @@ runs/
 
 # the sandbox image's fetched pieces, each checked by hash (sandbox/prefetch.sh, E-041)
 sandbox/cache/
+
+# A worker agent's git worktree (docs/how/hand-out-a-task.md): another checkout of this repository, never part of it
+.claude/worktrees/

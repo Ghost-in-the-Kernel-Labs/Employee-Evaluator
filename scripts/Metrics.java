@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,7 @@ final class Metrics {
         metrics.put("Fast loop (s)", time ? fastLoop() : "not timed (--time)");
         metrics.put("Largest source file (lines)", largest(java));
         metrics.put("Files a routing row opens", routing(Repo.read("CLAUDE.md")));
+        metrics.put("Largest routing-row working set (tokens)", largestWorkingSet(workingSets(Repo.read("CLAUDE.md"))));
         metrics.put("Functions over 20 paths", String.valueOf(functions.stream().filter(f -> f.paths() > 20).count()));
         metrics.put("Duplicate helpers (same body, two names)", String.valueOf(duplicates(functions)));
         metrics.put("Decisions without `See also`", withoutSeeAlso(Repo.read("theGhost.md")));
@@ -80,6 +82,55 @@ final class Metrics {
             }
         }
         return most + (which.isEmpty() ? "" : " (" + which + ")");
+    }
+
+    /** Characters a token, as an estimate (E-093): code and these documents run about four; a tokenizer is no dependency worth taking. */
+    static final int CHARS_PER_TOKEN = 4;
+
+    /**
+     * Each routing row of CLAUDE.md, by its task, and the tokens of the files it opens (token posture, step 2; E-093): every
+     * file its instructions cell names, and for a workpath's instructions (`docs/how/`) every file its "Start here" list names
+     * too, each file once. A folder, or a path that is no file, costs nothing here: it is opened only where the code points.
+     */
+    static Map<String, Integer> workingSets(String claude) {
+        Map<String, Integer> sets = new LinkedHashMap<>();
+        for (String line : claude.split("\n")) {
+            String[] cells = line.split("\\|");
+            if (cells.length < 3 || line.startsWith("| Task") || line.startsWith("| ---")) continue;
+            Set<String> opened = new LinkedHashSet<>(namedFiles(cells[2]));
+            for (String path : List.copyOf(opened)) {
+                if (path.startsWith("docs/how/")) opened.addAll(namedFiles(startHereList(Repo.read(path))));
+            }
+            int tokens = 0;
+            for (String path : opened) tokens += (Repo.read(path).length() + CHARS_PER_TOKEN - 1) / CHARS_PER_TOKEN;
+            sets.put(cells[1].trim(), tokens);
+        }
+        return sets;
+    }
+
+    /** The largest working set and its row, or 0 when CLAUDE.md has no routing row. */
+    static String largestWorkingSet(Map<String, Integer> sets) {
+        return sets.entrySet().stream().max(Map.Entry.comparingByValue())
+                .map(e -> e.getValue() + " (" + e.getKey() + ")").orElse("0");
+    }
+
+    /** The paths in backquotes that are files of this repository, in order (`docs/how/x.md`, never `gradle test`). */
+    private static List<String> namedFiles(String text) {
+        List<String> files = new ArrayList<>();
+        Matcher code = CODE.matcher(text);
+        while (code.find()) {
+            String path = code.group(1).trim();
+            if (!path.contains(" ") && Files.isRegularFile(Repo.ROOT.resolve(path))) files.add(path);
+        }
+        return files;
+    }
+
+    /** An instructions file's "Start here" list as written, or nothing when it has none. */
+    private static String startHereList(String how) {
+        int start = how.indexOf("**Start here:**");
+        if (start < 0) return "";
+        int end = how.indexOf("\n\n", start);
+        return how.substring(start, end < 0 ? how.length() : end);
     }
 
     /** The files an instructions file's "Start here" list opens: one per bullet. */

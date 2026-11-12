@@ -99,3 +99,4 @@ Find the decision here, then read its entry in `theGhost.md` by number
 | E-090 | A GitHub token is optional | in force | github |
 | E-091 | A dependency update is read before it comes in; a routine one that passes every layer is taken without asking Ghost | in force | security |
 | E-092 | A task goes to the cheapest tier the gate can check; models are named in one table, tiers everywhere else | in force | agents |
+| E-093 | A routing row's working set is the tokens of the files it opens, at four characters a token, reported and not yet held | in force | agents |

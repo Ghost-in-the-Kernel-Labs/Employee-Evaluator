@@ -1512,3 +1512,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-003, E-060, E-064, E-065, E-068, E-091
+
+### E-093: A routing row's working set is the tokens of the files it opens, at four characters a token, reported and not yet held
+- **Decision:** The token posture's step 2 (E-092): `gradle metrics` measures each routing row of CLAUDE.md by the tokens of the files it opens: every file its instructions cell names in backquotes, and for a workpath's instructions (`docs/how/`) every file that file's "Start here" list names, each file once; a folder, a command or a path that is no file costs nothing. Tokens are estimated at four characters each (`Metrics.CHARS_PER_TOKEN`), with no tokenizer. The largest set and its row are a metric of docs/AGENT.md, "Largest routing-row working set (tokens)", reported and not held: its budget is Ghost's to set. `Metrics.workingSets` gives every row's number, for step 3's scoring script to read.
+- **Why:** A task's first cost is what its row makes an agent open before it reads where the code points; the file count (E-063) says how many, not how much. Four characters a token is close for this repository's English and Java and needs no dependency (E-091 would read one). A target set before the first measure would be a guess; the first pass measured 49,522 tokens for "What to work on", which opens TODO.md, theGhost.md and docs/DESIGN.md whole.
+- **Held by:** `scripts/Metrics.java` (`workingSets`, `largestWorkingSet`); `test/MetricsTest.java` (a row naming a file twice, a command and a missing path costs the file once); docs/AGENT.md's metrics table.
+- **Source:** Ghost's token posture (E-092, its next steps in docs/HANDOFF.md). What a row's files are, the four characters and reporting the metric without a target are the agent's (Claude Opus 5.5), for Ghost to confirm.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-015, E-063, E-092

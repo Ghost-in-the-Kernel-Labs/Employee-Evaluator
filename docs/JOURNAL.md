@@ -1668,3 +1668,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** the three product/posture files exempt as whole files, written in the test and the how-file (taken); rewording them (refused: the ids are the product's settings, and a reword would blur which is which). `.claude/agents/` untouched (taken; the test does not read it). A routing row in CLAUDE.md (refused: no row fits, the two pointer lines under "When it happens" carry it, and the mandatory context stays small). The navigation review's open questions now go to the strong tier, whose table entry is Opus, where they went to Fable: Ghost to confirm.
 - **Resolved:** E-092; `docs/how/hand-out-a-task.md`; `test/TierNamesTest.java` (with six proofs); `escalate-to-opus.md`, `debrief-after-a-task.md`, `navigation-review.md` and two CLAUDE.md lines worded by tier; `gradle decisionsDoc`.
 - **Touched:** E-092, E-060, E-064, E-068 (statuses), CLAUDE.md, docs/how/, test/, docs/HANDOFF.md, docs/NAVIGATION-NOTES.md.
+
+### J-141 The token posture, step 2: each routing row's working set in tokens
+- **Who:** Claude Opus 5.5. **Class:** measurement.
+- **Intent:** Measure each task row of CLAUDE.md by the tokens of the files it opens (E-093), so step 3's script can score the roadmap from it.
+- **Found:** "What to work on; a decision; a plan; finishing a step" opens 49,522 tokens: TODO.md, docs/DESIGN.md and theGhost.md whole, through do-a-todo-step.md's "Start here". The journal holds two entries headed J-140 (the failure-missed one and the posture's); left as they are, said here.
+- **Options:** a target now (refused: a guess before a first measure; Ghost's to set); a tokenizer (refused: a dependency for an estimate); four characters a token (taken).
+- **Resolved:** E-093; `Metrics.workingSets` and the metric "Largest routing-row working set (tokens)", reported not held; `MetricsTest` holds a row's count.
+- **Touched:** scripts/Metrics.java, test/MetricsTest.java, docs/AGENT.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.

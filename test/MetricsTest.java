@@ -45,7 +45,22 @@ final class MetricsTest {
                 .accepts("sixteen commits since the last tithe", () -> TitheGate.check(history(16)))
                 .accepts("a young history with no tithe yet", () -> TitheGate.check(history(5).subList(0, 5)))
                 .rejects("twenty-one commits since the last navigation review", () -> TitheGate.check(reviewed(21)))
-                .accepts("twenty commits since the last navigation review", () -> TitheGate.check(reviewed(20)));
+                .accepts("twenty commits since the last navigation review", () -> TitheGate.check(reviewed(20)))
+                .accepts("a routing row's working set: each file it names once, a command or a missing path nothing", MetricsTest::workingSet)
+                .rejects("a working set that counts a file twice", () -> sameTokens(2));
+    }
+
+    /** A row naming CLAUDE.md twice, a command and a path that is no file costs CLAUDE.md's tokens once (token posture step 2, E-093). */
+    private static List<String> workingSet() {
+        return sameTokens(1);
+    }
+
+    /** The row's measured tokens against `times` CLAUDE.md's, at four characters a token. */
+    private static List<String> sameTokens(int times) {
+        String row = "| Task | Instructions |\n| --- | --- |\n| A task | `CLAUDE.md`, `gradle test`, `CLAUDE.md`, `no/such/file.md` |\n";
+        int expected = times * ((Check.read("CLAUDE.md").length() + Metrics.CHARS_PER_TOKEN - 1) / Metrics.CHARS_PER_TOKEN);
+        int measured = Metrics.workingSets(row).getOrDefault("A task", -1);
+        return measured == expected ? List.of() : List.of("A task: " + measured + " tokens, not " + expected);
     }
 
     /** Subjects newest first: a tithe, n - 1 ordinary commits, then a navigation review, so only the review's count varies. */

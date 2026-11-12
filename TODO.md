@@ -25,31 +25,31 @@ budget. Cost: needs a cost cap (each iteration repeats 2.2m's run).
 
 ### 2.3 Ambition judge
 
-Check: the Ambition facts on the calibration set, within the recorded agreement.
+Check: the Ambition facts on the calibration set, within the recorded agreement. Touches: `agent-runner/` and `ingest/` (`agent-runner/agent_runner/judge.py`, `ingest/evaluator/ingest/JudgedRules.java`).
 
 ### 2.4 Quality judge
 
 Check: the agent review of sampled modules combined with 1.5's facts into the Quality metric; the
-calibration set holds.
+calibration set holds. Touches: `agent-runner/`, `score/` and `analyze/` (`agent-runner/agent_runner/judge.py`, `score/evaluator/score/Formulas.java`, whose Quality formula takes the tools' half).
 
 ### 2.5 Navigability task
 
 Check: a fresh agent in the sandbox given a fixture and a small change request; tool calls, tokens
-and whether the repo's tests pass become the Navigability facts; the checklist of 1.8 retired.
+and whether the repo's tests pass become the Navigability facts; the checklist of 1.8 retired. Touches: `analyze/` and `agent-runner/` (`analyze/evaluator/analyze/Navigability.java`, the checklist it retires, and `analyze/evaluator/analyze/Sandbox.java`).
 
 ### 2.6 Peer corpus store
 
 Check: cards keyed by tooling bucket in SQLite; percentiles appear only once a bucket holds 200;
-Quality per thousand lines ranked only within its size band (SC-10).
+Quality per thousand lines ranked only within its size band (SC-10). Touches: `score/` (`score/evaluator/score/Buckets.java`, the bucket the store is keyed by).
 
 ### 2.7 Job queue and sandbox fleet
 
 Check: a submission runs as one isolated job with a timeout and a cost cap; cost per evaluation is
-recorded on every job; the sandbox reaches nothing but GitHub.
+recorded on every job; the sandbox reaches nothing but GitHub. Touches: `agent-runner/` and `sandbox/` (`agent-runner/caps.json`, `analyze/evaluator/analyze/Sandbox.java`).
 
 ### 2.8 Review renderer
 
-Check: the agent's prose and the card into the employer-facing review, each paragraph citing its facts.
+Check: the agent's prose and the card into the employer-facing review, each paragraph citing its facts. Touches: `score/` and `agent-runner/` (`score/evaluator/score/CardMarkdown.java`).
 
 ### 2.9 Tithe pass: the phase-2 boundary
 
@@ -63,21 +63,21 @@ Check: a Next.js frontend in `web/` talking to the Java API, with the score-card
 
 ### 3.2 GitHub App and sign-in
 
-Check: applicant and employer roles; an employer verified by company email domain.
+Check: applicant and employer roles; an employer verified by company email domain. Touches: `github/` (`github/evaluator/github/GitHubApi.java`).
 
 ### 3.3 Submission flow
 
 Check: pick a repository the account owns, grant read access, enqueue, see status; the admission gate
 (E-056, SC-11): evidence of AI assistance admits, none asks the applicant for their tooling and a judge
-decides, hand-written or generated wholesale is declined with its message and no card.
+decides, hand-written or generated wholesale is declined with its message and no card. Touches: `github/` and `score/` (`github/evaluator/github/GitHubApi.java`, `score/evaluator/score/Declined.java`).
 
 ### 3.4 Applicant's card page
 
-Check: all seven metrics, the review, the tier, and exactly what the board shows.
+Check: all seven metrics, the review, the tier, and exactly what the board shows. Touches: `score/` and `rubric/` (`score/evaluator/score/CardJson.java`, `rubric/evaluator/rubric/ScoreCard.java`).
 
 ### 3.5 Employer board
 
-Check: anonymized cards; filter by language, bucket, category; sort by any metric or ratio.
+Check: anonymized cards; filter by language, bucket, category; sort by any metric or ratio. Touches: `score/` (`score/evaluator/score/Buckets.java`, `rubric/evaluator/rubric/Ratios.java`).
 
 ### 3.6 Unlock flow
 
@@ -89,8 +89,9 @@ Check: advanced, declined or hired marked; an overdue unlock suspends the board;
 
 ### 3.8 Admin
 
-Check: corpus health per bucket, cost per evaluation, calibration drift.
+Check: corpus health per bucket, cost per evaluation, calibration drift. Touches: `agent-runner/`, `score/` and `rubric/` (`agent-runner/caps.json`, `score/evaluator/score/Buckets.java`, `rubric/evaluator/rubric/Calibration.java`).
 
 ### 3.9 Tithe pass: the phase-3 boundary
 
 Check: the metrics hold across all three packages.
+ Touches: `docs/AGENT.md`, where the tithe pass is kept.

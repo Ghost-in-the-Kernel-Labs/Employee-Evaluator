@@ -97,6 +97,13 @@ tasks.register('metrics', JavaExec) {
     systemProperty 'evaluator.root', rootDir.absolutePath
 }
 
+tasks.register('scoreItems', JavaExec) {
+    description = 'Scores each open TODO.md item from facts, with no model, and places it in a tier (token posture step 3, E-094).'
+    classpath = sourceSets.scripts.runtimeClasspath
+    mainClass = 'ScoreItems'
+    systemProperty 'evaluator.root', rootDir.absolutePath
+}
+
 tasks.register('titheGate', JavaExec) {
     description = 'Refuses a push past sixteen commits without a tithe (E-015); scripts/prepush.sh runs it.'
     classpath = sourceSets.scripts.runtimeClasspath

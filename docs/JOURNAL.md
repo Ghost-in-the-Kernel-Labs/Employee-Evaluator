@@ -1676,3 +1676,11 @@ noticed it. **Cost**: wall time or commits, where known. **Class**: one of `cont
 - **Options:** a target now (refused: a guess before a first measure; Ghost's to set); a tokenizer (refused: a dependency for an estimate); four characters a token (taken).
 - **Resolved:** E-093; `Metrics.workingSets` and the metric "Largest routing-row working set (tokens)", reported not held; `MetricsTest` holds a row's count.
 - **Touched:** scripts/Metrics.java, test/MetricsTest.java, docs/AGENT.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.
+
+### J-142 The token posture, step 3: each open item scored and placed by script
+- **Who:** Claude Opus 5.5. **Class:** measurement.
+- **Intent:** Score every open item of TODO.md from its text, with no model, and place it in a tier (E-094).
+- **Found:** Of eighteen open items, 2.2n is strong (it waits on Ghost: the key and the budget), 2.9 and 3.1 small, and fifteen are unplaced: an item written as a check names the outcome, seldom a file or a module, so a mid-tier agent places most of the roadmap until the items name their files.
+- **Options:** Suite Builder's points unchanged (taken: the two projects compare); a layer read from its bare word (refused: "score" and "history" are ordinary words here); a named layer placing an item without a file (taken, Ghost to confirm).
+- **Resolved:** E-094; `gradle scoreItems`; `test/ScoreItemsTest.java` in DocTests; `docs/how/hand-out-a-task.md` says what is built and that the worker log (step 4) is not.
+- **Touched:** scripts/ScoreItems.java, build.gradle, test/ScoreItemsTest.java, test/DocTests.java, docs/how/hand-out-a-task.md, theGhost.md, docs/JOURNAL.md, docs/HANDOFF.md.

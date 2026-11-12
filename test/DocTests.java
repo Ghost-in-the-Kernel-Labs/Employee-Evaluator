@@ -76,6 +76,11 @@ class DocTests {
     }
 
     @Test
+    void scoreItems() {
+        assertEquals(List.of(), ScoreItemsTest.run().problems());
+    }
+
+    @Test
     void kernelMap() {
         assertEquals(List.of(), KernelMapTest.run().problems());
     }

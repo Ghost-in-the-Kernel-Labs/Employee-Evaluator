@@ -1521,3 +1521,12 @@ from one of them says so in its Why; the reasoning there is not copied here, onl
 - **Status:** in force
 - **subject:** agents
 - **See also:** E-015, E-063, E-092
+
+### E-094: Each open item is scored from its own text and placed in a tier by script; one naming nothing is unplaced
+- **Decision:** The token posture's step 3 (E-092): `gradle scoreItems` (`scripts/ScoreItems.java`) reads each open item of TODO.md and scores it with no model, by the points Suite Builder took (its G-357): one per 10,000 tokens of the largest file the item names (at E-093's four characters a token), 2 for each layer named beyond the first, 3 for a contract (the score card's shape, an invariant, a decision's rule), -2 for a pass line a machine checks (a test, a golden, the gate); 0 to 3 is the small tier, 4 to 7 the mid, 8 and over the strong, and an item that waits on Ghost is the strong tier whatever its points. A layer is a module of docs/modules.json, `agent-runner/` or `sandbox/`, and counts only when named as a folder (`score/`) or a package (`evaluator.score`), never as the bare word. An item naming no file and no layer that does not wait is unplaced: a mid-tier agent scores it and writes the facts it used into the item. The points and edges are constants at the top of the script, the one place to tune them, with Ghost's approval.
+- **Why:** A coordinator that reads each item to place it spends its strong-tier context on what a script can do (E-092). Taking Suite Builder's points as they are lets the two projects' placements be compared; the layers are this repository's own. Of the eighteen open items today, two are placed (2.2n strong, waiting on Ghost; 2.9 small) and one by a layer it names (3.1); the rest name nothing, which is the measure's first finding: items written as checks seldom name their files.
+- **Held by:** `scripts/ScoreItems.java`; `test/ScoreItemsTest.java` (made-up items placed in each tier, a bare word read as no layer, a wait never read as small, every open item scored once in order); `build.gradle` (`scoreItems`); `docs/how/hand-out-a-task.md` ("Measuring it").
+- **Source:** Ghost's token posture (E-092, its steps in docs/HANDOFF.md) and Suite Builder's points. Taking the points unchanged, the layer set, the folder-only reading of a layer and a named layer placing an item without a file are the agent's (Claude Opus 5.5), for Ghost to confirm.
+- **Status:** in force
+- **subject:** agents
+- **See also:** E-092, E-093
